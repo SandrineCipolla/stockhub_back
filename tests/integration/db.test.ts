@@ -1,6 +1,6 @@
-import {mockConnection} from "../__mocks__/connectionUtils";
-import pool from "../../src/dbUtils";
-import {RowDataPacket} from "mysql2/promise";
+import { mockConnection } from "../__mocks__/connectionUtils";
+
+import { RowDataPacket } from "mysql2/promise";
 
 jest.mock("../../src/index", () => mockConnection);
 
@@ -30,6 +30,6 @@ jest.mock("../../src/index", () => mockConnection);
 //     });
 // });
 
-describe('Database Connection', () => {
-    it('should connect to the database and execute a simple query', async () => {});
-})
+describe("Database Connection", () => {
+  it("should connect to the database and execute a simple query", async () => {});
+});

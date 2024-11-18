@@ -10,7 +10,6 @@ appInsights
   .setAutoCollectConsole(true)
   .setUseDiskRetryCaching(true)
   .setSendLiveMetrics(true)
-  .setDistributedTracingMode(appInsights.DistributedTracingModes.AI)
   .start();
 
 const client = appInsights.defaultClient;
@@ -21,3 +20,21 @@ export const rootCloudEvent = (eventName: string, eventData: any) => {
     properties: { customProperty: eventData },
   });
 };
+
+export const rootDependency = (depTelemetry: DependencyTelemetry) => {
+  client.trackDependency(depTelemetry);
+};
+
+export const rootException = (error: Error) => {
+  client.trackException({ exception: error });
+};
+
+export interface DependencyTelemetry {
+  target: string;
+  name: string;
+  data: string;
+  duration: number;
+  resultCode: number;
+  success: boolean;
+  dependencyTypeName: string;
+}

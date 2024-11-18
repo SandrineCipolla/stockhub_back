@@ -19,10 +19,10 @@ const configureStockRoutes = async (): Promise<Router> => {
 
   // création instance de stockController
   const connection = await connectToDatabase();
-  const readStockRepository = new ReadStockRepository(connection);
-  const writeStockRepository = new WriteStockRepository(connection);
-  const readUser = new ReadUserRepository(connection);
-  const writeUser = new WriteUserRepository(connection);
+  const readStockRepository = new ReadStockRepository();
+  const writeStockRepository = new WriteStockRepository();
+  const readUser = new ReadUserRepository();
+  const writeUser = new WriteUserRepository();
   const stockController = new StockController(
     readStockRepository,
     writeStockRepository,
