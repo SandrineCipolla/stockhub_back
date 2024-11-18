@@ -7,12 +7,8 @@ import configureStockRoutes from "./routes/stockRoutes";
 import configureUserRoutes from "./routes/userRoutes";
 import { authConfigbearerStrategy } from "./authentication/authBearerStrategy";
 import { authenticationMiddleware } from "./authentication/authenticateMiddleware";
-import { startHttpsServer } from "./serverSetup/setupHttpsServer";
 import { setupHttpServer } from "./serverSetup/setupHttpServer";
-import { isProductionMode, selectedRuntimeMode } from "./config/runtimeMode";
 import cors from "cors";
-import { corsConfig } from "./config/corsConfig";
-import { CorsOptions } from "cors";
 
 export async function initializeApp() {
   const app = express();
@@ -110,8 +106,6 @@ export async function initializeApp() {
       res.status(500).send("Internal Server Error");
     }
   );
-
-  startHttpsServer(app);
 
   setupHttpServer(app);
 }

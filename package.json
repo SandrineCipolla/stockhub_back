@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/src/index.js",
-    "start:dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "start:dev": "nodemon",
     "start:prod": "node dist/src/index.js",
     "test": "jest --detectOpenHandles --forceExit",
     "test:ci": "jest --config=jest.ci.config.js --detectOpenHandles --forceExit",

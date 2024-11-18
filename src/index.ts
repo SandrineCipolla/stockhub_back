@@ -1,4 +1,3 @@
-import express from "express";
 import { rootMain } from "./Utils/logger";
 import { initializeApp } from "./initializeApp";
 import { selectedRuntimeMode } from "./config/runtimeMode";
