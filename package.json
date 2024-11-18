@@ -10,7 +10,8 @@
     "test": "jest --detectOpenHandles --forceExit",
     "test:ci": "jest --config=jest.ci.config.js --detectOpenHandles --forceExit",
     "test:coverage": "COVERAGE=true jest --config=jest.ci.config.js --passWithNoTests --detectOpenHandles --forceExit",
-    "build": "tsc --project tsconfig.json",
+    "build": "webpack --config webpack.config.js",
+    "build:local": "tsc --project tsconfig.json",
     "copy-certs": "cp ./server.cert ./dist"
   },
   "keywords": [],
