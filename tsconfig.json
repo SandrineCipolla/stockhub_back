@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "types": ["jest","mysql2","applicationinsights"],
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "sourceMap": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "src/global.d.ts",
+    "src/Utils/**/global.d.ts"
+  ],
+  "exclude": ["node_modules","dist"]
+}
