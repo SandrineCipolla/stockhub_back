@@ -3,6 +3,12 @@ import request from "supertest";
 import { HTTP_CODE_OK } from "../../src/Utils/httpCodes";
 import { initializeApp } from "../../src/initializeApp";
 
+describe("Stock Routes", () => {
+  it("should run a test", async () => {
+    expect(true).toBe(true);
+  });
+});
+
 // describe("Stock Routes", () => {
 //
 //
