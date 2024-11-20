@@ -52,9 +52,6 @@ jobs:
         with:
           name: node-app
 
-      - name: Remove node_modules
-        run: rm -rf node_modules
-
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
