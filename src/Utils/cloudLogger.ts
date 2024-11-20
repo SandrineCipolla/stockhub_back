@@ -1,3 +1,5 @@
+import { rootMain } from "./logger";
+
 const appInsights = require("applicationinsights");
 
 appInsights
@@ -11,6 +13,8 @@ appInsights
   .setUseDiskRetryCaching(true)
   .setSendLiveMetrics(true)
   .start();
+
+rootMain.info("Application Insights started.");
 
 const client = appInsights.defaultClient;
 
