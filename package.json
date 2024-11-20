@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "start:dev": "nodemon",
+    "start:dev": "nodemon --exec node -r ts-node/register --env-file=.env ./src/index.ts",
     "start:prod": "node dist/src/index.js",
     "test": "jest --detectOpenHandles --forceExit",
     "test:ci": "jest --config=jest.ci.config.js --detectOpenHandles --forceExit",
@@ -20,7 +20,7 @@
   "dependencies": {
     "applicationinsights": "^3.3.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.5",
     "express": "^4.20.0",
     "iconv-lite": "^0.6.3",
     "mysql": "^2.18.1",

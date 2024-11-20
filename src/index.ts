@@ -2,10 +2,12 @@ import { rootMain } from "./Utils/logger";
 import { initializeApp } from "./initializeApp";
 import { selectedRuntimeMode } from "./config/runtimeMode";
 import { rootCloudEvent } from "./Utils/cloudLogger";
-
-rootMain.info("Application Insights started");
+import dotenv from "dotenv";
 
 rootMain.info("Starting application ...");
+
+dotenv.config();
+
 rootMain.info(
   "Selected runtime mode is {selectedRuntimeMode}",
   selectedRuntimeMode
