@@ -17,8 +17,6 @@ const configureStockRoutes = async (): Promise<Router> => {
 
   const router = Router();
 
-  // création instance de stockController
-  const connection = await connectToDatabase();
   const readStockRepository = new ReadStockRepository();
   const writeStockRepository = new WriteStockRepository();
   const readUser = new ReadUserRepository();
