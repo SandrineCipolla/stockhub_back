@@ -9,11 +9,10 @@ const pool = mysql.createPool(connectionOptions);
 export async function connectToDatabase(): Promise<PoolConnection> {
   try {
     const connection = await pool.getConnection();
-    rootUtils.info("Connection to database successful");
+    rootUtils.info("Connection to database retrieved from pool");
     return connection;
   } catch (error) {
-    //TODO :affiner les message d'erreur.
-    rootUtils.error("Error connecting to the database:", error);
+    rootUtils.error("Unable to retrieve connection form pool:", error);
     throw error;
   }
 }
