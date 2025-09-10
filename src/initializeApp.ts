@@ -9,9 +9,11 @@ import { authConfigbearerStrategy } from "./authentication/authBearerStrategy";
 import { authenticationMiddleware } from "./authentication/authenticateMiddleware";
 import { setupHttpServer } from "./serverSetup/setupHttpServer";
 import cors from "cors";
+import configureStockRoutesV2 from "./api/routes/StockRoutesV2";
 
 export async function initializeApp() {
   const app = express();
+
   app.use(
     cors({
       origin: "*",
@@ -33,19 +35,27 @@ export async function initializeApp() {
 
   rootSecurity.info("initialization of authentication ...");
 
-  app.use(express.json());
-  cors({
-    origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-  });
+  // app.use(express.json());
+  // cors({
+  //   origin: "*",
+  //   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  //   preflightContinue: false,
+  //   optionsSuccessStatus: 204,
+  // });
 
   app.use(passport.initialize());
 
   passport.use(bearerStrategy);
 
   rootSecurity.info("initialization of authentication DONE!");
+
+  const stockRoutesV2 = await configureStockRoutesV2();
+  //injection OID directement pour tester les routes v2 sans auth
+  app.use("/api/v2", (req,res,next) => {
+    (req as any).userID = "sandrine.cipolla@gmail.com";
+    next();
+  }, stockRoutesV2);
+  rootMain.info('api/v2 routes (no auth required) configured');
 
   app.use(
     "/api",
@@ -74,6 +84,7 @@ export async function initializeApp() {
       res.status(err.status || 500).send(err);
     }
   );
+  rootMain.info('api/v1 routes (auth required) configured');
 
   const stockRoutes = await configureStockRoutes();
   app.use("/api/v1", stockRoutes);
@@ -81,9 +92,9 @@ export async function initializeApp() {
   const userRoutes = await configureUserRoutes();
   app.use("/api/v1", userRoutes);
 
-  app.get("/hello", (req: express.Request, res: express.Response) => {
-    res.status(200).send("Hello World");
-  });
+  // app.get("/hello", (req: express.Request, res: express.Response) => {
+  //   res.status(200).send("Hello World");
+  // });
 
   app.use(
     (
