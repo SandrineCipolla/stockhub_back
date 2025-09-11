@@ -21,7 +21,7 @@ export class StockController {
             const userID = await this.userService.convertOIDtoUserID(OID);
             const stocks = await this.stockVisualizationService.getAllStocks(userID.value);
 
-            console.info("getAllStocks {OID} - {stocks.length}", OID, stocks.length);
+            console.info(`getAllStocks ${OID} - ${stocks.length}`);
 
             res.status(HTTP_CODE_OK).json(stocks);
         } catch (err: any) {
