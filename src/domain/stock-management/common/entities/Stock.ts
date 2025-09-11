@@ -6,7 +6,7 @@ export class Stock {
         public label: string,
         public description: string,
         public category: string,
-        public items: StockItem[]=[],
+        public items: StockItem[] = [],
     ) {
     }
 

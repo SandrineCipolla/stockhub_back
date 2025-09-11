@@ -6,7 +6,7 @@ import {Quantity} from "../../../../../src/domain/stock-management/common/value-
 describe('Stock', () => {
     describe('when a stock is empty', () => {
         it('should return 0 items and 0 quantity', () => {
-            const stock = new Stock(1, 'Stock 1', 'Description 1','alimentation', []);
+            const stock = new Stock(1, 'Stock 1', 'Description 1', 'alimentation', []);
             expect(stock.getTotalItems()).toBe(0);
             expect(stock.getTotalQuantity()).toBe(0);
         })
@@ -18,7 +18,7 @@ describe('Stock', () => {
                 new StockItem('Item 1', new Quantity(5), 1),
                 new StockItem('Item 2', new Quantity(10), 1),
             ];
-            const stock = new Stock(1, 'Stock 1', 'Description 1','alimentation', items);
+            const stock = new Stock(1, 'Stock 1', 'Description 1', 'alimentation', items);
             expect(stock.getTotalItems()).toBe(2);
             expect(stock.getTotalQuantity()).toBe(15);
         })
@@ -30,7 +30,7 @@ describe('Stock', () => {
                 new StockItem('Item 1', new Quantity(0), 1),
                 new StockItem('Item 2', new Quantity(10), 1),
             ];
-            const stock = new Stock(1, 'Stock 1', 'Description 1','alimentation', items);
+            const stock = new Stock(1, 'Stock 1', 'Description 1', 'alimentation', items);
             expect(stock.getTotalItems()).toBe(2);
             expect(stock.getTotalQuantity()).toBe(10);
         })
