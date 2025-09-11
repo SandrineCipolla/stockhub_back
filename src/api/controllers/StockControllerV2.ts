@@ -8,14 +8,14 @@ import {Request, Response} from "express";
 import {rootMain} from "../../Utils/logger";
 
 
-export class StockController {
+export class StockControllerV2 {
     constructor(
         private readonly stockVisualizationService: StockVisualizationService,
         private readonly userService: UserService
     ) {
     }
 
-    public async getAllStocks(req:Request, res:Response) {
+    public async getAllStocks(req: Request, res: Response) {
         try {
             const OID = (req as any).userID as string;
 
@@ -32,7 +32,7 @@ export class StockController {
         }
     }
 
-    public async getStockDetails(req:Request, res:Response) {
+    public async getStockDetails(req: Request, res: Response) {
         try {
             const OID = (req as any).userID as string;
             const userID = await this.userService.convertOIDtoUserID(OID);

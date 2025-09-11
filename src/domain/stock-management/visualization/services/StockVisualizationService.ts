@@ -1,11 +1,9 @@
 import {Stock} from "../../common/entities/Stock";
 import {StockSummary} from "../models/StockSummary";
+import {IStockVisualizationRepository} from "../queries/IStockVisualizationRepository";
 
-export interface IStockVisualizationRepository {
-    getAllStocks(userId: number): Promise<Stock []>;
-}
 
-export class StockVisualizationService{
+export class StockVisualizationService {
     constructor(
         private repository: IStockVisualizationRepository
     ) {

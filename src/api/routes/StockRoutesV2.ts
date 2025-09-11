@@ -2,36 +2,36 @@ import {
     StockVisualizationService
 } from "../../domain/stock-management/visualization/services/StockVisualizationService";
 import {UserService} from "../../services/userService";
-import {StockController} from "../controllers/StockController";
+import {StockControllerV2} from "../controllers/StockControllerV2";
 import {Router} from "express";
 import {ReadUserRepository} from "../../services/readUserRepository";
 import {WriteUserRepository} from "../../services/writeUserRepository";
-import {Stock} from "../../domain/stock-management/common/entities/Stock";
-import {StockItem} from "../../domain/stock-management/common/entities/StockItem";
-import {Quantity} from "../../domain/stock-management/common/value-objects/Quantity";
+import {PrismaStockVisualizationRepository} from "../../db/repositories/PrismaStockVisualizationRepository";
 
-const fakeRepository = {
-    getAllStocks: async (userId: number): Promise<Stock[]> => {
-        return [
-            new Stock(1, "Cellier", "Stock alimentaire", "alimentation", [
-                new StockItem("Pâtes", new Quantity(5), 2),
-                new StockItem("Riz", new Quantity(0), 1),
-            ]),
-            new Stock(2, "Aquarelle", "Matériel créatif", "artistique", [
-                new StockItem("Pinceaux taille 1", new Quantity(2), 2),
-                new StockItem("Bleu outremer", new Quantity(2), 1),
-            ]),
-        ];
-    },
-};
+// const fakeRepository = {
+//     getAllStocks: async (userId: number): Promise<Stock[]> => {
+//         return [
+//             new Stock(1, "Cellier", "Stock alimentaire", "alimentation", [
+//                 new StockItem("Pâtes", new Quantity(5), 2),
+//                 new StockItem("Riz", new Quantity(0), 1),
+//             ]),
+//             new Stock(2, "Aquarelle", "Matériel créatif", "artistique", [
+//                 new StockItem("Pinceaux taille 1", new Quantity(2), 2),
+//                 new StockItem("Bleu outremer", new Quantity(2), 1),
+//             ]),
+//         ];
+//     },
+// };
 
-const stockVisualizationService = new StockVisualizationService(fakeRepository);
+const prismaRepository = new PrismaStockVisualizationRepository();
+
+const stockVisualizationService = new StockVisualizationService(prismaRepository);
 
 const readUserRepo = new ReadUserRepository();
 const writeUserRepo = new WriteUserRepository();
 const userService = new UserService(readUserRepo, writeUserRepo);
 
-const stockController = new StockController(
+const stockController = new StockControllerV2(
     stockVisualizationService,
     userService
 );
