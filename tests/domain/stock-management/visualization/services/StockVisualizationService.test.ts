@@ -65,9 +65,7 @@ describe('StockVisualizationService', () => {
         describe('when there is no items in the stock', () => {
             const fakeStocks = {
                 getAllStocks: async () => [
-                    new Stock(1, 'Stock 1', 'Description 1', 'alimentation', [
-
-                    ]),
+                    new Stock(1, 'Stock 1', 'Description 1', 'alimentation', []),
                 ],
             };
             const service = new StockVisualizationService(fakeStocks);
