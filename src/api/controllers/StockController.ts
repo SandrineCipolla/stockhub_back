@@ -5,6 +5,7 @@ import {UserService} from "../../services/userService";
 import {HTTP_CODE_OK} from "../../Utils/httpCodes";
 import {CustomError, sendError} from "../../errors";
 import {Request, Response} from "express";
+import {rootMain} from "../../Utils/logger";
 
 
 export class StockController {
@@ -14,14 +15,16 @@ export class StockController {
     ) {
     }
 
-    public async getAllStocks(req:Request, res:Response) {
+    public async getAllStocks(req: Request, res: Response) {
         try {
             const OID = (req as any).userID as string;
 
             const userID = await this.userService.convertOIDtoUserID(OID);
             const stocks = await this.stockVisualizationService.getAllStocks(userID.value);
-
-            console.info("getAllStocks {OID} - {stocks.length}", OID, stocks.length);
+            
+            rootMain.info(
+                `getAllStocks OID=${OID} stocksLength=${stocks.length}`
+            );
 
             res.status(HTTP_CODE_OK).json(stocks);
         } catch (err: any) {
@@ -29,14 +32,14 @@ export class StockController {
         }
     }
 
-    public async getStockDetails(req:Request, res:Response) {
+    public async getStockDetails(req: Request, res: Response) {
         try {
             const OID = (req as any).userID as string;
             const userID = await this.userService.convertOIDtoUserID(OID);
             const stockId = Number(req.params.stockId);
             const stock = await this.stockVisualizationService.getStockDetails(stockId, userID.value);
 
-            console.info("getStockDetails {OID} - {stockId}", OID, stockId);
+            rootMain.info(`getStockDetails OID=${OID} stockId=${stockId}`);
             res.status(HTTP_CODE_OK).json(stock);
         } catch (err: any) {
             sendError(res, err as CustomError);
