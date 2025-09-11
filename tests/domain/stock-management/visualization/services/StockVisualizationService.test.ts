@@ -85,7 +85,7 @@ describe('StockVisualizationService', () => {
             const fakeRepository = {getAllStocks: async () => []};
             const service = new StockVisualizationService(fakeRepository);
             it('should throw an error', async () => {
-                await expect(service.getStockDetails(99,1))
+                await expect(service.getStockDetails(99, 1))
                     .rejects.toThrow('Stock not found')
             })
         })
