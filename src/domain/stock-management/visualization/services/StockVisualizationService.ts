@@ -1,4 +1,5 @@
 import {Stock} from "../../common/entities/Stock";
+import {StockSummary} from "../models/StockSummary";
 
 export interface IStockVisualizationRepository {
     getAllStocks(userId: number): Promise<Stock []>;
@@ -10,8 +11,15 @@ export class StockVisualizationService{
     ) {
     }
 
-    async getAllStocks(userId: number): Promise<Stock []> {
-        return this.repository.getAllStocks(userId);
+    async getAllStocks(userId: number): Promise<StockSummary []> {
+        const stocks = await this.repository.getAllStocks(userId);
+
+        return stocks.map((stock) => ({
+            id: stock.id,
+            label: stock.label,
+            description: stock.description,
+            category: stock.category,
+        }));
     }
 
     async getStockDetails(stockId: number, userId: number): Promise<Stock> {
