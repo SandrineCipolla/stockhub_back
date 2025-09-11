@@ -1,0 +1,40 @@
+{
+  "info": {
+    "name": "Stockhub API V2",
+    "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab",
+    "description": "Collection pour tester les routes de visualisation V2 (DDD)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get all stocks",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3006/api/v2/stocks",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3006",
+          "path": ["api", "v2", "stocks"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get stock details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3006/api/v2/stocks/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3006",
+          "path": ["api", "v2", "stocks", "1"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
