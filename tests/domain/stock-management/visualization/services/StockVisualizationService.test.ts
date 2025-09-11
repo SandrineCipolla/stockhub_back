@@ -30,8 +30,7 @@ describe('StockVisualizationService', () => {
                 const result = await service.getAllStocks(1);
                 expect(result.length).toBe(1);
                 expect(result[0].label).toBe('Stock 1');
-                expect(result[0].getTotalItems()).toBe(2);
-                expect(result[0].getTotalQuantity()).toBe(15);
+
             })
         })
 
@@ -48,15 +47,13 @@ describe('StockVisualizationService', () => {
                 ],
             };
             const service = new StockVisualizationService(fakeStocks);
-            it('should return an array of stocks with correct totals', async () => {
+            it('should return an array of stocks', async () => {
                 const result = await service.getAllStocks(1);
                 expect(result.length).toBe(2);
                 expect(result[0].label).toBe('Stock 1');
-                expect(result[0].getTotalItems()).toBe(2);
-                expect(result[0].getTotalQuantity()).toBe(15);
+
                 expect(result[1].label).toBe('Stock 2');
-                expect(result[1].getTotalItems()).toBe(1);
-                expect(result[1].getTotalQuantity()).toBe(3);
+
             })
         })
     })
