@@ -2,7 +2,6 @@ import {Stock} from "../../../../../src/domain/stock-management/common/entities/
 import {StockItem} from "../../../../../src/domain/stock-management/common/entities/StockItem";
 import {Quantity} from "../../../../../src/domain/stock-management/common/value-objects/Quantity";
 
-;
 
 describe('Stock', () => {
     describe('when a stock is empty', () => {
