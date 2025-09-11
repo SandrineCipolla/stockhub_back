@@ -36,7 +36,7 @@ export class StockController {
             const stockId = Number(req.params.stockId);
             const stock = await this.stockVisualizationService.getStockDetails(stockId, userID.value);
 
-            console.info("getStockDetails {OID} - {stockId}", OID, stockId);
+            console.info(`getStockDetails ${OID} - ${stockId}`);
             res.status(HTTP_CODE_OK).json(stock);
         } catch (err: any) {
             sendError(res, err as CustomError);
