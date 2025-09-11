@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^6.16.0",
     "applicationinsights": "^3.3.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -28,6 +29,7 @@
     "passport": "^0.7.0",
     "passport-azure-ad": "^4.3.5",
     "passport-jwt": "^4.0.0",
+    "prisma": "^6.16.0",
     "react-router-dom": "^6.21.1",
     "typescript-logging": "^2.2.0",
     "typescript-logging-category-style": "^2.2.0"
