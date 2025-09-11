@@ -15,13 +15,13 @@ export class StockController {
     ) {
     }
 
-    public async getAllStocks(req: Request, res: Response) {
+    public async getAllStocks(req:Request, res:Response) {
         try {
             const OID = (req as any).userID as string;
 
             const userID = await this.userService.convertOIDtoUserID(OID);
             const stocks = await this.stockVisualizationService.getAllStocks(userID.value);
-            
+
             rootMain.info(
                 `getAllStocks OID=${OID} stocksLength=${stocks.length}`
             );
@@ -32,7 +32,7 @@ export class StockController {
         }
     }
 
-    public async getStockDetails(req: Request, res: Response) {
+    public async getStockDetails(req:Request, res:Response) {
         try {
             const OID = (req as any).userID as string;
             const userID = await this.userService.convertOIDtoUserID(OID);
