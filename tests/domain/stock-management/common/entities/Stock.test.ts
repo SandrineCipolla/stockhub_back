@@ -5,7 +5,7 @@ import {Quantity} from "../../../../../src/domain/stock-management/common/value-
 
 describe('Stock', () => {
     describe('when a stock is empty', () => {
-        it('should return 0 items and 0 quantiy', () => {
+        it('should return 0 items and 0 quantity', () => {
             const stock = new Stock(1, 'Stock 1', 'Description 1','alimentation', []);
             expect(stock.getTotalItems()).toBe(0);
             expect(stock.getTotalQuantity()).toBe(0);
