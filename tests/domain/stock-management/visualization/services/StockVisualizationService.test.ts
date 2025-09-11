@@ -16,7 +16,7 @@ describe('StockVisualizationService', () => {
             })
         })
 
-        describe('when user has a stocks', () => {
+        describe('when user has a stock', () => {
             const fakeStocks = {
                 getAllStocks: async () => [
                     new Stock(1, 'Stock 1', 'Description 1', 'alimentation', [
