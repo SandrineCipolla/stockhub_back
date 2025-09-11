@@ -29,7 +29,7 @@ const stockVisualizationService = new StockVisualizationService(fakeRepository);
 
 const readUserRepo = new ReadUserRepository();
 const writeUserRepo = new WriteUserRepository();
-const userService = new UserService(readUserRepo, writeUserRepo)
+const userService = new UserService(readUserRepo, writeUserRepo);
 
 const stockController = new StockController(
     stockVisualizationService,
