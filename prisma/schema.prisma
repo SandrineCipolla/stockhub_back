@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model items {
+  ID            Int     @id @default(autoincrement())
+  LABEL         String? @db.VarChar(255)
+  DESCRIPTION   String? @db.VarChar(255)
+  QUANTITY      Int?
+  MINIMUM_STOCK Int     @default(1)
+  STOCK_ID      Int?
+  stocks        stocks? @relation(fields: [STOCK_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "items_ibfk_1")
+
+  @@index([STOCK_ID], map: "STOCK_ID")
+}
+
+model stocks {
+  ID          Int             @id @default(autoincrement())
+  LABEL       String          @db.VarChar(255)
+  DESCRIPTION String?         @db.VarChar(255)
+  CATEGORY    stocks_CATEGORY @default(alimentation)
+  USER_ID     Int?
+  items       items[]
+  users       users?          @relation(fields: [USER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "stocks_ibfk_1")
+
+  @@index([USER_ID], map: "stocks_ibfk_1")
+}
+
+model users {
+  ID     Int      @id @default(autoincrement())
+  EMAIL  String   @unique(map: "unique_email") @db.VarChar(255)
+  stocks stocks[]
+}
+
+enum stocks_CATEGORY {
+  alimentation
+  hygiene
+  artistique
+}
