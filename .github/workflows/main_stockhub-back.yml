@@ -4,9 +4,6 @@
 
 name: Build, Test and Deploy Node.js app to Azure Web App - stockhub-back
 
-
-name: Build, Test and Deploy Node.js app to Azure Web App - stockhub-back
-
 on:
   push:
     branches:
@@ -49,10 +46,18 @@ jobs:
           node-version: "18.x"
       - run: npm ci
 
-      - name: Reset & migrate database for tests
-        run: npx prisma migrate reset --force --skip-generate --schema=prisma/schema.prisma
-        env:
-          DATABASE_URL: "mysql://root:root@localhost:3308/stockhub_test"
+      #      - name: Reset & migrate database for tests
+      #        run: npx prisma migrate reset --force --skip-generate --schema=prisma/schema.prisma
+      #        env:
+      #          DATABASE_URL: "mysql://root:root@localhost:3308/stockhub_test"
+      - name: Create database schema with SQL
+        run: |
+          mysql -h 127.0.0.1 -P 3308 -u root -proot stockhub_test < sql/initialize_database.sql
+          
+          - name: Generate Prisma Client after schema creation
+            run: npx prisma db pull --schema=prisma/schema.prisma --force && npx prisma generate --schema=prisma/schema.prisma
+            env:
+              DATABASE_URL: "mysql://root:root@localhost:3308/stockhub_test"
 
       - name: Run integration tests
         run: npm run test:integration
