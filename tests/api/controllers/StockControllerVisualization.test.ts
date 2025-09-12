@@ -76,4 +76,67 @@ describe("StockControllerVisualization", () => {
             });
         });
     });
+
+    describe("getStockDetails", () => {
+        describe("when the service call is successful", () => {
+            it("should return 200 and the stock details", async () => {
+                req = {params: {stockId: "1"}};
+                mockUserService.convertOIDtoUserID = jest.fn().mockResolvedValue({value: 42});
+                const mockStock = {
+                    id: 1,
+                    label: "Stock 1",
+                    description: "Description 1",
+                    category: "alimentation",
+                };
+                mockStockService.getStockDetails.mockResolvedValue(mockStock);
+
+                await controller.getStockDetails(req as Request, res as Response);
+
+                expect(res.status).toHaveBeenCalledWith(HTTP_CODE_OK);
+                expect(res.json).toHaveBeenCalledWith(mockStock);
+            });
+        });
+
+        describe("when the service call fails", () => {
+            it("should call sendError", async () => {
+                req = {params: {stockId: "1"}};
+                const error = new Error("not found");
+                mockUserService.convertOIDtoUserID = jest.fn().mockRejectedValue(error);
+
+                await controller.getStockDetails(req as Request, res as Response);
+
+                expect(sendError).toHaveBeenCalledWith(res, error as CustomError);
+            });
+        });
+    });
+
+    describe("getStockItems", () => {
+        describe("when the service call is successful", () => {
+            it("should return 200 and the items of the stock", async () => {
+                req = {params: {stockId: "1"}};
+                mockUserService.convertOIDtoUserID = jest.fn().mockResolvedValue({value: 42});
+                const mockItems = [
+                    {id: 1, label: "Item 1", description: "desc", category: "alimentation"},
+                ] as any;
+                mockStockService.getStockItems.mockResolvedValue(mockItems);
+
+                await controller.getStockItems(req as Request, res as Response);
+
+                expect(res.status).toHaveBeenCalledWith(HTTP_CODE_OK);
+                expect(res.json).toHaveBeenCalledWith(mockItems);
+            });
+        });
+
+        describe("when the service call fails", () => {
+            it("should call sendError", async () => {
+                req = {params: {stockId: "1"}};
+                const error = new Error("fail items");
+                mockUserService.convertOIDtoUserID = jest.fn().mockRejectedValue(error);
+
+                await controller.getStockItems(req as Request, res as Response);
+
+                expect(sendError).toHaveBeenCalledWith(res, error as CustomError);
+            });
+        });
+    });
 });

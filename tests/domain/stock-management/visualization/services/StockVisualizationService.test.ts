@@ -9,7 +9,7 @@ import {
 } from "../../../../../src/domain/stock-management/visualization/queries/IStockVisualizationRepository";
 
 describe('StockVisualizationService', () => {
-    describe(':: getAllStocks', () => {
+    describe('getAllStocks', () => {
         describe('when user has no stocks', () => {
             const fakeRepository: IStockVisualizationRepository = {
                 getAllStocks: async () => [],
@@ -67,8 +67,7 @@ describe('StockVisualizationService', () => {
             })
         })
     })
-
-    describe('::getStockDetails', () => {
+    describe('getStockDetails', () => {
         describe('when there is no items in the stock', () => {
             const fakeRepository: IStockVisualizationRepository = {
                 getAllStocks: async () => [],
@@ -101,7 +100,7 @@ describe('StockVisualizationService', () => {
             })
         })
     })
-    describe('::getStockItems', () => {
+    describe('getStockItems', () => {
         describe('when there is no items in the stock', () => {
             const fakeRepository: IStockVisualizationRepository = {
                 getAllStocks: async () => [],
