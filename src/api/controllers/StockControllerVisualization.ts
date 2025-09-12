@@ -8,14 +8,14 @@ import {Request, Response} from "express";
 import {rootMain} from "../../Utils/logger";
 
 
-export class StockController {
+export class StockControllerVisualization {
     constructor(
         private readonly stockVisualizationService: StockVisualizationService,
         private readonly userService: UserService
     ) {
     }
 
-    public async getAllStocks(req:Request, res:Response) {
+    public async getAllStocks(req: Request, res: Response) {
         try {
             const OID = (req as any).userID as string;
 
@@ -32,7 +32,7 @@ export class StockController {
         }
     }
 
-    public async getStockDetails(req:Request, res:Response) {
+    public async getStockDetails(req: Request, res: Response) {
         try {
             const OID = (req as any).userID as string;
             const userID = await this.userService.convertOIDtoUserID(OID);
@@ -41,6 +41,20 @@ export class StockController {
 
             rootMain.info(`getStockDetails OID=${OID} stockId=${stockId}`);
             res.status(HTTP_CODE_OK).json(stock);
+        } catch (err: any) {
+            sendError(res, err as CustomError);
+        }
+    }
+
+    public async getStockItems(req: Request, res: Response) {
+        try {
+            const OID = (req as any).userID as string;
+            const userID = await this.userService.convertOIDtoUserID(OID);
+            const stockId = Number(req.params.stockId);
+            const items = await this.stockVisualizationService.getStockItems(stockId, userID.value);
+
+            rootMain.info(`getStockItems OID=${OID} stockId=${stockId} itemsLength=${items.length}`);
+            res.status(HTTP_CODE_OK).json(items);
         } catch (err: any) {
             sendError(res, err as CustomError);
         }
