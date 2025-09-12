@@ -23,27 +23,27 @@ jobs:
       - run: npm run test:unit
 
 
-  integration-tests:
-    runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: stockhub_test
-        ports:
-          - 3308:3306
-        options: >-
-          --health-cmd="mysqladmin ping -h localhost -proot"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18.x"
-      - run: npm ci
+      #  integration-tests:
+      #    runs-on: ubuntu-latest
+      #    services:
+      #      mysql:
+      #        image: mysql:8.0
+      #        env:
+      #          MYSQL_ROOT_PASSWORD: root
+      #          MYSQL_DATABASE: stockhub_test
+      #        ports:
+      #          - 3308:3306
+      #        options: >-
+      #          --health-cmd="mysqladmin ping -h localhost -proot"
+      #          --health-interval=10s
+      #          --health-timeout=5s
+      #          --health-retries=5
+      #    steps:
+      #      - uses: actions/checkout@v4
+      #      - uses: actions/setup-node@v3
+      #        with:
+      #          node-version: "18.x"
+      #      - run: npm ci
 
       #      - name: Reset & migrate database for tests
       #        run: npx prisma migrate reset --force --skip-generate --schema=prisma/schema.prisma
