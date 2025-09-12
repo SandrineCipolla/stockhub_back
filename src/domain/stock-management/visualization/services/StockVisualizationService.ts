@@ -37,4 +37,5 @@ export class StockVisualizationService {
     async getStockItems(stockId: number, userId: number): Promise<StockItem []> {
         return this.repository.getStockItems(stockId, userId);
     }
+    
 }

@@ -1,76 +1,348 @@
 {
   "info": {
-    "name": "Stockhub API V2",
+    "name": "Stockhub API V2 - Complete",
     "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab",
-    "description": "Collection pour tester les routes de visualisation V2 (DDD)",
+    "description": "Collection complète pour tester les routes V2 avec système de rôles et demandes de réapprovisionnement",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "V2 - Get all stocks",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3006/api/v2/stocks",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "3006",
-          "path": [
-            "api",
-            "v2",
-            "stocks"
-          ]
+      "name": "📋 Visualisation (Tous utilisateurs)",
+      "item": [
+        {
+          "name": "V2 - Get all stocks",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3006/api/v2/stocks",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "api",
+                "v2",
+                "stocks"
+              ]
+            }
+          }
+        },
+        {
+          "name": "V2 - Get stock details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3006/api/v2/stocks/{{stockId}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "V2 - Get stock items",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3006/api/v2/stocks/{{stockId}}/items",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "items"
+              ]
+            }
+          }
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "V2 - Get stock details",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3006/api/v2/stocks/1",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "3006",
-          "path": [
-            "api",
-            "v2",
-            "stocks",
-            "1"
-          ]
+      "name": "👤 Demandes Utilisateur Normal",
+      "item": [
+        {
+          "name": "Create Restock Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestedQuantity\": 50,\n  \"reason\": \"Stock critique - besoin urgent\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3006/api/v2/stocks/{{stockId}}/items/{{itemId}}/restock-request",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "items",
+                "{{itemId}}",
+                "restock-request"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get My Restock Requests",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3006/api/v2/restock-requests/my-requests",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "api",
+                "v2",
+                "restock-requests",
+                "my-requests"
+              ]
+            }
+          }
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "V2 - Get stock items",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3006/api/v2/stocks/1/items",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "3006",
-          "path": [
-            "api",
-            "v2",
-            "stocks",
-            "1",
-            "items"
-          ]
+      "name": "🔒 Admin - Gestion des Demandes",
+      "item": [
+        {
+          "name": "Get All Restock Requests (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3006/api/v2/restock-requests",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "api",
+                "v2",
+                "restock-requests"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Approve Restock Request",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newQuantity\": 100\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3006/api/v2/restock-requests/{{requestId}}/approve",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "api",
+                "v2",
+                "restock-requests",
+                "{{requestId}}",
+                "approve"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reject Restock Request",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "http://localhost:3006/api/v2/restock-requests/{{requestId}}/reject",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "api",
+                "v2",
+                "restock-requests",
+                "{{requestId}}",
+                "reject"
+              ]
+            }
+          }
         }
-      },
-      "response": []
+      ]
+    },
+    {
+      "name": "🔧 Admin - Gestion Stocks",
+      "item": [
+        {
+          "name": "Update Stock Item Quantity (Direct)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 75\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3006/api/v2/stocks/{{stockId}}/items/{{itemId}}/quantity",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3006",
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "items",
+                "{{itemId}}",
+                "quantity"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "adminToken",
+      "value": "YOUR_ADMIN_TOKEN_HERE",
+      "type": "string"
+    },
+    {
+      "key": "userToken",
+      "value": "YOUR_USER_TOKEN_HERE",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "YOUR_TOKEN_HERE",
+      "type": "string"
+    },
+    {
+      "key": "stockId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "itemId",
+      "value": "5",
+      "type": "string"
+    },
+    {
+      "key": "requestId",
+      "value": "1",
+      "type": "string"
     }
   ]
 }

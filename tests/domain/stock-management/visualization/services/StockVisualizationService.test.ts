@@ -15,6 +15,9 @@ describe('StockVisualizationService', () => {
                 getAllStocks: async () => [],
                 getStockDetails: async () => null,
                 getStockItems: async () => [],
+                getStockById: () => Promise.resolve(null),
+                getStockItemById: () => Promise.resolve(null),
+                updateStockItemQuantity: () => Promise.resolve()
             };
             const service = new StockVisualizationService(fakeRepository);
             it('should return an empty array', async () => {
@@ -33,6 +36,9 @@ describe('StockVisualizationService', () => {
                 ],
                 getStockDetails: async () => null,
                 getStockItems: async () => [],
+                getStockById: () => Promise.resolve(null),
+                getStockItemById: () => Promise.resolve(null),
+                updateStockItemQuantity: () => Promise.resolve()
             };
             const service = new StockVisualizationService(fakeRepository);
             it('should return one stock', async () => {
@@ -55,6 +61,9 @@ describe('StockVisualizationService', () => {
                 ],
                 getStockDetails: async () => null,
                 getStockItems: async () => [],
+                getStockById: () => Promise.resolve(null),
+                getStockItemById: () => Promise.resolve(null),
+                updateStockItemQuantity: () => Promise.resolve()
             };
             const service = new StockVisualizationService(fakeRepository);
             it('should return an array of stocks', async () => {
@@ -74,6 +83,9 @@ describe('StockVisualizationService', () => {
                 getStockDetails: async () =>
                     new Stock(1, 'Stock 1', 'Description 1', 'alimentation', []),
                 getStockItems: async () => [],
+                getStockById: () => Promise.resolve(null),
+                getStockItemById: () => Promise.resolve(null),
+                updateStockItemQuantity: () => Promise.resolve()
             };
             const service = new StockVisualizationService(fakeRepository);
             it('should return the stock with 0 items and 0 quantity', async () => {
@@ -92,6 +104,9 @@ describe('StockVisualizationService', () => {
                 getAllStocks: async () => [],
                 getStockDetails: async () => null,
                 getStockItems: async () => [],
+                getStockById: () => Promise.resolve(null),
+                getStockItemById: () => Promise.resolve(null),
+                updateStockItemQuantity: () => Promise.resolve()
             };
             const service = new StockVisualizationService(fakeRepository);
             it('should throw an error', async () => {
@@ -106,6 +121,9 @@ describe('StockVisualizationService', () => {
                 getAllStocks: async () => [],
                 getStockDetails: async () => null,
                 getStockItems: async () => [],
+                getStockById: () => Promise.resolve(null),
+                getStockItemById: () => Promise.resolve(null),
+                updateStockItemQuantity: () => Promise.resolve()
             };
             const service = new StockVisualizationService(fakeRepository);
             it('should return an empty array', async () => {
@@ -122,6 +140,9 @@ describe('StockVisualizationService', () => {
                     new StockItem(1, 'Item 1', new Quantity(5), 'description item1', 1, 1),
                     new StockItem(2, 'Item 2', new Quantity(10), 'description item2', 1, 1),
                 ],
+                getStockById: () => Promise.resolve(null),
+                getStockItemById: () => Promise.resolve(null),
+                updateStockItemQuantity: () => Promise.resolve()
             };
             const service = new StockVisualizationService(fakeRepository);
             it('should return an array of items', async () => {

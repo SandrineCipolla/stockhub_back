@@ -1,10 +1,9 @@
-
 import {rootSecurityAuthenticationMiddleware} from "../Utils/logger";
 import {CustomError} from "../errors";
-import express from "express";
+import {NextFunction, Request, Response} from "express";
 import passport from "passport";
 
-export function authenticationMiddleware(res: express.Response, req: express.Request, next: express.NextFunction) {
+export function authenticationMiddleware(req: Request, res: Response, next: NextFunction) {
     rootSecurityAuthenticationMiddleware.info("Authenticating user ...");
 
     passport.authenticate(
@@ -19,12 +18,40 @@ export function authenticationMiddleware(res: express.Response, req: express.Req
                 rootSecurityAuthenticationMiddleware.error("User not authenticated, returning 401");
                 return res.status(401).json({error: 'Unauthorized'});
             }
-            if (info) {
-                (req as any).authInfo = info;
-                (req as any).userID = info.emails[0] as string;
-                rootSecurityAuthenticationMiddleware.info("Authentication successful, proceeding to next middleware - {oid}", {oid: info.emails[0]});
-                return next();
-            }
+
+
+            req.user = user;
+            (req as any).userID = user.email;
+
+            rootSecurityAuthenticationMiddleware.info(
+                `Authentication successful - Email: ${user.email}, Role: ${user.role}`
+            );
+
+
+            return next();
         }
     )(req, res, next);
+}
+
+export function requireAdmin(req: Request, res: Response, next: NextFunction) {
+    const user = req.user as any;
+
+    if (!user || !user.isAdmin) {
+        return res.status(403).json({
+            error: 'Admin access required',
+            userRole: user?.role || 'unknown'
+        });
+    }
+
+    next();
+}
+
+export function requireAuth(req: Request, res: Response, next: NextFunction) {
+    const user = req.user as any;
+
+    if (!user) {
+        return res.status(401).json({error: 'Authentication required'});
+    }
+
+    next();
 }

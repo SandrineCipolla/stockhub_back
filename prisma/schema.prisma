@@ -8,25 +8,27 @@ datasource db {
 }
 
 model items {
-  ID            Int     @id @default(autoincrement())
-  LABEL         String? @db.VarChar(255)
-  DESCRIPTION   String? @db.VarChar(255)
-  QUANTITY      Int?
-  MINIMUM_STOCK Int     @default(1)
-  STOCK_ID      Int
-  stocks        stocks  @relation(fields: [STOCK_ID], references: [ID], onDelete: Cascade, onUpdate: Cascade, map: "items_ibfk_1")
+  ID               Int                @id @default(autoincrement())
+  LABEL            String?            @db.VarChar(255)
+  DESCRIPTION      String?            @db.VarChar(255)
+  QUANTITY         Int?
+  MINIMUM_STOCK    Int                @default(1)
+  STOCK_ID         Int
+  stocks           stocks             @relation(fields: [STOCK_ID], references: [ID], onDelete: Cascade, onUpdate: Cascade, map: "items_ibfk_1")
+  restock_requests restock_requests[]
 
   @@index([STOCK_ID], map: "STOCK_ID")
 }
 
 model stocks {
-  ID          Int             @id @default(autoincrement())
-  LABEL       String          @db.VarChar(255)
-  DESCRIPTION String?         @db.VarChar(255)
-  CATEGORY    stocks_CATEGORY @default(alimentation)
-  USER_ID     Int?
-  items       items[]
-  users       users?          @relation(fields: [USER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "stocks_ibfk_1")
+  ID               Int                @id @default(autoincrement())
+  LABEL            String             @db.VarChar(255)
+  DESCRIPTION      String?            @db.VarChar(255)
+  CATEGORY         stocks_CATEGORY    @default(alimentation)
+  USER_ID          Int?
+  items            items[]
+  users            users?             @relation(fields: [USER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "stocks_ibfk_1")
+  restock_requests restock_requests[]
 
   @@index([USER_ID], map: "stocks_ibfk_1")
 }
@@ -35,6 +37,28 @@ model users {
   ID     Int      @id @default(autoincrement())
   EMAIL  String   @unique(map: "unique_email") @db.VarChar(255)
   stocks stocks[]
+}
+
+model restock_requests {
+  ID                 Int       @id @default(autoincrement())
+  STOCK_ID           Int
+  ITEM_ID            Int
+  REQUESTED_BY       String    @db.VarChar(255)
+  REQUESTED_QUANTITY Int
+  REASON             String?   @db.Text
+  STATUS             String    @default("PENDING") @db.VarChar(20)
+  CREATED_AT         DateTime  @default(now())
+  APPROVED_BY        String?   @db.VarChar(255)
+  APPROVED_AT        DateTime?
+
+  stock stocks @relation(fields: [STOCK_ID], references: [ID], onDelete: Cascade, onUpdate: Cascade, map: "restock_requests_stock_fk")
+  item  items  @relation(fields: [ITEM_ID], references: [ID], onDelete: Cascade, onUpdate: Cascade, map: "restock_requests_item_fk")
+
+  @@index([REQUESTED_BY], map: "idx_requested_by")
+  @@index([STATUS], map: "idx_status")
+  @@index([STOCK_ID], map: "idx_stock_id")
+  @@index([ITEM_ID], map: "idx_item_id")
+  @@index([CREATED_AT], map: "idx_created_at")
 }
 
 enum stocks_CATEGORY {
