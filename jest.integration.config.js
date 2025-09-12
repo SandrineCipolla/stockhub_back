@@ -7,6 +7,11 @@ module.exports = {
         "^.+\\.tsx?$": "ts-jest",
     },
     setupFiles: ["dotenv/config"],
+    testMatch: [
+        "**/tests/integration/**/*.test.ts",
+        "**/tests/db(integration)/**/*.test.ts",
+        "**/tests/api/routes/**/*.test.ts"
+    ],
     setupFilesAfterEnv: ["<rootDir>/tests/setupIntegrationEnv.ts"],
     testTimeout: 30000,
     verbose: true,
