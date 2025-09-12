@@ -5,7 +5,7 @@ import {
     IStockVisualizationRepository
 } from "../../domain/stock-management/visualization/queries/IStockVisualizationRepository";
 
-import {PrismaClient} from "@prisma/client";
+import {items as PrismaItem, PrismaClient, stocks as PrismaStock} from "@prisma/client";
 
 
 const prisma = new PrismaClient();
@@ -16,7 +16,7 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
             where: {USER_ID: userId},
 
         });
-        return stocks.map((stock) => new Stock(
+        return stocks.map((stock: PrismaStock) => new Stock(
             stock.ID,
             stock.LABEL,
             stock.DESCRIPTION ?? '',
@@ -53,7 +53,7 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
         const items = await prisma.items.findMany({
             where: {STOCK_ID: stockId},
         });
-        return items.map((item) => new StockItem(
+        return items.map((item: PrismaItem) => new StockItem(
             item.ID,
             item.LABEL ?? '',
             new Quantity(item.QUANTITY ?? 0),
