@@ -49,7 +49,7 @@ const configureStockRoutesV2 = async (): Promise<Router> => {
 
     router.get("/stocks/:stockId/items", async (req, res) => {
         await stockController.getStockItems(req, res);
-    })
+    });
 
     return router;
 };
