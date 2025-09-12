@@ -8,6 +8,7 @@
     "start:dev": "nodemon --exec node -r ts-node/register --env-file=.env ./src/index.ts",
     "start:prod": "node dist/src/index.js",
     "test": "jest --runInBand --detectOpenHandles --forceExit",
+    "test:unit": "jest --config jest.config.js --runInBand --detectOpenHandles --forceExit",
     "test:ci": "jest --config=jest.ci.config.js --detectOpenHandles --forceExit",
     "test:coverage": "COVERAGE=true jest --config=jest.ci.config.js --passWithNoTests --detectOpenHandles --forceExit",
     "test:integration": "jest --config jest.integration.config.js --runInBand --detectOpenHandles --forceExit",
