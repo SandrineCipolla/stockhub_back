@@ -7,31 +7,67 @@
   },
   "item": [
     {
-      "name": "Get all stocks",
+      "name": "V2 - Get all stocks",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
           "raw": "http://localhost:3006/api/v2/stocks",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "3006",
-          "path": ["api", "v2", "stocks"]
+          "path": [
+            "api",
+            "v2",
+            "stocks"
+          ]
         }
       },
       "response": []
     },
     {
-      "name": "Get stock details",
+      "name": "V2 - Get stock details",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
           "raw": "http://localhost:3006/api/v2/stocks/1",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "3006",
-          "path": ["api", "v2", "stocks", "1"]
+          "path": [
+            "api",
+            "v2",
+            "stocks",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "V2 - Get stock items",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3006/api/v2/stocks/1/items",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3006",
+          "path": [
+            "api",
+            "v2",
+            "stocks",
+            "1",
+            "items"
+          ]
         }
       },
       "response": []

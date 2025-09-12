@@ -2,7 +2,7 @@ import {
     StockVisualizationService
 } from "../../domain/stock-management/visualization/services/StockVisualizationService";
 import {UserService} from "../../services/userService";
-import {StockControllerV2} from "../controllers/StockControllerV2";
+import {StockControllerVisualization} from "../controllers/StockControllerVisualization";
 import {Router} from "express";
 import {ReadUserRepository} from "../../services/readUserRepository";
 import {WriteUserRepository} from "../../services/writeUserRepository";
@@ -31,7 +31,7 @@ const readUserRepo = new ReadUserRepository();
 const writeUserRepo = new WriteUserRepository();
 const userService = new UserService(readUserRepo, writeUserRepo);
 
-const stockController = new StockControllerV2(
+const stockController = new StockControllerVisualization(
     stockVisualizationService,
     userService
 );
@@ -46,6 +46,10 @@ const configureStockRoutesV2 = async (): Promise<Router> => {
     router.get("/stocks/:stockId", async (req, res) => {
         await stockController.getStockDetails(req, res);
     });
+
+    router.get("/stocks/:stockId/items", async (req, res) => {
+        await stockController.getStockItems(req, res);
+    })
 
     return router;
 };

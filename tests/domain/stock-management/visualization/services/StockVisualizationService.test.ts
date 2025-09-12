@@ -4,11 +4,18 @@ import {
 import {Quantity} from "../../../../../src/domain/stock-management/common/value-objects/Quantity";
 import {StockItem} from "../../../../../src/domain/stock-management/common/entities/StockItem";
 import {Stock} from "../../../../../src/domain/stock-management/common/entities/Stock";
+import {
+    IStockVisualizationRepository
+} from "../../../../../src/domain/stock-management/visualization/queries/IStockVisualizationRepository";
 
 describe('StockVisualizationService', () => {
     describe(':: getAllStocks', () => {
         describe('when user has no stocks', () => {
-            const fakeRepository = {getAllStocks: async () => []};
+            const fakeRepository: IStockVisualizationRepository = {
+                getAllStocks: async () => [],
+                getStockDetails: async () => null,
+                getStockItems: async () => [],
+            };
             const service = new StockVisualizationService(fakeRepository);
             it('should return an empty array', async () => {
                 const result = await service.getAllStocks(1);
@@ -17,15 +24,17 @@ describe('StockVisualizationService', () => {
         })
 
         describe('when user has a stock', () => {
-            const fakeStocks = {
+            const fakeRepository: IStockVisualizationRepository = {
                 getAllStocks: async () => [
                     new Stock(1, 'Stock 1', 'Description 1', 'alimentation', [
-                        new StockItem('Item 1', new Quantity(5), 1),
-                        new StockItem('Item 2', new Quantity(10), 1),
+                        new StockItem(1, 'Item 1', new Quantity(5), 'description item1', 1, 1),
+                        new StockItem(2, 'Item 2', new Quantity(10), 'description item2', 1, 1),
                     ]),
                 ],
+                getStockDetails: async () => null,
+                getStockItems: async () => [],
             };
-            const service = new StockVisualizationService(fakeStocks);
+            const service = new StockVisualizationService(fakeRepository);
             it('should return one stock', async () => {
                 const result = await service.getAllStocks(1);
                 expect(result.length).toBe(1);
@@ -35,18 +44,19 @@ describe('StockVisualizationService', () => {
         })
 
         describe('when user has multiple stocks', () => {
-            const fakeStocks = {
+            const fakeRepository: IStockVisualizationRepository = {
                 getAllStocks: async () => [
                     new Stock(1, 'Stock 1', 'Description 1', 'alimentation', [
-                        new StockItem('Item 1', new Quantity(5), 1),
-                        new StockItem('Item 2', new Quantity(10), 1),
+                        new StockItem(1, 'Item 1', new Quantity(5), 'description item1', 1, 1),
                     ]),
                     new Stock(2, 'Stock 2', 'Description 2', 'electronics', [
-                        new StockItem('Item 3', new Quantity(3), 1),
+                        new StockItem(2, 'Item 2', new Quantity(3), 'description item2', 2, 1),
                     ]),
                 ],
+                getStockDetails: async () => null,
+                getStockItems: async () => [],
             };
-            const service = new StockVisualizationService(fakeStocks);
+            const service = new StockVisualizationService(fakeRepository);
             it('should return an array of stocks', async () => {
                 const result = await service.getAllStocks(1);
                 expect(result.length).toBe(2);
@@ -60,28 +70,68 @@ describe('StockVisualizationService', () => {
 
     describe('::getStockDetails', () => {
         describe('when there is no items in the stock', () => {
-            const fakeStocks = {
-                getAllStocks: async () => [
+            const fakeRepository: IStockVisualizationRepository = {
+                getAllStocks: async () => [],
+                getStockDetails: async () =>
                     new Stock(1, 'Stock 1', 'Description 1', 'alimentation', []),
-                ],
+                getStockItems: async () => [],
             };
-            const service = new StockVisualizationService(fakeStocks);
+            const service = new StockVisualizationService(fakeRepository);
             it('should return the stock with 0 items and 0 quantity', async () => {
                 const result = await service.getStockDetails(1, 1);
-                expect(result).toBeDefined();
-                expect(result?.label).toBe('Stock 1');
-                expect(result?.id).toBe(1);
-                expect(result?.getTotalItems()).toBe(0);
-                expect(result?.getTotalQuantity()).toBe(0);
+                expect(result).toEqual({
+                    id: 1,
+                    label: 'Stock 1',
+                    description: 'Description 1',
+                    category: 'alimentation',
+                });
             })
         })
 
         describe('when stock does not exist', () => {
-            const fakeRepository = {getAllStocks: async () => []};
+            const fakeRepository: IStockVisualizationRepository = {
+                getAllStocks: async () => [],
+                getStockDetails: async () => null,
+                getStockItems: async () => [],
+            };
             const service = new StockVisualizationService(fakeRepository);
             it('should throw an error', async () => {
                 await expect(service.getStockDetails(99, 1))
                     .rejects.toThrow('Stock not found')
+            })
+        })
+    })
+    describe('::getStockItems', () => {
+        describe('when there is no items in the stock', () => {
+            const fakeRepository: IStockVisualizationRepository = {
+                getAllStocks: async () => [],
+                getStockDetails: async () => null,
+                getStockItems: async () => [],
+            };
+            const service = new StockVisualizationService(fakeRepository);
+            it('should return an empty array', async () => {
+                const result = await service.getStockItems(1, 1);
+                expect(result).toEqual([]);
+            })
+        })
+
+        describe('when there are items in the stock', () => {
+            const fakeRepository: IStockVisualizationRepository = {
+                getAllStocks: async () => [],
+                getStockDetails: async () => null,
+                getStockItems: async () => [
+                    new StockItem(1, 'Item 1', new Quantity(5), 'description item1', 1, 1),
+                    new StockItem(2, 'Item 2', new Quantity(10), 'description item2', 1, 1),
+                ],
+            };
+            const service = new StockVisualizationService(fakeRepository);
+            it('should return an array of items', async () => {
+                const result = await service.getStockItems(1, 1);
+                expect(result.length).toBe(2);
+                expect(result[0].label).toBe('Item 1');
+                expect(result[0].quantity.value).toBe(5);
+                expect(result[1].label).toBe('Item 2');
+                expect(result[1].quantity.value).toBe(10);
             })
         })
     })
