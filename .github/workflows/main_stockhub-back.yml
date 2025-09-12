@@ -20,44 +20,84 @@ jobs:
         with:
           node-version: "18.x"
       - run: npm ci
-      - name: Run unit tests
-        run: npm run test:unit
+      - run: npx tsc --noEmit
+      - run: npm run lint --if-present
+      - run: npm run test:unit
+
 
   integration-tests:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: stockhub_test
+        ports:
+          - 3308:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
       - run: npm ci
+
+      - name: Run migrations
+        run: npx prisma migrate deploy --schema=prisma/schema.prisma
+        env:
+          DATABASE_URL: "mysql://root:root@localhost:3308/stockhub_test"
+
       - name: Run integration tests
         run: npm run test:integration
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL_TEST }}
+          DATABASE_URL: "mysql://root:root@localhost:3308/stockhub_test"
 
-  build-deploy:
+
+  build-and-deploy:
     runs-on: ubuntu-latest
-    needs: [ unit-tests, integration-tests ]   # attend que les TU et intégration passent
+    needs:
+      - unit-tests
+      - integration-tests
+    environment:
+      name: "Production"
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
-      - run: npm ci
-      - run: npx tsc --noEmit
-      - run: npm run lint --if-present
-      - run: npm run build
-      - run: rm -rf node_modules
-      - run: zip release.zip ./* -r
-      - uses: actions/upload-artifact@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Remove node_modules
+        run: rm -rf node_modules
+
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
           name: node-app
           path: release.zip
-      - uses: actions/download-artifact@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
           name: node-app
-      - run: unzip release.zip
+
+      - name: Unzip artifact
+        run: unzip release.zip
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
