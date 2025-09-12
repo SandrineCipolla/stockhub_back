@@ -8,21 +8,6 @@ import {ReadUserRepository} from "../../services/readUserRepository";
 import {WriteUserRepository} from "../../services/writeUserRepository";
 import {PrismaStockVisualizationRepository} from "../../db/repositories/PrismaStockVisualizationRepository";
 
-// const fakeRepository = {
-//     getAllStocks: async (userId: number): Promise<Stock[]> => {
-//         return [
-//             new Stock(1, "Cellier", "Stock alimentaire", "alimentation", [
-//                 new StockItem("Pâtes", new Quantity(5), 2),
-//                 new StockItem("Riz", new Quantity(0), 1),
-//             ]),
-//             new Stock(2, "Aquarelle", "Matériel créatif", "artistique", [
-//                 new StockItem("Pinceaux taille 1", new Quantity(2), 2),
-//                 new StockItem("Bleu outremer", new Quantity(2), 1),
-//             ]),
-//         ];
-//     },
-// };
-
 const prismaRepository = new PrismaStockVisualizationRepository();
 
 const stockVisualizationService = new StockVisualizationService(prismaRepository);
