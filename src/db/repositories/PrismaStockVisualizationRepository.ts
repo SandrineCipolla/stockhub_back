@@ -1,11 +1,11 @@
-import {PrismaClient} from "../../generated/prisma";
-
 import {Stock} from "../../domain/stock-management/common/entities/Stock";
 import {StockItem} from "../../domain/stock-management/common/entities/StockItem";
 import {Quantity} from "../../domain/stock-management/common/value-objects/Quantity";
 import {
     IStockVisualizationRepository
 } from "../../domain/stock-management/visualization/queries/IStockVisualizationRepository";
+
+import {PrismaClient} from "../../generated/prisma";
 
 const prisma = new PrismaClient();
 
