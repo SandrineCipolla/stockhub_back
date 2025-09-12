@@ -1,4 +1,5 @@
-import {PrismaClient} from "../../src/generated/prisma";
+import {PrismaClient} from "@prisma/client";
+
 import {PrismaStockVisualizationRepository} from "../../src/db/repositories/PrismaStockVisualizationRepository";
 
 const prisma = new PrismaClient();
