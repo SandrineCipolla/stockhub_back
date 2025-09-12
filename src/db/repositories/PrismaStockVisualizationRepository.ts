@@ -58,7 +58,7 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
             new Quantity(item.QUANTITY ?? 0),
             item.DESCRIPTION ?? '',
             item.MINIMUM_STOCK,
-            item.STOCK_ID ?? 0,
+            item.STOCK_ID!,
         ));
     }
 
