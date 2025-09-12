@@ -5,7 +5,8 @@ import {
     IStockVisualizationRepository
 } from "../../domain/stock-management/visualization/queries/IStockVisualizationRepository";
 
-import {PrismaClient} from "../../generated/prisma";
+import {PrismaClient} from "@prisma/client";
+
 
 const prisma = new PrismaClient();
 
@@ -58,7 +59,7 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
             new Quantity(item.QUANTITY ?? 0),
             item.DESCRIPTION ?? '',
             item.MINIMUM_STOCK,
-            item.STOCK_ID!,
+            item.STOCK_ID,
         ));
     }
 
