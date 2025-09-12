@@ -13,8 +13,8 @@ model items {
   DESCRIPTION   String? @db.VarChar(255)
   QUANTITY      Int?
   MINIMUM_STOCK Int     @default(1)
-  STOCK_ID      Int
-  stocks        stocks  @relation(fields: [STOCK_ID], references: [ID], onDelete: Cascade, onUpdate: Cascade, map: "items_ibfk_1")
+  STOCK_ID      Int?
+  stocks        stocks? @relation(fields: [STOCK_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "items_ibfk_1")
 
   @@index([STOCK_ID], map: "STOCK_ID")
 }
