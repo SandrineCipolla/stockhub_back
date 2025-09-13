@@ -1,16 +1,18 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build, Test and Deploy Node.js app to Azure Web App - stockhub-back
+name: CI/CD Pipeline - stockhub-back
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "*" ]  # CI s'exécute sur toutes les branches
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  unit-tests:
+  # CI Job - s'exécute sur toutes les branches
+  continuous-integration:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -114,11 +116,13 @@ jobs:
   #          DATABASE_URL: "mysql://root:root@localhost:3308/stockhub_test"
 
 
+  # Build et Deploy - ne s'exécute QUE sur la branche main
   build-and-deploy:
     runs-on: ubuntu-latest
+    # Condition: ne s'exécute que sur push vers main
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs:
-      - unit-tests
-    #      - integration-tests
+      - continuous-integration
     environment:
       name: "Production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
