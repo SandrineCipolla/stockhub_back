@@ -10,6 +10,8 @@ import {authenticationMiddleware} from "./authentication/authenticateMiddleware"
 import {setupHttpServer} from "./serverSetup/setupHttpServer";
 import cors from "cors";
 import configureStockRoutesV2 from "./api/routes/StockRoutesV2";
+import swaggerUi from 'swagger-ui-express';
+import {swaggerSpec} from './docs/swagger';
 
 export async function initializeApp() {
     const app = express();
@@ -35,6 +37,10 @@ export async function initializeApp() {
 
     rootSecurity.info("initialization of authentication ...");
 
+    app.use(express.json());
+
+    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    rootMain.info("Swagger docs available at /api-docs");
 
     app.use(passport.initialize());
 
@@ -42,13 +48,13 @@ export async function initializeApp() {
 
     rootSecurity.info("initialization of authentication DONE!");
 
-    const stockRoutesV2 = await configureStockRoutesV2();
-    //injection OID directement pour tester les routes v2 sans auth
-    app.use("/api/v2", (req, res, next) => {
-        (req as any).userID = "sandrine.cipolla@gmail.com";
-        next();
-    }, stockRoutesV2);
-    rootMain.info('api/v2 routes (no auth required) configured');
+    // const stockRoutesV2 = await configureStockRoutesV2();
+    // //injection OID directement pour tester les routes v2 sans auth
+    // app.use("/api/v2", (req, res, next) => {
+    //     (req as any).userID = "sandrine.cipolla@gmail.com";
+    //     next();
+    // }, stockRoutesV2);
+    // rootMain.info('api/v2 routes (no auth required) configured');
 
     app.use(
         "/api",
@@ -81,6 +87,9 @@ export async function initializeApp() {
 
     const stockRoutes = await configureStockRoutes();
     app.use("/api/v1", stockRoutes);
+
+    const stockRoutesV2 = await configureStockRoutesV2();
+    app.use("/api/v2", stockRoutesV2);
 
     const userRoutes = await configureUserRoutes();
     app.use("/api/v1", userRoutes);

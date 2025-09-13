@@ -1,0 +1,93 @@
+{
+  "info": {
+    "name": "StockHub V1 vs V2",
+    "_postman_id": "a1b2c3d4-e5f6-7890-1234-abcdef123456",
+    "description": "Collection pour comparer les endpoints V1 (legacy) et V2 (DDD/Prisma)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "V1 - Get all stocks",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3006/api/v1/stocks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3006",
+          "path": [
+            "api",
+            "v1",
+            "stocks"
+          ]
+        }
+      }
+    },
+    {
+      "name": "V1 - Get stock items",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3006/api/v1/stocks/9/items",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3006",
+          "path": [
+            "api",
+            "v1",
+            "stocks",
+            "9",
+            "items"
+          ]
+        }
+      }
+    },
+    {
+      "name": "V2 - Get all stocks (summary)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3006/api/v2/stocks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3006",
+          "path": [
+            "api",
+            "v2",
+            "stocks"
+          ]
+        }
+      }
+    },
+    {
+      "name": "V2 - Get stock details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3006/api/v2/stocks/9",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3006",
+          "path": [
+            "api",
+            "v2",
+            "stocks",
+            "9"
+          ]
+        }
+      }
+    }
+  ]
+}
