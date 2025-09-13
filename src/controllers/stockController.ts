@@ -7,7 +7,7 @@ import {HTTP_CODE_CREATED, HTTP_CODE_OK} from "../Utils/httpCodes";
 import {UserService} from "../services/userService";
 import {ReadUserRepository} from "../services/readUserRepository";
 import {WriteUserRepository} from "../services/writeUserRepository";
-import {rootStockController} from "../Utils/logger";
+import {rootException} from "../Utils/cloudLogger";
 
 //
 //
@@ -41,6 +41,7 @@ export class StockController {
 
             res.status(HTTP_CODE_OK).json(stocks);
         } catch (err: any) {
+            rootException(err)
             sendError(res, err as CustomError);
         }
     }
@@ -62,6 +63,7 @@ export class StockController {
 
             res.status(HTTP_CODE_CREATED).json({message: "Stock created successfully."});
         } catch (err: any) {
+            rootException(err)
             sendError(res, err as CustomError);
         }
     }
@@ -74,6 +76,7 @@ export class StockController {
             const stock = await this.stockService.getStockDetails(ID, userID.value);
             res.status(HTTP_CODE_OK).json(stock);
         } catch (err: any) {
+            rootException(err)
             sendError(res, err as CustomError);
         }
     }
@@ -84,6 +87,7 @@ export class StockController {
             const items = await this.stockService.getStockItems(ID);
             res.status(HTTP_CODE_OK).json(items);
         } catch (err: any) {
+            rootException(err)
             sendError(res, err as CustomError);
         }
     }
@@ -101,6 +105,7 @@ export class StockController {
             await this.stockService.updateStockItemQuantity(itemID, QUANTITY, stockID);
             res.status(HTTP_CODE_OK).json({message: "Stock updated successfully."});
         } catch (err: any) {
+            rootException(err)
             sendError(res, err as CustomError);
         }
     }
@@ -116,6 +121,7 @@ export class StockController {
             await this.stockService.addStockItem(item, stockID);
             res.status(HTTP_CODE_CREATED).json({message: "Stock item added successfully."});
         } catch (err: any) {
+            rootException(err)
             sendError(res, err as CustomError);
         }
     }
@@ -127,6 +133,7 @@ export class StockController {
             await this.stockService.deleteStockItem(stockID, itemID);
             res.status(HTTP_CODE_OK).json({message: "Stock item deleted successfully."});
         } catch (err: any) {
+            rootException(err)
             sendError(res, err as CustomError);
         }
     }
@@ -136,10 +143,11 @@ export class StockController {
             const OID = (req as any).userID as string;
             const userID = await this.userService.convertOIDtoUserID(OID);
             const stockID = Number(req.params.stockID);
-            await this.stockService.deleteStock(stockID,userID.value);
+            await this.stockService.deleteStock(stockID, userID.value);
             res.status(HTTP_CODE_OK).json({message: "Stock deleted successfully."});
         } catch (err: any) {
             console.error("Error in deleteStock:", err);
+            rootException(err)
             sendError(res, err as CustomError);
         }
     }
@@ -151,6 +159,7 @@ export class StockController {
             const items = await this.stockService.getAllItems(userID.value);
             res.status(HTTP_CODE_OK).json(items);
         } catch (err: any) {
+            rootException(err)
             sendError(res, err as CustomError);
         }
     }
@@ -161,20 +170,22 @@ export class StockController {
             const item = await this.stockService.getItemDetails(itemID);
             res.status(HTTP_CODE_OK).json(item);
         } catch (err: any) {
+            rootException(err)
             sendError(res, err as CustomError);
         }
     }
 
-    async getLowStockItems(req:Request,res:Response) {
+    async getLowStockItems(req: Request, res: Response) {
         try {
             const OID = (req as any).userID as string;
             const userID = await this.userService.convertOIDtoUserID(OID);
             if (!userID) {
-                return res.status(400).json({ error: 'User ID is missing' });
+                return res.status(400).json({error: 'User ID is missing'});
             }
-            const items=await this.stockService.getLowStockItems(userID.value);
+            const items = await this.stockService.getLowStockItems(userID.value);
             res.status(HTTP_CODE_OK).json(items);
         } catch (err: any) {
+            rootException(err)
             sendError(res, err as CustomError);
         }
     }
