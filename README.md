@@ -72,7 +72,7 @@ Déploiement cible Azure App Service + DB MySQL Azure.
 
 ### Diagramme relationnel
 
-![Database Schema](./docs/images/StockHub_V2.png)
+![Database Schema](src/docs/images/StockHub_V2.png)
 
 ### Modèle actuel
 
