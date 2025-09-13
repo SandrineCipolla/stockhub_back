@@ -83,9 +83,9 @@ describe("StockControllerVisualization", () => {
                 req = {params: {stockId: "1"}};
                 mockUserService.convertOIDtoUserID = jest.fn().mockResolvedValue({value: 42});
                 const mockStock = {
-                    id: 1,
-                    label: "Stock 1",
-                    description: "Description 1",
+                    ID: 1,
+                    LABEL: "Stock 1",
+                    DESCRIPTION: "Description 1",
                     category: "alimentation",
                 };
                 mockStockService.getStockDetails.mockResolvedValue(mockStock);

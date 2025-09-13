@@ -1,6 +1,7 @@
 export interface StockSummary {
-    id: number;
-    label: string;
-    description: string;
+    ID: number;
+    LABEL: string;
+    DESCRIPTION: string;
     category: string;
 }
+
