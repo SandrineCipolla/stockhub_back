@@ -1,0 +1,26 @@
+-- CreateTable
+CREATE TABLE `restock_requests` (
+    `ID` INTEGER NOT NULL AUTO_INCREMENT,
+    `STOCK_ID` INTEGER NOT NULL,
+    `ITEM_ID` INTEGER NOT NULL,
+    `REQUESTED_BY` VARCHAR(255) NOT NULL,
+    `REQUESTED_QUANTITY` INTEGER NOT NULL,
+    `REASON` TEXT NULL,
+    `STATUS` VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    `CREATED_AT` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `APPROVED_BY` VARCHAR(255) NULL,
+    `APPROVED_AT` DATETIME(3) NULL,
+
+    INDEX `idx_requested_by`(`REQUESTED_BY`),
+    INDEX `idx_status`(`STATUS`),
+    INDEX `idx_stock_id`(`STOCK_ID`),
+    INDEX `idx_item_id`(`ITEM_ID`),
+    INDEX `idx_created_at`(`CREATED_AT`),
+    PRIMARY KEY (`ID`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `restock_requests` ADD CONSTRAINT `restock_requests_stock_fk` FOREIGN KEY (`STOCK_ID`) REFERENCES `stocks`(`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `restock_requests` ADD CONSTRAINT `restock_requests_item_fk` FOREIGN KEY (`ITEM_ID`) REFERENCES `items`(`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
