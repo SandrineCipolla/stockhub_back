@@ -1,7 +1,6 @@
 import authConfig from "./authConfig";
 import {rootMain, rootSecurity} from "./Utils/logger";
 import express from "express";
-import cors from "cors";
 import {CustomError} from "./errors";
 import passport from "passport";
 import configureStockRoutes from "./routes/stockRoutes";
@@ -10,6 +9,7 @@ import {authConfigbearerStrategy} from "./authentication/authBearerStrategy";
 import {authenticationMiddleware} from "./authentication/authenticateMiddleware";
 import {setupHttpServer} from "./serverSetup/setupHttpServer";
 import configureStockRoutesV2 from "./api/routes/StockRoutesV2";
+import {rootCloudEvent} from "./Utils/cloudLogger";
 
 export async function initializeApp() {
     const app = express();
@@ -23,15 +23,15 @@ export async function initializeApp() {
         // console.log('🔍 Origin received:', origin);
         // console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
         //
-        // const isProduction = process.env.NODE_ENV === 'production';
-        // const isProdOrigin = origin === 'https://brave-field-03611eb03.5.azurestaticapps.net';
-        // const isDevOrigin = origin && (origin.includes('localhost') || origin.includes('127.0.0.1'));
-        //
-        // if ((isProduction && isProdOrigin) || (!isProduction && isDevOrigin)) {
-        //     res.setHeader('Access-Control-Allow-Origin', origin);
-        // }
+        const isProduction = process.env.NODE_ENV === 'production';
+        const isProdOrigin = origin === 'https://brave-field-03611eb03.5.azurestaticapps.net';
+        const isDevOrigin = origin && (origin.includes('localhost') || origin.includes('127.0.0.1'));
 
-        res.setHeader('Access-Control-Allow-Origin', '*');
+        if ((isProduction && isProdOrigin) || (!isProduction && isDevOrigin)) {
+            rootCloudEvent("CORS origin allowed", {origin});
+            res.setHeader('Access-Control-Allow-Origin', origin);
+        }
+
         res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
         res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
         res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -39,6 +39,7 @@ export async function initializeApp() {
 
         // Gérer les requêtes preflight OPTIONS
         if (req.method === 'OPTIONS') {
+            rootCloudEvent("CORS preflight request handled", {origin});
             res.status(200).end();
             return;
         }
