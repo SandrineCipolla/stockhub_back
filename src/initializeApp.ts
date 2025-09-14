@@ -1,6 +1,7 @@
 import authConfig from "./authConfig";
 import {rootMain, rootSecurity} from "./Utils/logger";
 import express from "express";
+import cors from "cors";
 import {CustomError} from "./errors";
 import passport from "passport";
 import configureStockRoutes from "./routes/stockRoutes";
@@ -9,43 +10,36 @@ import {authConfigbearerStrategy} from "./authentication/authBearerStrategy";
 import {authenticationMiddleware} from "./authentication/authenticateMiddleware";
 import {setupHttpServer} from "./serverSetup/setupHttpServer";
 import configureStockRoutesV2 from "./api/routes/StockRoutesV2";
-import {rootCloudEvent} from "./Utils/cloudLogger";
 
 export async function initializeApp() {
     const app = express();
 
     app.use(express.json());
 
+    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map(o => o.trim()).filter(Boolean) || [];
 
-    app.use((req, res, next) => {
-
-        // const origin = req.headers.origin;
-        // console.log('🔍 Origin received:', origin);
-        // console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
-        //
-        const isProduction = process.env.NODE_ENV === 'production';
-        const isProdOrigin = origin === 'https://brave-field-03611eb03.5.azurestaticapps.net';
-        const isDevOrigin = origin && (origin.includes('localhost') || origin.includes('127.0.0.1'));
-
-        if ((isProduction && isProdOrigin) || (!isProduction && isDevOrigin)) {
-            rootCloudEvent("CORS origin allowed", {origin});
-            res.setHeader('Access-Control-Allow-Origin', origin);
-        }
-
-        res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
-        res.setHeader('Access-Control-Allow-Credentials', 'true');
-        res.setHeader('Access-Control-Max-Age', '86400');
-
-        // Gérer les requêtes preflight OPTIONS
-        if (req.method === 'OPTIONS') {
-            rootCloudEvent("CORS preflight request handled", {origin});
-            res.status(200).end();
-            return;
-        }
-
-        next();
-    });
+    app.use(
+        cors({
+            origin: allowedOrigins,
+            credentials: true,
+            methods: [
+                'GET',
+                'HEAD',
+                'PUT',
+                'PATCH',
+                'POST',
+                'DELETE',
+                'OPTIONS'
+            ],
+            allowedHeaders: [
+                'Content-Type',
+                'Authorization',
+                'X-Requested-With',
+                'Accept'
+            ]
+        })
+    );
+    app.options('*', cors());
 
     const clientID = authConfig.credentials.clientID;
     const audience = authConfig.credentials.clientID;
@@ -57,6 +51,8 @@ export async function initializeApp() {
 
     const bearerStrategy = authConfigbearerStrategy;
 
+    // ----------- Passport setup -----------
+
     rootSecurity.info("initialization of authentication ...");
 
     app.use(passport.initialize());
@@ -65,6 +61,7 @@ export async function initializeApp() {
 
     rootSecurity.info("initialization of authentication DONE!");
 
+    // ----------- Routes setup -----------
 
     const stockRoutesV2 = await configureStockRoutesV2();
 
