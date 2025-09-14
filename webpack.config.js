@@ -5,12 +5,19 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = {
     entry: "./src/index.ts",
     target: "node",
-    externals: [nodeExternals({
-        allowlist: ['@prisma/client', '.prisma/client'] // Inclure Prisma dans le bundle
-    })],
+    // externals: [nodeExternals({
+    //     allowlist: ['@prisma/client', '.prisma/client'] // Inclure Prisma dans le bundle
+    // })],
     plugins: [
         new CopyWebpackPlugin({
             patterns: [
+                {
+                    from: "node_modules/prisma/libquery_engine-*.so.node",
+                    to: "node_modules/.prisma/client/",
+                    globOptions: {
+                        ignore: []
+                    }
+                },
                 {
                     from: "node_modules/.prisma/client",
                     to: "node_modules/.prisma/client",
