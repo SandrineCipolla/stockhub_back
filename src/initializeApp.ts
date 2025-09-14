@@ -19,18 +19,19 @@ export async function initializeApp() {
 
     app.use((req, res, next) => {
 
-        const origin = req.headers.origin;
-        console.log('🔍 Origin received:', origin);
-        console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
+        // const origin = req.headers.origin;
+        // console.log('🔍 Origin received:', origin);
+        // console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
+        //
+        // const isProduction = process.env.NODE_ENV === 'production';
+        // const isProdOrigin = origin === 'https://brave-field-03611eb03.5.azurestaticapps.net';
+        // const isDevOrigin = origin && (origin.includes('localhost') || origin.includes('127.0.0.1'));
+        //
+        // if ((isProduction && isProdOrigin) || (!isProduction && isDevOrigin)) {
+        //     res.setHeader('Access-Control-Allow-Origin', origin);
+        // }
 
-        const isProduction = process.env.NODE_ENV === 'production';
-        const isProdOrigin = origin === 'https://brave-field-03611eb03.5.azurestaticapps.net';
-        const isDevOrigin = origin && (origin.includes('localhost') || origin.includes('127.0.0.1'));
-
-        if ((isProduction && isProdOrigin) || (!isProduction && isDevOrigin)) {
-            res.setHeader('Access-Control-Allow-Origin', origin);
-        }
-
+        res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
         res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
         res.setHeader('Access-Control-Allow-Credentials', 'true');
