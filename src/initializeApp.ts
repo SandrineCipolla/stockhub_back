@@ -15,18 +15,22 @@ export async function initializeApp() {
 
     app.use(express.json());
 
+    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map(o => o.trim()).filter(Boolean) || [];
+
     // // Configuration CORS globale améliorée
     // app.use(cors(corsConfig));
     //
     // // Middleware pour gérer explicitement les requêtes OPTIONS (preflight)
     // app.options('*', cors(corsConfig));
     app.use((req, res, next) => {
-        const allowedOrigin = 'https://brave-field-03611eb03.5.azurestaticapps.net';
-        const origin = req.headers.origin;
+        const origin = req.headers.origin as string | undefined;
 
-        // Permettre l'origine spécifique ou * en développement
-        if (origin === allowedOrigin || process.env.NODE_ENV === 'development') {
-            res.setHeader('Access-Control-Allow-Origin', origin || '*');
+        if (origin && (allowedOrigins.includes(origin) || process.env.NODE_ENV === 'development')) {
+            res.setHeader('Access-Control-Allow-Origin', origin);
+
+            if (req.headers.authorization || req.headers.cookie) {
+                res.setHeader('Access-Control-Allow-Credentials', 'true');
+            }
         }
 
         res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
