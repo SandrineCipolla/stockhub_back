@@ -1,6 +1,7 @@
 import authConfig from "./authConfig";
 import {rootMain, rootSecurity} from "./Utils/logger";
 import express from "express";
+import cors from "cors";
 import {CustomError} from "./errors";
 import passport from "passport";
 import configureStockRoutes from "./routes/stockRoutes";
@@ -17,34 +18,28 @@ export async function initializeApp() {
 
     const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map(o => o.trim()).filter(Boolean) || [];
 
-    // // Configuration CORS globale améliorée
-    // app.use(cors(corsConfig));
-    //
-    // // Middleware pour gérer explicitement les requêtes OPTIONS (preflight)
-    // app.options('*', cors(corsConfig));
-    app.use((req, res, next) => {
-        const origin = req.headers.origin as string | undefined;
-
-        if (origin && (allowedOrigins.includes(origin) || process.env.NODE_ENV === 'development')) {
-            res.setHeader('Access-Control-Allow-Origin', origin);
-
-            if (req.headers.authorization || req.headers.cookie) {
-                res.setHeader('Access-Control-Allow-Credentials', 'true');
-            }
-        }
-
-        res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
-        res.setHeader('Access-Control-Max-Age', '86400');
-
-        // Gérer les requêtes preflight OPTIONS
-        if (req.method === 'OPTIONS') {
-            res.status(200).end();
-            return;
-        }
-
-        next();
-    });
+    app.use(
+        cors({
+            origin: allowedOrigins,
+            credentials: true,
+            methods: [
+                'GET',
+                'HEAD',
+                'PUT',
+                'PATCH',
+                'POST',
+                'DELETE',
+                'OPTIONS'
+            ],
+            allowedHeaders: [
+                'Content-Type',
+                'Authorization',
+                'X-Requested-With',
+                'Accept'
+            ]
+        })
+    );
+    app.options('*', cors());
 
     const clientID = authConfig.credentials.clientID;
     const audience = authConfig.credentials.clientID;
