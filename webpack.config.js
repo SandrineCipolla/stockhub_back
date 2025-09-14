@@ -5,9 +5,9 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = {
     entry: "./src/index.ts",
     target: "node",
-    externals: [nodeExternals({
-        allowlist: [] // Exclure tous les modules node_modules du bundle, y compris Prisma
-    })],
+    // externals: [nodeExternals({
+    //     allowlist: [] // Exclure tous les modules node_modules du bundle, y compris Prisma
+    // })],
     plugins: [
         new CopyWebpackPlugin({
             patterns: [
