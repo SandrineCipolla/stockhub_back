@@ -13,7 +13,7 @@
     "test:coverage": "COVERAGE=true jest --config=jest.ci.config.js --passWithNoTests --detectOpenHandles --forceExit",
     "test:integration": "jest --config jest.integration.config.js --runInBand --detectOpenHandles --forceExit",
     "migrate:test": "dotenv -e .env.test -- prisma migrate dev --name init --schema=prisma/schema.prisma",
-    "build": "webpack --config webpack.config.js",
+    "build": "npx prisma generate && webpack --config webpack.config.js",
     "build:local": "tsc --project tsconfig.json",
     "copy-certs": "cp ./server.cert ./dist"
   },
