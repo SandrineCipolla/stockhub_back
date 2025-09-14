@@ -77,7 +77,7 @@ export async function initializeApp() {
     //         res: express.Response,
     //         next: express.NextFunction
     //     ) => {
-    //         authenticationMiddleware(res, req, next);
+    //         authenticationMiddleware(req, res, next);
     //     },
     //     (
     //         req: express.Request,
@@ -106,7 +106,7 @@ export async function initializeApp() {
             res: express.Response,
             next: express.NextFunction
         ) => {
-            authenticationMiddleware(res, req, next);
+            authenticationMiddleware(req, res, next);
         },
         (
             req: express.Request,
@@ -136,7 +136,7 @@ export async function initializeApp() {
             res: express.Response,
             next: express.NextFunction
         ) => {
-            authenticationMiddleware(res, req, next);
+            authenticationMiddleware(req, res, next);
         },
         (
             req: express.Request,

@@ -1,10 +1,9 @@
-
 import {rootSecurityAuthenticationMiddleware} from "../Utils/logger";
 import {CustomError} from "../errors";
 import express from "express";
 import passport from "passport";
 
-export function authenticationMiddleware(res: express.Response, req: express.Request, next: express.NextFunction) {
+export function authenticationMiddleware(req: express.Request, res: express.Response, next: express.NextFunction) {
     rootSecurityAuthenticationMiddleware.info("Authenticating user ...");
 
     passport.authenticate(
@@ -22,9 +21,14 @@ export function authenticationMiddleware(res: express.Response, req: express.Req
             if (info) {
                 (req as any).authInfo = info;
                 (req as any).userID = info.emails[0] as string;
-                rootSecurityAuthenticationMiddleware.info("Authentication successful, proceeding to next middleware - {oid}", {oid: info.emails[0]});
+                rootSecurityAuthenticationMiddleware.info(
+                    "Authentication successful, proceeding to next middleware - {oid}",
+                    {oid: info.emails[0]}
+                );
                 return next();
             }
         }
     )(req, res, next);
 }
+
+
