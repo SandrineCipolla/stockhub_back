@@ -14,7 +14,6 @@ import configureStockRoutesV2 from "./api/routes/StockRoutesV2";
 export async function initializeApp() {
     const app = express();
 
-    app.use(express.json());
 
     const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map(o => o.trim()).filter(Boolean) || [];
 
@@ -37,11 +36,15 @@ export async function initializeApp() {
                 'Content-Type',
                 'Authorization',
                 'X-Requested-With',
-                'Accept'
+                'Accept',
+                'Credentials'
             ]
         })
     );
+
     app.options('*', cors());
+
+    app.use(express.json());
 
     rootServerSetup.getChildCategory("cors").info("Cors configuration completed");
 
