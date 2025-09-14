@@ -1,5 +1,5 @@
 import authConfig from "./authConfig";
-import {rootMain, rootSecurity} from "./Utils/logger";
+import {rootMain, rootSecurity, rootServerSetup} from "./Utils/logger";
 import express from "express";
 import cors from "cors";
 import {CustomError} from "./errors";
@@ -17,6 +17,8 @@ export async function initializeApp() {
     app.use(express.json());
 
     const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map(o => o.trim()).filter(Boolean) || [];
+
+    rootServerSetup.getChildCategory("cors").info("Allowed origins: {allowedOrigins}", {allowedOrigins});
 
     app.use(
         cors({
@@ -40,6 +42,8 @@ export async function initializeApp() {
         })
     );
     app.options('*', cors());
+
+    rootServerSetup.getChildCategory("cors").info("Cors configuration completed");
 
     const clientID = authConfig.credentials.clientID;
     const audience = authConfig.credentials.clientID;
