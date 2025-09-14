@@ -15,22 +15,20 @@ export async function initializeApp() {
 
     app.use(express.json());
 
-    // // Configuration CORS globale améliorée
-    // app.use(cors(corsConfig));
-    //
-    // // Middleware pour gérer explicitement les requêtes OPTIONS (preflight)
-    // app.options('*', cors(corsConfig));
+
     app.use((req, res, next) => {
         const allowedOrigin = 'https://brave-field-03611eb03.5.azurestaticapps.net';
         const origin = req.headers.origin;
+        console.log('🔍 Origin received:', origin);
+        console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
 
-        // Permettre l'origine spécifique ou * en développement
-        if (origin === allowedOrigin || process.env.NODE_ENV === 'development') {
-            res.setHeader('Access-Control-Allow-Origin', origin || '*');
+        if (origin) {
+            res.setHeader('Access-Control-Allow-Origin', origin);
         }
 
         res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
         res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
         res.setHeader('Access-Control-Max-Age', '86400');
 
         // Gérer les requêtes preflight OPTIONS
@@ -60,47 +58,9 @@ export async function initializeApp() {
 
     rootSecurity.info("initialization of authentication DONE!");
 
-    // IMPORTANT: Routes V2 configurées avec authentification
-    const stockRoutesV2 = await configureStockRoutesV2();
 
-    // // Middleware spécifique pour V2 avec CORS renforcé ET authentification
-    // app.use("/api/v2",
-    //     cors(corsV2Config),
-    //     (req: any, res: any, next: any) => {
-    //         // Ajout d'headers CORS supplémentaires si nécessaire
-    //         res.header('Access-Control-Allow-Origin', '*');
-    //         res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
-    //         res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
-    //         next();
-    //     },
-    //     (
-    //         req: express.Request,
-    //         res: express.Response,
-    //         next: express.NextFunction
-    //     ) => {
-    //         authenticationMiddleware(res, req, next);
-    //     },
-    //     (
-    //         req: express.Request,
-    //         res: express.Response,
-    //         next: express.NextFunction
-    //     ) => {
-    //         next();
-    //     },
-    //     (
-    //         err: CustomError,
-    //         req: express.Request,
-    //         res: express.Response,
-    //         next: express.NextFunction
-    //     ) => {
-    //         res.locals.message = err.message;
-    //         res.locals.error = req.app.get("env") === "development" ? err : {};
-    //         res.status(err.status || 500).send(err);
-    //     },
-    //     stockRoutesV2
-    // );
-    // rootMain.info('api/v2 routes (auth required) configured');
-// Middleware spécifique pour V2 SANS redéfinir CORS (déjà géré au niveau global)
+    const stockRoutesV2 = await configureStockRoutesV2();
+    
     app.use("/api/v2",
         (
             req: express.Request,
