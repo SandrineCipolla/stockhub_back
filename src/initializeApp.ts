@@ -14,6 +14,8 @@ import configureStockRoutesV2 from "./api/routes/StockRoutesV2";
 export async function initializeApp() {
     const app = express();
 
+    app.use(express.json());
+
     app.use(
         cors({
             origin: "*",

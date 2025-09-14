@@ -1,7 +1,6 @@
 import {
     StockVisualizationService
 } from "../../../../../src/domain/stock-management/visualization/services/StockVisualizationService";
-import {Quantity} from "../../../../../src/domain/stock-management/common/value-objects/Quantity";
 import {StockItem} from "../../../../../src/domain/stock-management/common/entities/StockItem";
 import {Stock} from "../../../../../src/domain/stock-management/common/entities/Stock";
 import {
@@ -27,8 +26,8 @@ describe('StockVisualizationService', () => {
             const fakeRepository: IStockVisualizationRepository = {
                 getAllStocks: async () => [
                     new Stock(1, 'Stock 1', 'Description 1', 'alimentation', [
-                        new StockItem(1, 'Item 1', new Quantity(5), 'description item1', 1, 1),
-                        new StockItem(2, 'Item 2', new Quantity(10), 'description item2', 1, 1),
+                        new StockItem(1, 'Item 1', 5, 'description item1', 1, 1),
+                        new StockItem(2, 'Item 2', 10, 'description item2', 1, 1),
                     ]),
                 ],
                 getStockDetails: async () => null,
@@ -47,10 +46,10 @@ describe('StockVisualizationService', () => {
             const fakeRepository: IStockVisualizationRepository = {
                 getAllStocks: async () => [
                     new Stock(1, 'Stock 1', 'Description 1', 'alimentation', [
-                        new StockItem(1, 'Item 1', new Quantity(5), 'description item1', 1, 1),
+                        new StockItem(1, 'Item 1', 5, 'description item1', 1, 1),
                     ]),
                     new Stock(2, 'Stock 2', 'Description 2', 'electronics', [
-                        new StockItem(2, 'Item 2', new Quantity(3), 'description item2', 2, 1),
+                        new StockItem(2, 'Item 2', 3, 'description item2', 2, 1),
                     ]),
                 ],
                 getStockDetails: async () => null,
@@ -79,9 +78,9 @@ describe('StockVisualizationService', () => {
             it('should return the stock with 0 items and 0 quantity', async () => {
                 const result = await service.getStockDetails(1, 1);
                 expect(result).toEqual({
-                    id: 1,
-                    label: 'Stock 1',
-                    description: 'Description 1',
+                    ID: 1,
+                    LABEL: 'Stock 1',
+                    DESCRIPTION: 'Description 1',
                     category: 'alimentation',
                 });
             })
@@ -119,18 +118,18 @@ describe('StockVisualizationService', () => {
                 getAllStocks: async () => [],
                 getStockDetails: async () => null,
                 getStockItems: async () => [
-                    new StockItem(1, 'Item 1', new Quantity(5), 'description item1', 1, 1),
-                    new StockItem(2, 'Item 2', new Quantity(10), 'description item2', 1, 1),
+                    new StockItem(1, 'Item 1', 5, 'description item1', 1, 1),
+                    new StockItem(2, 'Item 2', 10, 'description item2', 1, 1),
                 ],
             };
             const service = new StockVisualizationService(fakeRepository);
             it('should return an array of items', async () => {
                 const result = await service.getStockItems(1, 1);
                 expect(result.length).toBe(2);
-                expect(result[0].label).toBe('Item 1');
-                expect(result[0].quantity.value).toBe(5);
-                expect(result[1].label).toBe('Item 2');
-                expect(result[1].quantity.value).toBe(10);
+                expect(result[0].LABEL).toBe('Item 1');
+                expect(result[0].QUANTITY).toBe(5);
+                expect(result[1].LABEL).toBe('Item 2');
+                expect(result[1].QUANTITY).toBe(10);
             })
         })
     })

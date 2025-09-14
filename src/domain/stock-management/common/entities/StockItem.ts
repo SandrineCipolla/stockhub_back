@@ -1,22 +1,25 @@
 import {Quantity} from "../value-objects/Quantity";
 
 export class StockItem {
-    constructor(
-        public id: number,
-        public label: string,
-        public quantity: Quantity,
-        public description: string,
-        public minimumStock: number = 1,
-        public stockId: number,
-    ) {
 
+    private innerQuantity: Quantity;
+
+    constructor(
+        public ID: number,
+        public LABEL: string,
+        public QUANTITY: number,
+        public DESCRIPTION: string,
+        public minimumStock: number = 1,
+        public STOCK_ID: number,
+    ) {
+        this.innerQuantity = new Quantity(QUANTITY);
     }
 
     isOutOfStock(): boolean {
-        return this.quantity.isZero();
+        return this.innerQuantity.isZero();
     }
 
     isLowStock(): boolean {
-        return this.quantity.isLessOrEqualToMinimum(this.minimumStock);
+        return this.innerQuantity.isLessOrEqualToMinimum(this.minimumStock);
     }
 }

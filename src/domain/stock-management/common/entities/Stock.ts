@@ -15,6 +15,6 @@ export class Stock {
     }
 
     getTotalQuantity(): number {
-        return this.items.reduce((sum, item) => sum + item.quantity.value, 0);
+        return this.items.reduce((sum, item) => sum + item.QUANTITY, 0);
     }
 }

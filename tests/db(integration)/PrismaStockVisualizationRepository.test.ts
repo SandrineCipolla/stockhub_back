@@ -84,8 +84,8 @@ describe("PrismaStockVisualizationRepository (integration)", () => {
                 const items = await repo.getStockItems(stock.ID, user.ID);
 
                 expect(items).toHaveLength(1);
-                expect(items[0].label).toBe("Item1");
-                expect(items[0].quantity.value).toBe(5);
+                expect(items[0].LABEL).toBe("Item1");
+                expect(items[0].QUANTITY).toBe(5);
             });
         });
 
