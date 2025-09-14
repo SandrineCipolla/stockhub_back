@@ -1,16 +1,19 @@
-import cors from "cors";
-import { rootSecurity } from "../Utils/logger";
+import {CorsOptions} from 'cors';
 
-const allowedOrigins = ["*"];
-
-export const corsConfig = {
-  origin: true,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
+export const corsConfig: CorsOptions = {
+    origin: "*",
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+    credentials: false,
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
 };
-rootSecurity.info("CORS configuration allowed origins:");
 
-allowedOrigins.forEach((current) => {
-  rootSecurity.info(` - ${current}`);
-});
+export const corsV2Config: CorsOptions = {
+    origin: "*",
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+    credentials: false,
+    preflightContinue: false,
+    optionsSuccessStatus: 200,
+};

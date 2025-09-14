@@ -10,20 +10,18 @@ import {authenticationMiddleware} from "./authentication/authenticateMiddleware"
 import {setupHttpServer} from "./serverSetup/setupHttpServer";
 import cors from "cors";
 import configureStockRoutesV2 from "./api/routes/StockRoutesV2";
+import {corsConfig, corsV2Config} from "./config/corsConfig";
 
 export async function initializeApp() {
     const app = express();
 
     app.use(express.json());
 
-    app.use(
-        cors({
-            origin: "*",
-            methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-            preflightContinue: false,
-            optionsSuccessStatus: 204,
-        })
-    );
+    // Configuration CORS globale améliorée
+    app.use(cors(corsConfig));
+
+    // Middleware pour gérer explicitement les requêtes OPTIONS (preflight)
+    app.options('*', cors(corsConfig));
 
     const clientID = authConfig.credentials.clientID;
     const audience = authConfig.credentials.clientID;
@@ -37,23 +35,56 @@ export async function initializeApp() {
 
     rootSecurity.info("initialization of authentication ...");
 
-
     app.use(passport.initialize());
 
     passport.use(bearerStrategy);
 
     rootSecurity.info("initialization of authentication DONE!");
 
+    // IMPORTANT: Routes V2 configurées avec authentification
     const stockRoutesV2 = await configureStockRoutesV2();
-    //injection OID directement pour tester les routes v2 sans auth
-    app.use("/api/v2", (req, res, next) => {
-        (req as any).userID = "sandrine.cipolla@gmail.com";
-        next();
-    }, stockRoutesV2);
-    rootMain.info('api/v2 routes (no auth required) configured');
 
+    // Middleware spécifique pour V2 avec CORS renforcé ET authentification
+    app.use("/api/v2",
+        cors(corsV2Config),
+        (req: any, res: any, next: any) => {
+            // Ajout d'headers CORS supplémentaires si nécessaire
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+            res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+            next();
+        },
+        (
+            req: express.Request,
+            res: express.Response,
+            next: express.NextFunction
+        ) => {
+            authenticationMiddleware(res, req, next);
+        },
+        (
+            req: express.Request,
+            res: express.Response,
+            next: express.NextFunction
+        ) => {
+            next();
+        },
+        (
+            err: CustomError,
+            req: express.Request,
+            res: express.Response,
+            next: express.NextFunction
+        ) => {
+            res.locals.message = err.message;
+            res.locals.error = req.app.get("env") === "development" ? err : {};
+            res.status(err.status || 500).send(err);
+        },
+        stockRoutesV2
+    );
+    rootMain.info('api/v2 routes (auth required) configured');
+
+    // Middleware d'authentification appliqué seulement après les routes V2
     app.use(
-        "/api",
+        "/api/v1",
         (
             req: express.Request,
             res: express.Response,
