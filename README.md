@@ -164,7 +164,7 @@ Auth V1 (Azure Bearer) reste active → séparation claire dans logs :
 - **DB** : Azure MySQL
 - **Backend** : Azure App Service / Container
 - **Monitoring** : Application Insights (présent, warnings dépréciation à gérer)
-- **Secrets** : `.env` → `DATABASE_URL`, `AZURE_CLIENT_ID`, etc.
+- **Secrets** : `.env` → `DATABASE_URL`, `AZURE_CLIENT_ID`, `ALLOWED_ORIGINS`, etc.
 
 ---
 

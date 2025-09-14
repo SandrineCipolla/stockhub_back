@@ -21,9 +21,14 @@ export function authenticationMiddleware(req: express.Request, res: express.Resp
             if (info) {
                 (req as any).authInfo = info;
                 (req as any).userID = info.emails[0] as string;
-                rootSecurityAuthenticationMiddleware.info("Authentication successful, proceeding to next middleware - {oid}", {oid: info.emails[0]});
+                rootSecurityAuthenticationMiddleware.info(
+                    "Authentication successful, proceeding to next middleware - {oid}",
+                    {oid: info.emails[0]}
+                );
                 return next();
             }
         }
     )(req, res, next);
 }
+
+

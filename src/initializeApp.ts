@@ -1,6 +1,7 @@
 import authConfig from "./authConfig";
 import {rootMain, rootSecurity} from "./Utils/logger";
 import express from "express";
+import cors from "cors";
 import {CustomError} from "./errors";
 import passport from "passport";
 import configureStockRoutes from "./routes/stockRoutes";
