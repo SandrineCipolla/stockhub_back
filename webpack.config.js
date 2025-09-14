@@ -1,13 +1,27 @@
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
-//    externals: [nodeExternals()], // Exclut `node_modules` du bundle
 module.exports = {
     entry: "./src/index.ts",
     target: "node",
-    // externals: [nodeExternals({
-    //     allowlist: [/^(?!@prisma\/client)/] // Exclure spécifiquement @prisma/client
-    // })],
+    externals: [nodeExternals({
+        allowlist: [] // Exclure tous les modules node_modules du bundle, y compris Prisma
+    })],
+    plugins: [
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: "node_modules/.prisma/client",
+                    to: "node_modules/.prisma/client",
+                },
+                {
+                    from: "node_modules/@prisma/client",
+                    to: "node_modules/@prisma/client",
+                },
+            ],
+        }),
+    ],
     module: {
         rules: [
             {
