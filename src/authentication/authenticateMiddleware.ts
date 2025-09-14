@@ -1,10 +1,9 @@
-
 import {rootSecurityAuthenticationMiddleware} from "../Utils/logger";
 import {CustomError} from "../errors";
 import express from "express";
 import passport from "passport";
 
-export function authenticationMiddleware(res: express.Response, req: express.Request, next: express.NextFunction) {
+export function authenticationMiddleware(req: express.Request, res: express.Response, next: express.NextFunction) {
     rootSecurityAuthenticationMiddleware.info("Authenticating user ...");
 
     passport.authenticate(

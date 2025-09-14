@@ -17,12 +17,16 @@ export async function initializeApp() {
 
 
     app.use((req, res, next) => {
-        const allowedOrigin = 'https://brave-field-03611eb03.5.azurestaticapps.net';
+
         const origin = req.headers.origin;
         console.log('🔍 Origin received:', origin);
         console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
 
-        if (origin) {
+        const isProduction = process.env.NODE_ENV === 'production';
+        const isProdOrigin = origin === 'https://brave-field-03611eb03.5.azurestaticapps.net';
+        const isDevOrigin = origin && (origin.includes('localhost') || origin.includes('127.0.0.1'));
+
+        if ((isProduction && isProdOrigin) || (!isProduction && isDevOrigin)) {
             res.setHeader('Access-Control-Allow-Origin', origin);
         }
 
@@ -60,14 +64,14 @@ export async function initializeApp() {
 
 
     const stockRoutesV2 = await configureStockRoutesV2();
-    
+
     app.use("/api/v2",
         (
             req: express.Request,
             res: express.Response,
             next: express.NextFunction
         ) => {
-            authenticationMiddleware(res, req, next);
+            authenticationMiddleware(req, res, next);
         },
         (
             req: express.Request,
@@ -97,7 +101,7 @@ export async function initializeApp() {
             res: express.Response,
             next: express.NextFunction
         ) => {
-            authenticationMiddleware(res, req, next);
+            authenticationMiddleware(req, res, next);
         },
         (
             req: express.Request,
