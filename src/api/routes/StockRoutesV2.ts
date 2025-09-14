@@ -7,6 +7,7 @@ import {Router} from "express";
 import {ReadUserRepository} from "../../services/readUserRepository";
 import {WriteUserRepository} from "../../services/writeUserRepository";
 import {PrismaStockVisualizationRepository} from "../../db/repositories/PrismaStockVisualizationRepository";
+import {rootController} from "../../Utils/logger";
 
 const prismaRepository = new PrismaStockVisualizationRepository();
 
@@ -22,19 +23,28 @@ const stockController = new StockControllerVisualization(
 );
 
 const configureStockRoutesV2 = async (): Promise<Router> => {
+
+    const logger = rootController.getChildCategory("stockRoutesV2");
+
     const router = Router();
 
     router.get("/stocks", async (req, res) => {
         await stockController.getAllStocks(req, res);
     });
 
+    logger.info("Routes for /stocks configured");
+
     router.get("/stocks/:stockId", async (req, res) => {
         await stockController.getStockDetails(req, res);
     });
 
+    logger.info("Routes for /stocks/:stockId configured");
+
     router.get("/stocks/:stockId/items", async (req, res) => {
         await stockController.getStockItems(req, res);
     });
+
+    logger.info("Routes for /stocks/:stockId/items configured");
 
     return router;
 };
