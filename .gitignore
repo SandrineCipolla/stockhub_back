@@ -48,6 +48,12 @@ web_modules/
 # TypeScript cache
 *.tsbuildinfo
 
+# Prisma binary engines (generated on install)
+*.node
+.prisma/
+prisma/*.node
+libquery_engine-*.so.node
+
 # Optional npm cache directory
 .npm
 
