@@ -5,6 +5,7 @@ const passportConfig = {
     },
     policies: {
         policyName: 'B2C_1_signupsignin',
+        passwordReset: "B2C_1_passwordreset",
     },
     metadata: {
         b2cDomain: 'stockhubb2c.b2clogin.com',
