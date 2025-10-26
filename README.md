@@ -90,6 +90,62 @@ Déploiement cible Azure App Service + DB MySQL Azure.
 Systeme de scopes pour les utilisateurs (partage de stocks entre membres d'une famille).
 Les utilisateurs "normaux" pourront faire des demandes de réapprovisionnementr au propriétaire du stok.
 
+### 💰 Gestion de la base de données Azure (Économies)
+
+**IMPORTANT** : Pour économiser de l'argent (~15€/mois), arrêtez le serveur MySQL quand vous ne développez pas !
+
+#### **Base de données active** :
+- **Serveur** : `stockhub-database-mysql-restored`
+- **Host** : `stockhub-database-mysql-restored.mysql.database.azure.com`
+- **Coût actif** : ~15-20€/mois (24/7)
+- **Coût arrêté** : ~0€/mois
+
+#### **Démarrer la base de données** (avant de développer)
+
+**Méthode 1 - Explorateur Windows (le plus simple)** :
+1. Ouvrez l'explorateur de fichiers
+2. Allez dans le dossier du projet `stockhub_back`
+3. **Clic droit** sur `start_mysql.ps1`
+4. Cliquez sur **"Exécuter avec PowerShell"**
+5. ⏳ Attend 1-2 minutes
+6. ✅ MySQL démarré, vous pouvez lancer votre app
+
+**Méthode 2 - Terminal PowerShell** :
+```powershell
+# Depuis le dossier stockhub_back
+.\start_mysql.ps1
+```
+
+**Méthode 3 - Commande manuelle** :
+```powershell
+az mysql flexible-server start --resource-group StockHubApp-resources --name stockhub-database-mysql-restored
+```
+
+#### **Arrêter la base de données** (quand vous avez fini de développer)
+
+**Méthode 1 - Explorateur Windows** :
+- **Clic droit** sur `stop_mysql.ps1` → "Exécuter avec PowerShell"
+
+**Méthode 2 - Terminal PowerShell** :
+```powershell
+.\stop_mysql.ps1
+```
+
+**Méthode 3 - Commande manuelle** :
+```powershell
+az mysql flexible-server stop --resource-group StockHubApp-resources --name stockhub-database-mysql-restored
+```
+
+💡 **Astuce** : Les scripts PowerShell (`.ps1`) affichent des messages en couleur et restent ouverts pour que vous puissiez lire les informations.
+
+#### **Workflow de développement recommandé** :
+
+1. **Avant de commencer** : `.\start_mysql.ps1` (1-2 min)
+2. **Développer** : Lancez votre application normalement
+3. **Après avoir fini** : `.\stop_mysql.ps1` (économie immédiate)
+
+**Économie estimée** : ~10€/mois si vous développez 50% du temps, ~15€/mois si vous développez rarement.
+
 ## 6. API (MVP)
 
 ### GET /api/v2/stocks
