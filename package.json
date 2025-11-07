@@ -15,7 +15,8 @@
     "migrate:test": "dotenv -e .env.test -- prisma migrate dev --name init --schema=prisma/schema.prisma",
     "build": "npx prisma generate && webpack --config webpack.config.js",
     "build:local": "tsc --project tsconfig.json",
-    "copy-certs": "cp ./server.cert ./dist"
+    "copy-certs": "cp ./server.cert ./dist",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
