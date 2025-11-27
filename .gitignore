@@ -140,3 +140,11 @@ dist
 
 .idea/
 generated/
+
+# Azure cost analysis and deployment files
+analyze_costs.py
+*_usage.json
+azure_cost_analysis.md
+docs/azure-alerts-configuration.md
+docs/azure-mysql-optimization.md
+docs/troubleshooting-prisma-azure-deployment.md
