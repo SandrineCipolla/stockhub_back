@@ -1,29 +1,43 @@
-import {items as PrismaItem, PrismaClient} from "@prisma/client";
+import {items as PrismaItem, PrismaClient, stocks_CATEGORY} from "@prisma/client";
 import {
     IStockCommandRepository
 } from "../../../../domain/stock-management/manipulation/repositories/IStockCommandRepository";
 import {Stock} from "../../../../domain/stock-management/common/entities/Stock";
 import {StockItem} from "../../../../domain/stock-management/common/entities/StockItem";
 import {DependencyTelemetry, rootDependency, rootException} from "../../../../Utils/cloudLogger";
+import {PrismaStockWithItems} from "../types/prisma";
+
 
 const DEPENDENCY_NAME = process.env.DB_DATABASE;
 const DEPENDENCY_TARGET = process.env.DB_HOST;
 const DEPENDENCY_TYPE = "MySQL";
 
-const prisma = new PrismaClient();
-
 export class PrismaStockCommandRepository implements IStockCommandRepository {
+    private prisma: PrismaClient;
+
+    constructor(prismaClient?: PrismaClient) {
+        this.prisma = prismaClient ?? new PrismaClient();
+    }
+
     async save(stock: Stock): Promise<Stock> {
         let success = false;
         const userId = 1;
 
         try {
-            const createdStock = await prisma.stocks.create({
+            const createdStock = await this.prisma.stocks.create({
                 data: {
                     LABEL: stock.getLabelValue(),
                     DESCRIPTION: stock.getDescriptionValue(),
-                    CATEGORY: stock.category as any,
-                    USER_ID: userId
+                    CATEGORY: this.normalizeCategory(stock.category),
+                    USER_ID: userId,
+                    items: {
+                        create: stock.items.map(item => ({
+                            LABEL: item.LABEL,
+                            DESCRIPTION: item.DESCRIPTION,
+                            QUANTITY: item.QUANTITY,
+                            MINIMUM_STOCK: item.minimumStock
+                        }))
+                    }
                 },
                 include: {
                     items: true
@@ -38,7 +52,7 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
         } finally {
             rootDependency({
                 name: DEPENDENCY_NAME,
-                data: `prisma.stocks.create({ LABEL: ${stock.getLabelValue()}, USER_ID: ${userId} })`,
+                data: `prisma.stocks.create({ LABEL: ${stock.getLabelValue()}, USER_ID: ${userId}, items: ${stock.items.length} })`,
                 duration: 0,
                 success: success,
                 resultCode: 0,
@@ -52,7 +66,7 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
         let success = false;
 
         try {
-            const stock = await prisma.stocks.findUnique({
+            const stock = await this.prisma.stocks.findUnique({
                 where: {ID: stockId},
                 include: {items: true}
             });
@@ -97,7 +111,6 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
                 throw new Error(`Stock with ID ${stockId} not found`);
             }
 
-
             stock.addItem({
                 label: item.label,
                 quantity: item.quantity,
@@ -105,8 +118,7 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
                 minimumStock: item.minimumStock
             });
 
-
-            await prisma.items.create({
+            await this.prisma.items.create({
                 data: {
                     LABEL: item.label,
                     DESCRIPTION: item.description || '',
@@ -118,8 +130,11 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
 
             success = true;
 
-
-            return await this.findById(stockId) as Stock;
+            const updatedStock = await this.findById(stockId);
+            if (!updatedStock) {
+                throw new Error(`Failed to retrieve updated stock with ID ${stockId}`);
+            }
+            return updatedStock;
         } catch (error) {
             rootException(error as Error);
             throw error;
@@ -154,15 +169,18 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
             stock.updateItemQuantity(itemId, newQuantity);
 
 
-            await prisma.items.update({
+            await this.prisma.items.update({
                 where: {ID: itemId},
                 data: {QUANTITY: newQuantity}
             });
 
             success = true;
 
-
-            return await this.findById(stockId) as Stock;
+            const updatedStock = await this.findById(stockId);
+            if (!updatedStock) {
+                throw new Error(`Failed to retrieve updated stock with ID ${stockId}`);
+            }
+            return updatedStock;
         } catch (error) {
             rootException(error as Error);
             throw error;
@@ -179,7 +197,21 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
         }
     }
 
-    private toDomain(prismaStock: any): Stock {
+    private normalizeCategory(category: string | stocks_CATEGORY): stocks_CATEGORY {
+        const lowerCategory = category.toLowerCase();
+        const categoryValues = Object.values(stocks_CATEGORY);
+
+        const matchedCategory = categoryValues.find(catValue => catValue === lowerCategory);
+
+        if (matchedCategory) {
+            return matchedCategory;
+        }
+
+        throw new Error(`Invalid category: ${category}. Valid categories: ${categoryValues.join(', ')}`);
+    }
+
+
+    private toDomain(prismaStock: PrismaStockWithItems): Stock {
         const items = prismaStock.items?.map((item: PrismaItem) =>
             new StockItem(
                 item.ID,

@@ -1,21 +1,25 @@
-import {Stock} from "../../domain/stock-management/common/entities/Stock";
-import {StockItem} from "../../domain/stock-management/common/entities/StockItem";
+import {Stock} from "../../../../domain/stock-management/common/entities/Stock";
+import {StockItem} from "../../../../domain/stock-management/common/entities/StockItem";
 import {
     IStockVisualizationRepository
-} from "../../domain/stock-management/visualization/queries/IStockVisualizationRepository";
+} from "../../../../domain/stock-management/visualization/queries/IStockVisualizationRepository";
 
 import {items as PrismaItem, PrismaClient, stocks as PrismaStock} from "@prisma/client";
-import {DependencyTelemetry, rootDependency, rootException} from "../../Utils/cloudLogger";
+import {DependencyTelemetry, rootDependency, rootException} from "../../../../Utils/cloudLogger";
 
 const DEPENDENCY_NAME = process.env.DB_DATABASE;
 const DEPENDENCY_TARGET = process.env.DB_HOST;
 const DEPENDENCY_TYPE = "MySQL";
 
-const prisma = new PrismaClient();
-
 export class PrismaStockVisualizationRepository implements IStockVisualizationRepository {
+    private prisma: PrismaClient;
+
+    constructor(prismaClient?: PrismaClient) {
+        this.prisma = prismaClient ?? new PrismaClient();
+    }
+
     async getAllStocks(userId: number): Promise<Stock[]> {
-        const stocks = await prisma.stocks.findMany({
+        const stocks = await this.prisma.stocks.findMany({
             where: {USER_ID: userId},
 
         });
@@ -29,7 +33,7 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
     }
 
     async getStockDetails(stockId: number, userId: number): Promise<Stock | null> {
-        const stock = await prisma.stocks.findFirst({
+        const stock = await this.prisma.stocks.findFirst({
             where: {ID: stockId, USER_ID: userId},
 
         });
@@ -50,7 +54,7 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
 
         try {
 
-            const stock = await prisma.stocks.findFirst({
+            const stock = await this.prisma.stocks.findFirst({
                 where: {ID: stockId, USER_ID: userId},
 
             });
@@ -58,7 +62,7 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
                 throw new Error('Stock not found or access denied');
             }
 
-            const items = await prisma.items.findMany({
+            const items = await this.prisma.items.findMany({
                 where: {STOCK_ID: stockId},
             });
             return items.map((item: PrismaItem) => new StockItem(
