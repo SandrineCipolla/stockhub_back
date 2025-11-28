@@ -7,7 +7,7 @@ on:
   push:
     branches: [ "*" ]  # CI s'exécute sur toutes les branches
   pull_request:
-    branches: [ main ]
+    branches: [ "*" ]
   workflow_dispatch:
 
 jobs:
