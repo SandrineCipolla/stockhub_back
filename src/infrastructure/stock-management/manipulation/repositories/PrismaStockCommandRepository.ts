@@ -13,9 +13,8 @@ const DEPENDENCY_TYPE = "MySQL";
 const prisma = new PrismaClient();
 
 export class PrismaStockCommandRepository implements IStockCommandRepository {
-    async save(stock: Stock): Promise<Stock> {
+    async save(stock: Stock, userId: number): Promise<Stock> {
         let success = false;
-        const userId = 1;
 
         try {
             const createdStock = await prisma.stocks.create({

@@ -14,6 +14,6 @@ export class CreateStockCommandHandler {
             userId: command.userId
         });
 
-        return await this.stockRepository.save(stock);
+        return await this.stockRepository.save(stock, command.userId);
     }
 }
