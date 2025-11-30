@@ -12,6 +12,9 @@
     "test:ci": "jest --config=jest.ci.config.js --detectOpenHandles --forceExit",
     "test:coverage": "COVERAGE=true jest --config=jest.ci.config.js --passWithNoTests --detectOpenHandles --forceExit",
     "test:integration": "jest --config jest.integration.config.js --runInBand --detectOpenHandles --forceExit",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
     "migrate:test": "dotenv -e .env.test -- prisma migrate dev --name init --schema=prisma/schema.prisma",
     "build": "npx prisma generate && webpack --config webpack.config.js",
     "build:local": "tsc --project tsconfig.json",
@@ -39,6 +42,7 @@
     "typescript-logging-category-style": "^2.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@testcontainers/mysql": "^11.9.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",

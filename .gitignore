@@ -151,3 +151,6 @@ docs/troubleshooting-prisma-azure-deployment.md
 
 #docs
 doccs/architecture/ddd-cqrs-stock-manipulation.md
+# Playwright
+playwright-report/
+test-results/
