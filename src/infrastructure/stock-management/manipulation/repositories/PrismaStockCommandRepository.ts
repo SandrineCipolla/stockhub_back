@@ -13,15 +13,17 @@ const DEPENDENCY_TARGET = process.env.DB_HOST;
 const DEPENDENCY_TYPE = "MySQL";
 
 export class PrismaStockCommandRepository implements IStockCommandRepository {
+
     private prisma: PrismaClient;
 
     constructor(prismaClient?: PrismaClient) {
         this.prisma = prismaClient ?? new PrismaClient();
     }
 
-    async save(stock: Stock): Promise<Stock> {
+   
+    async save(stock: Stock, userId: number): Promise<Stock> {
+
         let success = false;
-        const userId = 1;
 
         try {
             const createdStock = await this.prisma.stocks.create({

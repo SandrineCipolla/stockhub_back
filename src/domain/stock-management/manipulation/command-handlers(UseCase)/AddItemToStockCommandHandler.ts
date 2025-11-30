@@ -7,11 +7,18 @@ export class AddItemToStockCommandHandler {
     }
 
     async handle(command: AddItemToStockCommand): Promise<Stock> {
-        return await this.stockRepository.addItemToStock(command.stockId, {
-            label: command.label,
-            quantity: command.quantity,
-            description: command.description,
-            minimumStock: command.minimumStock
-        });
+        try {
+            return await this.stockRepository.addItemToStock(command.stockId, {
+                label: command.label,
+                quantity: command.quantity,
+                description: command.description,
+                minimumStock: command.minimumStock
+            });
+        } catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`Failed to add item to stock: ${error.message}`);
+            }
+            throw new Error('Failed to add item to stock: Unknown error');
+        }
     }
 }

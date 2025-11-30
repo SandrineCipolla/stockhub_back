@@ -16,13 +16,20 @@ export class StockControllerVisualization {
     ) {
     }
 
+    private validateOID(OID: string, res: Response): boolean {
+        if (!OID || OID.trim() === '') {
+            res.status(401).json({error: 'User not authenticated'});
+            return false;
+        }
+        return true;
+    }
+
     public async getAllStocks(req: Request, res: Response) {
         try {
             const OID = (req as any).userID as string;
 
-            // Validation de sécurité
-            if (!OID || OID.trim() === '') {
-                return res.status(401).json({error: 'User not authenticated'});
+            if (!this.validateOID(OID, res)) {
+                return;
             }
 
             const userID = await this.userService.convertOIDtoUserID(OID);
@@ -43,9 +50,8 @@ export class StockControllerVisualization {
         try {
             const OID = (req as any).userID as string;
 
-            // Validation de sécurité
-            if (!OID || OID.trim() === '') {
-                return res.status(401).json({error: 'User not authenticated'});
+            if (!this.validateOID(OID, res)) {
+                return;
             }
 
             const userID = await this.userService.convertOIDtoUserID(OID);
@@ -64,9 +70,8 @@ export class StockControllerVisualization {
         try {
             const OID = (req as any).userID as string;
 
-            // Validation de sécurité
-            if (!OID || OID.trim() === '') {
-                return res.status(401).json({error: 'User not authenticated'});
+            if (!this.validateOID(OID, res)) {
+                return;
             }
 
             const userID = await this.userService.convertOIDtoUserID(OID);

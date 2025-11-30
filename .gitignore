@@ -148,3 +148,6 @@ azure_cost_analysis.md
 docs/azure-alerts-configuration.md
 docs/azure-mysql-optimization.md
 docs/troubleshooting-prisma-azure-deployment.md
+
+#docs
+doccs/architecture/ddd-cqrs-stock-manipulation.md

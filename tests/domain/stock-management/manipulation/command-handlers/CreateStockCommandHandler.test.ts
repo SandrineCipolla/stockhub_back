@@ -36,7 +36,8 @@ describe('CreateStockCommandHandler', () => {
                 expect(mockRepository.save).toHaveBeenCalledWith(
                     expect.objectContaining({
                         category: 'alimentation'
-                    })
+                    }),
+                    123
                 );
                 expect(result).toBe(mockStock);
             })
