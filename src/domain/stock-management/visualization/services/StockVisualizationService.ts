@@ -15,8 +15,8 @@ export class StockVisualizationService {
 
         return stocks.map((stock) => ({
             id: stock.id,
-            label: stock.label,
-            description: stock.description,
+            label: stock.getLabelValue(),
+            description: stock.getDescriptionValue(),
             category: stock.category,
         }));
     }
@@ -29,8 +29,8 @@ export class StockVisualizationService {
         }
         return {
             ID: stock.id,
-            LABEL: stock.label,
-            DESCRIPTION: stock.description,
+            LABEL: stock.getLabelValue(),
+            DESCRIPTION: stock.getDescriptionValue(),
             category: stock.category,
         };
     }
