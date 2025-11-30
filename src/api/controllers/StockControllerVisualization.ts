@@ -16,9 +16,21 @@ export class StockControllerVisualization {
     ) {
     }
 
+    private validateOID(OID: string, res: Response): boolean {
+        if (!OID || OID.trim() === '') {
+            res.status(401).json({error: 'User not authenticated'});
+            return false;
+        }
+        return true;
+    }
+
     public async getAllStocks(req: Request, res: Response) {
         try {
             const OID = (req as any).userID as string;
+
+            if (!this.validateOID(OID, res)) {
+                return;
+            }
 
             const userID = await this.userService.convertOIDtoUserID(OID);
             const stocks = await this.stockVisualizationService.getAllStocks(userID.value);
@@ -37,6 +49,11 @@ export class StockControllerVisualization {
     public async getStockDetails(req: Request, res: Response) {
         try {
             const OID = (req as any).userID as string;
+
+            if (!this.validateOID(OID, res)) {
+                return;
+            }
+
             const userID = await this.userService.convertOIDtoUserID(OID);
             const stockId = Number(req.params.stockId);
             const stock = await this.stockVisualizationService.getStockDetails(stockId, userID.value);
@@ -52,6 +69,11 @@ export class StockControllerVisualization {
     public async getStockItems(req: Request, res: Response) {
         try {
             const OID = (req as any).userID as string;
+
+            if (!this.validateOID(OID, res)) {
+                return;
+            }
+
             const userID = await this.userService.convertOIDtoUserID(OID);
             const stockId = Number(req.params.stockId);
             const items = await this.stockVisualizationService.getStockItems(stockId, userID.value);
