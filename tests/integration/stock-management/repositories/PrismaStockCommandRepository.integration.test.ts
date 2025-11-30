@@ -87,7 +87,7 @@ describe('PrismaStockCommandRepository', () => {
                     minimumStock: 10
                 });
 
-                const savedStock = await repository.save(stock);
+                const savedStock = await repository.save(stock, 1);
 
                 expect(savedStock.id).toBeGreaterThan(0);
                 expect(savedStock.getLabelValue()).toBe('Integration Test Stock');
