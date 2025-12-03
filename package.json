@@ -27,6 +27,7 @@
   "dependencies": {
     "@prisma/client": "^6.16.0",
     "applicationinsights": "^3.3.0",
+    "axios": "^1.13.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.20.0",
@@ -42,6 +43,7 @@
     "typescript-logging-category-style": "^2.2.0"
   },
   "devDependencies": {
+    "@azure/msal-node": "^3.8.3",
     "@playwright/test": "^1.57.0",
     "@testcontainers/mysql": "^11.9.0",
     "@types/cors": "^2.8.17",
