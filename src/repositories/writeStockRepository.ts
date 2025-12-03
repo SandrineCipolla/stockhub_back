@@ -74,7 +74,7 @@ export class WriteStockRepository {
                 item.label,
                 item.description,
                 item.quantity,
-                1,
+                item.minimumStock || 1,
                 stockID,
             ]);
 

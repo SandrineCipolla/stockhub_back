@@ -1,4 +1,3 @@
-
 import {ReadUserRepository} from "./readUserRepository";
 import {WriteUserRepository} from "./writeUserRepository";
 
@@ -6,7 +5,7 @@ class UserIdentifier {
     public readonly empty: boolean;
     public readonly value: number;
 
-    constructor( oid: string){
+    constructor(oid: string) {
         this.empty = !oid;
         this.value = parseInt(oid);
     }
@@ -24,9 +23,16 @@ export class UserService {
         this.writeUserRepository = writeUser;
     }
 
-    async convertOIDtoUserID(oid: string) {
+    async convertOIDtoUserID(oid: string): Promise<UserIdentifier> {
         try {
             const userID = await this.readUserRepository.readUserByOID(oid);
+
+            // If user doesn't exist, create it automatically (for E2E)
+            if (!userID) {
+                console.log(`User with OID ${oid} not found, creating new user...`);
+                return await this.addUser(oid);
+            }
+
             return new UserIdentifier(userID);
         } catch (error) {
             const err = error as Error;
@@ -35,7 +41,7 @@ export class UserService {
         }
     }
 
-    async addUser(email: string) {
+    async addUser(email: string): Promise<UserIdentifier> {
         const existingUser = await this.readUserRepository.readUserByOID(email);
 
         if (existingUser) {
@@ -46,7 +52,6 @@ export class UserService {
         await this.writeUserRepository.addUser(email);
         return await this.convertOIDtoUserID(email);
     }
-
 
 
 }
