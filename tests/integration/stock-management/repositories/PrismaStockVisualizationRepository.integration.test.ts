@@ -1,12 +1,14 @@
 import {PrismaClient} from "@prisma/client";
 
-import {PrismaStockVisualizationRepository} from "../../src/db/repositories/PrismaStockVisualizationRepository";
+import {
+    PrismaStockVisualizationRepository
+} from "../../../../src/infrastructure/stock-management/visualization/repositories/PrismaStockVisualizationRepository";
 
 const prisma = new PrismaClient();
 const repo = new PrismaStockVisualizationRepository();
 
 
-describe("PrismaStockVisualizationRepository (integration)", () => {
+describe("PrismaStockVisualizationRepository", () => {
     beforeAll(async () => {
         await prisma.$connect();
     });

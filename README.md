@@ -193,9 +193,60 @@ az mysql flexible-server stop --resource-group StockHubApp-resources --name stoc
 - `Stock` : `getTotalItems()`, `getTotalQuantity()`
 - `StockVisualizationService` : cas vide, cas stocks présents, cas 404
 
-### Intégration (à venir)
+**Commande** :
+```bash
+npm run test:unit
+```
 
-`supertest` sur `/api/v2/stocks`
+### Tests d'Intégration
+
+Tests d'intégration des services et repositories avec base de données de test.
+
+**Commande** :
+```bash
+npm run test:integration
+```
+
+### Tests E2E (End-to-End) ✅
+
+Tests fonctionnels complets avec **authentification Azure AD B2C réelle** via Playwright.
+
+**Workflow testé** :
+1. ✅ Authentification Azure AD B2C (ROPC)
+2. ✅ Création d'un stock
+3. ✅ Ajout d'items au stock
+4. ✅ Visualisation du stock
+5. ✅ Mise à jour de quantités
+6. ✅ Détection des items en rupture
+7. ✅ Nettoyage automatique des données de test
+
+**⚠️ IMPORTANT - Prérequis** :
+```bash
+# Terminal 1 : Démarrer le serveur backend
+npm run start:dev
+
+# Terminal 2 : Une fois le serveur démarré, lancer les tests E2E
+npm run test:e2e
+```
+
+**Commandes disponibles** :
+```bash
+# Tests E2E standard
+npm run test:e2e
+
+# Interface UI de Playwright
+npm run test:e2e:ui
+
+# Mode headed (avec navigateur visible)
+npm run test:e2e:headed
+```
+
+**Documentation complète** : Voir [Guide des Tests E2E](./docs/E2E_TESTS_GUIDE.md)
+
+**Résultat attendu** :
+```
+✅ 7 tests passed (14.4s)
+```
 
 ## 8. 🧪 Procédure de Test Utilisateur - Module DDD
 

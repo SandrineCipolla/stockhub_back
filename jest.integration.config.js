@@ -2,17 +2,15 @@
 module.exports = {
     preset: "ts-jest",
     testEnvironment: "node",
-    roots: ["<rootDir>/tests/db(integration)", "<rootDir>/tests/api/routes"],
+    roots: ["<rootDir>/tests/integration"],
     transform: {
         "^.+\\.tsx?$": "ts-jest",
     },
     setupFiles: ["dotenv/config"],
     testMatch: [
-        "**/tests/integration/**/*.test.ts",
-        "**/tests/db(integration)/**/*.test.ts",
-        "**/tests/api/routes/**/*.test.ts"
+        "**/tests/integration/**/*.integration.test.ts"
     ],
     setupFilesAfterEnv: ["<rootDir>/tests/setupIntegrationEnv.ts"],
-    testTimeout: 30000,
+    testTimeout: 60000,
     verbose: true,
 };

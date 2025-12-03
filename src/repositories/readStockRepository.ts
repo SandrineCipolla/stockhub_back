@@ -101,7 +101,7 @@ export class ReadStockRepository {
 
     try {
       const [items] = (await connection.query(
-        "SELECT items.*, stocks.LABEL AS stockLabel FROM items JOIN stocks ON items.STOCK_ID = stocks.id WHERE items.QUANTITY <= 1 AND stocks.USER_ID = ?",
+        "SELECT items.*, stocks.LABEL AS stockLabel FROM items JOIN stocks ON items.STOCK_ID = stocks.id WHERE items.QUANTITY <= items.MINIMUM_STOCK AND stocks.USER_ID = ?",
         [userId]
       )) as [RowDataPacket[], FieldPacket[]];
 
