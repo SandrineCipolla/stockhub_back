@@ -9,11 +9,6 @@ import {ReadUserRepository} from "../services/readUserRepository";
 import {WriteUserRepository} from "../services/writeUserRepository";
 import {rootException} from "../Utils/cloudLogger";
 
-//
-//
-//
-// //TODO voir si + messages d'erreurs selon les situations
-
 
 export class StockController {
     private stockService: StockService;
@@ -116,7 +111,8 @@ export class StockController {
             const item = {
                 label: req.body['LABEL'],
                 description: req.body['DESCRIPTION'],
-                quantity: req.body['QUANTITY']
+                quantity: req.body['QUANTITY'],
+                minimumStock: req.body['MINIMUM_STOCK']
             };
             await this.stockService.addStockItem(item, stockID);
             res.status(HTTP_CODE_CREATED).json({message: "Stock item added successfully."});
