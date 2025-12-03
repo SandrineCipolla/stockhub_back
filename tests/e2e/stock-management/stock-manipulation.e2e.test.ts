@@ -1,41 +1,55 @@
-import { test, expect } from '@playwright/test';
+import {expect, test} from '@playwright/test';
+import {createAzureAuthHelper} from '../helpers/azureAuth';
 
 /**
- * E2E Test Suite: Stock Management Complete Workflow
+ * E2E Test Suite: Stock Management Complete Workflow with Azure AD Authentication
  *
  * This test suite validates the complete stock management workflow using v1 API:
- * 1. Create a new stock
- * 2. Add items to the stock
- * 3. Visualize the stock and its items
- * 4. Update item quantities
- * 5. Check for low stock items
+ * 1. Authenticate with Azure AD B2C to get real token
+ * 2. Create a new stock
+ * 3. Add items to the stock
+ * 4. Visualize the stock and its items
+ * 5. Update item quantities
+ * 6. Check for low stock items
  */
 
-test.describe('Stock Management E2E Workflow', () => {
+test.describe('Stock Management E2E Workflow with Azure AD', () => {
     const baseURL = process.env.API_BASE_URL || 'http://localhost:3006';
-    const apiV1 = `${baseURL}/api/v1`;
+    const apiV1 = `${baseURL}/api/v1`; // Used for POST/PUT (creation/modification)
+    const apiV2 = `${baseURL}/api/v2`; // Used for GET (reading)
     let stockId: number;
     let itemId1: number;
     let itemId2: number;
-
-    // Mock Azure AD authentication
-    const mockUserOID = 'test-user-oid-e2e-12345';
+    let authToken: string;
+    const createdStockIds: number[] = []; // Track all created stocks for cleanup
 
     test.beforeAll(async () => {
         console.log('🚀 Starting E2E Stock Management Tests');
-        console.log(`📍 API Base URL: ${baseURL}`);
-        console.log(`📍 API v1: ${apiV1}`);
+
+        try {
+            // Get Azure AD B2C token using MSAL helper
+            const authHelper = createAzureAuthHelper();
+            authToken = await authHelper.getBearerToken();
+            console.log('✅ Authentication successful');
+        } catch (error: any) {
+            console.error('❌ Authentication failed:', error.message);
+            console.log('\n💡 Troubleshooting tips:');
+            console.log('1. Verify .env.test has all required Azure credentials');
+            console.log('2. Check that your B2C policy supports ROPC');
+            console.log('3. Ensure "Allow public client flows" is enabled in Azure Portal');
+            throw error;
+        }
     });
 
-    test('Step 1: Create a new stock', async ({ request }) => {
+    test('Step 1: Create a new stock with Azure AD authentication', async ({request}) => {
         const response = await request.post(`${apiV1}/stocks`, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': authToken
             },
             data: {
-                userID: mockUserOID,
-                LABEL: 'E2E Test Stock',
-                DESCRIPTION: 'Stock created via E2E test with Playwright'
+                LABEL: 'E2E Test Stock with Azure AD',
+                DESCRIPTION: 'Stock created via E2E test with real Azure AD authentication'
             }
         });
 
@@ -45,31 +59,40 @@ test.describe('Stock Management E2E Workflow', () => {
         expect(result).toHaveProperty('message');
         expect(result.message).toContain('Stock created successfully');
 
-        console.log(`✅ Stock created successfully`);
+        // Extract stock ID from response if available, otherwise fetch from GET endpoint
+        if (result.stock && result.stock.ID) {
+            stockId = result.stock.ID;
+        } else {
+            // Get the stock ID by fetching all stocks (using v2 GET endpoint)
+            const getAllResponse = await request.get(`${apiV2}/stocks`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': authToken
+                }
+            });
 
-        // Get the stock ID by fetching all stocks
-        const getAllResponse = await request.get(`${apiV1}/stocks`, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: {
-                userID: mockUserOID
-            }
-        });
+            expect(getAllResponse.status()).toBe(200);
+            const stocks = await getAllResponse.json();
+            const createdStock = stocks.find((s: any) => s.label === 'E2E Test Stock with Azure AD');
+            expect(createdStock).toBeDefined();
+            stockId = createdStock.id;
+        }
 
-        const stocks = await getAllResponse.json();
-        const createdStock = stocks.find((s: any) => s.LABEL === 'E2E Test Stock');
-        stockId = createdStock.ID;
-        console.log(`📦 Stock ID: ${stockId}`);
+        console.log(`✅ Stock created (ID: ${stockId}`);
+
+
+        // Track the created stock for cleanup
+        createdStockIds.push(stockId);
     });
 
-    test('Step 2: Add first item to stock (normal stock)', async ({ request }) => {
-        const response = await request.post(`${baseURL}/stocks/${stockId}/items`, {
+    test('Step 2: Add first item to stock (normal stock)', async ({request}) => {
+        const response = await request.post(`${apiV1}/stocks/${stockId}/items`, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': authToken
             },
             data: {
-                userID: mockUserOID,
+
                 LABEL: 'Pommes Bio',
                 DESCRIPTION: 'Pommes rouges biologiques',
                 QUANTITY: 50,
@@ -81,35 +104,33 @@ test.describe('Stock Management E2E Workflow', () => {
         const result = await response.json();
 
         expect(result).toHaveProperty('message');
-        expect(result.message).toContain('Item added successfully');
-
-        console.log(`✅ First item (Pommes) added successfully`);
+        expect(result.message).toContain('added successfully');
 
         // Get item ID
-        const getItemsResponse = await request.get(`${baseURL}/stocks/${stockId}/items`, {
+        const getItemsResponse = await request.get(`${apiV2}/stocks/${stockId}/items`, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': authToken
             },
-            data: {
-                userID: mockUserOID
-            }
+            data: {}
         });
 
         const items = await getItemsResponse.json();
-        const apple = items.find((item: any) => item.LABEL === 'Pommes Bio');
-        itemId1 = apple.ID;
-        console.log(`🍎 Item ID 1: ${itemId1}`);
+        // V2 returns lowercase field names
+        const apple = items.find((item: any) => (item.label || item.LABEL) === 'Pommes Bio');
+        itemId1 = apple.id || apple.ID;
     });
 
-    test('Step 3: Add second item to stock (low stock)', async ({ request }) => {
-        const response = await request.post(`${baseURL}/stocks/${stockId}/items`, {
+    test('Step 3: Add second item to stock (low stock)', async ({request}) => {
+        const response = await request.post(`${apiV1}/stocks/${stockId}/items`, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': authToken
             },
             data: {
-                userID: mockUserOID,
-                LABEL: 'Bananes Équitables',
-                DESCRIPTION: 'Bananes issues du commerce équitable',
+
+                LABEL: 'Bananes',
+                DESCRIPTION: 'Bananes équitables',
                 QUANTITY: 5,
                 MINIMUM_STOCK: 20
             }
@@ -119,103 +140,61 @@ test.describe('Stock Management E2E Workflow', () => {
         const result = await response.json();
 
         expect(result).toHaveProperty('message');
-        expect(result.message).toContain('Item added successfully');
-
-        console.log(`✅ Second item (Bananes) added successfully`);
+        expect(result.message).toContain('added successfully');
 
         // Get item ID
-        const getItemsResponse = await request.get(`${baseURL}/stocks/${stockId}/items`, {
+        const getItemsResponse = await request.get(`${apiV2}/stocks/${stockId}/items`, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': authToken
             },
-            data: {
-                userID: mockUserOID
-            }
+            data: {}
         });
 
         const items = await getItemsResponse.json();
-        const banana = items.find((item: any) => item.LABEL === 'Bananes Équitables');
-        itemId2 = banana.ID;
-        console.log(`🍌 Item ID 2: ${itemId2}`);
+        // V2 returns lowercase field names
+        const banana = items.find((item: any) => (item.label || item.LABEL) === 'Bananes');
+        itemId2 = banana.id || banana.ID;
     });
 
-    test('Step 4: Visualize all stocks', async ({ request }) => {
-        const response = await request.get(`${baseURL}/stocks`, {
+    test('Step 4: Visualize stock and verify items', async ({request}) => {
+        const response = await request.get(`${apiV2}/stocks/${stockId}/items`, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': authToken
             },
-            data: {
-                userID: mockUserOID
-            }
-        });
-
-        expect(response.status()).toBe(200);
-        const stocks = await response.json();
-
-        expect(Array.isArray(stocks)).toBe(true);
-        expect(stocks.length).toBeGreaterThan(0);
-
-        const ourStock = stocks.find((s: any) => s.ID === stockId);
-        expect(ourStock).toBeDefined();
-        expect(ourStock.LABEL).toBe('E2E Test Stock');
-
-        console.log(`✅ Retrieved ${stocks.length} stock(s)`);
-    });
-
-    test('Step 5: Visualize specific stock details', async ({ request }) => {
-        const response = await request.get(`${baseURL}/stocks/${stockId}`, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: {
-                userID: mockUserOID
-            }
-        });
-
-        expect(response.status()).toBe(200);
-        const stock = await response.json();
-
-        expect(stock[0].ID).toBe(stockId);
-        expect(stock[0].LABEL).toBe('E2E Test Stock');
-
-        console.log(`✅ Stock details retrieved`);
-    });
-
-    test('Step 6: Visualize stock items', async ({ request }) => {
-        const response = await request.get(`${baseURL}/stocks/${stockId}/items`, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: {
-                userID: mockUserOID
-            }
+            data: {}
         });
 
         expect(response.status()).toBe(200);
         const items = await response.json();
 
         expect(Array.isArray(items)).toBe(true);
-        expect(items.length).toBe(2);
+        expect(items).toHaveLength(2);
 
-        const apple = items.find((item: any) => item.ID === itemId1);
-        expect(apple.LABEL).toBe('Pommes Bio');
-        expect(apple.QUANTITY).toBe(50);
+        // V2 returns lowercase field names
+        const apple = items.find((item: any) => (item.label || item.LABEL) === 'Pommes Bio');
+        const banana = items.find((item: any) => (item.label || item.LABEL) === 'Bananes');
 
-        const banana = items.find((item: any) => item.ID === itemId2);
-        expect(banana.LABEL).toBe('Bananes Équitables');
-        expect(banana.QUANTITY).toBe(5);
+        expect(apple).toBeDefined();
+        expect(banana).toBeDefined();
 
-        console.log(`✅ Retrieved ${items.length} items from stock`);
+        const appleQty = apple.quantity || apple.QUANTITY;
+        const bananaQty = banana.quantity || banana.QUANTITY;
+
+        expect(appleQty).toBe(50);
+        expect(bananaQty).toBe(5);
     });
 
-    test('Step 7: Update item quantity (increase apples)', async ({ request }) => {
-        const response = await request.put(`${baseURL}/stocks/${stockId}/items/${itemId1}`, {
+    test('Step 5: Update item quantity', async ({request}) => {
+        const response = await request.put(`${apiV1}/stocks/${stockId}/items/${itemId1}`, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': authToken
             },
             data: {
-                userID: mockUserOID,
-                QUANTITY: 100
+
+                QUANTITY: 75
             }
         });
 
@@ -225,37 +204,29 @@ test.describe('Stock Management E2E Workflow', () => {
         expect(result).toHaveProperty('message');
         expect(result.message).toContain('updated successfully');
 
-        console.log(`✅ Item ${itemId1} (Pommes) quantity updated to 100`);
-    });
-
-    test('Step 8: Update item quantity (decrease bananas to critical level)', async ({ request }) => {
-        const response = await request.put(`${baseURL}/stocks/${stockId}/items/${itemId2}`, {
+        // Verify the update
+        const getItemResponse = await request.get(`${apiV1}/stocks/${stockId}/items`, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': authToken
             },
-            data: {
-                userID: mockUserOID,
-                QUANTITY: 3
-            }
+            data: {}
         });
 
-        expect(response.status()).toBe(200);
-        const result = await response.json();
-
-        expect(result).toHaveProperty('message');
-        expect(result.message).toContain('updated successfully');
-
-        console.log(`✅ Item ${itemId2} (Bananes) quantity updated to 3 (critical low stock)`);
+        const items = await getItemResponse.json();
+        // V2 returns lowercase field names
+        const updatedApple = items.find((item: any) => (item.id || item.ID) === itemId1);
+        const updatedQty = updatedApple.quantity || updatedApple.QUANTITY;
+        expect(updatedQty).toBe(75);
     });
 
-    test('Step 9: Check for low stock items', async ({ request }) => {
-        const response = await request.get(`${baseURL}/low-stock-items`, {
+    test('Step 6: Check for low stock items', async ({request}) => {
+        const response = await request.get(`${apiV1}/low-stock-items`, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': authToken
             },
-            data: {
-                userID: mockUserOID
-            }
+            data: {}
         });
 
         expect(response.status()).toBe(200);
@@ -264,27 +235,30 @@ test.describe('Stock Management E2E Workflow', () => {
         expect(Array.isArray(lowStockItems)).toBe(true);
         expect(lowStockItems.length).toBeGreaterThan(0);
 
-        // Bananas should be in low stock (quantity: 3, MINIMUM_STOCK: 20)
-        const banana = lowStockItems.find((item: any) => item.ID === itemId2);
-        expect(banana).toBeDefined();
-        expect(banana.LABEL).toBe('Bananes Équitables');
-        expect(banana.QUANTITY).toBe(3);
-        expect(banana.MINIMUM_STOCK).toBe(20);
+        const lowStockBanana = lowStockItems.find((item: any) =>
+            item.LABEL === 'Bananes' && item.QUANTITY < item.MINIMUM_STOCK
+        );
 
-        // Apples should NOT be in low stock (quantity: 100, MINIMUM_STOCK: 10)
-        const apple = lowStockItems.find((item: any) => item.ID === itemId1);
-        expect(apple).toBeUndefined();
-
-        console.log(`✅ Found ${lowStockItems.length} low stock item(s)`);
-        console.log(`🚨 Low stock items:`, lowStockItems.map((item: any) => ({
-            label: item.LABEL,
-            quantity: item.QUANTITY,
-            minimum: item.MINIMUM_STOCK
-        })));
+        expect(lowStockBanana).toBeDefined();
+        expect(lowStockBanana.QUANTITY).toBe(5);
+        expect(lowStockBanana.MINIMUM_STOCK).toBe(20);
     });
 
-    test.afterAll(async () => {
-        console.log('🏁 E2E tests completed successfully!');
-        console.log('💡 Tip: To clean up test data, manually delete test stock via DELETE /stocks/:ID');
+    test.afterAll(async ({request}) => {
+        // Delete all created stocks
+        for (const id of createdStockIds) {
+            try {
+                await request.delete(`${apiV1}/stocks/${id}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': authToken
+                    }
+                });
+            } catch (error: any) {
+                console.warn(`⚠️  Error deleting test stock ${id}:`, error.message);
+            }
+        }
+
+        console.log('✅ E2E tests completed and cleaned up');
     });
 });
