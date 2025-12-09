@@ -28,7 +28,7 @@ export class StockMapper {
      */
     static toDTO(stock: Stock, unit: string = 'unités'): StockDTO {
         // Extraire les valeurs des Value Objects
-        const name = stock.getLabelValue();
+        const label = stock.getLabelValue();
         const description = stock.getDescriptionValue();
 
         // Calculer la quantité totale (somme de tous les items)
@@ -56,7 +56,7 @@ export class StockMapper {
 
         return {
             id: stock.id,
-            name,
+            label,
             description,
             category,
             quantity: totalQuantity,

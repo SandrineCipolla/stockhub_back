@@ -14,9 +14,9 @@ export interface StockDTO {
     id: number;
 
     /**
-     * Nom du stock (mappé depuis StockLabel.value)
+     * Label du stock (mappé depuis StockLabel.value)
      */
-    name: string;
+    label: string;
 
     /**
      * Description du stock

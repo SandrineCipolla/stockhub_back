@@ -25,7 +25,7 @@ describe('StockMapper', () => {
             // Assert
             expect(dto).toEqual({
                 id: 1,
-                name: 'Café Arabica',
+                label: 'Café Arabica',
                 description: 'Café premium',
                 category: 'alimentation',
                 quantity: 80, // 50 + 30
@@ -186,7 +186,7 @@ describe('StockMapper', () => {
             const dto = StockMapper.toDTO(stock);
 
             // Assert
-            expect(dto.name).toBe('String Label');
+            expect(dto.label).toBe('String Label');
             expect(dto.description).toBe('String Description');
             expect(dto.category).toBe('hygiene');
         });
@@ -232,8 +232,8 @@ describe('StockMapper', () => {
 
             // Assert
             expect(dtos).toHaveLength(2);
-            expect(dtos[0].name).toBe('Stock 1');
-            expect(dtos[1].name).toBe('Stock 2');
+            expect(dtos[0].label).toBe('Stock 1');
+            expect(dtos[1].label).toBe('Stock 2');
         });
 
         it('should handle empty array', () => {
