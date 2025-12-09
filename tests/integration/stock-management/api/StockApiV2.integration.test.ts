@@ -124,17 +124,26 @@ describe('Stock API V2 Integration Tests', () => {
                     .expect(200);
 
                 expect(response.body).toHaveLength(2);
+                // V2 API returns DTOs with 'label' (consistent with database)
                 expect(response.body[0]).toMatchObject({
                     id: expect.any(Number),
                     label: 'Stock Alimentation',
                     description: 'Stock pour produits alimentaires',
-                    category: 'alimentation'
+                    category: 'alimentation',
+                    quantity: expect.any(Number),
+                    unit: expect.any(String),
+                    minimumStock: expect.any(Number),
+                    status: expect.any(String)
                 });
                 expect(response.body[1]).toMatchObject({
                     id: expect.any(Number),
                     label: 'Stock Hygiène',
                     description: 'Stock pour produits d\'hygiène',
-                    category: 'hygiene'
+                    category: 'hygiene',
+                    quantity: expect.any(Number),
+                    unit: expect.any(String),
+                    minimumStock: expect.any(Number),
+                    status: expect.any(String)
                 });
             });
         });

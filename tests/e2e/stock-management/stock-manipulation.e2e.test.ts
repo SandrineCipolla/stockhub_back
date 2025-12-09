@@ -73,6 +73,7 @@ test.describe('Stock Management E2E Workflow with Azure AD', () => {
 
             expect(getAllResponse.status()).toBe(200);
             const stocks = await getAllResponse.json();
+            // V2 API returns DTOs with 'label' (consistent with database)
             const createdStock = stocks.find((s: any) => s.label === 'E2E Test Stock with Azure AD');
             expect(createdStock).toBeDefined();
             stockId = createdStock.id;
