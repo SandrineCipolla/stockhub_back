@@ -21,31 +21,57 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
     async getAllStocks(userId: number): Promise<Stock[]> {
         const stocks = await this.prisma.stocks.findMany({
             where: {USER_ID: userId},
-
+            include: {
+                items: true
+            }
         });
-        return stocks.map((stock: PrismaStock) => new Stock(
-            stock.ID,
-            stock.LABEL,
-            stock.DESCRIPTION ?? '',
-            stock.CATEGORY,
-        ));
+        return stocks.map((stock) => {
+            const stockEntity = new Stock(
+                stock.ID,
+                stock.LABEL,
+                stock.DESCRIPTION ?? '',
+                stock.CATEGORY,
+            );
+            // Ajouter les items au stock
+            stockEntity.items = stock.items.map((item: PrismaItem) => new StockItem(
+                item.ID,
+                item.LABEL ?? '',
+                item.QUANTITY ?? 0,
+                item.DESCRIPTION ?? '',
+                item.MINIMUM_STOCK,
+                item.STOCK_ID!,
+            ));
+            return stockEntity;
+        });
 
     }
 
     async getStockDetails(stockId: number, userId: number): Promise<Stock | null> {
         const stock = await this.prisma.stocks.findFirst({
             where: {ID: stockId, USER_ID: userId},
-
+            include: {
+                items: true
+            }
         });
         if (!stock) {
             return null;
         }
-        return new Stock(
+        const stockEntity = new Stock(
             stock.ID,
             stock.LABEL,
             stock.DESCRIPTION ?? '',
             stock.CATEGORY,
-        )
+        );
+        // Ajouter les items au stock
+        stockEntity.items = stock.items.map((item: PrismaItem) => new StockItem(
+            item.ID,
+            item.LABEL ?? '',
+            item.QUANTITY ?? 0,
+            item.DESCRIPTION ?? '',
+            item.MINIMUM_STOCK,
+            item.STOCK_ID!,
+        ));
+        return stockEntity;
     }
 
     async getStockItems(stockId: number, userId: number): Promise<StockItem[]> {

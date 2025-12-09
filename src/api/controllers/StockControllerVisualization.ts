@@ -7,6 +7,7 @@ import {CustomError, sendError} from "../../errors";
 import {Request, Response} from "express";
 import {rootMain} from "../../Utils/logger";
 import {rootException} from "../../Utils/cloudLogger";
+import {StockMapper} from "../dto/mappers/StockMapper";
 
 
 export class StockControllerVisualization {
@@ -35,11 +36,14 @@ export class StockControllerVisualization {
             const userID = await this.userService.convertOIDtoUserID(OID);
             const stocks = await this.stockVisualizationService.getAllStocks(userID.value);
 
+            // Transformer les entités Stock en DTOs pour l'API
+            const stockDTOs = StockMapper.toDTOList(stocks);
+
             rootMain.info(
                 `getAllStocks OID=${OID} stocksLength=${stocks.length}`
             );
 
-            res.status(HTTP_CODE_OK).json(stocks);
+            res.status(HTTP_CODE_OK).json(stockDTOs);
         } catch (err: any) {
             rootException(err);
             sendError(res, err as CustomError);
@@ -58,8 +62,11 @@ export class StockControllerVisualization {
             const stockId = Number(req.params.stockId);
             const stock = await this.stockVisualizationService.getStockDetails(stockId, userID.value);
 
+            // Transformer l'entité Stock en DTO pour l'API
+            const stockDTO = StockMapper.toDTO(stock);
+
             rootMain.info(`getStockDetails OID=${OID} stockId=${stockId}`);
-            res.status(HTTP_CODE_OK).json([stock]);
+            res.status(HTTP_CODE_OK).json(stockDTO);
         } catch (err: any) {
             rootException(err);
             sendError(res, err as CustomError);
@@ -78,8 +85,11 @@ export class StockControllerVisualization {
             const stockId = Number(req.params.stockId);
             const items = await this.stockVisualizationService.getStockItems(stockId, userID.value);
 
+            // Transformer les entités StockItem en DTOs pour l'API
+            const itemDTOs = StockMapper.itemsToDTOList(items);
+
             rootMain.info(`getStockItems OID=${OID} stockId=${stockId} itemsLength=${items.length}`);
-            res.status(HTTP_CODE_OK).json(items);
+            res.status(HTTP_CODE_OK).json(itemDTOs);
         } catch (err: any) {
             rootException(err);
             sendError(res, err as CustomError);

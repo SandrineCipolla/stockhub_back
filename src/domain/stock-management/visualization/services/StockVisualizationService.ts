@@ -1,7 +1,6 @@
-import {StockSummary} from "../models/StockSummary";
 import {IStockVisualizationRepository} from "../queries/IStockVisualizationRepository";
 import {StockItem} from "../../common/entities/StockItem";
-import {StockWithoutItems} from "../models/StockWithoutItems";
+import {Stock} from "../../common/entities/Stock";
 
 
 export class StockVisualizationService {
@@ -10,32 +9,20 @@ export class StockVisualizationService {
     ) {
     }
 
-    async getAllStocks(userId: number): Promise<StockWithoutItems []> {
-        const stocks = await this.repository.getAllStocks(userId);
-
-        return stocks.map((stock) => ({
-            id: stock.id,
-            label: stock.getLabelValue(),
-            description: stock.getDescriptionValue(),
-            category: stock.category,
-        }));
+    async getAllStocks(userId: number): Promise<Stock[]> {
+        return this.repository.getAllStocks(userId);
     }
 
-    async getStockDetails(stockId: number, userId: number): Promise<StockSummary> {
+    async getStockDetails(stockId: number, userId: number): Promise<Stock> {
         const stock = await this.repository.getStockDetails(stockId, userId);
 
         if (!stock) {
             throw new Error("Stock not found");
         }
-        return {
-            ID: stock.id,
-            LABEL: stock.getLabelValue(),
-            DESCRIPTION: stock.getDescriptionValue(),
-            category: stock.category,
-        };
+        return stock;
     }
 
-    async getStockItems(stockId: number, userId: number): Promise<StockItem []> {
+    async getStockItems(stockId: number, userId: number): Promise<StockItem[]> {
         return this.repository.getStockItems(stockId, userId);
     }
 }
