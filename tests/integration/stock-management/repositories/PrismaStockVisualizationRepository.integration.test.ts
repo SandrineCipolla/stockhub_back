@@ -1,24 +1,28 @@
-import {PrismaClient} from "@prisma/client";
+import {
+    PrismaStockVisualizationRepository
+} from "../../../../src/infrastructure/stock-management/visualization/repositories/PrismaStockVisualizationRepository";
+import {
+    clearTestData,
+    closeTestDatabase,
+    setupTestDatabase,
+    TestDatabaseSetup
+} from '../../../helpers/testContainerSetup';
 
-import {PrismaStockVisualizationRepository} from "../../src/db/repositories/PrismaStockVisualizationRepository";
+describe("PrismaStockVisualizationRepository", () => {
+    let setup: TestDatabaseSetup;
+    let repo: PrismaStockVisualizationRepository;
 
-const prisma = new PrismaClient();
-const repo = new PrismaStockVisualizationRepository();
-
-
-describe("PrismaStockVisualizationRepository (integration)", () => {
     beforeAll(async () => {
-        await prisma.$connect();
-    });
-
-    afterEach(async () => {
-        await prisma.items.deleteMany();
-        await prisma.stocks.deleteMany();
-        await prisma.users.deleteMany();
-    });
+        setup = await setupTestDatabase();
+        repo = new PrismaStockVisualizationRepository();
+    }, 60000);
 
     afterAll(async () => {
-        await prisma.$disconnect();
+        await closeTestDatabase(setup);
+    });
+
+    beforeEach(async () => {
+        await clearTestData(setup.prisma);
     });
 
     describe("getAllStocks", () => {
@@ -34,11 +38,11 @@ describe("PrismaStockVisualizationRepository (integration)", () => {
     describe("getStockDetails", () => {
         describe("when stock exists for user", () => {
             it("should return stock details", async () => {
-                const user = await prisma.users.create({
+                const user = await setup.prisma.users.create({
                     data: {EMAIL: "user@test.com"},
                 });
 
-                const stock = await prisma.stocks.create({
+                const stock = await setup.prisma.stocks.create({
                     data: {
                         USER_ID: user.ID,
                         LABEL: "Test Stock",
@@ -60,11 +64,11 @@ describe("PrismaStockVisualizationRepository (integration)", () => {
     describe("getStockItems", () => {
         describe("when stock contains items", () => {
             it("should return items of the stock", async () => {
-                const user = await prisma.users.create({
+                const user = await setup.prisma.users.create({
                     data: {EMAIL: "items@test.com"},
                 });
 
-                const stock = await prisma.stocks.create({
+                const stock = await setup.prisma.stocks.create({
                     data: {
                         USER_ID: user.ID,
                         LABEL: "Stock with items",
@@ -72,7 +76,7 @@ describe("PrismaStockVisualizationRepository (integration)", () => {
                     },
                 });
 
-                await prisma.items.create({
+                await setup.prisma.items.create({
                     data: {
                         LABEL: "Item1",
                         QUANTITY: 5,
@@ -91,14 +95,14 @@ describe("PrismaStockVisualizationRepository (integration)", () => {
 
         describe("when stock belongs to another user", () => {
             it("should throw an error", async () => {
-                const user1 = await prisma.users.create({
+                const user1 = await setup.prisma.users.create({
                     data: {EMAIL: "user1@test.com"},
                 });
-                const user2 = await prisma.users.create({
+                const user2 = await setup.prisma.users.create({
                     data: {EMAIL: "user2@test.com"},
                 });
 
-                const stock = await prisma.stocks.create({
+                const stock = await setup.prisma.stocks.create({
                     data: {
                         USER_ID: user2.ID,
                         LABEL: "Stock other user",

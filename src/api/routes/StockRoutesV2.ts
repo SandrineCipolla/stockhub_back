@@ -6,23 +6,26 @@ import {StockControllerVisualization} from "../controllers/StockControllerVisual
 import {Router} from "express";
 import {ReadUserRepository} from "../../services/readUserRepository";
 import {WriteUserRepository} from "../../services/writeUserRepository";
-import {PrismaStockVisualizationRepository} from "../../db/repositories/PrismaStockVisualizationRepository";
+import {
+    PrismaStockVisualizationRepository
+} from "../../infrastructure/stock-management/visualization/repositories/PrismaStockVisualizationRepository";
 import {rootController} from "../../Utils/logger";
+import {PrismaClient} from "@prisma/client";
 
-const prismaRepository = new PrismaStockVisualizationRepository();
+const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Router> => {
 
-const stockVisualizationService = new StockVisualizationService(prismaRepository);
+    const prismaRepository = new PrismaStockVisualizationRepository(prismaClient);
 
-const readUserRepo = new ReadUserRepository();
-const writeUserRepo = new WriteUserRepository();
-const userService = new UserService(readUserRepo, writeUserRepo);
+    const stockVisualizationService = new StockVisualizationService(prismaRepository);
 
-const stockController = new StockControllerVisualization(
-    stockVisualizationService,
-    userService
-);
+    const readUserRepo = new ReadUserRepository();
+    const writeUserRepo = new WriteUserRepository();
+    const userService = new UserService(readUserRepo, writeUserRepo);
 
-const configureStockRoutesV2 = async (): Promise<Router> => {
+    const stockController = new StockControllerVisualization(
+        stockVisualizationService,
+        userService
+    );
 
     const logger = rootController.getChildCategory("stockRoutesV2");
 
