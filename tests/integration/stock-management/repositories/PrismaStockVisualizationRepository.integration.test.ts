@@ -1,7 +1,12 @@
 import {
     PrismaStockVisualizationRepository
 } from "../../../../src/infrastructure/stock-management/visualization/repositories/PrismaStockVisualizationRepository";
-import {setupTestDatabase, teardownTestDatabase, clearTestData, TestDatabaseSetup} from '../../../helpers/testContainerSetup';
+import {
+    clearTestData,
+    closeTestDatabase,
+    setupTestDatabase,
+    TestDatabaseSetup
+} from '../../../helpers/testContainerSetup';
 
 describe("PrismaStockVisualizationRepository", () => {
     let setup: TestDatabaseSetup;
@@ -13,7 +18,7 @@ describe("PrismaStockVisualizationRepository", () => {
     }, 60000);
 
     afterAll(async () => {
-        await teardownTestDatabase(setup);
+        await closeTestDatabase(setup);
     });
 
     beforeEach(async () => {

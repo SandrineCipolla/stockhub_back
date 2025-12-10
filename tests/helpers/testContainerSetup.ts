@@ -11,25 +11,7 @@ export interface TestDatabaseSetup {
     connectionString: string;
 }
 
-/**
- * Sets up a MySQL TestContainer with Prisma for integration tests
- *
- * @returns Object containing the container, Prisma client, and connection string
- * @throws Error if container startup or database initialization fails
- *
- * @example
- * ```typescript
- * let setup: TestDatabaseSetup;
- *
- * beforeAll(async () => {
- *   setup = await setupTestDatabase();
- * }, 60000);
- *
- * afterAll(async () => {
- *   await teardownTestDatabase(setup);
- * });
- * ```
- */
+
 export async function setupTestDatabase(): Promise<TestDatabaseSetup> {
     // Start MySQL container
     const container = await new MySqlContainer('mysql:8.0')
@@ -60,36 +42,11 @@ export async function setupTestDatabase(): Promise<TestDatabaseSetup> {
     return {container, prisma, connectionString};
 }
 
-/**
- * Tears down the test database by disconnecting Prisma and stopping the container
- *
- * @param setup - The test database setup to tear down
- *
- * @example
- * ```typescript
- * afterAll(async () => {
- *   await teardownTestDatabase(setup);
- * });
- * ```
- */
-export async function teardownTestDatabase(setup: TestDatabaseSetup): Promise<void> {
+export async function closeTestDatabase(setup: TestDatabaseSetup): Promise<void> {
     await setup.prisma.$disconnect();
     await setup.container.stop();
 }
 
-/**
- * Clears all data from the test database tables
- * Useful in beforeEach hooks to ensure test isolation
- *
- * @param prisma - The Prisma client instance
- *
- * @example
- * ```typescript
- * beforeEach(async () => {
- *   await clearTestData(setup.prisma);
- * });
- * ```
- */
 export async function clearTestData(prisma: PrismaClient): Promise<void> {
     await prisma.items.deleteMany({});
     await prisma.stocks.deleteMany({});

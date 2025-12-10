@@ -2,7 +2,12 @@ import {
     PrismaStockCommandRepository
 } from '../../../../src/infrastructure/stock-management/manipulation/repositories/PrismaStockCommandRepository';
 import {Stock} from '../../../../src/domain/stock-management/common/entities/Stock';
-import {setupTestDatabase, teardownTestDatabase, clearTestData, TestDatabaseSetup} from '../../../helpers/testContainerSetup';
+import {
+    clearTestData,
+    closeTestDatabase,
+    setupTestDatabase,
+    TestDatabaseSetup
+} from '../../../helpers/testContainerSetup';
 
 describe('PrismaStockCommandRepository', () => {
     let setup: TestDatabaseSetup;
@@ -14,7 +19,7 @@ describe('PrismaStockCommandRepository', () => {
     }, 60000);
 
     afterAll(async () => {
-        await teardownTestDatabase(setup);
+        await closeTestDatabase(setup);
     });
 
     beforeEach(async () => {

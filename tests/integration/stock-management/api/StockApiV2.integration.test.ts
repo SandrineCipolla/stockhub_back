@@ -1,7 +1,12 @@
 import express from 'express';
 import request from 'supertest';
 import configureStockRoutesV2 from '../../../../src/api/routes/StockRoutesV2';
-import {setupTestDatabase, teardownTestDatabase, clearTestData, TestDatabaseSetup} from '../../../helpers/testContainerSetup';
+import {
+    clearTestData,
+    closeTestDatabase,
+    setupTestDatabase,
+    TestDatabaseSetup
+} from '../../../helpers/testContainerSetup';
 
 jest.mock('../../../../src/services/userService', () => {
     return {
@@ -39,7 +44,7 @@ describe('Stock API V2 Integration Tests', () => {
     }, 60000);
 
     afterAll(async () => {
-        await teardownTestDatabase(setup);
+        await closeTestDatabase(setup);
     });
 
     beforeEach(async () => {
