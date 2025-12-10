@@ -1,13 +1,7 @@
-import {MySqlContainer, StartedMySqlContainer} from '@testcontainers/mysql';
-import {PrismaClient} from '@prisma/client';
-import {exec} from 'child_process';
-import {promisify} from 'util';
 import express from 'express';
 import request from 'supertest';
 import configureStockRoutesV2 from '../../../../src/api/routes/StockRoutesV2';
-
-const execAsync = promisify(exec);
-
+import {setupTestDatabase, teardownTestDatabase, clearTestData, TestDatabaseSetup} from '../../../helpers/testContainerSetup';
 
 jest.mock('../../../../src/services/userService', () => {
     return {
@@ -24,34 +18,11 @@ jest.mock('../../../../src/services/userService', () => {
 });
 
 describe('Stock API V2 Integration Tests', () => {
-    let container: StartedMySqlContainer;
-    let prisma: PrismaClient;
+    let setup: TestDatabaseSetup;
     let app: express.Express;
 
     beforeAll(async () => {
-
-        container = await new MySqlContainer('mysql:8.0')
-            .withDatabase('stockhub_test')
-            .withUsername('test')
-            .withRootPassword('test')
-            .start();
-
-        const connectionString = `mysql://test:test@${container.getHost()}:${container.getPort()}/stockhub_test`;
-
-        process.env.DATABASE_URL = connectionString;
-
-        await execAsync('npx prisma db push --skip-generate --accept-data-loss', {
-            env: {...process.env, DATABASE_URL: connectionString}
-        });
-
-        prisma = new PrismaClient({
-            datasources: {
-                db: {
-                    url: connectionString
-                }
-            }
-        });
-
+        setup = await setupTestDatabase();
 
         app = express();
         app.use(express.json());
@@ -63,23 +34,19 @@ describe('Stock API V2 Integration Tests', () => {
         });
 
         // Configure stock routes with injected test Prisma client
-        const stockRoutesV2 = await configureStockRoutesV2(prisma);
+        const stockRoutesV2 = await configureStockRoutesV2(setup.prisma);
         app.use('/api/v2', stockRoutesV2);
-
     }, 60000);
 
     afterAll(async () => {
-        await prisma.$disconnect();
-        await container.stop();
+        await teardownTestDatabase(setup);
     });
 
     beforeEach(async () => {
-        await prisma.items.deleteMany({});
-        await prisma.stocks.deleteMany({});
-        await prisma.users.deleteMany({});
+        await clearTestData(setup.prisma);
 
         // Create a test user
-        await prisma.users.create({
+        await setup.prisma.users.create({
             data: {
                 ID: 1,
                 EMAIL: 'test-user-oid-123'
@@ -101,7 +68,7 @@ describe('Stock API V2 Integration Tests', () => {
         describe('when user has stocks', () => {
             it('should return all user stocks', async () => {
 
-                await prisma.stocks.create({
+                await setup.prisma.stocks.create({
                     data: {
                         LABEL: 'Stock Alimentation',
                         DESCRIPTION: 'Stock pour produits alimentaires',
@@ -110,7 +77,7 @@ describe('Stock API V2 Integration Tests', () => {
                     }
                 });
 
-                await prisma.stocks.create({
+                await setup.prisma.stocks.create({
                     data: {
                         LABEL: 'Stock Hygiène',
                         DESCRIPTION: 'Stock pour produits d\'hygiène',
@@ -144,7 +111,7 @@ describe('Stock API V2 Integration Tests', () => {
                 //  without auth mock
                 const appNoAuth = express();
                 appNoAuth.use(express.json());
-                const stockRoutesV2 = await configureStockRoutesV2(prisma);
+                const stockRoutesV2 = await configureStockRoutesV2(setup.prisma);
                 appNoAuth.use('/api/v2', stockRoutesV2);
 
                 // without authentication

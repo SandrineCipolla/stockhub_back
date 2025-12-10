@@ -1,61 +1,27 @@
-import {MySqlContainer, StartedMySqlContainer} from '@testcontainers/mysql';
-import {PrismaClient} from '@prisma/client';
-import {exec} from 'child_process';
-import {promisify} from 'util';
 import {
     PrismaStockCommandRepository
 } from '../../../../src/infrastructure/stock-management/manipulation/repositories/PrismaStockCommandRepository';
 import {Stock} from '../../../../src/domain/stock-management/common/entities/Stock';
-
-const execAsync = promisify(exec);
+import {setupTestDatabase, teardownTestDatabase, clearTestData, TestDatabaseSetup} from '../../../helpers/testContainerSetup';
 
 describe('PrismaStockCommandRepository', () => {
-    let container: StartedMySqlContainer;
-    let prismaTest: PrismaClient;
+    let setup: TestDatabaseSetup;
     let repository: PrismaStockCommandRepository;
 
     beforeAll(async () => {
-        container = await new MySqlContainer('mysql:8.0')
-            .withDatabase('stockhub_test')
-            .withUsername('test')
-            .withRootPassword('test')
-            .start();
-
-        const connectionString = `mysql://test:test@${container.getHost()}:${container.getPort()}/stockhub_test`;
-
-        // DATABASE_URL for Prisma
-        process.env.DATABASE_URL = connectionString;
-
-        // Push Prisma schema to the test database
-        await execAsync('npx prisma db push --skip-generate --accept-data-loss', {
-            env: {...process.env, DATABASE_URL: connectionString}
-        });
-
-        // Initialize Prisma client with the test database connection
-        prismaTest = new PrismaClient({
-            datasources: {
-                db: {
-                    url: connectionString
-                }
-            }
-        });
-
-        // Inject the test Prisma client into the repository
-        repository = new PrismaStockCommandRepository(prismaTest);
-    }, 60000); //timeout for container startup
+        setup = await setupTestDatabase();
+        repository = new PrismaStockCommandRepository(setup.prisma);
+    }, 60000);
 
     afterAll(async () => {
-        await prismaTest.$disconnect();
-        await container.stop();
+        await teardownTestDatabase(setup);
     });
 
     beforeEach(async () => {
-        await prismaTest.items.deleteMany({});
-        await prismaTest.stocks.deleteMany({});
-        await prismaTest.users.deleteMany({});
+        await clearTestData(setup.prisma);
 
         // Create a test user
-        await prismaTest.users.create({
+        await setup.prisma.users.create({
             data: {
                 ID: 1,
                 EMAIL: 'test@test.com'
@@ -96,7 +62,7 @@ describe('PrismaStockCommandRepository', () => {
                 expect(savedStock.getTotalQuantity()).toBe(30);
 
                 // Verify directly in database
-                const stockInDb = await prismaTest.stocks.findUnique({
+                const stockInDb = await setup.prisma.stocks.findUnique({
                     where: {ID: savedStock.id},
                     include: {items: true}
                 });
@@ -118,7 +84,7 @@ describe('PrismaStockCommandRepository', () => {
         describe('when adding an item to an existing stock', () => {
             it('should persist the new item and update stock in MySQL', async () => {
 
-                const createdStock = await prismaTest.stocks.create({
+                const createdStock = await setup.prisma.stocks.create({
                     data: {
                         LABEL: 'Existing Stock',
                         DESCRIPTION: 'Stock for item addition test',
@@ -127,7 +93,7 @@ describe('PrismaStockCommandRepository', () => {
                     }
                 });
 
-                await prismaTest.items.create({
+                await setup.prisma.items.create({
                     data: {
                         LABEL: 'Initial Item',
                         QUANTITY: 5,
@@ -150,7 +116,7 @@ describe('PrismaStockCommandRepository', () => {
                 expect(updatedStock.getTotalItems()).toBe(2);
                 expect(updatedStock.getTotalQuantity()).toBe(20);
 
-                const stockInDb = await prismaTest.stocks.findUnique({
+                const stockInDb = await setup.prisma.stocks.findUnique({
                     where: {ID: createdStock.ID},
                     include: {items: true}
                 });
