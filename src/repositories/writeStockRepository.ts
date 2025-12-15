@@ -3,10 +3,12 @@ import {Stock, StockToCreate, UpdateStockRequest} from "../models";
 import {ErrorMessages, ValidationError} from "../errors";
 import {connectToDatabase} from "../dbUtils";
 import {DependencyTelemetry, rootDependency, rootException} from "../Utils/cloudLogger";
+import {rootWriteStockRepository} from "../Utils/logger";
 
 const DEPENDENCY_NAME = process.env.DB_DATABASE;
 const DEPENDENCY_TARGET = process.env.DB_HOST;
 const DEPENDENCY_TYPE = "MySQL";
+const DEFAULT_MINIMUM_STOCK = 1;
 
 export class WriteStockRepository {
     async updateStockItemQuantity(updateRequest: UpdateStockRequest) {
@@ -74,7 +76,7 @@ export class WriteStockRepository {
                 item.label,
                 item.description,
                 item.quantity,
-                item.minimumStock || 1,
+                item.minimumStock || DEFAULT_MINIMUM_STOCK,
                 stockID,
             ]);
 
@@ -89,7 +91,7 @@ export class WriteStockRepository {
             rootDependency({
                 name: DEPENDENCY_NAME,
                 data: `INSERT INTO items(id, label, description, quantity, minimum_stock, stock_id)
-                       VALUES (${item.id}, ${item.label}, ${item.description}, ${item.quantity}, 1, ${stockID})`,
+                       VALUES (${item.id}, ${item.label}, ${item.description}, ${item.quantity}, ${item.minimumStock || DEFAULT_MINIMUM_STOCK}, ${stockID})`,
                 duration: 0,
                 success: success,
                 resultCode: 0,
@@ -149,7 +151,7 @@ export class WriteStockRepository {
     }
 
     async deleteStock(stockID: number, userID: number): Promise<ResultSetHeader> {
-        console.log("Attempting to delete stock with ID - repo:", stockID);
+        rootWriteStockRepository.info('Attempting to delete stock with ID {stockID}', stockID);
 
         let connection = await connectToDatabase();
 

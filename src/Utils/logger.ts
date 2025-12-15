@@ -24,3 +24,8 @@ export const rootStockController = rootController.getChildCategory("stockControl
 // Database
 export const rootDatabase = provider.getCategory("database");
 export const rootReadUserRepository = rootDatabase.getChildCategory("readUserRepository");
+export const rootWriteStockRepository = rootDatabase.getChildCategory("writeStockRepository");
+
+// Services
+export const rootService = provider.getCategory("service");
+export const rootUserService = rootService.getChildCategory("userService");

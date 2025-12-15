@@ -1,5 +1,6 @@
 import {ReadUserRepository} from "./readUserRepository";
 import {WriteUserRepository} from "./writeUserRepository";
+import {rootUserService} from "../Utils/logger";
 
 class UserIdentifier {
     public readonly empty: boolean;
@@ -29,14 +30,14 @@ export class UserService {
 
             // If user doesn't exist, create it automatically (for E2E)
             if (!userID) {
-                console.log(`User with OID ${oid} not found, creating new user...`);
+                rootUserService.info('User with OID {oid} not found, creating new user...', oid);
                 return await this.addUser(oid);
             }
 
             return new UserIdentifier(userID);
         } catch (error) {
             const err = error as Error;
-            console.error(`Error converting OID to UserID: ${err.message}`);
+            rootUserService.error('Error converting OID to UserID: {message}', err.message);
             throw err;
         }
     }
@@ -45,7 +46,7 @@ export class UserService {
         const existingUser = await this.readUserRepository.readUserByOID(email);
 
         if (existingUser) {
-            console.log(`User with email ${email} already exists.`);
+            rootUserService.info('User with email {email} already exists.', email);
             return new UserIdentifier(existingUser);
         }
 
