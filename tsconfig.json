@@ -10,7 +10,17 @@
     "outDir": "./dist",
     "strictNullChecks": true,
     "noImplicitAny": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@domain/*": ["domain/*"],
+      "@infrastructure/*": ["infrastructure/*"],
+      "@utils/*": ["Utils/*"],
+      "@config/*": ["config/*"],
+      "@api/*": ["api/*"],
+      "@services/*": ["services/*"],
+      "@repositories/*": ["repositories/*"]
+    }
   },
   "include": [
     "src/**/*.ts",

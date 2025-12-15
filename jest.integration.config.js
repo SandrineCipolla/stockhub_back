@@ -6,6 +6,15 @@ module.exports = {
     transform: {
         "^.+\\.tsx?$": "ts-jest",
     },
+    moduleNameMapper: {
+        '^@domain/(.*)$': '<rootDir>/src/domain/$1',
+        '^@infrastructure/(.*)$': '<rootDir>/src/infrastructure/$1',
+        '^@utils/(.*)$': '<rootDir>/src/Utils/$1',
+        '^@config/(.*)$': '<rootDir>/src/config/$1',
+        '^@api/(.*)$': '<rootDir>/src/api/$1',
+        '^@services/(.*)$': '<rootDir>/src/services/$1',
+        '^@repositories/(.*)$': '<rootDir>/src/repositories/$1',
+    },
     setupFiles: ["dotenv/config"],
     testMatch: [
         "**/tests/integration/**/*.integration.test.ts"

@@ -1,3 +1,4 @@
+import 'tsconfig-paths/register';
 import { rootMain } from "./Utils/logger";
 import { initializeApp } from "./initializeApp";
 import { selectedRuntimeMode } from "./config/runtimeMode";

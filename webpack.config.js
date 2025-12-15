@@ -40,6 +40,15 @@ module.exports = {
     },
     resolve: {
         extensions: [".ts", ".js"],
+        alias: {
+            "@domain": path.resolve(__dirname, "src/domain"),
+            "@infrastructure": path.resolve(__dirname, "src/infrastructure"),
+            "@utils": path.resolve(__dirname, "src/Utils"),
+            "@config": path.resolve(__dirname, "src/config"),
+            "@api": path.resolve(__dirname, "src/api"),
+            "@services": path.resolve(__dirname, "src/services"),
+            "@repositories": path.resolve(__dirname, "src/repositories"),
+        },
     },
     output: {
         filename: "index.js",

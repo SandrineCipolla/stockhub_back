@@ -1,10 +1,10 @@
 import {items as PrismaItem, PrismaClient, stocks_CATEGORY} from "@prisma/client";
 import {
     IStockCommandRepository
-} from "../../../../domain/stock-management/manipulation/repositories/IStockCommandRepository";
-import {Stock} from "../../../../domain/stock-management/common/entities/Stock";
-import {StockItem} from "../../../../domain/stock-management/common/entities/StockItem";
-import {DependencyTelemetry, rootDependency, rootException} from "../../../../Utils/cloudLogger";
+} from "@domain/stock-management/manipulation/repositories/IStockCommandRepository";
+import {Stock} from "@domain/stock-management/common/entities/Stock";
+import {StockItem} from "@domain/stock-management/common/entities/StockItem";
+import {DependencyTelemetry, rootDependency, rootException} from "@utils/cloudLogger";
 import {PrismaStockWithItems} from "../types/prisma";
 
 
