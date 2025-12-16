@@ -1,20 +1,12 @@
-import {MySqlContainer, StartedMySqlContainer} from '@testcontainers/mysql';
-import {PrismaClient} from '@prisma/client';
 import {exec} from 'child_process';
 import {promisify} from 'util';
 import express from 'express';
 import request from 'supertest';
 import configureStockRoutesV2 from '@api/routes/StockRoutesV2';
+import {clearTestData, closeTestDatabase, setupTestDatabase, TestDatabaseSetup} from "@helpers/testContainerSetup";
 
 const execAsync = promisify(exec);
 
-import configureStockRoutesV2 from '../../../../src/api/routes/StockRoutesV2';
-import {
-    clearTestData,
-    closeTestDatabase,
-    setupTestDatabase,
-    TestDatabaseSetup
-} from '../../../helpers/testContainerSetup';
 
 jest.mock('@services/userService', () => {
     return {
