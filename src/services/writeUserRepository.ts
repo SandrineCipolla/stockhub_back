@@ -1,6 +1,6 @@
 import { PoolConnection } from "mysql2/promise";
-import { CustomError, DatabaseError, ErrorMessages } from "../errors";
-import { connectToDatabase } from "../dbUtils";
+import { CustomError, DatabaseError, ErrorMessages } from "@core/errors";
+import { connectToDatabase } from "@core/dbUtils";
 
 export class WriteUserRepository {
   async addUser(email: string) {

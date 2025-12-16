@@ -1,5 +1,5 @@
-import {rootSecurityAuthenticationMiddleware} from "../Utils/logger";
-import {CustomError} from "../errors";
+import {rootSecurityAuthenticationMiddleware} from "@utils/logger";
+import {CustomError} from "@core/errors";
 import express from "express";
 import passport from "passport";
 

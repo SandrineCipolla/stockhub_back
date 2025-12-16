@@ -1,8 +1,8 @@
-import {WriteStockRepository} from "../repositories/writeStockRepository";
-import {ReadStockRepository} from "../repositories/readStockRepository";
-import {Stock, StockToCreate, UpdateStockRequest} from "../models";
-import {BadRequestError, ErrorMessages, NotFoundError, ValidationError} from "../errors";
-import {StockMapper} from "../stockMapper";
+import {WriteStockRepository} from "@repositories/writeStockRepository";
+import {ReadStockRepository} from "@repositories/readStockRepository";
+import {Stock, StockToCreate, UpdateStockRequest} from "@core/models";
+import {BadRequestError, ErrorMessages, NotFoundError, ValidationError} from "@core/errors";
+import {StockMapper} from "@core/stockMapper";
 
 export class StockService {
     private writeStockRepository: WriteStockRepository;

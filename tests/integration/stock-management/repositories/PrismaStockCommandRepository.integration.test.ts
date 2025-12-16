@@ -1,13 +1,13 @@
+import {exec} from 'child_process';
+import {promisify} from 'util';
 import {
     PrismaStockCommandRepository
-} from '../../../../src/infrastructure/stock-management/manipulation/repositories/PrismaStockCommandRepository';
-import {Stock} from '../../../../src/domain/stock-management/common/entities/Stock';
-import {
-    clearTestData,
-    closeTestDatabase,
-    setupTestDatabase,
-    TestDatabaseSetup
-} from '../../../helpers/testContainerSetup';
+} from '@infrastructure/stock-management/manipulation/repositories/PrismaStockCommandRepository';
+import {Stock} from '@domain/stock-management/common/entities/Stock';
+import {clearTestData, closeTestDatabase, setupTestDatabase, TestDatabaseSetup} from "@helpers/testContainerSetup";
+
+const execAsync = promisify(exec);
+
 
 describe('PrismaStockCommandRepository', () => {
     let setup: TestDatabaseSetup;

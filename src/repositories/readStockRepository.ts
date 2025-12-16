@@ -1,6 +1,6 @@
 import { FieldPacket, PoolConnection, RowDataPacket } from "mysql2/promise";
-import { rootDependency, rootException } from "../Utils/cloudLogger";
-import { connectToDatabase } from "../dbUtils";
+import { rootDependency, rootException } from "@utils/cloudLogger";
+import { connectToDatabase } from "@core/dbUtils";
 
 const QUERY_ALL_STOCKS_BY_USER = "SELECT * FROM stocks WHERE USER_ID = ?";
 export class ReadStockRepository {
@@ -101,7 +101,7 @@ export class ReadStockRepository {
 
     try {
       const [items] = (await connection.query(
-        "SELECT items.*, stocks.LABEL AS stockLabel FROM items JOIN stocks ON items.STOCK_ID = stocks.id WHERE items.QUANTITY <= 1 AND stocks.USER_ID = ?",
+        "SELECT items.*, stocks.LABEL AS stockLabel FROM items JOIN stocks ON items.STOCK_ID = stocks.id WHERE items.QUANTITY <= items.MINIMUM_STOCK AND stocks.USER_ID = ?",
         [userId]
       )) as [RowDataPacket[], FieldPacket[]];
 

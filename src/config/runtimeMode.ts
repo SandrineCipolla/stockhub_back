@@ -1,4 +1,4 @@
-import {rootServerSetup} from "../Utils/logger";
+import {rootServerSetup} from "@utils/logger";
 
 export const selectedRuntimeMode = process.env.NODE_ENV;
 

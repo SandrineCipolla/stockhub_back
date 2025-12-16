@@ -1,12 +1,18 @@
+import {PrismaClient} from "@prisma/client";
+
 import {
     PrismaStockVisualizationRepository
-} from "../../../../src/infrastructure/stock-management/visualization/repositories/PrismaStockVisualizationRepository";
+} from "@infrastructure/stock-management/visualization/repositories/PrismaStockVisualizationRepository";
 import {
     clearTestData,
     closeTestDatabase,
     setupTestDatabase,
     TestDatabaseSetup
-} from '../../../helpers/testContainerSetup';
+} from "../../../helpers/testContainerSetup";
+
+const prisma = new PrismaClient();
+const repo = new PrismaStockVisualizationRepository();
+
 
 describe("PrismaStockVisualizationRepository", () => {
     let setup: TestDatabaseSetup;

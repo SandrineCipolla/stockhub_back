@@ -1,5 +1,5 @@
-import {Stock} from "../../common/entities/Stock";
-import {StockItem} from "../../common/entities/StockItem";
+import {Stock} from "@domain/stock-management/common/entities/Stock";
+import {StockItem} from "@domain/stock-management/common/entities/StockItem";
 
 export interface IStockVisualizationRepository {
     getAllStocks(userId: number): Promise<Stock []>;

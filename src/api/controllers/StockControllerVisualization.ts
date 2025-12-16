@@ -1,12 +1,12 @@
 import {
     StockVisualizationService
-} from "../../domain/stock-management/visualization/services/StockVisualizationService";
-import {UserService} from "../../services/userService";
-import {HTTP_CODE_OK} from "../../Utils/httpCodes";
-import {CustomError, sendError} from "../../errors";
+} from "@domain/stock-management/visualization/services/StockVisualizationService";
+import {UserService} from "@services/userService";
+import {HTTP_CODE_OK} from "@utils/httpCodes";
+import {CustomError, sendError} from "@core/errors";
 import {Request, Response} from "express";
-import {rootMain} from "../../Utils/logger";
-import {rootException} from "../../Utils/cloudLogger";
+import {rootMain} from "@utils/logger";
+import {rootException} from "@utils/cloudLogger";
 
 
 export class StockControllerVisualization {

@@ -1,4 +1,4 @@
-import {Quantity} from "../value-objects/Quantity";
+import {Quantity} from "@domain/stock-management/common/value-objects/Quantity";
 
 export class StockItem {
 

@@ -1,18 +1,18 @@
 import {Request, Response} from 'express';
-import {StockController} from '../../src/controllers/stockController';
-import {StockService} from '../../src/services/stockService';
-import {CustomError, sendError} from '../../src/errors';
+import {StockController} from '@controllers/stockController';
+import {StockService} from '@services/stockService';
+import {CustomError, sendError} from '@core/errors';
 import {mockReadRepo, mockWriteRepo} from "../__mocks__/mockedData";
-import {ReadStockRepository} from "../../src/repositories/readStockRepository";
-import {WriteStockRepository} from "../../src/repositories/writeStockRepository";
-import {HTTP_CODE_OK} from "../../src/Utils/httpCodes";
-import {ReadUserRepository} from "../../src/services/readUserRepository";
+import {ReadStockRepository} from "@repositories/readStockRepository";
+import {WriteStockRepository} from "@repositories/writeStockRepository";
+import {HTTP_CODE_OK} from "@utils/httpCodes";
+import {ReadUserRepository} from "@services/readUserRepository";
 import {PoolConnection} from "mysql2/promise";
-import {WriteUserRepository} from "../../src/services/writeUserRepository";
+import {WriteUserRepository} from "@services/writeUserRepository";
 
 
-jest.mock('../../src/services/stockService');
-jest.mock('../../src/errors', () => ({
+jest.mock('@services/stockService');
+jest.mock('@core/errors', () => ({
     sendError: jest.fn()
 }));
 

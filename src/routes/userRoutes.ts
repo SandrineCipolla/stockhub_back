@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { ReadUserRepository } from "../services/readUserRepository";
-import { UserService } from "../services/userService";
-import { WriteUserRepository } from "../services/writeUserRepository";
+import { ReadUserRepository } from "@services/readUserRepository";
+import { UserService } from "@services/userService";
+import { WriteUserRepository } from "@services/writeUserRepository";
 
 const configureUserRoutes = async (): Promise<Router> => {
   const router = Router();

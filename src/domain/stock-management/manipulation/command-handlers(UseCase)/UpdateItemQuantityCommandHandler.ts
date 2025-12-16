@@ -1,6 +1,6 @@
-import {UpdateItemQuantityCommand} from "../commands(Request)/UpdateItemQuantityCommand";
-import {IStockCommandRepository} from "../repositories/IStockCommandRepository";
-import {Stock} from "../../common/entities/Stock";
+import {UpdateItemQuantityCommand} from "@domain/stock-management/manipulation/commands(Request)/UpdateItemQuantityCommand";
+import {IStockCommandRepository} from "@domain/stock-management/manipulation/repositories/IStockCommandRepository";
+import {Stock} from "@domain/stock-management/common/entities/Stock";
 
 export class UpdateItemQuantityCommandHandler {
     constructor(private readonly stockRepository: IStockCommandRepository) {

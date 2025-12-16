@@ -2,7 +2,7 @@ import express from "express";
 import request from "supertest";
 
 import {PrismaClient} from "@prisma/client";
-import configureStockRoutesV2 from "../../../src/api/routes/StockRoutesV2";
+import configureStockRoutesV2 from "@api/routes/StockRoutesV2";
 
 const prisma = new PrismaClient();
 const TEST_OID = "fake-oid-test";

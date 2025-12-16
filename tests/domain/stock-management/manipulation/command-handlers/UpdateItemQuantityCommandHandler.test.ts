@@ -1,14 +1,14 @@
 import {
     UpdateItemQuantityCommandHandler
-} from "../../../../../src/domain/stock-management/manipulation/command-handlers(UseCase)/UpdateItemQuantityCommandHandler";
+} from "@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateItemQuantityCommandHandler";
 import {
     UpdateItemQuantityCommand
-} from "../../../../../src/domain/stock-management/manipulation/commands(Request)/UpdateItemQuantityCommand";
+} from "@domain/stock-management/manipulation/commands(Request)/UpdateItemQuantityCommand";
 import {
     IStockCommandRepository
-} from "../../../../../src/domain/stock-management/manipulation/repositories/IStockCommandRepository";
-import {Stock} from "../../../../../src/domain/stock-management/common/entities/Stock";
-import {StockItem} from "../../../../../src/domain/stock-management/common/entities/StockItem";
+} from "@domain/stock-management/manipulation/repositories/IStockCommandRepository";
+import {Stock} from "@domain/stock-management/common/entities/Stock";
+import {StockItem} from "@domain/stock-management/common/entities/StockItem";
 
 describe('UpdateItemQuantityCommandHandler', () => {
     describe('handle()', () => {

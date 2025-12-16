@@ -1,4 +1,4 @@
-import {Stock} from "../../common/entities/Stock";
+import {Stock} from "@domain/stock-management/common/entities/Stock";
 
 export interface IStockCommandRepository {
     save(stock: Stock, userId: number): Promise<Stock>;

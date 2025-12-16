@@ -1,5 +1,5 @@
 import {PoolConnection} from "mysql2/promise";
-import {Stock} from "../../src/models";
+import {Stock} from "@core/models";
 
 
 export interface TableColumn {

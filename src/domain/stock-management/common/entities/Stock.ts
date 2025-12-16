@@ -1,7 +1,7 @@
 import {StockItem} from "./StockItem";
-import {StockLabel} from "../value-objects/StockLabel";
-import {StockDescription} from "../value-objects/StockDescription";
-import {Quantity} from "../value-objects/Quantity";
+import {StockLabel} from "@domain/stock-management/common/value-objects/StockLabel";
+import {StockDescription} from "@domain/stock-management/common/value-objects/StockDescription";
+import {Quantity} from "@domain/stock-management/common/value-objects/Quantity";
 import {stocks_CATEGORY} from "@prisma/client";
 
 export class Stock {

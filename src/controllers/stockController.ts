@@ -1,18 +1,13 @@
 import {Request, Response} from "express";
-import {StockService} from "../services/stockService";
-import {BadRequestError, CustomError, ErrorMessages, sendError, ValidationError} from "../errors";
-import {WriteStockRepository} from "../repositories/writeStockRepository";
-import {ReadStockRepository} from "../repositories/readStockRepository";
-import {HTTP_CODE_CREATED, HTTP_CODE_OK} from "../Utils/httpCodes";
-import {UserService} from "../services/userService";
-import {ReadUserRepository} from "../services/readUserRepository";
-import {WriteUserRepository} from "../services/writeUserRepository";
-import {rootException} from "../Utils/cloudLogger";
-
-//
-//
-//
-// //TODO voir si + messages d'erreurs selon les situations
+import {StockService} from "@services/stockService";
+import {BadRequestError, CustomError, ErrorMessages, sendError, ValidationError} from "@core/errors";
+import {WriteStockRepository} from "@repositories/writeStockRepository";
+import {ReadStockRepository} from "@repositories/readStockRepository";
+import {HTTP_CODE_CREATED, HTTP_CODE_OK} from "@utils/httpCodes";
+import {UserService} from "@services/userService";
+import {ReadUserRepository} from "@services/readUserRepository";
+import {WriteUserRepository} from "@services/writeUserRepository";
+import {rootException} from "@utils/cloudLogger";
 
 
 export class StockController {
@@ -116,7 +111,8 @@ export class StockController {
             const item = {
                 label: req.body['LABEL'],
                 description: req.body['DESCRIPTION'],
-                quantity: req.body['QUANTITY']
+                quantity: req.body['QUANTITY'],
+                minimumStock: req.body['MINIMUM_STOCK']
             };
             await this.stockService.addStockItem(item, stockID);
             res.status(HTTP_CODE_CREATED).json({message: "Stock item added successfully."});

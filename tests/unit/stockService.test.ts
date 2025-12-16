@@ -1,13 +1,13 @@
-import {StockService} from "../../src/services/stockService";
+import {StockService} from "@services/stockService";
 import {fakeStocks, fakeStocksAsRowDataPacket, mockReadRepo, mockWriteRepo} from "../__mocks__/mockedData";
 import {createFakeDatabaseConnection} from "../__mocks__/connectionUtils";
-import {ReadStockRepository} from "../../src/repositories/readStockRepository";
-import {WriteStockRepository} from "../../src/repositories/writeStockRepository";
+import {ReadStockRepository} from "@repositories/readStockRepository";
+import {WriteStockRepository} from "@repositories/writeStockRepository";
 
 
 // mock pour ReadStockRepository et WriteStockRepository
-jest.mock("../../src/repositories/readStockRepository");
-jest.mock("../../src/repositories/writeStockRepository");
+jest.mock("@repositories/readStockRepository");
+jest.mock("@repositories/writeStockRepository");
 
 // Configuration du test
 describe("StockService", () => {

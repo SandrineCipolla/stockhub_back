@@ -1,5 +1,5 @@
 import {RowDataPacket} from "mysql2/promise";
-import {Stock} from "./models";
+import {Stock} from "@core/models";
 
 export class StockMapper {
     static mapRowDataPacketToStock(row: RowDataPacket): Stock {

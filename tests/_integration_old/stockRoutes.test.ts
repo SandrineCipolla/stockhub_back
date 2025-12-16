@@ -1,7 +1,7 @@
 import request from "supertest";
 // import { app } from "../../src";
-import { HTTP_CODE_OK } from "../../src/Utils/httpCodes";
-import { initializeApp } from "../../src/initializeApp";
+import { HTTP_CODE_OK } from "@utils/httpCodes";
+import { initializeApp } from "@core/initializeApp";
 
 describe("Stock Routes", () => {
   it("should run a test", async () => {

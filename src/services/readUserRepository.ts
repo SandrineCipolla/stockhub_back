@@ -1,6 +1,6 @@
 import { FieldPacket, PoolConnection, RowDataPacket } from "mysql2/promise";
-import { rootReadUserRepository } from "../Utils/logger";
-import { connectToDatabase } from "../dbUtils";
+import { rootReadUserRepository } from "@utils/logger";
+import { connectToDatabase } from "@core/dbUtils";
 
 export class ReadUserRepository {
   async readUserByOID(oid: string) {

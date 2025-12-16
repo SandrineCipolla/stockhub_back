@@ -7,11 +7,12 @@ export interface CustomRowDataPacket extends RowDataPacket {
     QUANTITY: number;
 }
 
-export class Stock  {
+export class Stock {
     id: number;
     label: string;
     description: string;
     quantity: number;
+    minimumStock?: number;
 
     constructor(id: number, label: string, description: string, quantity: number) {
         this.id = id;
@@ -40,17 +41,17 @@ export class UpdateStockRequest {
 }
 
 export class Item {
-    id :number;
+    id: number;
     label: string;
     description: string;
     quantity: number;
     stock_id: number;
 
-    constructor(id: number, label: string, description: string, quantity: number,stock_id:number) {
+    constructor(id: number, label: string, description: string, quantity: number, stock_id: number) {
         this.id = id;
         this.label = label;
         this.description = description;
         this.quantity = quantity;
-        this.stock_id= stock_id;
+        this.stock_id = stock_id;
     }
 }

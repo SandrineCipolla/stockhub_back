@@ -1,8 +1,8 @@
 
 import { RowDataPacket } from 'mysql2/promise';
-import {StockMapper} from "../src/stockMapper";
+import {StockMapper} from "@core/stockMapper";
 import {exampleRow, expectedStock} from "./__mocks__/mockedData";
-import {Stock} from "../src/models";
+import {Stock} from "@core/models";
 
 describe('StockMapper', () => {
     it('should map RowDataPacket to Stock', () => {

@@ -1,17 +1,17 @@
-import {StockControllerVisualization} from "../../../src/api/controllers/StockControllerVisualization";
-import {CustomError, sendError} from "../../../src/errors";
+import {StockControllerVisualization} from "@api/controllers/StockControllerVisualization";
+import {CustomError, sendError} from "@core/errors";
 import {
     StockVisualizationService
-} from "../../../src/domain/stock-management/visualization/services/StockVisualizationService";
-import {UserService} from "../../../src/services/userService";
-import {HTTP_CODE_OK} from "../../../src/Utils/httpCodes";
-import {ReadUserRepository} from "../../../src/services/readUserRepository";
-import {WriteUserRepository} from "../../../src/services/writeUserRepository";
+} from "@domain/stock-management/visualization/services/StockVisualizationService";
+import {UserService} from "@services/userService";
+import {HTTP_CODE_OK} from "@utils/httpCodes";
+import {ReadUserRepository} from "@services/readUserRepository";
+import {WriteUserRepository} from "@services/writeUserRepository";
 import {PoolConnection} from "mysql2/promise";
 import {Request, Response} from "express";
 
-jest.mock("../../../src/domain/stock-management/visualization/services/StockVisualizationService");
-jest.mock("../../../src/errors", () => ({
+jest.mock("@domain/stock-management/visualization/services/StockVisualizationService");
+jest.mock("@core/errors", () => ({
     sendError: jest.fn(),
 }));
 
