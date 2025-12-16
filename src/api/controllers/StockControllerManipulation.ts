@@ -1,12 +1,20 @@
 import {Response} from "express";
 import {AuthenticatedRequest} from "@api/types/AuthenticatedRequest";
 import {UserService} from "@services/userService";
-import {CreateStockCommandHandler} from "@domain/stock-management/manipulation/command-handlers(UseCase)/CreateStockCommandHandler";
-import {AddItemToStockCommandHandler} from "@domain/stock-management/manipulation/command-handlers(UseCase)/AddItemToStockCommandHandler";
-import {UpdateItemQuantityCommandHandler} from "@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateItemQuantityCommandHandler";
+import {
+    CreateStockCommandHandler
+} from "@domain/stock-management/manipulation/command-handlers(UseCase)/CreateStockCommandHandler";
+import {
+    AddItemToStockCommandHandler
+} from "@domain/stock-management/manipulation/command-handlers(UseCase)/AddItemToStockCommandHandler";
+import {
+    UpdateItemQuantityCommandHandler
+} from "@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateItemQuantityCommandHandler";
 import {CreateStockCommand} from "@domain/stock-management/manipulation/commands(Request)/CreateStockCommand";
 import {AddItemToStockCommand} from "@domain/stock-management/manipulation/commands(Request)/AddItemToStockCommand";
-import {UpdateItemQuantityCommand} from "@domain/stock-management/manipulation/commands(Request)/UpdateItemQuantityCommand";
+import {
+    UpdateItemQuantityCommand
+} from "@domain/stock-management/manipulation/commands(Request)/UpdateItemQuantityCommand";
 import {HTTP_CODE_CREATED, HTTP_CODE_OK} from "@utils/httpCodes";
 import {CustomError, sendError} from "@core/errors";
 import {rootMain} from "@utils/logger";
@@ -21,21 +29,19 @@ export class StockControllerManipulation {
     ) {
     }
 
-    private validateOID(OID: string, res: Response): boolean {
+    private getValidatedOID(req: AuthenticatedRequest, res: Response): string | null {
+        const OID = req.userID;
         if (!OID || OID.trim() === '') {
             res.status(401).json({error: 'User not authenticated'});
-            return false;
+            return null;
         }
-        return true;
+        return OID;
     }
 
     public async createStock(req: AuthenticatedRequest, res: Response) {
         try {
-            const OID = req.userID;
-
-            if (!this.validateOID(OID, res)) {
-                return;
-            }
+            const OID = this.getValidatedOID(req, res);
+            if (!OID) return;
 
             const userID = await this.userService.convertOIDtoUserID(OID);
             const {label, description, category} = req.body;
@@ -63,11 +69,8 @@ export class StockControllerManipulation {
 
     public async addItemToStock(req: AuthenticatedRequest, res: Response) {
         try {
-            const OID = req.userID;
-
-            if (!this.validateOID(OID, res)) {
-                return;
-            }
+            const OID = this.getValidatedOID(req, res);
+            if (!OID) return;
 
             const stockId = Number(req.params.stockId);
             const {label, quantity, description, minimumStock} = req.body;
@@ -95,11 +98,8 @@ export class StockControllerManipulation {
 
     public async updateItemQuantity(req: AuthenticatedRequest, res: Response) {
         try {
-            const OID = req.userID;
-
-            if (!this.validateOID(OID, res)) {
-                return;
-            }
+            const OID = this.getValidatedOID(req, res);
+            if (!OID) return;
 
             const stockId = Number(req.params.stockId);
             const itemId = Number(req.params.itemId);
