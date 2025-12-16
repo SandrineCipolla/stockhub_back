@@ -63,6 +63,90 @@ Le backend StockHub suit une architecture **Domain-Driven Design (DDD)** avec s�
 
 ## Séparation CQRS
 
+### Diagramme CQRS
+
+```mermaid
+flowchart TB
+    subgraph Client
+        UI[Interface Client]
+    end
+
+    subgraph "API Layer"
+        GET[GET Requests<br/>Liste, Détails]
+        POST[POST/PATCH Requests<br/>Créer, Modifier]
+    end
+
+    UI -->|Lecture| GET
+    UI -->|Écriture| POST
+
+    subgraph "READ SIDE - Visualization"
+        direction TB
+        VC[StockControllerVisualization]
+        VS[StockVisualizationService]
+        VR[PrismaStockVisualizationRepository]
+
+        GET --> VC
+        VC --> VS
+        VS --> VR
+
+        VR -->|SELECT optimisé<br/>COUNT, projections| DB[(Database<br/>Prisma)]
+
+        style VC fill:#e3f2fd
+        style VS fill:#e3f2fd
+        style VR fill:#e3f2fd
+    end
+
+    subgraph "WRITE SIDE - Manipulation"
+        direction TB
+        MC[StockControllerManipulation]
+        CMD[Commands<br/>CreateStock<br/>AddItem<br/>UpdateQuantity]
+        HDL[Command Handlers<br/>Use Cases]
+        DOM[Domain Layer<br/>Stock Entity<br/>Value Objects]
+        CR[PrismaStockCommandRepository]
+
+        POST --> MC
+        MC --> CMD
+        CMD --> HDL
+        HDL --> DOM
+        DOM --> CR
+
+        CR -->|INSERT/UPDATE<br/>avec validation métier| DB
+
+        style MC fill:#fff3e0
+        style CMD fill:#fff3e0
+        style HDL fill:#fff3e0
+        style DOM fill:#ffe0b2
+        style CR fill:#fff3e0
+    end
+
+    subgraph "Infrastructure"
+        DB
+    end
+
+    style DB fill:#f3e5f5
+
+    classDef readSide fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef writeSide fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef domain fill:#ffe0b2,stroke:#e65100,stroke-width:3px
+
+    %% Annotations
+    note1[📖 Queries optimisées<br/>Pas de logique métier<br/>Performance lecture]
+    note2[✏️ Validation métier stricte<br/>Logique business<br/>Protection invariants]
+
+    note1 -.->|READ| VS
+    note2 -.->|WRITE| DOM
+
+    style note1 fill:#e8f5e9,stroke:#4caf50,stroke-dasharray: 5 5
+    style note2 fill:#fce4ec,stroke:#e91e63,stroke-dasharray: 5 5
+```
+
+**Légende:**
+- 🔵 **Bleu (READ)** : Optimisé pour la lecture, pas de logique métier
+- 🟠 **Orange (WRITE)** : Validation métier stricte, protection des invariants
+- 🟣 **Violet (Domain)** : Cœur métier, règles business
+
+---
+
 ### READ Side (Queries - Visualization)
 
 **Responsabilité:** Lecture optimisée des données pour l'affichage
