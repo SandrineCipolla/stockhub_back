@@ -1,9 +1,9 @@
 import {ResultSetHeader} from "mysql2/promise";
-import {Stock, StockToCreate, UpdateStockRequest} from "../models";
-import {ErrorMessages, ValidationError} from "../errors";
-import {connectToDatabase} from "../dbUtils";
-import {DependencyTelemetry, rootDependency, rootException} from "../Utils/cloudLogger";
-import {rootWriteStockRepository} from "../Utils/logger";
+import {Stock, StockToCreate, UpdateStockRequest} from "@core/models";
+import {ErrorMessages, ValidationError} from "@core/errors";
+import {connectToDatabase} from "@core/dbUtils";
+import {DependencyTelemetry, rootDependency, rootException} from "@utils/cloudLogger";
+import {rootWriteStockRepository} from "@utils/logger";
 
 const DEPENDENCY_NAME = process.env.DB_DATABASE;
 const DEPENDENCY_TARGET = process.env.DB_HOST;

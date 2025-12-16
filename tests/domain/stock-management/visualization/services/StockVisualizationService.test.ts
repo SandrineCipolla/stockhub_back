@@ -1,11 +1,11 @@
 import {
     StockVisualizationService
-} from "../../../../../src/domain/stock-management/visualization/services/StockVisualizationService";
-import {StockItem} from "../../../../../src/domain/stock-management/common/entities/StockItem";
-import {Stock} from "../../../../../src/domain/stock-management/common/entities/Stock";
+} from "@domain/stock-management/visualization/services/StockVisualizationService";
+import {StockItem} from "@domain/stock-management/common/entities/StockItem";
+import {Stock} from "@domain/stock-management/common/entities/Stock";
 import {
     IStockVisualizationRepository
-} from "../../../../../src/domain/stock-management/visualization/queries/IStockVisualizationRepository";
+} from "@domain/stock-management/visualization/queries/IStockVisualizationRepository";
 
 describe('StockVisualizationService', () => {
     describe('getAllStocks', () => {

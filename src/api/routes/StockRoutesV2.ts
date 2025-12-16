@@ -1,15 +1,15 @@
 import {
     StockVisualizationService
-} from "../../domain/stock-management/visualization/services/StockVisualizationService";
-import {UserService} from "../../services/userService";
-import {StockControllerVisualization} from "../controllers/StockControllerVisualization";
+} from "@domain/stock-management/visualization/services/StockVisualizationService";
+import {UserService} from "@services/userService";
+import {StockControllerVisualization} from "@api/controllers/StockControllerVisualization";
 import {Router} from "express";
-import {ReadUserRepository} from "../../services/readUserRepository";
-import {WriteUserRepository} from "../../services/writeUserRepository";
+import {ReadUserRepository} from "@services/readUserRepository";
+import {WriteUserRepository} from "@services/writeUserRepository";
 import {
     PrismaStockVisualizationRepository
-} from "../../infrastructure/stock-management/visualization/repositories/PrismaStockVisualizationRepository";
-import {rootController} from "../../Utils/logger";
+} from "@infrastructure/stock-management/visualization/repositories/PrismaStockVisualizationRepository";
+import {rootController} from "@utils/logger";
 import {PrismaClient} from "@prisma/client";
 
 const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Router> => {

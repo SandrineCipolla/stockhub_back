@@ -1,13 +1,13 @@
 import {
     IStockCommandRepository
-} from "../../../../../src/domain/stock-management/manipulation/repositories/IStockCommandRepository";
-import {Stock} from "../../../../../src/domain/stock-management/common/entities/Stock";
+} from "@domain/stock-management/manipulation/repositories/IStockCommandRepository";
+import {Stock} from "@domain/stock-management/common/entities/Stock";
 import {
     CreateStockCommandHandler
-} from "../../../../../src/domain/stock-management/manipulation/command-handlers(UseCase)/CreateStockCommandHandler";
+} from "@domain/stock-management/manipulation/command-handlers(UseCase)/CreateStockCommandHandler";
 import {
     CreateStockCommand
-} from "../../../../../src/domain/stock-management/manipulation/commands(Request)/CreateStockCommand";
+} from "@domain/stock-management/manipulation/commands(Request)/CreateStockCommand";
 
 describe('CreateStockCommandHandler', () => {
     describe('handle()', () => {

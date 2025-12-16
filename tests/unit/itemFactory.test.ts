@@ -1,4 +1,4 @@
-import { createUpdatedItemQuantity } from '../../src/Utils/itemFactory';
+import { createUpdatedItemQuantity } from '@utils/itemFactory';
 
 describe('createUpdatedItemQuantity', () => {
     it('should create an object with the correct id and quantity', () => {

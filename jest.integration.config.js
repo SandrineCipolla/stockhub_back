@@ -14,6 +14,11 @@ module.exports = {
         '^@api/(.*)$': '<rootDir>/src/api/$1',
         '^@services/(.*)$': '<rootDir>/src/services/$1',
         '^@repositories/(.*)$': '<rootDir>/src/repositories/$1',
+        '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',
+        '^@routes/(.*)$': '<rootDir>/src/routes/$1',
+        '^@authentication/(.*)$': '<rootDir>/src/authentication/$1',
+        '^@serverSetup/(.*)$': '<rootDir>/src/serverSetup/$1',
+        '^@core/(.*)$': '<rootDir>/src/$1',
     },
     setupFiles: ["dotenv/config"],
     testMatch: [

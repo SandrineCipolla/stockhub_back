@@ -1,8 +1,8 @@
-import {UserService} from '../../src/services/userService';
+import {UserService} from '@services/userService';
 
-import {ErrorMessages, NotFoundError} from '../../src/errors';
-import {ReadUserRepository} from "../../src/services/readUserRepository";
-import { WriteUserRepository } from '../../src/services/writeUserRepository';
+import {ErrorMessages, NotFoundError} from '@core/errors';
+import {ReadUserRepository} from "@services/readUserRepository";
+import { WriteUserRepository } from '@services/writeUserRepository';
 
 describe('UserService', () => {
     let userService: UserService;

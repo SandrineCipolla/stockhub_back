@@ -1,11 +1,11 @@
-import {Stock} from "../../../../domain/stock-management/common/entities/Stock";
-import {StockItem} from "../../../../domain/stock-management/common/entities/StockItem";
+import {Stock} from "@domain/stock-management/common/entities/Stock";
+import {StockItem} from "@domain/stock-management/common/entities/StockItem";
 import {
     IStockVisualizationRepository
-} from "../../../../domain/stock-management/visualization/queries/IStockVisualizationRepository";
+} from "@domain/stock-management/visualization/queries/IStockVisualizationRepository";
 
 import {items as PrismaItem, PrismaClient, stocks as PrismaStock} from "@prisma/client";
-import {DependencyTelemetry, rootDependency, rootException} from "../../../../Utils/cloudLogger";
+import {DependencyTelemetry, rootDependency, rootException} from "@utils/cloudLogger";
 
 const DEPENDENCY_NAME = process.env.DB_DATABASE;
 const DEPENDENCY_TARGET = process.env.DB_HOST;

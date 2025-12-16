@@ -1,9 +1,9 @@
 import fs from "fs";
 import https from "https";
 import express from "express";
-import { HttpsPort } from "../config/httpPortConfiguration";
-import { rootServerSetup } from "../Utils/logger";
-import { isDevelopmentMode } from "../config/runtimeMode";
+import { HttpsPort } from "@config/httpPortConfiguration";
+import { rootServerSetup } from "@utils/logger";
+import { isDevelopmentMode } from "@config/runtimeMode";
 
 const serverKeyPath = "/etc/ssl/private/selfsigned.key";
 const serverCertPath = "/etc/ssl/certs/selfsigned.crt";

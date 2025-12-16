@@ -1,6 +1,6 @@
 import express from "express";
-import {HttpPort} from "../config/httpPortConfiguration";
-import {rootServerSetup} from "../Utils/logger";
+import {HttpPort} from "@config/httpPortConfiguration";
+import {rootServerSetup} from "@utils/logger";
 
 rootServerSetup.info('Setup HTTP Server {httpsPort}', HttpPort);
 

@@ -1,6 +1,6 @@
 import { FieldPacket, PoolConnection, RowDataPacket } from "mysql2/promise";
-import { rootDependency, rootException } from "../Utils/cloudLogger";
-import { connectToDatabase } from "../dbUtils";
+import { rootDependency, rootException } from "@utils/cloudLogger";
+import { connectToDatabase } from "@core/dbUtils";
 
 const QUERY_ALL_STOCKS_BY_USER = "SELECT * FROM stocks WHERE USER_ID = ?";
 export class ReadStockRepository {

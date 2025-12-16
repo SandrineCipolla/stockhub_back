@@ -1,7 +1,7 @@
-import authConfig from "../authConfig";
+import authConfig from "@core/authConfig";
 import {IBearerStrategyOptionWithRequest} from "passport-azure-ad";
-import {rootSecurityAuthenticationMiddleware} from "../Utils/logger";
-import {AuthConfigOptions} from "./models";
+import {rootSecurityAuthenticationMiddleware} from "@utils/logger";
+import {AuthConfigOptions} from "@config/models";
 
 if (!authConfig.credentials.clientID) {
     rootSecurityAuthenticationMiddleware.error('setup client id is {clientID}', authConfig.credentials.clientID);

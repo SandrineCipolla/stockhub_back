@@ -1,8 +1,8 @@
 import {TableColumn} from "../_integration_old/dbUtils";
-import {CustomRowDataPacket, Stock} from "../../src/models";
+import {CustomRowDataPacket, Stock} from "@core/models";
 import {RowDataPacket} from "mysql2/promise";
-import {WriteStockRepository} from "../../src/repositories/writeStockRepository";
-import {ReadStockRepository} from "../../src/repositories/readStockRepository";
+import {WriteStockRepository} from "@repositories/writeStockRepository";
+import {ReadStockRepository} from "@repositories/readStockRepository";
 
 export const exampleRow = {
     ID: 1,

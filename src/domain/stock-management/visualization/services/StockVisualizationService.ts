@@ -1,7 +1,7 @@
-import {StockSummary} from "../models/StockSummary";
-import {IStockVisualizationRepository} from "../queries/IStockVisualizationRepository";
-import {StockItem} from "../../common/entities/StockItem";
-import {StockWithoutItems} from "../models/StockWithoutItems";
+import {StockSummary} from "@domain/stock-management/visualization/models/StockSummary";
+import {IStockVisualizationRepository} from "@domain/stock-management/visualization/queries/IStockVisualizationRepository";
+import {StockItem} from "@domain/stock-management/common/entities/StockItem";
+import {StockWithoutItems} from "@domain/stock-management/visualization/models/StockWithoutItems";
 
 
 export class StockVisualizationService {

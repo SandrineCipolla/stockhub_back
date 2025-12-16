@@ -1,5 +1,12 @@
+import {PrismaClient} from "@prisma/client";
+
 import {
     PrismaStockVisualizationRepository
+} from "@infrastructure/stock-management/visualization/repositories/PrismaStockVisualizationRepository";
+
+const prisma = new PrismaClient();
+const repo = new PrismaStockVisualizationRepository();
+
 } from "../../../../src/infrastructure/stock-management/visualization/repositories/PrismaStockVisualizationRepository";
 import {
     clearTestData,

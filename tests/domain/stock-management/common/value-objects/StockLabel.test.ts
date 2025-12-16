@@ -1,4 +1,4 @@
-import {StockLabel} from "../../../../../src/domain/stock-management/common/value-objects/StockLabel";
+import {StockLabel} from "@domain/stock-management/common/value-objects/StockLabel";
 
 describe('StockLabel', () => {
     describe('constructor()', () => {

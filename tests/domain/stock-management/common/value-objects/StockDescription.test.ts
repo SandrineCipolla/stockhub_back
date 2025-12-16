@@ -1,4 +1,4 @@
-import {StockDescription} from "../../../../../src/domain/stock-management/common/value-objects/StockDescription";
+import {StockDescription} from "@domain/stock-management/common/value-objects/StockDescription";
 
 describe('StockDescription', () => {
     describe('constructor()', () => {

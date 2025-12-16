@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import {Stock, StockToCreate} from "../models";
+import {Stock, StockToCreate} from "@core/models";
 
 
 export const extractDataFromRequestBody = (req: Request, keys: string[]) => {

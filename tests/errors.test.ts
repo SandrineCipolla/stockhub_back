@@ -6,13 +6,13 @@ import {
     NotFoundError,
     sendError,
     ValidationError
-} from "../src/errors";
+} from "@core/errors";
 import {
     HTTP_CODE_BAD_REQUEST,
     HTTP_CODE_CONFLICT,
     HTTP_CODE_INTERNAL_SERVER_ERROR,
     HTTP_CODE_NOT_FOUND
-} from "../src/Utils/httpCodes";
+} from "@utils/httpCodes";
 import spyOn = jest.spyOn;
 
 

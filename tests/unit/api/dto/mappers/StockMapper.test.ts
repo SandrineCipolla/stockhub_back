@@ -1,8 +1,8 @@
-import {StockMapper} from '../../../../../src/api/dto/mappers/StockMapper';
-import {Stock} from '../../../../../src/domain/stock-management/common/entities/Stock';
-import {StockItem} from '../../../../../src/domain/stock-management/common/entities/StockItem';
-import {StockLabel} from '../../../../../src/domain/stock-management/common/value-objects/StockLabel';
-import {StockDescription} from '../../../../../src/domain/stock-management/common/value-objects/StockDescription';
+import {StockMapper} from '@api/dto/mappers/StockMapper';
+import {Stock} from '@domain/stock-management/common/entities/Stock';
+import {StockItem} from '@domain/stock-management/common/entities/StockItem';
+import {StockLabel} from '@domain/stock-management/common/value-objects/StockLabel';
+import {StockDescription} from '@domain/stock-management/common/value-objects/StockDescription';
 
 describe('StockMapper', () => {
     describe('toDTO', () => {

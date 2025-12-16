@@ -1,12 +1,12 @@
 import passportAzureAd from "passport-azure-ad";
 import express from "express";
-import {CustomError} from "../errors";
-import {rootMain} from "../Utils/logger";
+import {CustomError} from "@core/errors";
+import {rootMain} from "@utils/logger";
 
-import {ReadUserRepository} from "../services/readUserRepository";
-import {WriteUserRepository} from "../services/writeUserRepository";
-import {UserService} from "../services/userService";
-import {authConfigoptions} from "../config/authenticationConfig";
+import {ReadUserRepository} from "@services/readUserRepository";
+import {WriteUserRepository} from "@services/writeUserRepository";
+import {UserService} from "@services/userService";
+import {authConfigoptions} from "@config/authenticationConfig";
 
 async function createUserService() {
     const readUserRepository = new ReadUserRepository();

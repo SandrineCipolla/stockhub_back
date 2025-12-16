@@ -1,6 +1,6 @@
-import {Stock} from '../../../domain/stock-management/common/entities/Stock';
-import {StockItem} from '../../../domain/stock-management/common/entities/StockItem';
-import {StockDTO, StockItemDTO, StockStatus} from '../StockDTO';
+import {Stock} from '@domain/stock-management/common/entities/Stock';
+import {StockItem} from '@domain/stock-management/common/entities/StockItem';
+import {StockDTO, StockItemDTO, StockStatus} from '@api/dto/StockDTO';
 
 /**
  * StockMapper - Transforme les entités Domain en DTOs pour l'API

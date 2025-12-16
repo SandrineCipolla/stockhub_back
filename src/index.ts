@@ -1,8 +1,8 @@
 import 'tsconfig-paths/register';
-import { rootMain } from "./Utils/logger";
-import { initializeApp } from "./initializeApp";
-import { selectedRuntimeMode } from "./config/runtimeMode";
-import { rootCloudEvent } from "./Utils/cloudLogger";
+import {rootMain} from "@utils/logger";
+import {initializeApp} from "@core/initializeApp";
+import {selectedRuntimeMode} from "@config/runtimeMode";
+import {rootCloudEvent} from "@utils/cloudLogger";
 import dotenv from "dotenv";
 
 rootMain.info("Starting application ...");
@@ -10,14 +10,14 @@ rootMain.info("Starting application ...");
 dotenv.config();
 
 rootMain.info(
-  "Selected runtime mode is {selectedRuntimeMode}",
-  selectedRuntimeMode
+    "Selected runtime mode is {selectedRuntimeMode}",
+    selectedRuntimeMode
 );
 
 rootCloudEvent("Application started", {
-  selectedRuntimeMode,
+    selectedRuntimeMode,
 });
 
 if (process.env.NODE_ENV !== "test") {
-  initializeApp();
+    initializeApp();
 }

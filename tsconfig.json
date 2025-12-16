@@ -19,7 +19,12 @@
       "@config/*": ["config/*"],
       "@api/*": ["api/*"],
       "@services/*": ["services/*"],
-      "@repositories/*": ["repositories/*"]
+      "@repositories/*": ["repositories/*"],
+      "@controllers/*": ["controllers/*"],
+      "@routes/*": ["routes/*"],
+      "@authentication/*": ["authentication/*"],
+      "@serverSetup/*": ["serverSetup/*"],
+      "@core/*": ["./*"]
     }
   },
   "include": [

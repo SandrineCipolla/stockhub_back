@@ -1,14 +1,14 @@
 import {
     AddItemToStockCommandHandler
-} from "../../../../../src/domain/stock-management/manipulation/command-handlers(UseCase)/AddItemToStockCommandHandler";
+} from "@domain/stock-management/manipulation/command-handlers(UseCase)/AddItemToStockCommandHandler";
 import {
     AddItemToStockCommand
-} from "../../../../../src/domain/stock-management/manipulation/commands(Request)/AddItemToStockCommand";
+} from "@domain/stock-management/manipulation/commands(Request)/AddItemToStockCommand";
 import {
     IStockCommandRepository
-} from "../../../../../src/domain/stock-management/manipulation/repositories/IStockCommandRepository";
-import {Stock} from "../../../../../src/domain/stock-management/common/entities/Stock";
-import {StockItem} from "../../../../../src/domain/stock-management/common/entities/StockItem";
+} from "@domain/stock-management/manipulation/repositories/IStockCommandRepository";
+import {Stock} from "@domain/stock-management/common/entities/Stock";
+import {StockItem} from "@domain/stock-management/common/entities/StockItem";
 
 describe('AddItemToStockCommandHandler', () => {
     describe('handle()', () => {

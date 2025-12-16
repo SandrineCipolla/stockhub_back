@@ -1,6 +1,6 @@
-import {ReadUserRepository} from "./readUserRepository";
-import {WriteUserRepository} from "./writeUserRepository";
-import {rootUserService} from "../Utils/logger";
+import {ReadUserRepository} from "@services/readUserRepository";
+import {WriteUserRepository} from "@services/writeUserRepository";
+import {rootUserService} from "@utils/logger";
 
 class UserIdentifier {
     public readonly empty: boolean;

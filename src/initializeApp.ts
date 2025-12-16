@@ -1,15 +1,15 @@
-import authConfig from "./authConfig";
-import {rootMain, rootSecurity, rootServerSetup} from "./Utils/logger";
+import authConfig from "@core/authConfig";
+import {rootMain, rootSecurity, rootServerSetup} from "@utils/logger";
 import express from "express";
 import cors from "cors";
-import {CustomError} from "./errors";
+import {CustomError} from "@core/errors";
 import passport from "passport";
-import configureStockRoutes from "./routes/stockRoutes";
-import configureUserRoutes from "./routes/userRoutes";
-import {authConfigbearerStrategy} from "./authentication/authBearerStrategy";
-import {authenticationMiddleware} from "./authentication/authenticateMiddleware";
-import {setupHttpServer} from "./serverSetup/setupHttpServer";
-import configureStockRoutesV2 from "./api/routes/StockRoutesV2";
+import configureStockRoutes from "@routes/stockRoutes";
+import configureUserRoutes from "@routes/userRoutes";
+import {authConfigbearerStrategy} from "@authentication/authBearerStrategy";
+import {authenticationMiddleware} from "@authentication/authenticateMiddleware";
+import {setupHttpServer} from "@serverSetup/setupHttpServer";
+import configureStockRoutesV2 from "@api/routes/StockRoutesV2";
 
 export async function initializeApp() {
     const app = express();

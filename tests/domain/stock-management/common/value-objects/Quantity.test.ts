@@ -1,4 +1,4 @@
-import {Quantity} from "../../../../../src/domain/stock-management/common/value-objects/Quantity";
+import {Quantity} from "@domain/stock-management/common/value-objects/Quantity";
 
 describe('Quantity', () => {
     describe('when the quantity is negative', () => {

@@ -1,4 +1,4 @@
-import {StockItem} from "../../../../../src/domain/stock-management/common/entities/StockItem";
+import {StockItem} from "@domain/stock-management/common/entities/StockItem";
 
 describe('StockItem', () => {
     describe('when the stockItem quantity is 0', () => {

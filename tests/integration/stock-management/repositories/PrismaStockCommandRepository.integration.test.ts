@@ -1,5 +1,13 @@
+import {MySqlContainer, StartedMySqlContainer} from '@testcontainers/mysql';
+import {PrismaClient} from '@prisma/client';
+import {exec} from 'child_process';
+import {promisify} from 'util';
 import {
     PrismaStockCommandRepository
+} from '@infrastructure/stock-management/manipulation/repositories/PrismaStockCommandRepository';
+import {Stock} from '@domain/stock-management/common/entities/Stock';
+
+const execAsync = promisify(exec);
 } from '../../../../src/infrastructure/stock-management/manipulation/repositories/PrismaStockCommandRepository';
 import {Stock} from '../../../../src/domain/stock-management/common/entities/Stock';
 import {
