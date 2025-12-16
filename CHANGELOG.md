@@ -1,5 +1,39 @@
 # Changelog
 
+## [1.2.0](https://github.com/SandrineCipolla/stockhub_back/compare/v1.1.0...v1.2.0) (2025-12-16)
+
+
+### ✨ Features
+
+* add Azure AD B2C ROPC configuration for E2E tests ([c811fec](https://github.com/SandrineCipolla/stockhub_back/commit/c811fec0d6e797861cf81e35dab10eec19de2995))
+* add E2E tests with Playwright for stock management workflow ([f8dbf68](https://github.com/SandrineCipolla/stockhub_back/commit/f8dbf68b9ef5f38d76e674e4a8fffc584ef7fd2c))
+* add StockDTO and StockMapper for transforming domain entities to API DTOs ([0d4efe2](https://github.com/SandrineCipolla/stockhub_back/commit/0d4efe2719afec32e46b38bb25a448eade639e7b))
+* configure path aliases for cleaner imports ([06ae8a4](https://github.com/SandrineCipolla/stockhub_back/commit/06ae8a4a71a00d7bd2e7b31da82ff5d380320e81))
+
+
+### 🐛 Bug Fixes
+
+* add MINIMUM_STOCK support and auto-create users on first login ([ee63180](https://github.com/SandrineCipolla/stockhub_back/commit/ee63180d896b1b2cf40fa24bfa8722d54f970604))
+* address PR[#40](https://github.com/SandrineCipolla/stockhub_back/issues/40) review feedback on security and logging ([3ccf29c](https://github.com/SandrineCipolla/stockhub_back/commit/3ccf29c2bbe9496b5ad7ded15bfd443294a9a4ab))
+
+
+### ♻️ Code Refactoring
+
+* simplify import paths and enhance test setup for stock management integration tests ([8e8568c](https://github.com/SandrineCipolla/stockhub_back/commit/8e8568c79c6ec57c35d00170cbce23dfae9219a4))
+* update import paths to use path aliases for improved readability ([1a43f79](https://github.com/SandrineCipolla/stockhub_back/commit/1a43f794bc74e89b3e930e9a1da978794013a4fc))
+
+
+### 📚 Documentation
+
+* add comprehensive E2E testing documentation ([41c2f27](https://github.com/SandrineCipolla/stockhub_back/commit/41c2f27ce3ba2d26e6ad8d27485c69e89e737de1))
+* add documentation for PR [#40](https://github.com/SandrineCipolla/stockhub_back/issues/40) review fixes and improvements ([42b98a3](https://github.com/SandrineCipolla/stockhub_back/commit/42b98a381941669894176037895d8b41aa7ca762))
+* add roadmap for StockHub backend development phases and tasks ([a7b0d64](https://github.com/SandrineCipolla/stockhub_back/commit/a7b0d646432feef5980644e49253881d2f989b8a))
+
+
+### 🧪 Tests
+
+* add E2E tests infrastructure with Playwright and Azure AD B2C ([0ed07f5](https://github.com/SandrineCipolla/stockhub_back/commit/0ed07f50dec60932123dccd5875c7c6a10ea6374))
+
 ## [1.1.0](https://github.com/SandrineCipolla/stockhub_back/compare/v1.0.0...v1.1.0) (2025-12-10)
 
 
