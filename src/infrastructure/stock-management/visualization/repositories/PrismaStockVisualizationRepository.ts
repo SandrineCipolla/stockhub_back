@@ -50,7 +50,7 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
 
     async getStockItems(stockId: number, userId: number): Promise<StockItem[]> {
 
-        let success = false;
+        const success = false;
 
         try {
 
