@@ -24,6 +24,8 @@
     "lint:fix": "eslint . --ext .ts,.js --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "knip": "knip",
+    "knip:fix": "knip --fix",
     "prepare": "husky install"
   },
   "lint-staged": {

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "entry": ["src/index.ts"],
+  "project": ["src/**/*.ts"],
+  "ignore": ["**/*.test.ts", "**/*.spec.ts", "tests/**/*"],
+  "ignoreDependencies": ["@types/*"],
+  "jest": {
+    "config": ["jest.config.js", "jest.ci.config.js", "jest.integration.config.js"]
+  },
+  "playwright": {
+    "config": ["playwright.config.ts"]
+  }
+}
