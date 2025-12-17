@@ -3,7 +3,7 @@
   "entry": ["src/index.ts"],
   "project": ["src/**/*.ts"],
   "ignore": ["**/*.test.ts", "**/*.spec.ts", "tests/**/*"],
-  "ignoreDependencies": ["@types/*"],
+  "ignoreDependencies": ["@types/*", "@azure/msal-node", "@testcontainers/mysql", "testcontainers"],
   "ignoreBinaries": ["knip"],
   "jest": {
     "config": ["jest.config.js", "jest.ci.config.js", "jest.integration.config.js"]
