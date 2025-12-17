@@ -26,11 +26,6 @@
     "format:check": "prettier --check .",
     "prepare": "husky install"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "*.{ts,js}": [
       "prettier --write",
