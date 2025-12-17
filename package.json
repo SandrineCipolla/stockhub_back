@@ -32,9 +32,12 @@
     }
   },
   "lint-staged": {
-    "*.{ts,js,json,md}": [
+    "*.{ts,js}": [
       "prettier --write",
       "eslint --fix"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
     ]
   },
   "keywords": [],
@@ -60,6 +63,8 @@
   },
   "devDependencies": {
     "@azure/msal-node": "^3.8.3",
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
     "@playwright/test": "^1.57.0",
     "@testcontainers/mysql": "^11.9.0",
     "@types/cors": "^2.8.17",
