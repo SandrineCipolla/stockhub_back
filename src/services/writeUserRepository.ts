@@ -4,7 +4,7 @@ import { connectToDatabase } from "@core/dbUtils";
 
 export class WriteUserRepository {
   async addUser(email: string) {
-    let connection = await connectToDatabase();
+    const connection = await connectToDatabase();
 
     try {
       const sql = "INSERT INTO users (EMAIL) VALUES (?)";

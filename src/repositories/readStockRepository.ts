@@ -10,9 +10,9 @@ export class ReadStockRepository {
       QUERY_ALL_STOCKS_BY_USER + " - " + userID
     );
 
-    let connection = await connectToDatabase();
+    const connection = await connectToDatabase();
 
-    let startTime = Date.now();
+    const startTime = Date.now();
 
     try {
       const [stocks] = (await connection.query(QUERY_ALL_STOCKS_BY_USER, [
@@ -37,7 +37,7 @@ export class ReadStockRepository {
   }
 
   async readStockDetails(ID: number, userID: number) {
-    let connection = await connectToDatabase();
+    const connection = await connectToDatabase();
 
     try {
       const [stock] = (await connection.query(
@@ -52,7 +52,7 @@ export class ReadStockRepository {
   }
 
   async readStockItems(ID: number) {
-    let connection = await connectToDatabase();
+    const connection = await connectToDatabase();
 
     try {
       const [items] = (await connection.query(
@@ -66,7 +66,7 @@ export class ReadStockRepository {
   }
 
   async readAllItems(userID: number) {
-    let connection = await connectToDatabase();
+    const connection = await connectToDatabase();
 
     try {
       const [items] = (await connection.query(
@@ -80,7 +80,7 @@ export class ReadStockRepository {
   }
 
   async readItemDetails(itemID: number) {
-    let connection = await connectToDatabase();
+    const connection = await connectToDatabase();
 
     try {
       const [items] = (await connection.query(
@@ -97,7 +97,7 @@ export class ReadStockRepository {
   }
 
   async readLowStockItems(userId: number) {
-    let connection = await connectToDatabase();
+    const connection = await connectToDatabase();
 
     try {
       const [items] = (await connection.query(

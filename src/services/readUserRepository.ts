@@ -8,7 +8,7 @@ export class ReadUserRepository {
 
     const query = "SELECT ID FROM users WHERE EMAIL = ?";
 
-    let connection = await connectToDatabase();
+    const connection = await connectToDatabase();
 
     try {
       const [rows]: [RowDataPacket[], FieldPacket[]] = await connection.execute(

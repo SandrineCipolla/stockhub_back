@@ -24,7 +24,7 @@ export class WriteStockRepository {
             );
         }
 
-        let connection = await connectToDatabase();
+        const connection = await connectToDatabase();
 
         try {
             await connection.execute(
@@ -66,7 +66,7 @@ export class WriteStockRepository {
 
             rootException(validationError);
         }
-        let connection = await connectToDatabase();
+        const connection = await connectToDatabase();
 
         let success = false;
 
@@ -102,7 +102,7 @@ export class WriteStockRepository {
     }
 
     async createStock(stock: Partial<StockToCreate>, userID: number) {
-        let connection = await connectToDatabase();
+        const connection = await connectToDatabase();
 
         let success = false;
 
@@ -137,7 +137,7 @@ export class WriteStockRepository {
         stockID: number,
         itemID: number
     ): Promise<ResultSetHeader> {
-        let connection = await connectToDatabase();
+        const connection = await connectToDatabase();
 
         try {
             const [result] = await connection.execute<ResultSetHeader>(
@@ -153,7 +153,7 @@ export class WriteStockRepository {
     async deleteStock(stockID: number, userID: number): Promise<ResultSetHeader> {
         rootWriteStockRepository.info('Attempting to delete stock with ID {stockID}', stockID);
 
-        let connection = await connectToDatabase();
+        const connection = await connectToDatabase();
 
         try {
             const [result] = await connection.execute<ResultSetHeader>(
@@ -167,7 +167,7 @@ export class WriteStockRepository {
     }
 
     async deleteStockItemsByStockID(stockID: number): Promise<void> {
-        let connection = await connectToDatabase();
+        const connection = await connectToDatabase();
 
         try {
             await connection.execute("DELETE FROM items WHERE STOCK_ID = ?", [

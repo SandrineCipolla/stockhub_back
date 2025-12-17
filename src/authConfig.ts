@@ -18,7 +18,7 @@ const passportConfig = {
         isB2C: true,
         validateIssuer: false,
         passReqToCallback: true,
-        loggingLevel: 'warn' as 'warn',
+        loggingLevel: 'warn' as const,
         loggingNoPII: false,
     },
     protectedRoutes: {
