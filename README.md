@@ -67,6 +67,29 @@ Routes REST Express `/api/v2/stocks`.
 
 Déploiement cible Azure App Service + DB MySQL Azure.
 
+## 📚 Documentation Architecture
+
+### Architecture Decision Records (ADRs)
+
+Les **ADRs** documentent les décisions techniques majeures du projet avec leur contexte, alternatives considérées, et conséquences.
+
+📖 **[Voir tous les ADRs](./docs/adr/README.md)**
+
+| # | Décision | Date |
+|---|----------|------|
+| [ADR-001](./docs/adr/ADR-001-migration-ddd-cqrs.md) | Migration vers DDD/CQRS | Nov 2024 |
+| [ADR-002](./docs/adr/ADR-002-choix-prisma-orm.md) | Choix de Prisma vs TypeORM | Déc 2025 |
+| [ADR-003](./docs/adr/ADR-003-azure-ad-b2c-authentication.md) | Azure AD B2C pour authentification | Déc 2025 |
+| [ADR-004](./docs/adr/ADR-004-tests-value-objects-entities.md) | Tests sur Value Objects et Entities | Déc 2025 |
+| [ADR-005](./docs/adr/ADR-005-api-versioning-v2.md) | Versioning API (V2 sans V1) | Déc 2025 |
+| [ADR-006](./docs/adr/ADR-006-mysql-azure-cloud.md) | MySQL Azure vs autres clouds | Déc 2025 |
+
+### Documentation complète
+
+- 📘 [Architecture DDD/CQRS complète](./docs/architecture/DDD-CQRS-ARCHITECTURE.md)
+- 📄 [Guide d'implémentation routes manipulation](./docs/ddd-manipulation-routes-implementation.md)
+- 🧪 [Guide des Tests E2E](./docs/E2E_TESTS_GUIDE.md)
+
 ## 5. Base de données
 
 ### Diagramme relationnel
