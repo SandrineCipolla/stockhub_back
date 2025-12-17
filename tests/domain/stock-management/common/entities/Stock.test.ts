@@ -88,4 +88,218 @@ describe('Stock', () => {
         })
     })
 
+    describe('addItem()', () => {
+        describe('when adding a valid item', () => {
+            it('should add the item to the stock', () => {
+                const stock = Stock.create({
+                    label: 'Stock 1',
+                    description: 'Description 1',
+                    category: 'alimentation',
+                    userId: 1
+                });
+
+                const item = stock.addItem({
+                    label: 'Tomates',
+                    description: 'Tomates fraîches',
+                    quantity: 10,
+                    minimumStock: 3
+                });
+
+                expect(stock.items).toHaveLength(1);
+                expect(stock.items[0]).toBe(item);
+                expect(item.LABEL).toBe('Tomates');
+                expect(item.QUANTITY).toBe(10);
+                expect(item.minimumStock).toBe(3);
+            })
+        })
+
+        describe('when label is empty', () => {
+            it('should throw an error', () => {
+                const stock = Stock.create({
+                    label: 'Stock 1',
+                    description: 'Description 1',
+                    category: 'alimentation',
+                    userId: 1
+                });
+
+                expect(() => stock.addItem({
+                    label: '',
+                    quantity: 10
+                })).toThrow('Item label cannot be empty');
+            })
+        })
+
+        describe('when quantity is negative', () => {
+            it('should throw an error', () => {
+                const stock = Stock.create({
+                    label: 'Stock 1',
+                    description: 'Description 1',
+                    category: 'alimentation',
+                    userId: 1
+                });
+
+                expect(() => stock.addItem({
+                    label: 'Item 1',
+                    quantity: -5
+                })).toThrow('Item quantity cannot be negative');
+            })
+        })
+
+        describe('when item with same label already exists', () => {
+            it('should throw an error', () => {
+                const stock = Stock.create({
+                    label: 'Stock 1',
+                    description: 'Description 1',
+                    category: 'alimentation',
+                    userId: 1
+                });
+
+                stock.addItem({label: 'Tomates', quantity: 10});
+
+                expect(() => stock.addItem({
+                    label: 'Tomates',
+                    quantity: 5
+                })).toThrow('Item with label "Tomates" already exists in this stock');
+            })
+        })
+
+        describe('when item with same label but different case', () => {
+            it('should throw an error', () => {
+                const stock = Stock.create({
+                    label: 'Stock 1',
+                    description: 'Description 1',
+                    category: 'alimentation',
+                    userId: 1
+                });
+
+                stock.addItem({label: 'Tomates', quantity: 10});
+
+                expect(() => stock.addItem({
+                    label: 'TOMATES',
+                    quantity: 5
+                })).toThrow('Item with label "TOMATES" already exists in this stock');
+            })
+        })
+    })
+
+    describe('updateItemQuantity()', () => {
+        describe('when updating with a valid quantity', () => {
+            it('should update the item quantity', () => {
+                const stock = Stock.create({
+                    label: 'Stock 1',
+                    description: 'Description 1',
+                    category: 'alimentation',
+                    userId: 1
+                });
+
+                const item = stock.addItem({label: 'Tomates', quantity: 10});
+
+                stock.updateItemQuantity(item.ID, 25);
+
+                expect(item.QUANTITY).toBe(25);
+            })
+        })
+
+        describe('when quantity is negative', () => {
+            it('should throw an error', () => {
+                const stock = Stock.create({
+                    label: 'Stock 1',
+                    description: 'Description 1',
+                    category: 'alimentation',
+                    userId: 1
+                });
+
+                const item = stock.addItem({label: 'Tomates', quantity: 10});
+
+                expect(() => stock.updateItemQuantity(item.ID, -5))
+                    .toThrow('Quantity cannot be negative');
+            })
+        })
+
+        describe('when item does not exist', () => {
+            it('should throw an error', () => {
+                const stock = Stock.create({
+                    label: 'Stock 1',
+                    description: 'Description 1',
+                    category: 'alimentation',
+                    userId: 1
+                });
+
+                expect(() => stock.updateItemQuantity(999, 10))
+                    .toThrow('Item with ID 999 not found in this stock');
+            })
+        })
+    })
+
+    describe('getLowStockItems()', () => {
+        describe('when no items are low on stock', () => {
+            it('should return an empty array', () => {
+                const stock = Stock.create({
+                    label: 'Stock 1',
+                    description: 'Description 1',
+                    category: 'alimentation',
+                    userId: 1
+                });
+
+                stock.addItem({label: 'Tomates', quantity: 10, minimumStock: 3});
+                stock.addItem({label: 'Carottes', quantity: 15, minimumStock: 5});
+
+                expect(stock.getLowStockItems()).toHaveLength(0);
+            })
+        })
+
+        describe('when some items are low on stock', () => {
+            it('should return only the low stock items', () => {
+                const stock = Stock.create({
+                    label: 'Stock 1',
+                    description: 'Description 1',
+                    category: 'alimentation',
+                    userId: 1
+                });
+
+                stock.addItem({label: 'Tomates', quantity: 2, minimumStock: 5});
+                stock.addItem({label: 'Carottes', quantity: 15, minimumStock: 3});
+                stock.addItem({label: 'Pommes', quantity: 1, minimumStock: 10});
+
+                const lowStockItems = stock.getLowStockItems();
+
+                expect(lowStockItems).toHaveLength(2);
+                expect(lowStockItems.map(item => item.LABEL)).toContain('Tomates');
+                expect(lowStockItems.map(item => item.LABEL)).toContain('Pommes');
+            })
+        })
+    })
+
+    describe('hasLowStockItems()', () => {
+        describe('when there are no low stock items', () => {
+            it('should return false', () => {
+                const stock = Stock.create({
+                    label: 'Stock 1',
+                    description: 'Description 1',
+                    category: 'alimentation',
+                    userId: 1
+                });
+
+                stock.addItem({label: 'Tomates', quantity: 10, minimumStock: 3});
+
+                expect(stock.hasLowStockItems()).toBe(false);
+            })
+        })
+
+        describe('when there are low stock items', () => {
+            it('should return true', () => {
+                const stock = Stock.create({
+                    label: 'Stock 1',
+                    description: 'Description 1',
+                    category: 'alimentation',
+                    userId: 1
+                });
+
+                stock.addItem({label: 'Tomates', quantity: 2, minimumStock: 5});
+
+                expect(stock.hasLowStockItems()).toBe(true);
+            })
+        })
+    })
+
 })

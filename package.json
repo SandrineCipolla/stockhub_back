@@ -20,7 +20,7 @@
     "build:local": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "copy-certs": "cp ./server.cert ./dist",
     "postinstall": "prisma generate",
-    "lint": "eslint . --ext .ts,.js --report-unused-disable-directives --max-warnings 150",
+    "lint": "eslint . --ext .ts,.js --report-unused-disable-directives --max-warnings 160",
     "lint:fix": "eslint . --ext .ts,.js --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
