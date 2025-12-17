@@ -77,7 +77,7 @@ Les **ADRs** documentent les décisions techniques majeures du projet avec leur 
 
 | # | Décision | Date |
 |---|----------|------|
-| [ADR-001](./docs/adr/ADR-001-migration-ddd-cqrs.md) | Migration vers DDD/CQRS | Nov 2024 |
+| [ADR-001](./docs/adr/ADR-001-migration-ddd-cqrs.md) | Migration vers DDD/CQRS | Nov 2025 |
 | [ADR-002](./docs/adr/ADR-002-choix-prisma-orm.md) | Choix de Prisma vs TypeORM | Déc 2025 |
 | [ADR-003](./docs/adr/ADR-003-azure-ad-b2c-authentication.md) | Azure AD B2C pour authentification | Déc 2025 |
 | [ADR-004](./docs/adr/ADR-004-tests-value-objects-entities.md) | Tests sur Value Objects et Entities | Déc 2025 |
