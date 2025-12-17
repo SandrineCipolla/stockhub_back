@@ -4,6 +4,7 @@
   "project": ["src/**/*.ts"],
   "ignore": ["**/*.test.ts", "**/*.spec.ts", "tests/**/*"],
   "ignoreDependencies": ["@types/*"],
+  "ignoreBinaries": ["knip"],
   "jest": {
     "config": ["jest.config.js", "jest.ci.config.js", "jest.integration.config.js"]
   },

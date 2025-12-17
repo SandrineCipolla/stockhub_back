@@ -1,15 +1,15 @@
-import {rootServerSetup} from "@utils/logger";
+import { rootServerSetup } from '@utils/logger';
 
 export const selectedRuntimeMode = process.env.NODE_ENV;
 
-export const developmentMode = "development";
-export const productionMode = "production";
-export const testMode = "test";
+const developmentMode = 'development';
+const productionMode = 'production';
+const testMode = 'test';
 
-export function isDevelopmentMode() {
-    return selectedRuntimeMode === developmentMode;
+function isDevelopmentMode() {
+  return selectedRuntimeMode === developmentMode;
 }
 
-export function isProductionMode() {
-    return selectedRuntimeMode === productionMode;
+function isProductionMode() {
+  return selectedRuntimeMode === productionMode;
 }
