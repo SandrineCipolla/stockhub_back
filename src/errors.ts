@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import express from 'express';
 import {
   HTTP_CODE_BAD_REQUEST,
   HTTP_CODE_CONFLICT,
@@ -76,7 +76,7 @@ export enum ErrorMessages {
   AddUser = 'Error while adding user to DB',
 }
 
-export const sendError = (res: Response, err: CustomError) => {
+export const sendError = (res: express.Response, err: CustomError) => {
   switch (true) {
     case err instanceof ValidationError:
       return res
