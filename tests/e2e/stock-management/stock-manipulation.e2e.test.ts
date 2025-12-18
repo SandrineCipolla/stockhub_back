@@ -151,7 +151,7 @@ test.describe('Stock Management E2E Workflow with Azure AD', () => {
     const items = await getItemsResponse.json();
     // V2 returns lowercase field names
     const banana = items.find((item: any) => (item.label || item.LABEL) === 'Bananes');
-    itemId2 = banana.id || banana.ID;
+    _itemId2 = banana.id || banana.ID;
   });
 
   test('Step 4: Visualize stock and verify items', async ({ request }) => {
