@@ -94,7 +94,6 @@ const configureStockRoutes = async (): Promise<Router> => {
   //Route pour créer un nouvel item
   router.post('/stocks/:stockID/items', async (req, res) => {
     try {
-      const stockID = Number(req.params.stockID);
       await stockController.addStockItem(req, res);
     } catch (error) {
       console.error('Error in POST /stocks/:stockID/items', error);
