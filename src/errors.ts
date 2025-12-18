@@ -92,13 +92,14 @@ export const sendError = (res: Response, err: CustomError) => {
     case err instanceof ConflictError:
       return res.status(HTTP_CODE_CONFLICT).json({ error: err.message, type: err.typology });
 
-    case err instanceof DatabaseError:
+    case err instanceof DatabaseError: {
       const databaseError = err as DatabaseError;
       console.error('Original database error:', databaseError.originalError);
       return res.status(HTTP_CODE_INTERNAL_SERVER_ERROR).json({
         error: 'A database error occurred. Please try again later.',
         type: err.typology,
       });
+    }
 
     default:
       return res

@@ -39,7 +39,7 @@ export class UpdateStockRequest {
   }
 }
 
-class Item {
+export class Item {
   id: number;
   label: string;
   description: string;

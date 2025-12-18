@@ -1,6 +1,5 @@
-import { rootMain } from "./logger";
-
-const appInsights = require("applicationinsights");
+import { rootMain } from './logger';
+import * as appInsights from 'applicationinsights';
 
 appInsights
   .setup(process.env.APPLICATIONINSIGHTS_CONNECTION_STRING)
@@ -14,7 +13,7 @@ appInsights
   .setSendLiveMetrics(true)
   .start();
 
-rootMain.info("Application Insights started.");
+rootMain.info('Application Insights started.');
 
 const client = appInsights.defaultClient;
 

@@ -1,10 +1,5 @@
-import request from "supertest";
-// import { app } from "../../src";
-import { HTTP_CODE_OK } from "@utils/httpCodes";
-import { initializeApp } from "@core/initializeApp";
-
-describe("Stock Routes", () => {
-  it("should run a test", async () => {
+describe('Stock Routes', () => {
+  it('should run a test', async () => {
     expect(true).toBe(true);
   });
 });

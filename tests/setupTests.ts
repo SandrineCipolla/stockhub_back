@@ -1,2 +1,3 @@
+import iconv from 'iconv-lite';
 
-require('iconv-lite').encodingExists('foo')
+iconv.encodingExists('foo');
