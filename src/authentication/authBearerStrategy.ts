@@ -1,6 +1,5 @@
 import passportAzureAd, { ITokenPayload, VerifyCallback } from 'passport-azure-ad';
 import express from 'express';
-import { CustomError } from '@core/errors';
 import { rootMain } from '@utils/logger';
 
 import { ReadUserRepository } from '@services/readUserRepository';
@@ -11,10 +10,6 @@ import { authConfigoptions } from '@config/authenticationConfig';
 interface AzureB2CTokenPayload extends ITokenPayload {
   emails?: string[];
   error_description?: string;
-}
-
-interface AuthenticatedUser {
-  userID: { value: number; empty: boolean };
 }
 
 async function createUserService() {

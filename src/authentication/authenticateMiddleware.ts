@@ -1,5 +1,4 @@
 import { rootSecurityAuthenticationMiddleware } from '@utils/logger';
-import { CustomError } from '@core/errors';
 import express from 'express';
 import passport from 'passport';
 import { ITokenPayload } from 'passport-azure-ad';
