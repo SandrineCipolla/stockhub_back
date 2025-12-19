@@ -27,6 +27,7 @@ export class ReadStockRepository {
     } catch (error) {
       rootException(new Error('Error while reading all stocks'));
       depTelemetry.duration = this.computeDuration(startTime);
+      throw error;
     } finally {
       connection.release();
       rootDependency(depTelemetry);

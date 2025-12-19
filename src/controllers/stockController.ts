@@ -45,7 +45,7 @@ export class StockController {
     }
   }
 
-  async createStock(req: express.Request, res: express.Response) {
+  async createStock(req: express.Request, res: express.Response): Promise<void> {
     try {
       const OID = req.userID || '';
       const userID = await this.userService.convertOIDtoUserID(OID);
@@ -54,13 +54,14 @@ export class StockController {
       console.info('createStock {OID} - {LABEL} - {DESCRIPTION} ...', OID, LABEL, DESCRIPTION);
 
       if (!LABEL || !DESCRIPTION) {
-        return sendError(
+        sendError(
           res,
           new BadRequestError(
             'LABEL and DESCRIPTION are required to create a stock.',
             ErrorMessages.CreateStock
           )
         );
+        return;
       }
       await this.stockService.createStock({ LABEL, DESCRIPTION }, userID.value);
 
@@ -97,20 +98,21 @@ export class StockController {
     }
   }
 
-  async updateStockItemQuantity(req: express.Request, res: express.Response) {
+  async updateStockItemQuantity(req: express.Request, res: express.Response): Promise<void> {
     try {
       const itemID = Number(req.params.itemID);
       const stockID = Number(req.params.stockID);
       const { QUANTITY } = req.body;
 
       if (!itemID || QUANTITY === undefined) {
-        return sendError(
+        sendError(
           res,
           new ValidationError(
             'ID and QUANTITY must be provided.',
             ErrorMessages.UpdateStockItemQuantity
           )
         );
+        return;
       }
 
       await this.stockService.updateStockItemQuantity(itemID, QUANTITY, stockID);
@@ -187,12 +189,13 @@ export class StockController {
     }
   }
 
-  async getLowStockItems(req: express.Request, res: express.Response) {
+  async getLowStockItems(req: express.Request, res: express.Response): Promise<void> {
     try {
       const OID = req.userID || '';
       const userID = await this.userService.convertOIDtoUserID(OID);
       if (!userID) {
-        return res.status(400).json({ error: 'User ID is missing' });
+        res.status(400).json({ error: 'User ID is missing' });
+        return;
       }
       const items = await this.stockService.getLowStockItems(userID.value);
       res.status(HTTP_CODE_OK).json(items);
