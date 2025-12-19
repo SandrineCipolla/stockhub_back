@@ -34,8 +34,8 @@ export class StockControllerVisualization {
       rootMain.info(`getAllStocks OID=${OID} stocksLength=${stocks.length}`);
 
       res.status(HTTP_CODE_OK).json(stocks);
-    } catch (err: any) {
-      rootException(err);
+    } catch (err: unknown) {
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }
@@ -54,8 +54,8 @@ export class StockControllerVisualization {
 
       rootMain.info(`getStockDetails OID=${OID} stockId=${stockId}`);
       res.status(HTTP_CODE_OK).json([stock]);
-    } catch (err: any) {
-      rootException(err);
+    } catch (err: unknown) {
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }
@@ -74,8 +74,8 @@ export class StockControllerVisualization {
 
       rootMain.info(`getStockItems OID=${OID} stockId=${stockId} itemsLength=${items.length}`);
       res.status(HTTP_CODE_OK).json(items);
-    } catch (err: any) {
-      rootException(err);
+    } catch (err: unknown) {
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }

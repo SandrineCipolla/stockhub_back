@@ -1,4 +1,4 @@
-import passportAzureAd from 'passport-azure-ad';
+import passportAzureAd, { ITokenPayload, VerifyCallback } from 'passport-azure-ad';
 import express from 'express';
 import { CustomError } from '@core/errors';
 import { rootMain } from '@utils/logger';
@@ -7,6 +7,15 @@ import { ReadUserRepository } from '@services/readUserRepository';
 import { WriteUserRepository } from '@services/writeUserRepository';
 import { UserService } from '@services/userService';
 import { authConfigoptions } from '@config/authenticationConfig';
+
+interface AzureB2CTokenPayload extends ITokenPayload {
+  emails?: string[];
+  error_description?: string;
+}
+
+interface AuthenticatedUser {
+  userID: { value: number; empty: boolean };
+}
 
 async function createUserService() {
   const readUserRepository = new ReadUserRepository();
@@ -17,11 +26,7 @@ async function createUserService() {
 
 export const authConfigbearerStrategy = new passportAzureAd.BearerStrategy(
   authConfigoptions,
-  async (
-    req: express.Request,
-    token: any,
-    done: (err: CustomError | null, user?: any, info?: any) => void
-  ) => {
+  async (req: express.Request, token: AzureB2CTokenPayload, done: VerifyCallback) => {
     rootMain.debug('Token received:', token);
     // 💡 Cas spécial : utilisateur a cliqué sur "Forgot password"
     if (token?.error_description?.includes('AADB2C90118')) {
@@ -47,6 +52,10 @@ export const authConfigbearerStrategy = new passportAzureAd.BearerStrategy(
     try {
       const userService = await createUserService();
 
+      if (!token.emails || token.emails.length === 0) {
+        return done(new Error('No email found in token'), null);
+      }
+
       const email = token.emails[0];
       let userID = await userService.convertOIDtoUserID(email);
       if (userID.empty) {
@@ -56,7 +65,7 @@ export const authConfigbearerStrategy = new passportAzureAd.BearerStrategy(
       done(null, { userID }, token);
     } catch (error) {
       rootMain.error('Error during authentication:', error);
-      done(error as CustomError, null);
+      done(error as Error, null);
     }
   }
 );

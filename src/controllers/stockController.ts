@@ -39,8 +39,8 @@ export class StockController {
       console.info('getAllStocks {OID} - {stocks.length}', OID, stocks.length);
 
       res.status(HTTP_CODE_OK).json(stocks);
-    } catch (err: any) {
-      rootException(err);
+    } catch (err: unknown) {
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }
@@ -67,8 +67,8 @@ export class StockController {
       console.info('createStock {OID} - {LABEL} - {DESCRIPTION} DONE!', OID, LABEL, DESCRIPTION);
 
       res.status(HTTP_CODE_CREATED).json({ message: 'Stock created successfully.' });
-    } catch (err: any) {
-      rootException(err);
+    } catch (err: unknown) {
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }
@@ -80,8 +80,8 @@ export class StockController {
       const ID = Number(req.params.ID);
       const stock = await this.stockService.getStockDetails(ID, userID.value);
       res.status(HTTP_CODE_OK).json(stock);
-    } catch (err: any) {
-      rootException(err);
+    } catch (err: unknown) {
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }
@@ -91,8 +91,8 @@ export class StockController {
       const ID = Number(req.params.ID);
       const items = await this.stockService.getStockItems(ID);
       res.status(HTTP_CODE_OK).json(items);
-    } catch (err: any) {
-      rootException(err);
+    } catch (err: unknown) {
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }
@@ -115,8 +115,8 @@ export class StockController {
 
       await this.stockService.updateStockItemQuantity(itemID, QUANTITY, stockID);
       res.status(HTTP_CODE_OK).json({ message: 'Stock updated successfully.' });
-    } catch (err: any) {
-      rootException(err);
+    } catch (err: unknown) {
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }
@@ -132,8 +132,8 @@ export class StockController {
       };
       await this.stockService.addStockItem(item, stockID);
       res.status(HTTP_CODE_CREATED).json({ message: 'Stock item added successfully.' });
-    } catch (err: any) {
-      rootException(err);
+    } catch (err: unknown) {
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }
@@ -144,8 +144,8 @@ export class StockController {
       const itemID = Number(req.params.itemID);
       await this.stockService.deleteStockItem(stockID, itemID);
       res.status(HTTP_CODE_OK).json({ message: 'Stock item deleted successfully.' });
-    } catch (err: any) {
-      rootException(err);
+    } catch (err: unknown) {
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }
@@ -157,9 +157,9 @@ export class StockController {
       const stockID = Number(req.params.stockID);
       await this.stockService.deleteStock(stockID, userID.value);
       res.status(HTTP_CODE_OK).json({ message: 'Stock deleted successfully.' });
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error in deleteStock:', err);
-      rootException(err);
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }
@@ -170,8 +170,8 @@ export class StockController {
       const userID = await this.userService.convertOIDtoUserID(OID);
       const items = await this.stockService.getAllItems(userID.value);
       res.status(HTTP_CODE_OK).json(items);
-    } catch (err: any) {
-      rootException(err);
+    } catch (err: unknown) {
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }
@@ -181,8 +181,8 @@ export class StockController {
       const itemID = Number(req.params.itemID);
       const item = await this.stockService.getItemDetails(itemID);
       res.status(HTTP_CODE_OK).json(item);
-    } catch (err: any) {
-      rootException(err);
+    } catch (err: unknown) {
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }
@@ -196,8 +196,8 @@ export class StockController {
       }
       const items = await this.stockService.getLowStockItems(userID.value);
       res.status(HTTP_CODE_OK).json(items);
-    } catch (err: any) {
-      rootException(err);
+    } catch (err: unknown) {
+      rootException(err as Error);
       sendError(res, err as CustomError);
     }
   }
