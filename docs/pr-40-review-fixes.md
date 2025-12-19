@@ -7,6 +7,7 @@ Ce document détaille les modifications apportées pour répondre aux 4 retours 
 **Reviewé par :** @macreiben-dev
 **Date :** 12 décembre 2025
 **Commits :**
+
 - `fix: address PR#40 review feedback on security and logging`
 - `feat: configure path aliases for cleaner imports`
 - `refactor: replace all relative imports with path aliases`
@@ -23,8 +24,10 @@ Ce document détaille les modifications apportées pour répondre aux 4 retours 
 ```typescript
 // ❌ AVANT
 rootSecurityAuthenticationMiddleware.info('Active client ID: {clientID}', activeClientID);
-rootSecurityAuthenticationMiddleware.info('Identity metadata URL: {url}',
-    `https://${authConfig.metadata.b2cDomain}/${authConfig.credentials.tenantName}/${activePolicy}/${authConfig.metadata.version}/${authConfig.metadata.discovery}`);
+rootSecurityAuthenticationMiddleware.info(
+  'Identity metadata URL: {url}',
+  `https://${authConfig.metadata.b2cDomain}/${authConfig.credentials.tenantName}/${activePolicy}/${authConfig.metadata.version}/${authConfig.metadata.discovery}`
+);
 ```
 
 ### ⚠️ Pourquoi c'est un problème ?
@@ -104,24 +107,24 @@ console.error(`Error converting OID to UserID: ${err.message}`);
 
 ```typescript
 // Services
-export const rootService = provider.getCategory("service");
-export const rootUserService = rootService.getChildCategory("userService");
+export const rootService = provider.getCategory('service');
+export const rootUserService = rootService.getChildCategory('userService');
 
 // Database
-export const rootWriteStockRepository = rootDatabase.getChildCategory("writeStockRepository");
+export const rootWriteStockRepository = rootDatabase.getChildCategory('writeStockRepository');
 ```
 
 **2. Remplacement dans le code :**
 
 ```typescript
 // ✅ APRÈS - userService.ts
-import {rootUserService} from "@utils/logger";
+import { rootUserService } from '@utils/logger';
 
 rootUserService.info('User with OID {oid} not found, creating new user...', oid);
 rootUserService.error('Error converting OID to UserID: {message}', err.message);
 
 // ✅ APRÈS - writeStockRepository.ts
-import {rootWriteStockRepository} from "@utils/logger";
+import { rootWriteStockRepository } from '@utils/logger';
 
 rootWriteStockRepository.info('Attempting to delete stock with ID {stockID}', stockID);
 ```
@@ -200,10 +203,10 @@ data: `INSERT INTO items(..., minimum_stock, ...)
 
 ```typescript
 // ❌ AVANT
-import {IStockCommandRepository} from "../../../../domain/stock-management/manipulation/repositories/IStockCommandRepository";
-import {Stock} from "../../../../domain/stock-management/common/entities/Stock";
-import {StockItem} from "../../../../domain/stock-management/common/entities/StockItem";
-import {DependencyTelemetry, rootDependency, rootException} from "../../../../Utils/cloudLogger";
+import { IStockCommandRepository } from '../../../../domain/stock-management/manipulation/repositories/IStockCommandRepository';
+import { Stock } from '../../../../domain/stock-management/common/entities/Stock';
+import { StockItem } from '../../../../domain/stock-management/common/entities/StockItem';
+import { DependencyTelemetry, rootDependency, rootException } from '../../../../Utils/cloudLogger';
 ```
 
 ### ⚠️ Pourquoi c'est un problème ?
@@ -303,15 +306,16 @@ import 'tsconfig-paths/register'; // En première ligne
 
 ```typescript
 // ✅ APRÈS
-import {IStockCommandRepository} from "@domain/stock-management/manipulation/repositories/IStockCommandRepository";
-import {Stock} from "@domain/stock-management/common/entities/Stock";
-import {StockItem} from "@domain/stock-management/common/entities/StockItem";
-import {DependencyTelemetry, rootDependency, rootException} from "@utils/cloudLogger";
+import { IStockCommandRepository } from '@domain/stock-management/manipulation/repositories/IStockCommandRepository';
+import { Stock } from '@domain/stock-management/common/entities/Stock';
+import { StockItem } from '@domain/stock-management/common/entities/StockItem';
+import { DependencyTelemetry, rootDependency, rootException } from '@utils/cloudLogger';
 ```
 
 **Fichiers modifiés :**
-- 33 fichiers sources (src/**/*.ts)
-- 23 fichiers de tests (tests/**/*.ts)
+
+- 33 fichiers sources (src/\*_/_.ts)
+- 23 fichiers de tests (tests/\*_/_.ts)
 - 5 fichiers de configuration
 - Total : **56 fichiers** mis à jour
 
@@ -352,14 +356,14 @@ import {DependencyTelemetry, rootDependency, rootException} from "@utils/cloudLo
 
 #### Compatibilité
 
-| Contexte | Fonctionne ? | Comment ? |
-|----------|--------------|-----------|
-| **TypeScript compilation** | ✅ | TypeScript comprend nativement les paths |
-| **Webpack build** | ✅ | Configuration `resolve.alias` |
-| **Jest tests** | ✅ | Configuration `moduleNameMapper` |
-| **ts-node en dev** | ✅ | `tsconfig-paths/register` |
-| **Node.js production** | ✅ | `tsconfig-paths/register` en première ligne |
-| **tsc build** | ✅ | `tsc-alias` transforme après compilation |
+| Contexte                   | Fonctionne ? | Comment ?                                   |
+| -------------------------- | ------------ | ------------------------------------------- |
+| **TypeScript compilation** | ✅           | TypeScript comprend nativement les paths    |
+| **Webpack build**          | ✅           | Configuration `resolve.alias`               |
+| **Jest tests**             | ✅           | Configuration `moduleNameMapper`            |
+| **ts-node en dev**         | ✅           | `tsconfig-paths/register`                   |
+| **Node.js production**     | ✅           | `tsconfig-paths/register` en première ligne |
+| **tsc build**              | ✅           | `tsc-alias` transforme après compilation    |
 
 ### 🎯 Convention adoptée
 
@@ -385,6 +389,7 @@ import {DependencyTelemetry, rootDependency, rootException} from "@utils/cloudLo
 Toutes les modifications ont été validées par :
 
 ### ✅ Tests automatisés
+
 ```bash
 npm run test:unit
 # Test Suites: 9 passed, 9 total
@@ -392,18 +397,21 @@ npm run test:unit
 ```
 
 ### ✅ Build TypeScript
+
 ```bash
 npm run build:local
 # Compilation successful, no errors
 ```
 
 ### ✅ Build Webpack (production)
+
 ```bash
 npm run build
 # Build successful
 ```
 
 ### ✅ Vérification manuelle
+
 - Aucun import relatif inter-module restant (sauf intra-module, ce qui est correct)
 - Tous les fichiers de configuration synchronisés
 - Documentation à jour
@@ -413,19 +421,23 @@ npm run build
 ## Impact et bénéfices
 
 ### 🔒 Sécurité
+
 - Réduction du risque d'exposition d'informations sensibles dans les logs
 - Meilleure traçabilité des événements de sécurité
 
 ### 📊 Observabilité
+
 - Logs structurés et catégorisés dans Application Insights
 - Facilite le debugging et le monitoring en production
 
 ### 🛠️ Maintenabilité
+
 - Code plus lisible et auto-documenté
 - Refactoring facilité grâce aux path aliases
 - Moins de risques d'erreurs lors des modifications
 
 ### 👥 Expérience développeur
+
 - Imports plus intuitifs et plus courts
 - Auto-complétion IDE améliorée
 - Onboarding facilité pour les nouveaux développeurs

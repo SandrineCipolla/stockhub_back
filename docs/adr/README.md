@@ -7,6 +7,7 @@ Un **Architecture Decision Record (ADR)** est un document qui capture une décis
 ### Pourquoi utiliser des ADRs ?
 
 Les ADRs permettent de :
+
 - 📝 **Documenter le "pourquoi"** derrière chaque choix technique
 - 🔍 **Comprendre le raisonnement** des décisions passées (pour l'équipe actuelle et future)
 - ⚖️ **Évaluer les trade-offs** de manière transparente
@@ -16,6 +17,7 @@ Les ADRs permettent de :
 ### Quand créer un ADR ?
 
 Créez un ADR pour toute décision architecturale qui :
+
 - Impacte la structure du code ou la stack technique
 - A des alternatives viables
 - A des conséquences à long terme
@@ -25,14 +27,14 @@ Créez un ADR pour toute décision architecturale qui :
 
 ### ADRs acceptés
 
-| # | Titre | Date | Statut |
-|---|-------|------|--------|
-| [ADR-001](./ADR-001-migration-ddd-cqrs.md) | Migration vers DDD/CQRS | 2024-11 | ✅ Accepté |
-| [ADR-002](./ADR-002-choix-prisma-orm.md) | Choix de Prisma vs TypeORM | 2025-12 | ✅ Accepté |
-| [ADR-003](./ADR-003-azure-ad-b2c-authentication.md) | Azure AD B2C pour authentification | 2025-12 | ✅ Accepté |
+| #                                                    | Titre                               | Date    | Statut     |
+| ---------------------------------------------------- | ----------------------------------- | ------- | ---------- |
+| [ADR-001](./ADR-001-migration-ddd-cqrs.md)           | Migration vers DDD/CQRS             | 2024-11 | ✅ Accepté |
+| [ADR-002](./ADR-002-choix-prisma-orm.md)             | Choix de Prisma vs TypeORM          | 2025-12 | ✅ Accepté |
+| [ADR-003](./ADR-003-azure-ad-b2c-authentication.md)  | Azure AD B2C pour authentification  | 2025-12 | ✅ Accepté |
 | [ADR-004](./ADR-004-tests-value-objects-entities.md) | Tests sur Value Objects et Entities | 2025-12 | ✅ Accepté |
-| [ADR-005](./ADR-005-api-versioning-v2.md) | Versioning API (V2 sans V1) | 2025-12 | ✅ Accepté |
-| [ADR-006](./ADR-006-mysql-azure-cloud.md) | MySQL Azure vs autres clouds | 2025-12 | ✅ Accepté |
+| [ADR-005](./ADR-005-api-versioning-v2.md)            | Versioning API (V2 sans V1)         | 2025-12 | ✅ Accepté |
+| [ADR-006](./ADR-006-mysql-azure-cloud.md)            | MySQL Azure vs autres clouds        | 2025-12 | ✅ Accepté |
 
 ### ADRs dépréciés
 
@@ -82,6 +84,7 @@ cp docs/adr/TEMPLATE.md docs/adr/ADR-XXX-titre-decision.md
 Une fois qu'un ADR est accepté, **il ne doit pas être modifié**. Si la décision change, créez un nouvel ADR qui supplante l'ancien.
 
 **Exemple :**
+
 ```
 ADR-002: Choix de Prisma (Accepté)
 ADR-015: Migration vers Drizzle ORM (Accepté, supplante ADR-002)
@@ -99,6 +102,7 @@ Les ADRs documentent des **décisions rationnelles**, pas des opinions personnel
 Chaque décision a des avantages ET des inconvénients. Soyez transparent.
 
 **Exemple :**
+
 - ✅ **Avantage :** Type-safety excellente
 - ⚠️ **Inconvénient :** Vendor lock-in (dépendance forte à Prisma)
 

@@ -14,16 +14,19 @@ Les tests E2E sont maintenant **complètement fonctionnels** avec authentificati
 - ✅ **Tous les tests passent** : 7/7 tests réussis
 
 ## Objectif initial
+
 Implémenter des tests E2E automatisés avec authentification Azure AD B2C utilisant le flow ROPC (Resource Owner Password Credentials) pour éviter l'interaction manuelle.
 
 ## Configuration effectuée
 
 ### Application Azure AD B2C : ROPC_Auth_app
+
 - **Client ID** : `a6a645f0-32fe-42cc-b524-6a3d83bbfb43`
 - **Tenant** : `stockhubb2c.onmicrosoft.com`
 - **User Flow** : `B2C_1_ROPC`
 
 ### Paramètres configurés dans le manifest
+
 ```json
 {
   "isFallbackPublicClient": true,
@@ -37,25 +40,30 @@ Implémenter des tests E2E automatisés avec authentification Azure AD B2C utili
 ```
 
 ### Redirect URIs configurés
+
 - `msala6a645f0-32fe-42cc-b524-6a3d83bbfb43://auth` (MSAL only)
 - `https://stockhubb2c.b2clogin.com/oauth2/nativeclient`
 - `https://localhost`
 
 ### API Permissions
+
 - Microsoft Graph : `openid`, `offline_access`
 - ROPC_Auth_app : `access_as_user` (custom scope)
 
 ## Problèmes rencontrés
 
 ### 1. Erreur AADB2C90057 (Résolue)
+
 **Erreur** : "The provided application is not configured to allow the 'OAuth' Implicit flow"
 
 **Solution** :
+
 - Activer `oauth2AllowImplicitFlow` dans le manifest
 - Cocher les checkboxes "Access tokens" et "ID tokens" dans Implicit Grant settings
 - Configurer les redirect URIs pour Mobile/Desktop applications
 
 ### 2. Erreur AADB2C90225 - Création d'utilisateur de test (CONTOURNÉE)
+
 **Erreur** : "The username or password provided in the request are invalid"
 
 **Cause** : Les mots de passe temporaires d'Azure AD B2C expirent en quelques minutes seulement et nécessitent un changement interactif.
@@ -65,25 +73,30 @@ Implémenter des tests E2E automatisés avec authentification Azure AD B2C utili
 ## Tentatives de résolution (toutes échouées)
 
 ### Tentative 1 : Reset password avec mot de passe temporaire
+
 - ❌ Les mots de passe temporaires expirent trop rapidement (< 5 minutes)
 - ❌ Nécessitent un changement au premier sign-in (incompatible avec ROPC)
 - ❌ Pas de moyen de créer un mot de passe permanent via le portail Azure
 
 ### Tentative 2 : Création d'utilisateur via Azure CLI
+
 ```bash
 az ad user create --display-name "E2E Test User" --user-principal-name testuser@stockhubb2c.onmicrosoft.com
 ```
+
 - ❌ Problème de tenant (connecté au tenant principal au lieu du tenant B2C)
 - ❌ Erreur : "The domain portion of the userPrincipalName property is invalid"
 - ❌ Les commandes `az ad` ne fonctionnent pas correctement avec B2C
 
 ### Tentative 3 : Création d'utilisateur via Microsoft Graph API
+
 - ❌ Nécessite d'être connecté au bon tenant B2C (complexe)
 - ❌ Configuration du champ `identities` compliquée pour Azure AD B2C
 - ❌ Documentation Microsoft peu claire pour les comptes locaux B2C
 - ❌ Nécessite des permissions spéciales et une app avec secret
 
 ### Tentative 4 : Création via Azure PowerShell
+
 - ❌ Même problématique que Azure CLI
 - ❌ Incompatibilité entre Azure AD et Azure AD B2C
 

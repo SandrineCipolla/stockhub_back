@@ -75,14 +75,14 @@ Les **ADRs** documentent les décisions techniques majeures du projet avec leur 
 
 📖 **[Voir tous les ADRs](./docs/adr/README.md)**
 
-| # | Décision | Date |
-|---|----------|------|
-| [ADR-001](./docs/adr/ADR-001-migration-ddd-cqrs.md) | Migration vers DDD/CQRS | Nov 2025 |
-| [ADR-002](./docs/adr/ADR-002-choix-prisma-orm.md) | Choix de Prisma vs TypeORM | Déc 2025 |
-| [ADR-003](./docs/adr/ADR-003-azure-ad-b2c-authentication.md) | Azure AD B2C pour authentification | Déc 2025 |
+| #                                                             | Décision                            | Date     |
+| ------------------------------------------------------------- | ----------------------------------- | -------- |
+| [ADR-001](./docs/adr/ADR-001-migration-ddd-cqrs.md)           | Migration vers DDD/CQRS             | Nov 2025 |
+| [ADR-002](./docs/adr/ADR-002-choix-prisma-orm.md)             | Choix de Prisma vs TypeORM          | Déc 2025 |
+| [ADR-003](./docs/adr/ADR-003-azure-ad-b2c-authentication.md)  | Azure AD B2C pour authentification  | Déc 2025 |
 | [ADR-004](./docs/adr/ADR-004-tests-value-objects-entities.md) | Tests sur Value Objects et Entities | Déc 2025 |
-| [ADR-005](./docs/adr/ADR-005-api-versioning-v2.md) | Versioning API (V2 sans V1) | Déc 2025 |
-| [ADR-006](./docs/adr/ADR-006-mysql-azure-cloud.md) | MySQL Azure vs autres clouds | Déc 2025 |
+| [ADR-005](./docs/adr/ADR-005-api-versioning-v2.md)            | Versioning API (V2 sans V1)         | Déc 2025 |
+| [ADR-006](./docs/adr/ADR-006-mysql-azure-cloud.md)            | MySQL Azure vs autres clouds        | Déc 2025 |
 
 ### Documentation complète
 
@@ -118,6 +118,7 @@ Les utilisateurs "normaux" pourront faire des demandes de réapprovisionnementr 
 **IMPORTANT** : Pour économiser de l'argent (~15€/mois), arrêtez le serveur MySQL quand vous ne développez pas !
 
 #### **Base de données active** :
+
 - **Serveur** : `stockhub-database-mysql-restored`
 - **Host** : `stockhub-database-mysql-restored.mysql.database.azure.com`
 - **Coût actif** : ~15-20€/mois (24/7)
@@ -126,6 +127,7 @@ Les utilisateurs "normaux" pourront faire des demandes de réapprovisionnementr 
 #### **Démarrer la base de données** (avant de développer)
 
 **Méthode 1 - Explorateur Windows (le plus simple)** :
+
 1. Ouvrez l'explorateur de fichiers
 2. Allez dans le dossier du projet `stockhub_back`
 3. **Clic droit** sur `start_mysql.ps1`
@@ -134,12 +136,14 @@ Les utilisateurs "normaux" pourront faire des demandes de réapprovisionnementr 
 6. ✅ MySQL démarré, vous pouvez lancer votre app
 
 **Méthode 2 - Terminal PowerShell** :
+
 ```powershell
 # Depuis le dossier stockhub_back
 .\start_mysql.ps1
 ```
 
 **Méthode 3 - Commande manuelle** :
+
 ```powershell
 az mysql flexible-server start --resource-group StockHubApp-resources --name stockhub-database-mysql-restored
 ```
@@ -147,14 +151,17 @@ az mysql flexible-server start --resource-group StockHubApp-resources --name sto
 #### **Arrêter la base de données** (quand vous avez fini de développer)
 
 **Méthode 1 - Explorateur Windows** :
+
 - **Clic droit** sur `stop_mysql.ps1` → "Exécuter avec PowerShell"
 
 **Méthode 2 - Terminal PowerShell** :
+
 ```powershell
 .\stop_mysql.ps1
 ```
 
 **Méthode 3 - Commande manuelle** :
+
 ```powershell
 az mysql flexible-server stop --resource-group StockHubApp-resources --name stockhub-database-mysql-restored
 ```
@@ -217,6 +224,7 @@ az mysql flexible-server stop --resource-group StockHubApp-resources --name stoc
 - `StockVisualizationService` : cas vide, cas stocks présents, cas 404
 
 **Commande** :
+
 ```bash
 npm run test:unit
 ```
@@ -226,6 +234,7 @@ npm run test:unit
 Tests d'intégration des services et repositories avec base de données de test.
 
 **Commande** :
+
 ```bash
 npm run test:integration
 ```
@@ -235,6 +244,7 @@ npm run test:integration
 Tests fonctionnels complets avec **authentification Azure AD B2C réelle** via Playwright.
 
 **Workflow testé** :
+
 1. ✅ Authentification Azure AD B2C (ROPC)
 2. ✅ Création d'un stock
 3. ✅ Ajout d'items au stock
@@ -244,6 +254,7 @@ Tests fonctionnels complets avec **authentification Azure AD B2C réelle** via P
 7. ✅ Nettoyage automatique des données de test
 
 **⚠️ IMPORTANT - Prérequis** :
+
 ```bash
 # Terminal 1 : Démarrer le serveur backend
 npm run start:dev
@@ -253,6 +264,7 @@ npm run test:e2e
 ```
 
 **Commandes disponibles** :
+
 ```bash
 # Tests E2E standard
 npm run test:e2e
@@ -267,6 +279,7 @@ npm run test:e2e:headed
 **Documentation complète** : Voir [Guide des Tests E2E](./docs/E2E_TESTS_GUIDE.md)
 
 **Résultat attendu** :
+
 ```
 ✅ 7 tests passed (14.4s)
 ```
@@ -304,13 +317,13 @@ https://brave-field-03611eb03.5.azurestaticapps.net/
 1. **Inscription** : Cliquez sur "Se connecter" ou "Créer un compte"
 2. **Portail Azure B2C** : Redirection vers le portail d'authentification Azure
 3. **Saisie des informations** :
-    - Email valide
-    - Mot de passe sécurisé
-    - Informations complémentaires requises
+   - Email valide
+   - Mot de passe sécurisé
+   - Informations complémentaires requises
 4. **Vérification email** :
-    - Consultez votre boîte email (vérifiez les spams)
-    - Cliquez sur le lien de vérification reçu
-    - Saisissez le code de vérification
+   - Consultez votre boîte email (vérifiez les spams)
+   - Cliquez sur le lien de vérification reçu
+   - Saisissez le code de vérification
 5. **Finalisation** : Terminez la création de votre compte
 
 ##### 3. Première Connexion et Vérification
@@ -324,9 +337,9 @@ https://brave-field-03611eb03.5.azurestaticapps.net/
 
 1. **Navigation** : Accédez à la section "Créer un stock"
 2. **Formulaire** : Remplissez les informations :
-    - **Nom** : ex. "Stock Cuisine"
-    - **Description** : ex. "Produits alimentaires de la cuisine"
-    - **Catégorie** : Sélectionnez une catégorie
+   - **Nom** : ex. "Stock Cuisine"
+   - **Description** : ex. "Produits alimentaires de la cuisine"
+   - **Catégorie** : Sélectionnez une catégorie
 3. **Soumission** : Cliquez sur "Créer le stock"
 
 **🔍 Vérification Network (DevTools F12 > Network)** :
@@ -339,8 +352,8 @@ https://brave-field-03611eb03.5.azurestaticapps.net/
 ##### 5. Test Visualisation DDD (API V2)
 
 1. **Liste des stocks** :
-    - Naviguez vers "Mes stocks" ou "Visualisation"
-    - Vérifiez l'affichage de vos stocks créés
+   - Naviguez vers "Mes stocks" ou "Visualisation"
+   - Vérifiez l'affichage de vos stocks créés
 
 **🔍 Vérification Network** :
 
@@ -349,8 +362,8 @@ https://brave-field-03611eb03.5.azurestaticapps.net/
 - ✅ Response : Array de stocks avec structure DDD
 
 2. **Détail d'un stock** :
-    - Cliquez sur un stock pour voir ses détails
-    - Examinez la structure des données retournées
+   - Cliquez sur un stock pour voir ses détails
+   - Examinez la structure des données retournées
 
 **🔍 Vérification Network** :
 
@@ -359,8 +372,8 @@ https://brave-field-03611eb03.5.azurestaticapps.net/
 - ✅ Response : Stock complet avec items et quantities
 
 3. **Détail d'un item** (si applicable) :
-    - Cliquez sur un item du stock
-    - Vérifiez les détails de l'item
+   - Cliquez sur un item du stock
+   - Vérifiez les détails de l'item
 
 **🔍 Vérification Network** :
 
@@ -390,7 +403,7 @@ Content-Type: application/json
 
 ```bash
 GET /api/v2/stocks
-Authorization: Bearer [JWT_TOKEN] 
+Authorization: Bearer [JWT_TOKEN]
 Content-Type: application/json
 
 # Réponse attendue : 200 OK
@@ -500,15 +513,17 @@ Middleware d'authentification Azure Bearer appliqué sur **toutes les routes** :
 
 ```typescript
 // API V2 - avec authentification
-app.use("/api/v2",
-    authenticationMiddleware,  // Middleware d'auth appliqué
-    stockRoutesV2
+app.use(
+  '/api/v2',
+  authenticationMiddleware, // Middleware d'auth appliqué
+  stockRoutesV2
 );
 
-// API V1 - avec authentification  
-app.use("/api/v1",
-    authenticationMiddleware,  // Middleware d'auth appliqué
-    stockRoutes
+// API V1 - avec authentification
+app.use(
+  '/api/v1',
+  authenticationMiddleware, // Middleware d'auth appliqué
+  stockRoutes
 );
 ```
 

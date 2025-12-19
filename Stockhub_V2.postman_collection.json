@@ -14,15 +14,9 @@
         "url": {
           "raw": "http://localhost:3006/api/v2/stocks",
           "protocol": "http",
-          "host": [
-            "localhost"
-          ],
+          "host": ["localhost"],
           "port": "3006",
-          "path": [
-            "api",
-            "v2",
-            "stocks"
-          ]
+          "path": ["api", "v2", "stocks"]
         }
       },
       "response": []
@@ -35,16 +29,9 @@
         "url": {
           "raw": "http://localhost:3006/api/v2/stocks/1",
           "protocol": "http",
-          "host": [
-            "localhost"
-          ],
+          "host": ["localhost"],
           "port": "3006",
-          "path": [
-            "api",
-            "v2",
-            "stocks",
-            "1"
-          ]
+          "path": ["api", "v2", "stocks", "1"]
         }
       },
       "response": []
@@ -57,17 +44,9 @@
         "url": {
           "raw": "http://localhost:3006/api/v2/stocks/1/items",
           "protocol": "http",
-          "host": [
-            "localhost"
-          ],
+          "host": ["localhost"],
           "port": "3006",
-          "path": [
-            "api",
-            "v2",
-            "stocks",
-            "1",
-            "items"
-          ]
+          "path": ["api", "v2", "stocks", "1", "items"]
         }
       },
       "response": []

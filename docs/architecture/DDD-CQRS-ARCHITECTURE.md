@@ -141,6 +141,7 @@ flowchart TB
 ```
 
 **Légende:**
+
 - 🔵 **Bleu (READ)** : Optimisé pour la lecture, pas de logique métier
 - 🟠 **Orange (WRITE)** : Validation métier stricte, protection des invariants
 - 🟣 **Violet (Domain)** : Cœur métier, règles business
@@ -167,11 +168,13 @@ src/api/controllers/
 ```
 
 **Routes:**
+
 - `GET /api/v2/stocks` - Liste tous les stocks
 - `GET /api/v2/stocks/:id` - Détails d'un stock
 - `GET /api/v2/stocks/:id/items` - Items d'un stock
 
 **Caractéristiques:**
+
 - Requêtes SQL optimisées pour la lecture
 - Pas de logique métier (juste projection de données)
 - Peut utiliser des vues ou dénormalisation si nécessaire
@@ -204,11 +207,13 @@ src/api/controllers/
 ```
 
 **Routes:**
+
 - `POST /api/v2/stocks` - Créer un stock
 - `POST /api/v2/stocks/:id/items` - Ajouter un item
 - `PATCH /api/v2/stocks/:id/items/:itemId` - Modifier quantité
 
 **Caractéristiques:**
+
 - Validation métier stricte dans les entités
 - Commandes immuables (DTOs)
 - Logique métier dans Stock.addItem(), Stock.updateItemQuantity()
@@ -256,6 +261,7 @@ export class Stock {
 ```
 
 **Règles:**
+
 - Les entités ont une **identité** (id)
 - Elles contiennent la **logique métier**
 - Elles protègent leurs **invariants** (règles toujours vraies)
@@ -266,37 +272,39 @@ export class Stock {
 
 ```typescript
 export class StockLabel {
-    private readonly value: string;
-    private static readonly MIN_LENGTH = 3;
-    private static readonly MAX_LENGTH = 50;
+  private readonly value: string;
+  private static readonly MIN_LENGTH = 3;
+  private static readonly MAX_LENGTH = 50;
 
-    constructor(label: string) {
-        if (typeof label !== "string") {
-            throw new Error("Stock label must be a string.");
-        }
-        const normalized = label.trim();
-        if (normalized.length < StockLabel.MIN_LENGTH) {
-            throw new Error(`Stock label must be at least ${StockLabel.MIN_LENGTH} characters.`);
-        }
-        if (normalized.length > StockLabel.MAX_LENGTH) {
-            throw new Error(`Stock label must not exceed ${StockLabel.MAX_LENGTH} characters.`);
-        }
-        this.value = normalized;
+  constructor(label: string) {
+    if (typeof label !== 'string') {
+      throw new Error('Stock label must be a string.');
     }
+    const normalized = label.trim();
+    if (normalized.length < StockLabel.MIN_LENGTH) {
+      throw new Error(`Stock label must be at least ${StockLabel.MIN_LENGTH} characters.`);
+    }
+    if (normalized.length > StockLabel.MAX_LENGTH) {
+      throw new Error(`Stock label must not exceed ${StockLabel.MAX_LENGTH} characters.`);
+    }
+    this.value = normalized;
+  }
 
-    public getValue(): string {
-        return this.value;
-    }
+  public getValue(): string {
+    return this.value;
+  }
 }
 ```
 
 **Caractéristiques:**
+
 - **Immuables** (readonly)
 - **Pas d'identité** (deux StockLabel("cuisine") sont identiques)
 - **Auto-validation** (impossible de créer un objet invalide)
 - **Encapsulation** (value est private)
 
 **Value Objects du domaine:**
+
 - `StockLabel` - Label du stock (3-50 caractères)
 - `StockDescription` - Description (non vide)
 - `Quantity` - Quantité (>= 0)
@@ -309,16 +317,17 @@ export class StockLabel {
 
 ```typescript
 export class CreateStockCommand {
-    constructor(
-        public readonly label: string,
-        public readonly description: string,
-        public readonly category: string,
-        public readonly userId: number
-    ) {}
+  constructor(
+    public readonly label: string,
+    public readonly description: string,
+    public readonly category: string,
+    public readonly userId: number
+  ) {}
 }
 ```
 
 **Règles:**
+
 - **Immuables** (readonly)
 - **Pas de logique** (juste transport de données)
 - Représentent une **intention** de modification
@@ -329,29 +338,31 @@ export class CreateStockCommand {
 
 ```typescript
 export class CreateStockCommandHandler {
-    constructor(private readonly stockRepository: IStockCommandRepository) {}
+  constructor(private readonly stockRepository: IStockCommandRepository) {}
 
-    async handle(command: CreateStockCommand): Promise<Stock> {
-        // 1. Créer l'entité (validation automatique via Value Objects)
-        const stock = Stock.create({
-            label: command.label,
-            description: command.description,
-            category: command.category,
-            userId: command.userId
-        });
+  async handle(command: CreateStockCommand): Promise<Stock> {
+    // 1. Créer l'entité (validation automatique via Value Objects)
+    const stock = Stock.create({
+      label: command.label,
+      description: command.description,
+      category: command.category,
+      userId: command.userId,
+    });
 
-        // 2. Persister
-        return await this.stockRepository.save(stock, command.userId);
-    }
+    // 2. Persister
+    return await this.stockRepository.save(stock, command.userId);
+  }
 }
 ```
 
 **Responsabilités:**
+
 1. Orchestrer le use case
 2. Appeler les méthodes du domaine
 3. Déléguer la persistence au repository
 
 **Ce qu'ils ne font PAS:**
+
 - ❌ Validation métier (c'est le rôle du domaine)
 - ❌ Accès direct à la DB (c'est le rôle du repository)
 
@@ -408,6 +419,7 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
 ```
 
 **Pattern important:**
+
 1. Charger les données Prisma
 2. **Reconstituer l'entité domaine**
 3. Appeler les méthodes métier (validation automatique)
@@ -421,42 +433,38 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
 
 ```typescript
 export class StockControllerManipulation {
-    constructor(
-        private readonly createStockHandler: CreateStockCommandHandler,
-        private readonly addItemHandler: AddItemToStockCommandHandler,
-        private readonly updateQuantityHandler: UpdateItemQuantityCommandHandler,
-        private readonly userService: UserService
-    ) {}
+  constructor(
+    private readonly createStockHandler: CreateStockCommandHandler,
+    private readonly addItemHandler: AddItemToStockCommandHandler,
+    private readonly updateQuantityHandler: UpdateItemQuantityCommandHandler,
+    private readonly userService: UserService
+  ) {}
 
-    public async createStock(req: AuthenticatedRequest, res: Response) {
-        try {
-            // 1. Extraire les données de la requête
-            const {label, description, category} = req.body;
-            const userID = await this.userService.convertOIDtoUserID(req.userID);
+  public async createStock(req: AuthenticatedRequest, res: Response) {
+    try {
+      // 1. Extraire les données de la requête
+      const { label, description, category } = req.body;
+      const userID = await this.userService.convertOIDtoUserID(req.userID);
 
-            // 2. Créer la commande
-            const command = new CreateStockCommand(
-                label,
-                description,
-                category,
-                userID.value
-            );
+      // 2. Créer la commande
+      const command = new CreateStockCommand(label, description, category, userID.value);
 
-            // 3. Déléguer au handler
-            const stock = await this.createStockHandler.handle(command);
+      // 3. Déléguer au handler
+      const stock = await this.createStockHandler.handle(command);
 
-            // 4. Logger et répondre
-            rootMain.info(`createStock stockId=${stock.id}`);
-            res.status(HTTP_CODE_CREATED).json(stock);
-        } catch (err) {
-            rootException(err as Error);
-            sendError(res, err as CustomError);
-        }
+      // 4. Logger et répondre
+      rootMain.info(`createStock stockId=${stock.id}`);
+      res.status(HTTP_CODE_CREATED).json(stock);
+    } catch (err) {
+      rootException(err as Error);
+      sendError(res, err as CustomError);
     }
+  }
 }
 ```
 
 **Responsabilités:**
+
 - Extraction des données HTTP
 - Création des Commands/Queries
 - Appel des Handlers
@@ -464,6 +472,7 @@ export class StockControllerManipulation {
 - Gestion des erreurs
 
 **Ce qu'il ne fait PAS:**
+
 - ❌ Logique métier
 - ❌ Accès direct à la DB
 - ❌ Création d'entités domaine
@@ -532,6 +541,7 @@ export class StockControllerManipulation {
 ### 1. Testabilité
 
 **Domain:**
+
 ```typescript
 // Test sans DB, sans HTTP
 const stock = Stock.create({...});
@@ -540,6 +550,7 @@ expect(stock.items).toHaveLength(1);
 ```
 
 **Application:**
+
 ```typescript
 // Test avec mock repository
 const mockRepo = { save: jest.fn() };
@@ -553,6 +564,7 @@ expect(mockRepo.save).toHaveBeenCalled();
 ### 2. Évolutivité
 
 **Ajouter une règle métier:**
+
 ```typescript
 // ✅ Modification uniquement dans Stock.addItem()
 addItem(params: {...}): StockItem {
@@ -565,6 +577,7 @@ addItem(params: {...}): StockItem {
 ```
 
 Aucun changement dans:
+
 - ❌ Controller
 - ❌ Handler
 - ❌ Repository
@@ -575,11 +588,13 @@ Aucun changement dans:
 ### 3. Performance (CQRS)
 
 **READ side:**
+
 - Requêtes SQL optimisées
 - Pas de chargement des relations inutiles
 - Possibilité de dénormalisation future
 
 **WRITE side:**
+
 - Chargement complet de l'agrégat
 - Validation métier stricte
 - Moins sollicité que le READ
@@ -639,14 +654,14 @@ class CreateStockCommandHandler {
 
 ### Nommage
 
-| Type | Convention | Exemple |
-|------|-----------|---------|
-| Entity | PascalCase | `Stock`, `StockItem` |
-| Value Object | PascalCase | `StockLabel`, `Quantity` |
-| Command | PascalCase + "Command" | `CreateStockCommand` |
-| Handler | PascalCase + "Handler" | `CreateStockCommandHandler` |
-| Repository Interface | "I" + PascalCase + "Repository" | `IStockCommandRepository` |
-| Repository Impl | PascalCase + "Repository" | `PrismaStockCommandRepository` |
+| Type                 | Convention                      | Exemple                        |
+| -------------------- | ------------------------------- | ------------------------------ |
+| Entity               | PascalCase                      | `Stock`, `StockItem`           |
+| Value Object         | PascalCase                      | `StockLabel`, `Quantity`       |
+| Command              | PascalCase + "Command"          | `CreateStockCommand`           |
+| Handler              | PascalCase + "Handler"          | `CreateStockCommandHandler`    |
+| Repository Interface | "I" + PascalCase + "Repository" | `IStockCommandRepository`      |
+| Repository Impl      | PascalCase + "Repository"       | `PrismaStockCommandRepository` |
 
 ### Organisation des fichiers
 
@@ -687,15 +702,18 @@ src/domain/stock-management/
 ```
 
 **Unit Tests (53):**
+
 - Value Objects: StockLabel, StockDescription, Quantity
 - Entities: Stock (logique métier)
 - Command Handlers: CreateStock, AddItem, UpdateQuantity
 
 **Integration Tests (2):**
+
 - PrismaStockCommandRepository (avec DB réelle)
 - API v2 routes (end-to-end API layer)
 
 **E2E Tests (1):**
+
 - Scénario complet: Créer stock → Ajouter items → Visualiser → Modifier
 
 ---
@@ -703,16 +721,19 @@ src/domain/stock-management/
 ## Prochaines étapes
 
 ### Court terme
+
 - [ ] Migration complète du code legacy vers DDD
 - [ ] Ajout de validation Joi/Zod sur les DTOs API
 - [ ] Pagination des listes
 
 ### Moyen terme
+
 - [ ] Domain Events pour audit trail
 - [ ] Event Sourcing pour historique des modifications
 - [ ] Cache Redis pour READ side
 
 ### Long terme
+
 - [ ] Microservices (si nécessaire)
 - [ ] Separate READ/WRITE databases (CQRS complet)
 

@@ -2,13 +2,9 @@ module.exports = {
   root: true,
   env: {
     node: true,
-    es2020: true
+    es2020: true,
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'prettier'
-  ],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
   ignorePatterns: [
     'dist',
     'node_modules',
@@ -19,13 +15,13 @@ module.exports = {
     'playwright-report',
     'test-results',
     '*.config.js',
-    '*.config.ts'
+    '*.config.ts',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module',
-    project: './tsconfig.json'
+    project: './tsconfig.json',
   },
   plugins: ['@typescript-eslint'],
   rules: {
@@ -37,6 +33,6 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'warn',
     'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
     'no-prototype-builtins': 'warn',
-    'no-case-declarations': 'warn'
-  }
+    'no-case-declarations': 'warn',
+  },
 };

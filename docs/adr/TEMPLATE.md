@@ -23,11 +23,13 @@
 ## Alternatives considérées
 
 ### Alternative 1: [Nom]
+
 - **Avantages:** [...]
 - **Inconvénients:** [...]
 - **Pourquoi rejetée:** [...]
 
 ### Alternative 2: [Nom]
+
 - **Avantages:** [...]
 - **Inconvénients:** [...]
 - **Pourquoi rejetée:** [...]
@@ -35,14 +37,17 @@
 ## Conséquences
 
 ### Positives
+
 - [Bénéfice 1]
 - [Bénéfice 2]
 
 ### Négatives
+
 - [Trade-off 1]
 - [Trade-off 2]
 
 ### Risques
+
 - [Risque potentiel et mitigation]
 
 ## Validation
