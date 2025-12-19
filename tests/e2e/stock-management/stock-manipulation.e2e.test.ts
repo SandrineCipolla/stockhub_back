@@ -19,7 +19,6 @@ test.describe('Stock Management E2E Workflow with Azure AD', () => {
   const apiV2 = `${baseURL}/api/v2`; // Used for GET (reading)
   let stockId: number;
   let itemId1: number;
-  let _itemId2: number;
   let authToken: string;
   const createdStockIds: number[] = []; // Track all created stocks for cleanup
 
@@ -150,8 +149,7 @@ test.describe('Stock Management E2E Workflow with Azure AD', () => {
 
     const items = await getItemsResponse.json();
     // V2 returns lowercase field names
-    const banana = items.find((item: any) => (item.label || item.LABEL) === 'Bananes');
-    _itemId2 = banana.id || banana.ID;
+    items.find((item: any) => (item.label || item.LABEL) === 'Bananes');
   });
 
   test('Step 4: Visualize stock and verify items', async ({ request }) => {
