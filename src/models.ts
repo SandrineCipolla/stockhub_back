@@ -38,19 +38,3 @@ export class UpdateStockRequest {
     this.stockID = stockID;
   }
 }
-
-export class Item {
-  id: number;
-  label: string;
-  description: string;
-  quantity: number;
-  stock_id: number;
-
-  constructor(id: number, label: string, description: string, quantity: number, stock_id: number) {
-    this.id = id;
-    this.label = label;
-    this.description = description;
-    this.quantity = quantity;
-    this.stock_id = stock_id;
-  }
-}
