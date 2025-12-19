@@ -22,7 +22,7 @@ export class StockControllerVisualization {
 
   public async getAllStocks(req: express.Request, res: express.Response) {
     try {
-      const OID = (req as any).userID as string;
+      const OID = req.userID || '';
 
       if (!this.validateOID(OID, res)) {
         return;
@@ -42,7 +42,7 @@ export class StockControllerVisualization {
 
   public async getStockDetails(req: express.Request, res: express.Response) {
     try {
-      const OID = (req as any).userID as string;
+      const OID = req.userID || '';
 
       if (!this.validateOID(OID, res)) {
         return;
@@ -62,7 +62,7 @@ export class StockControllerVisualization {
 
   public async getStockItems(req: express.Request, res: express.Response) {
     try {
-      const OID = (req as any).userID as string;
+      const OID = req.userID || '';
 
       if (!this.validateOID(OID, res)) {
         return;

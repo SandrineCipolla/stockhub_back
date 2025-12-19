@@ -2,6 +2,7 @@ import { StockVisualizationService } from '@domain/stock-management/visualizatio
 import { UserService } from '@services/userService';
 import { StockControllerVisualization } from '@api/controllers/StockControllerVisualization';
 import { StockControllerManipulation } from '@api/controllers/StockControllerManipulation';
+import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
 import express, { Router } from 'express';
 import { ReadUserRepository } from '@services/readUserRepository';
 import { WriteUserRepository } from '@services/writeUserRepository';
@@ -61,13 +62,13 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   // Manipulation routes
   router.post('/stocks', async (req: express.Request, res: express.Response) => {
-    await manipulationController.createStock(req as any, res);
+    await manipulationController.createStock(req as AuthenticatedRequest, res);
   });
 
   logger.info('Routes for POST /stocks configured');
 
   router.post('/stocks/:stockId/items', async (req: express.Request, res: express.Response) => {
-    await manipulationController.addItemToStock(req as any, res);
+    await manipulationController.addItemToStock(req as AuthenticatedRequest, res);
   });
 
   logger.info('Routes for POST /stocks/:stockId/items configured');
@@ -75,7 +76,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   router.patch(
     '/stocks/:stockId/items/:itemId',
     async (req: express.Request, res: express.Response) => {
-      await manipulationController.updateItemQuantity(req as any, res);
+      await manipulationController.updateItemQuantity(req as AuthenticatedRequest, res);
     }
   );
 

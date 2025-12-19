@@ -15,7 +15,7 @@ export class ValidationError extends Error implements CustomError {
   constructor(
     message: string,
     public typology: ErrorMessages,
-    public data?: any
+    public data?: unknown
   ) {
     super(message);
     this.name = 'ValidationError';
@@ -26,7 +26,7 @@ export class DatabaseError extends Error implements CustomError {
   constructor(
     message: string,
     public typology: ErrorMessages,
-    public originalError?: any
+    public originalError?: unknown
   ) {
     super(message);
     this.name = 'DatabaseError';

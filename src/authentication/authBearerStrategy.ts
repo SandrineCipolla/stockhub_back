@@ -35,6 +35,8 @@ export const authConfigbearerStrategy = new passportAzureAd.BearerStrategy(
       const resetUrl = `https://${domain}/${tenant}/oauth2/v2.0/authorize?p=${resetPolicy}&client_id=${clientId}&nonce=defaultNonce&redirect_uri=${redirectUri}&scope=openid&response_type=id_token&prompt=login`;
 
       // Redirige directement vers le flow reset
+      // Note: This may not work as expected - BearerStrategy doesn't have access to res
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (req as any).res.redirect(resetUrl);
     }
     // 🔒 Vérification du token normal

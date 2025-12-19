@@ -36,8 +36,8 @@ export function authenticationMiddleware(
           rootSecurityAuthenticationMiddleware.error('No email found in token info');
           return res.status(401).json({ error: 'No email found in token' });
         }
-        (req as any).authInfo = info;
-        (req as any).userID = info.emails[0];
+        req.authInfo = info;
+        req.userID = info.emails[0];
         rootSecurityAuthenticationMiddleware.info(
           'Authentication successful, proceeding to next middleware - {oid}',
           { oid: info.emails[0] }

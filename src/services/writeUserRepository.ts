@@ -10,9 +10,9 @@ export class WriteUserRepository {
       const sql = 'INSERT INTO users (EMAIL) VALUES (?)';
       await connection.query(sql, [email]);
       rootDatabase.info(`User added successfully: ${email}`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Gérer l'erreur de doublon
-      if (error.code === 'ER_DUP_ENTRY') {
+      if (error && typeof error === 'object' && 'code' in error && error.code === 'ER_DUP_ENTRY') {
         rootDatabase.info(`User with email ${email} already exists in the database.`);
       } else {
         throw new DatabaseError('Error adding user to DB', ErrorMessages.AddUser);

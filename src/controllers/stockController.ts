@@ -31,7 +31,7 @@ export class StockController {
 
   public async getAllStocks(req: express.Request, res: express.Response) {
     try {
-      const OID = (req as any).userID as string;
+      const OID = req.userID || '';
 
       const userID = await this.userService.convertOIDtoUserID(OID);
       const stocks = await this.stockService.getAllStocks(userID.value);
@@ -47,7 +47,7 @@ export class StockController {
 
   async createStock(req: express.Request, res: express.Response) {
     try {
-      const OID = (req as any).userID as string;
+      const OID = req.userID || '';
       const userID = await this.userService.convertOIDtoUserID(OID);
       const { LABEL, DESCRIPTION } = req.body;
 
@@ -75,7 +75,7 @@ export class StockController {
 
   async getStockDetails(req: express.Request, res: express.Response) {
     try {
-      const OID = (req as any).userID as string;
+      const OID = req.userID || '';
       const userID = await this.userService.convertOIDtoUserID(OID);
       const ID = Number(req.params.ID);
       const stock = await this.stockService.getStockDetails(ID, userID.value);
@@ -152,7 +152,7 @@ export class StockController {
 
   async deleteStock(req: express.Request, res: express.Response) {
     try {
-      const OID = (req as any).userID as string;
+      const OID = req.userID || '';
       const userID = await this.userService.convertOIDtoUserID(OID);
       const stockID = Number(req.params.stockID);
       await this.stockService.deleteStock(stockID, userID.value);
@@ -166,7 +166,7 @@ export class StockController {
 
   async getAllItems(req: express.Request, res: express.Response) {
     try {
-      const OID = (req as any).userID as string;
+      const OID = req.userID || '';
       const userID = await this.userService.convertOIDtoUserID(OID);
       const items = await this.stockService.getAllItems(userID.value);
       res.status(HTTP_CODE_OK).json(items);
@@ -189,7 +189,7 @@ export class StockController {
 
   async getLowStockItems(req: express.Request, res: express.Response) {
     try {
-      const OID = (req as any).userID as string;
+      const OID = req.userID || '';
       const userID = await this.userService.convertOIDtoUserID(OID);
       if (!userID) {
         return res.status(400).json({ error: 'User ID is missing' });
