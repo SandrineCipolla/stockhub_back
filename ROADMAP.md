@@ -27,7 +27,7 @@
   - Routes GET complètes
   - DTO Mapper (`StockDTO.ts`, `StockMapper.ts`)
 - **Documentation:**
-  - ADR-001: Migration DDD/CQRS
+  - 8 ADRs complets (docs/adr/) justifiant tous les choix techniques
   - Guide d'implémentation DDD
   - Architecture README
 - **Tests E2E:** Playwright avec Azure AD B2C (PR #40)
@@ -35,15 +35,10 @@
 
 ### 🎯 Prochaines priorités
 
-1. **ADRs supplémentaires** (Issue #46 - partiellement fait)
-   - ✅ ADR-001: Migration DDD/CQRS
-   - ⏳ ADR-002: Choix de Prisma vs TypeORM
-   - ⏳ ADR-003: Azure AD B2C pour auth
-   - ⏳ ADR-004+: Autres décisions techniques
-2. **Couche d'autorisation** (Issue #44 - feedback encadrant)
-3. **Audit npm dans CI/CD** (Issue #45)
-4. **Normalisation module visualization** (Issue #36)
-5. **Optimisation CI/CD** (Issue #53)
+1. **Couche d'autorisation** (Issue #44 - feedback encadrant)
+2. **Audit npm dans CI/CD** (Issue #45 - feedback encadrant)
+3. **Normalisation module visualization** (Issue #36)
+4. **Optimisation CI/CD** (Issue #53)
 
 ---
 
@@ -140,26 +135,28 @@ Feedback encadrant: "manque dans la CI/CD : npm audit pour les dépendances"
 
 ---
 
-#### Issue #46: Documenter décisions techniques (ADRs)
+#### ✅ Issue #46: Documenter décisions techniques (ADRs) - COMPLÉTÉ
 
 **Priorité:** HAUTE (pour RNCP)
-**Statut:** ⏳ EN COURS (partiellement complété)
+**Statut:** ✅ COMPLÉTÉ
 
 **Description:**
 
 Feedback encadrant: "Il manque cependant des ADR ou l'équivalent qui **justifient les choix**"
 
-**Progression:**
+**Réalisations:**
 
-- [x] ✅ Créer `docs/architecture/` pour ADRs
-- [x] ✅ ADR-001: Migration DDD/CQRS (complet, 526 lignes)
-- [ ] ⏳ ADR-002: Choix de Prisma vs TypeORM
-- [ ] ⏳ ADR-003: Azure AD B2C pour auth
-- [ ] ⏳ ADR-004: Pourquoi tests sur Value Objects
-- [ ] ⏳ ADR-005: Stratégie de versioning API (V2 sans V1)
-- [ ] ⏳ ADR-006: Choix MySQL Azure vs autres clouds
+- [x] ✅ ADR-001: Migration DDD/CQRS (2025-11-25)
+- [x] ✅ ADR-002: Choix de Prisma ORM (2025-11-28)
+- [x] ✅ ADR-003: Azure AD B2C Authentication (2025-11-30)
+- [x] ✅ ADR-004: Tests Value Objects et Entities (2025-12-02)
+- [x] ✅ ADR-005: API Versioning V2 (2025-12-05)
+- [x] ✅ ADR-006: MySQL Azure Cloud (2025-12-08)
+- [x] ✅ ADR-007: Code Quality Enforcement (2024-12-19)
+- [x] ✅ ADR-008: TypeScript Request Type Aliases (2025-12-26)
+- [x] ✅ INDEX.md + TEMPLATE.md
 
-**Template ADR:** Voir `docs/architecture/ADR-001-migration-ddd-cqrs.md` pour exemple complet
+**Localisation:** `docs/adr/` (8 ADRs complets)
 
 ---
 
@@ -220,12 +217,14 @@ Gestion des contenants (fûts, bouteilles, caisses)
 1. ✅ Issue #37 - Module DDD/CQRS Manipulation (PR #49)
 2. ✅ Tests E2E - Infrastructure Playwright (PR #40)
 
-### ⏳ Phase 2 EN COURS - Qualité & Documentation RNCP
+### ✅ Phase 2 COMPLÉTÉE - Documentation RNCP
 
-3. ⏳ Issue #46 - ADRs (1/6 fait: ADR-001)
-   - Priorité immédiate pour justifier choix techniques
-4. ⏳ Issue #44 - Couche d'autorisation
-5. ⏳ Issue #45 - npm audit dans CI/CD
+3. ✅ Issue #46 - ADRs (8 ADRs complets)
+
+### ⏳ Phase 2bis EN COURS - Sécurité & Qualité
+
+4. ⏳ Issue #44 - Couche d'autorisation (feedback encadrant)
+5. ⏳ Issue #45 - npm audit dans CI/CD (feedback encadrant)
 6. 📋 Issue #36 - Normaliser module visualization
 7. 📋 Issue #53 - Optimiser CI/CD (8min → 4-5min)
 
@@ -265,8 +264,8 @@ Gestion des contenants (fûts, bouteilles, caisses)
 | Période            | Focus                      | Issues                          | Statut   |
 | ------------------ | -------------------------- | ------------------------------- | -------- |
 | ✅ Déc 2025 (S1-4) | Architecture DDD/CQRS      | #37, Tests E2E                  | COMPLÉTÉ |
-| ⏳ Déc 2025 (S5)   | Documentation RNCP         | #46 (ADRs 2-6)                  | EN COURS |
-| 📋 Jan 2026        | Sécurité & Qualité         | #44 (Autorisation), #45 (audit) | PLANIFIÉ |
+| ✅ Déc 2025 (S5)   | Documentation RNCP         | #46 (8 ADRs)                    | COMPLÉTÉ |
+| ⏳ Jan 2026        | Sécurité & Qualité         | #44 (Autorisation), #45 (audit) | EN COURS |
 | 📋 Fév-Mars 2026   | Refactoring & Optimisation | #36, #53                        | PLANIFIÉ |
 | 📋 Avr-Déc 2026    | Features avancées          | #41, #43                        | PLANIFIÉ |
 | 📋 Jan-Fév 2027    | ML & Leisure Mode          | #47, #48, #49                   | PLANIFIÉ |
@@ -282,7 +281,7 @@ Gestion des contenants (fûts, bouteilles, caisses)
 - [x] ✅ API CRUD fonctionnelle (POST/PATCH/GET)
 - [x] ✅ DTOs compatibles Frontend (StockDTO, StockMapper)
 - [x] ✅ Tests E2E passants (Playwright + Azure AD B2C)
-- [x] ⏳ Documentation technique (ADR-001 fait, 5 ADRs restants)
+- [x] ✅ Documentation technique (8 ADRs complets)
 
 ### Production-ready ⏳ EN COURS
 
@@ -292,14 +291,15 @@ Gestion des contenants (fûts, bouteilles, caisses)
 - [x] ✅ TypeScript strict mode (fait en v2.0.0)
 - [ ] 📋 CI/CD optimisée (Issue #53)
 
-### Qualité RNCP ⏳ EN COURS
+### Qualité RNCP ✅ COMPLÉTÉ (Documentation)
 
-- [x] ✅ ADR-001: Migration DDD/CQRS
-- [ ] ⏳ ADRs complémentaires (5 restants)
+- [x] ✅ 8 ADRs complets (justification tous choix techniques)
 - [x] ✅ Tests unitaires domaine (53 tests)
 - [x] ✅ Tests intégration (repository)
 - [x] ✅ Tests E2E (Playwright)
 - [x] ✅ Documentation architecture
+- [ ] ⏳ Couche d'autorisation (Issue #44 - feedback encadrant)
+- [ ] ⏳ npm audit CI/CD (Issue #45 - feedback encadrant)
 
 ---
 
