@@ -1,5 +1,5 @@
 import { LogLevel } from 'typescript-logging';
-import { CategoryProvider, Category } from 'typescript-logging-category-style';
+import { CategoryProvider } from 'typescript-logging-category-style';
 
 const provider = CategoryProvider.createProvider('ExampleProvider', {
   level: LogLevel.Info,
@@ -18,9 +18,6 @@ export const rootSecurity = provider.getCategory('security');
 export const rootSecurityAuthenticationMiddleware = rootSecurity.getChildCategory(
   'authenticationMiddleware'
 );
-
-// Controller
-const rootStockController = rootController.getChildCategory('stockController');
 
 // Database
 export const rootDatabase = provider.getCategory('database');

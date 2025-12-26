@@ -1,38 +1,41 @@
-import {StockService} from "@services/stockService";
-import {fakeStocks, fakeStocksAsRowDataPacket, mockReadRepo, mockWriteRepo} from "../__mocks__/mockedData";
-import {createFakeDatabaseConnection} from "../__mocks__/connectionUtils";
-import {ReadStockRepository} from "@repositories/readStockRepository";
-import {WriteStockRepository} from "@repositories/writeStockRepository";
-
+import { StockService } from '@services/stockService';
+import {
+  fakeStocks,
+  fakeStocksAsRowDataPacket,
+  mockReadRepo,
+  mockWriteRepo,
+} from '../__mocks__/mockedData';
+import { ReadStockRepository } from '@repositories/readStockRepository';
+import { WriteStockRepository } from '@repositories/writeStockRepository';
 
 // mock pour ReadStockRepository et WriteStockRepository
-jest.mock("@repositories/readStockRepository");
-jest.mock("@repositories/writeStockRepository");
+jest.mock('@repositories/readStockRepository');
+jest.mock('@repositories/writeStockRepository');
 
 // Configuration du test
-describe("StockService", () => {
-    let stockService: StockService;
-    let mockedReadRepo: jest.Mocked<ReadStockRepository>;
-    let mockedWriteRepo: jest.Mocked<WriteStockRepository>;
+describe('StockService', () => {
+  let stockService: StockService;
+  let mockedReadRepo: jest.Mocked<ReadStockRepository>;
+  let mockedWriteRepo: jest.Mocked<WriteStockRepository>;
 
-    beforeEach(() => {
-        mockedReadRepo = mockReadRepo
-        mockedWriteRepo = mockWriteRepo
-        stockService = new StockService(mockedReadRepo, mockedWriteRepo);
-    });
+  beforeEach(() => {
+    mockedReadRepo = mockReadRepo;
+    mockedWriteRepo = mockWriteRepo;
+    stockService = new StockService(mockedReadRepo, mockedWriteRepo);
+  });
 
-    afterEach(() => {
-        jest.restoreAllMocks();
-    });
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
-    describe("getAllStocks", () => {
-        it("should return stocks with id and label columns", async () => {
-            jest.spyOn(mockedReadRepo, "readAllStocks").mockResolvedValue(fakeStocksAsRowDataPacket);
-            const userID = 1;
-            const stocks = await stockService.getAllStocks(userID);
-            expect(stocks).toEqual(fakeStocks);
-        });
+  describe('getAllStocks', () => {
+    it('should return stocks with id and label columns', async () => {
+      jest.spyOn(mockedReadRepo, 'readAllStocks').mockResolvedValue(fakeStocksAsRowDataPacket);
+      const userID = 1;
+      const stocks = await stockService.getAllStocks(userID);
+      expect(stocks).toEqual(fakeStocks);
     });
+  });
 });
 
 // describe("insertStock", () => {
@@ -54,5 +57,3 @@ describe("StockService", () => {
 //         expect(writeRepo.createStock).toHaveBeenCalledWith(newStocks);
 //     });
 // });
-
-

@@ -1,25 +1,24 @@
-import {Quantity} from "@domain/stock-management/common/value-objects/Quantity";
+import { Quantity } from '@domain/stock-management/common/value-objects/Quantity';
 
 export class StockItem {
+  private innerQuantity: Quantity;
 
-    private innerQuantity: Quantity;
+  constructor(
+    public ID: number,
+    public LABEL: string,
+    public QUANTITY: number,
+    public DESCRIPTION: string,
+    public minimumStock: number = 1,
+    public STOCK_ID: number
+  ) {
+    this.innerQuantity = new Quantity(QUANTITY);
+  }
 
-    constructor(
-        public ID: number,
-        public LABEL: string,
-        public QUANTITY: number,
-        public DESCRIPTION: string,
-        public minimumStock: number = 1,
-        public STOCK_ID: number,
-    ) {
-        this.innerQuantity = new Quantity(QUANTITY);
-    }
+  isOutOfStock(): boolean {
+    return this.innerQuantity.isZero();
+  }
 
-    isOutOfStock(): boolean {
-        return this.innerQuantity.isZero();
-    }
-
-    isLowStock(): boolean {
-        return this.innerQuantity.isLessOrEqualToMinimum(this.minimumStock);
-    }
+  isLowStock(): boolean {
+    return this.innerQuantity.isLessOrEqualToMinimum(this.minimumStock);
+  }
 }

@@ -1,10 +1,10 @@
-import {Stock} from "@domain/stock-management/common/entities/Stock";
-import {StockItem} from "@domain/stock-management/common/entities/StockItem";
+import { Stock } from '@domain/stock-management/common/entities/Stock';
+import { StockItem } from '@domain/stock-management/common/entities/StockItem';
 
 export interface IStockVisualizationRepository {
-    getAllStocks(userId: number): Promise<Stock []>;
+  getAllStocks(userId: number): Promise<Stock[]>;
 
-    getStockDetails(stockId: number, userId: number): Promise<Stock | null>;
+  getStockDetails(stockId: number, userId: number): Promise<Stock | null>;
 
-    getStockItems(stockId: number, userId: number): Promise<StockItem[]>;
+  getStockItems(stockId: number, userId: number): Promise<StockItem[]>;
 }

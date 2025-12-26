@@ -19,6 +19,7 @@ Le projet StockHub nécessite une base de données relationnelle hébergée dans
 ### Contexte technique
 
 **Backend déjà sur Azure :**
+
 - Azure App Service (hébergement Node.js)
 - Azure Application Insights (monitoring)
 - Azure AD B2C (authentification)
@@ -69,6 +70,7 @@ Le backend utilise déjà Azure pour l'hébergement et l'authentification :
 ```
 
 **Avantages cohérence :**
+
 - ✅ Facturation centralisée (un seul portail Azure)
 - ✅ Réseau privé possible (VNet integration)
 - ✅ Logs centralisés (Azure Monitor)
@@ -78,20 +80,20 @@ Le backend utilise déjà Azure pour l'hébergement et l'authentification :
 
 **Azure offre un tier gratuit très généreux :**
 
-| Ressource | Gratuit 12 mois | Après 12 mois |
-|-----------|-----------------|---------------|
-| **Compute** | Burstable B1ms (1 vCore, 2 GB RAM) | ~$15/mois |
-| **Storage** | 32 GB | Inclus |
-| **Backups** | 7 jours rétention | Inclus |
+| Ressource   | Gratuit 12 mois                    | Après 12 mois |
+| ----------- | ---------------------------------- | ------------- |
+| **Compute** | Burstable B1ms (1 vCore, 2 GB RAM) | ~$15/mois     |
+| **Storage** | 32 GB                              | Inclus        |
+| **Backups** | 7 jours rétention                  | Inclus        |
 
 **Comparaison avec autres clouds :**
 
-| Provider | Tier gratuit | Limite gratuite |
-|----------|--------------|-----------------|
-| **Azure MySQL** | 12 mois | Burstable B1ms |
-| **AWS RDS** | 12 mois | db.t2.micro (1 vCore, 1 GB) |
-| **Google Cloud SQL** | Pas de tier gratuit | ~$10/mois minimum |
-| **Supabase** | Gratuit illimité | 500 MB storage (limité) |
+| Provider             | Tier gratuit        | Limite gratuite             |
+| -------------------- | ------------------- | --------------------------- |
+| **Azure MySQL**      | 12 mois             | Burstable B1ms              |
+| **AWS RDS**          | 12 mois             | db.t2.micro (1 vCore, 1 GB) |
+| **Google Cloud SQL** | Pas de tier gratuit | ~$10/mois minimum           |
+| **Supabase**         | Gratuit illimité    | 500 MB storage (limité)     |
 
 **Avantage Azure :** 2 GB RAM (vs 1 GB AWS) + meilleure intégration avec backend Azure.
 
@@ -100,12 +102,14 @@ Le backend utilise déjà Azure pour l'hébergement et l'authentification :
 Azure MySQL **Flexible Server** offre des fonctionnalités modernes :
 
 **Auto-scaling storage :**
+
 ```sql
 -- Storage augmente automatiquement si besoin
 -- De 20 GB → 32 GB → 64 GB (sans downtime)
 ```
 
 **Pause/Resume (économies) :**
+
 ```bash
 # Arrêter la DB en dev (pas facturé si arrêté > 7 jours)
 az mysql flexible-server stop --name stockhub-db
@@ -115,11 +119,13 @@ az mysql flexible-server start --name stockhub-db
 ```
 
 **Backups automatiques :**
+
 - ✅ Backups quotidiens automatiques (7 jours rétention)
 - ✅ Restauration point-in-time (PITR)
 - ✅ Geo-redundancy possible (haute disponibilité)
 
 **High Availability (HA) :**
+
 - Zone-redundant HA (99.99% SLA)
 - Failover automatique si serveur principal down
 
@@ -127,12 +133,12 @@ az mysql flexible-server start --name stockhub-db
 
 **Benchmarks internes :**
 
-| Métrique | Valeur mesurée |
-|----------|---------------|
-| Latence query simple | ~10ms |
-| Latence query JOIN | ~30ms |
-| Throughput API | ~50 req/s (B1ms suffisant) |
-| Connexions simultanées | 20-30 (limite: 171) |
+| Métrique               | Valeur mesurée             |
+| ---------------------- | -------------------------- |
+| Latence query simple   | ~10ms                      |
+| Latence query JOIN     | ~30ms                      |
+| Throughput API         | ~50 req/s (B1ms suffisant) |
+| Connexions simultanées | 20-30 (limite: 171)        |
 
 **Tier B1ms** (1 vCore, 2 GB RAM) est **largement suffisant** pour phase développement/évaluation (< 100 utilisateurs).
 
@@ -145,6 +151,7 @@ az mysql flexible-server start --name stockhub-db
 - ✅ **Conformité** : ISO 27001, SOC 2, GDPR
 
 **Configuration sécurisée :**
+
 ```javascript
 // Connection string avec SSL forcé
 const connectionString = `mysql://user:pass@stockhub-db.mysql.database.azure.com:3306/stockhub?ssl-mode=REQUIRED`;
@@ -157,11 +164,13 @@ const connectionString = `mysql://user:pass@stockhub-db.mysql.database.azure.com
 ### Alternative 1: AWS RDS MySQL
 
 **Avantages :**
+
 - ✅ Très mature (leader marché cloud)
 - ✅ Tier gratuit 12 mois (db.t2.micro)
 - ✅ Écosystème AWS très riche
 
 **Inconvénients :**
+
 - ❌ Backend déjà sur Azure (mixer clouds = complexité)
 - ❌ db.t2.micro : **1 GB RAM** (vs 2 GB Azure)
 - ❌ Logs séparés (CloudWatch vs Application Insights)
@@ -174,10 +183,12 @@ const connectionString = `mysql://user:pass@stockhub-db.mysql.database.azure.com
 ### Alternative 2: Google Cloud SQL
 
 **Avantages :**
+
 - ✅ Performance excellente
 - ✅ Intégration Google Cloud (BigQuery, etc.)
 
 **Inconvénients :**
+
 - ❌ **Pas de tier gratuit** (~$10/mois minimum)
 - ❌ Backend sur Azure (mixer clouds)
 - ❌ Prix plus élevé qu'Azure
@@ -189,18 +200,21 @@ const connectionString = `mysql://user:pass@stockhub-db.mysql.database.azure.com
 ### Alternative 3: Supabase (PostgreSQL)
 
 **Avantages :**
+
 - ✅ **Gratuit illimité** (tier gratuit sans expiration)
 - ✅ PostgreSQL (plus avancé que MySQL)
 - ✅ APIs REST auto-générées
 - ✅ Real-time subscriptions
 
 **Inconvénients :**
+
 - ❌ **PostgreSQL** au lieu de MySQL (changement syntaxe, migrations)
 - ❌ Storage limité : **500 MB** (vs 32 GB Azure)
 - ❌ Vendor lock-in Supabase (APIs propriétaires)
 - ❌ Moins enterprise-grade qu'Azure
 
 **Pourquoi rejeté :**
+
 1. **Migration MySQL → PostgreSQL** coûteuse (syntaxe différente, Prisma schema à adapter)
 2. **500 MB storage trop limité** pour croissance future
 3. **Lock-in Supabase** (APIs REST auto-générées ≠ standard)
@@ -212,10 +226,12 @@ const connectionString = `mysql://user:pass@stockhub-db.mysql.database.azure.com
 **Principe :** Installer MySQL sur une VM Azure.
 
 **Avantages :**
+
 - ✅ Contrôle total (configuration custom)
 - ✅ Possibilité d'optimiser coûts (shutdown VM la nuit)
 
 **Inconvénients :**
+
 - ❌ **Gestion infrastructure** (updates, patches, backups manuels)
 - ❌ Pas de HA automatique (failover manuel)
 - ❌ Sécurité à gérer manuellement
@@ -270,16 +286,19 @@ const connectionString = `mysql://user:pass@stockhub-db.mysql.database.azure.com
 ### Risques
 
 **Risque 1 : Fin du tier gratuit (surprise facture)**
+
 - **Impact :** Facture inattendue après 12 mois
 - **Probabilité :** Moyenne (oubli)
 - **Mitigation :** Alert Azure Budget (email si >$10/mois)
 
 **Risque 2 : Performance insuffisante**
+
 - **Impact :** Latence élevée si charge augmente
 - **Probabilité :** Faible (B1ms suffisant pour <100 users)
 - **Mitigation :** Monitoring Application Insights + upgrade facile
 
 **Risque 3 : Disponibilité (99.9% SLA)**
+
 - **Impact :** Downtime potentiel (0.1% = ~44 min/mois)
 - **Probabilité :** Faible
 - **Mitigation :** Upgrade vers HA (zone-redundant) si criticité augmente
@@ -291,14 +310,17 @@ const connectionString = `mysql://user:pass@stockhub-db.mysql.database.azure.com
 ### Métriques de succès
 
 ✅ **Coût :**
+
 - Coût actuel : **$0.00/mois** (tier gratuit actif)
 - Budget alert configuré : Email si >$10/mois
 
 ✅ **Performance :**
+
 - Latence API < 100ms : ✅ Atteint (~50ms)
 - Uptime : **99.95%** (mesuré sur 3 mois)
 
 ✅ **Sécurité :**
+
 - SSL/TLS forcé : ✅ Vérifié (Prisma connection string)
 - Firewall actif : ✅ Seul App Service autorisé
 - Backups automatiques : ✅ Quotidiens (7 jours rétention)

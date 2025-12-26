@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import express from 'express';
 import {
   HTTP_CODE_BAD_REQUEST,
   HTTP_CODE_CONFLICT,
@@ -15,7 +15,7 @@ export class ValidationError extends Error implements CustomError {
   constructor(
     message: string,
     public typology: ErrorMessages,
-    public data?: any
+    public data?: unknown
   ) {
     super(message);
     this.name = 'ValidationError';
@@ -26,7 +26,7 @@ export class DatabaseError extends Error implements CustomError {
   constructor(
     message: string,
     public typology: ErrorMessages,
-    public originalError?: any
+    public originalError?: unknown
   ) {
     super(message);
     this.name = 'DatabaseError';
@@ -76,7 +76,7 @@ export enum ErrorMessages {
   AddUser = 'Error while adding user to DB',
 }
 
-export const sendError = (res: Response, err: CustomError) => {
+export const sendError = (res: express.Response, err: CustomError) => {
   switch (true) {
     case err instanceof ValidationError:
       return res
@@ -92,13 +92,14 @@ export const sendError = (res: Response, err: CustomError) => {
     case err instanceof ConflictError:
       return res.status(HTTP_CODE_CONFLICT).json({ error: err.message, type: err.typology });
 
-    case err instanceof DatabaseError:
+    case err instanceof DatabaseError: {
       const databaseError = err as DatabaseError;
       console.error('Original database error:', databaseError.originalError);
       return res.status(HTTP_CODE_INTERNAL_SERVER_ERROR).json({
         error: 'A database error occurred. Please try again later.',
         type: err.typology,
       });
+    }
 
     default:
       return res

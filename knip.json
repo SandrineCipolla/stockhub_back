@@ -3,8 +3,16 @@
   "entry": ["src/index.ts"],
   "project": ["src/**/*.ts"],
   "ignore": ["**/*.test.ts", "**/*.spec.ts", "tests/**/*"],
-  "ignoreDependencies": ["@types/*", "@azure/msal-node", "@testcontainers/mysql", "testcontainers"],
+  "ignoreDependencies": [
+    "@types/*",
+    "@azure/msal-node",
+    "@testcontainers/mysql",
+    "testcontainers",
+    "express-serve-static-core"
+  ],
   "ignoreBinaries": ["knip"],
+  "ignoreExportsUsedInFile": true,
+  "includeEntryExports": false,
   "jest": {
     "config": ["jest.config.js", "jest.ci.config.js", "jest.integration.config.js"]
   },

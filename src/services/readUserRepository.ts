@@ -1,20 +1,17 @@
-import { FieldPacket, PoolConnection, RowDataPacket } from "mysql2/promise";
-import { rootReadUserRepository } from "@utils/logger";
-import { connectToDatabase } from "@core/dbUtils";
+import { FieldPacket, RowDataPacket } from 'mysql2/promise';
+import { rootReadUserRepository } from '@utils/logger';
+import { connectToDatabase } from '@core/dbUtils';
 
 export class ReadUserRepository {
   async readUserByOID(oid: string) {
-    rootReadUserRepository.info("readUserByOID {oid}", { oid });
+    rootReadUserRepository.info('readUserByOID {oid}', { oid });
 
-    const query = "SELECT ID FROM users WHERE EMAIL = ?";
+    const query = 'SELECT ID FROM users WHERE EMAIL = ?';
 
     const connection = await connectToDatabase();
 
     try {
-      const [rows]: [RowDataPacket[], FieldPacket[]] = await connection.execute(
-        query,
-        [oid]
-      );
+      const [rows]: [RowDataPacket[], FieldPacket[]] = await connection.execute(query, [oid]);
 
       if (!rows || rows.length === 0) {
         rootReadUserRepository.error(`User not found for OID: ${oid}`);

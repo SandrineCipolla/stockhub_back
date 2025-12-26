@@ -19,32 +19,28 @@ Le code actuel du backend StockHub présente plusieurs problèmes architecturaux
 ```typescript
 // ❌ Exemple de code legacy
 class StockService {
-    async createStock(label: string, description: string, userId: number) {
-        // Validation dans le service (mauvais endroit)
-        if (!label || label.trim().length < 3) {
-            throw new Error("Label must be at least 3 characters");
-        }
-        if (label.length > 100) {
-            throw new Error("Label too long");
-        }
-
-        // Logique métier éparpillée
-        const normalizedLabel = label.trim();
-
-        // Appel direct au repository (couplage fort)
-        const stock = await this.writeStockRepository.createStock(
-            normalizedLabel,
-            description,
-            userId
-        );
-
-        // Logique métier après la persistence (incohérent)
-        if (stock.items && stock.items.length > 0) {
-            // ... traitement
-        }
-
-        return stock;
+  async createStock(label: string, description: string, userId: number) {
+    // Validation dans le service (mauvais endroit)
+    if (!label || label.trim().length < 3) {
+      throw new Error('Label must be at least 3 characters');
     }
+    if (label.length > 100) {
+      throw new Error('Label too long');
+    }
+
+    // Logique métier éparpillée
+    const normalizedLabel = label.trim();
+
+    // Appel direct au repository (couplage fort)
+    const stock = await this.writeStockRepository.createStock(normalizedLabel, description, userId);
+
+    // Logique métier après la persistence (incohérent)
+    if (stock.items && stock.items.length > 0) {
+      // ... traitement
+    }
+
+    return stock;
+  }
 }
 ```
 
@@ -112,39 +108,36 @@ Nous adoptons une architecture **Domain-Driven Design (DDD)** avec séparation *
 ```typescript
 // ✅ Validation encapsulée dans un Value Object
 export class StockLabel {
-    private readonly value: string;
-    private static readonly MIN_LENGTH = 3;
-    private static readonly MAX_LENGTH = 50;
+  private readonly value: string;
+  private static readonly MIN_LENGTH = 3;
+  private static readonly MAX_LENGTH = 50;
 
-    constructor(label: string) {
-        if (typeof label !== "string") {
-            throw new Error("Stock label must be a string.");
-        }
-
-        const normalized = label.trim();
-
-        if (normalized.length < StockLabel.MIN_LENGTH) {
-            throw new Error(
-                `Stock label must be at least ${StockLabel.MIN_LENGTH} characters.`
-            );
-        }
-
-        if (normalized.length > StockLabel.MAX_LENGTH) {
-            throw new Error(
-                `Stock label must not exceed ${StockLabel.MAX_LENGTH} characters.`
-            );
-        }
-
-        this.value = normalized;
+  constructor(label: string) {
+    if (typeof label !== 'string') {
+      throw new Error('Stock label must be a string.');
     }
 
-    public getValue(): string {
-        return this.value;
+    const normalized = label.trim();
+
+    if (normalized.length < StockLabel.MIN_LENGTH) {
+      throw new Error(`Stock label must be at least ${StockLabel.MIN_LENGTH} characters.`);
     }
+
+    if (normalized.length > StockLabel.MAX_LENGTH) {
+      throw new Error(`Stock label must not exceed ${StockLabel.MAX_LENGTH} characters.`);
+    }
+
+    this.value = normalized;
+  }
+
+  public getValue(): string {
+    return this.value;
+  }
 }
 ```
 
 **Avantages:**
+
 - ✅ Impossible de créer un StockLabel invalide
 - ✅ Validation centralisée (un seul endroit)
 - ✅ Réutilisable partout
@@ -200,6 +193,7 @@ export class Stock {
 ```
 
 **Avantages:**
+
 - ✅ Règles métier centralisées
 - ✅ Impossible de créer un état invalide
 - ✅ Testable sans DB
@@ -212,18 +206,17 @@ export class Stock {
 ```typescript
 // ✅ Service simple pour lectures optimisées
 export class StockVisualizationService {
-    constructor(
-        private readonly stockRepository: IStockVisualizationRepository
-    ) {}
+  constructor(private readonly stockRepository: IStockVisualizationRepository) {}
 
-    async getAllStocks(userId: number): Promise<StockDTO[]> {
-        // Pas de logique métier, juste lecture
-        return await this.stockRepository.findAllByUserId(userId);
-    }
+  async getAllStocks(userId: number): Promise<StockDTO[]> {
+    // Pas de logique métier, juste lecture
+    return await this.stockRepository.findAllByUserId(userId);
+  }
 }
 ```
 
 **Repository READ:**
+
 ```typescript
 async findAllByUserId(userId: number): Promise<StockDTO[]> {
     // SELECT optimisé avec COUNT au lieu de charger tous les items
@@ -247,25 +240,21 @@ async findAllByUserId(userId: number): Promise<StockDTO[]> {
 ```typescript
 // ✅ Handler orchestrant le use case
 export class AddItemToStockCommandHandler {
-    constructor(
-        private readonly stockRepository: IStockCommandRepository
-    ) {}
+  constructor(private readonly stockRepository: IStockCommandRepository) {}
 
-    async handle(command: AddItemToStockCommand): Promise<Stock> {
-        return await this.stockRepository.addItemToStock(
-            command.stockId,
-            {
-                label: command.label,
-                quantity: command.quantity,
-                description: command.description,
-                minimumStock: command.minimumStock
-            }
-        );
-    }
+  async handle(command: AddItemToStockCommand): Promise<Stock> {
+    return await this.stockRepository.addItemToStock(command.stockId, {
+      label: command.label,
+      quantity: command.quantity,
+      description: command.description,
+      minimumStock: command.minimumStock,
+    });
+  }
 }
 ```
 
 **Repository WRITE:**
+
 ```typescript
 async addItemToStock(stockId: number, item: {...}): Promise<Stock> {
     // 1. Charger le stock complet
@@ -301,6 +290,7 @@ async addItemToStock(stockId: number, item: {...}): Promise<Stock> {
 ```
 
 **Avantages:**
+
 - ✅ READ: Performances optimales (pas de chargement inutile)
 - ✅ WRITE: Validation métier garantie
 - ✅ Séparation des préoccupations claire
@@ -328,14 +318,14 @@ describe('Stock', () => {
 
 ```typescript
 describe('PrismaStockCommandRepository', () => {
-    it('should enforce business rules when adding item', async () => {
-        const repo = new PrismaStockCommandRepository(prisma);
+  it('should enforce business rules when adding item', async () => {
+    const repo = new PrismaStockCommandRepository(prisma);
 
-        // La validation métier est garantie par l'entité
-        await expect(
-            repo.addItemToStock(stockId, {label: '', quantity: 10})
-        ).rejects.toThrow('cannot be empty');
-    });
+    // La validation métier est garantie par l'entité
+    await expect(repo.addItemToStock(stockId, { label: '', quantity: 10 })).rejects.toThrow(
+      'cannot be empty'
+    );
+  });
 });
 ```
 
@@ -408,6 +398,7 @@ class StockService {
 ```
 
 **Pourquoi rejeté:**
+
 - ❌ Logique dispersée
 - ❌ Difficile à tester
 - ❌ Couplage fort Prisma
@@ -420,11 +411,14 @@ class StockService {
 ```typescript
 // Étendre les modèles Prisma
 class StockModel extends PrismaStock {
-    addItem() { /* logique */ }
+  addItem() {
+    /* logique */
+  }
 }
 ```
 
 **Pourquoi rejeté:**
+
 - ❌ Couplage fort ORM
 - ❌ Modèle DB ≠ modèle métier
 - ❌ Difficile de changer de DB
@@ -435,6 +429,7 @@ class StockModel extends PrismaStock {
 **Principe:** Séparation DB READ/WRITE + historique événements
 
 **Pourquoi rejeté (pour l'instant):**
+
 - ⚠️ Trop complexe pour les besoins actuels
 - ⚠️ Infrastructure additionnelle (message queue)
 - ⚠️ Eventual consistency (complexité applicative)
@@ -445,21 +440,25 @@ class StockModel extends PrismaStock {
 ## Métriques de succès
 
 ### Qualité du code
+
 - ✅ 53 tests unitaires domaine (vs 0 avant)
 - ✅ Couverture métier 100% (méthodes utilisées)
 - ✅ Zéro console.log dans nouveau code
 - ✅ Logging structuré (Application Insights)
 
 ### Performance
+
 - ✅ READ: Queries optimisées (SELECT avec COUNT)
 - ⚠️ WRITE: +20ms latence acceptable (validation métier)
 
 ### Maintenabilité
+
 - ✅ Temps ajout règle métier: ~10min (vs 2h avant)
 - ✅ Localisation changement: 1 fichier (vs 3-5 avant)
 - ✅ Bugs régression: 0 (tests domaine)
 
 ### Adoption équipe
+
 - ✅ Documentation complète (README + ADR)
 - ✅ Exemples concrets (PR #40, feature/ddd-stock-manipulation-routes)
 - ✅ Patterns clairs et reproductibles
@@ -469,22 +468,26 @@ class StockModel extends PrismaStock {
 ## Plan de migration
 
 ### Phase 1: ✅ Complété (Nov-Déc 2024)
+
 - [x] Module manipulation en DDD/CQRS
 - [x] Tests unitaires domaine
 - [x] Documentation architecture
 - [x] ADR 001
 
 ### Phase 2: 🔄 En cours (Déc 2024)
+
 - [ ] Migration routes legacy vers DDD
 - [ ] Suppression ancien StockService
 - [ ] Suppression writeStockRepository
 
 ### Phase 3: 📅 Planifié (2025 Q1)
+
 - [ ] Module utilisateurs en DDD
 - [ ] Module authentification en DDD
 - [ ] Refactoring complet
 
 ### Phase 4: 📅 Futur
+
 - [ ] Domain Events (audit trail)
 - [ ] Event Sourcing (si nécessaire)
 - [ ] Séparation DB READ/WRITE (si volumes élevés)
@@ -494,11 +497,13 @@ class StockModel extends PrismaStock {
 ## Références
 
 ### Standards DDD/CQRS
+
 - [Domain-Driven Design - Eric Evans](https://www.domainlanguage.com/ddd/)
 - [CQRS - Martin Fowler](https://martinfowler.com/bliki/CQRS.html)
 - [Implementing DDD - Vaughn Vernon](https://vaughnvernon.com/)
 
 ### Implémentation StockHub
+
 - [Issue #37 - Migration DDD](https://github.com/SandrineCipolla/stockhub_back/issues/37)
 - [PR #40 - E2E Tests](https://github.com/SandrineCipolla/stockhub_back/pull/40)
 - [docs/architecture/DDD-CQRS-ARCHITECTURE.md](./DDD-CQRS-ARCHITECTURE.md)
@@ -508,9 +513,9 @@ class StockModel extends PrismaStock {
 
 ## Notes de révision
 
-| Date | Auteur | Changement |
-|------|--------|-----------|
-| Nov 2024 | Équipe Dev | Création initiale |
+| Date     | Auteur     | Changement                        |
+| -------- | ---------- | --------------------------------- |
+| Nov 2024 | Équipe Dev | Création initiale                 |
 | Déc 2024 | Équipe Dev | Ajout métriques de succès Phase 1 |
 
 ---

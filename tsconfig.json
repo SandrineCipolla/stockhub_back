@@ -4,70 +4,33 @@
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
-    "types": [
-      "jest",
-      "mysql2",
-      "applicationinsights"
-    ],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "strictNullChecks": true,
     "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@domain/*": [
-        "src/domain/*"
-      ],
-      "@infrastructure/*": [
-        "src/infrastructure/*"
-      ],
-      "@utils/*": [
-        "src/Utils/*"
-      ],
-      "@config/*": [
-        "src/config/*"
-      ],
-      "@api/*": [
-        "src/api/*"
-      ],
-      "@services/*": [
-        "src/services/*"
-      ],
-      "@repositories/*": [
-        "src/repositories/*"
-      ],
-      "@controllers/*": [
-        "src/controllers/*"
-      ],
-      "@routes/*": [
-        "src/routes/*"
-      ],
-      "@authentication/*": [
-        "src/authentication/*"
-      ],
-      "@serverSetup/*": [
-        "src/serverSetup/*"
-      ],
-      "@core/*": [
-        "src/*"
-      ],
-      "@helpers/*": [
-        "tests/helpers/*",
-        "src/helpers/*"
-      ]
+      "@domain/*": ["src/domain/*"],
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@utils/*": ["src/Utils/*"],
+      "@config/*": ["src/config/*"],
+      "@api/*": ["src/api/*"],
+      "@services/*": ["src/services/*"],
+      "@repositories/*": ["src/repositories/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@routes/*": ["src/routes/*"],
+      "@authentication/*": ["src/authentication/*"],
+      "@serverSetup/*": ["src/serverSetup/*"],
+      "@core/*": ["src/*"],
+      "@helpers/*": ["tests/helpers/*", "src/helpers/*"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "tests/**/*.ts",
-    "tests/types/**/*.d.ts",
-    "src/global.d.ts",
-    "src/Utils/**/global.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "tests/**/*.ts", "tests/**/*.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }
