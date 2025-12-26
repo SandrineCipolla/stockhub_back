@@ -160,11 +160,21 @@ app.use((_req, res, next) => {
 
 | Métrique                    | Valeur     |
 | --------------------------- | ---------- |
-| Warnings ESLint             | 55 (-43%)  |
-| Warnings `any`              | 35 (-54%)  |
+| Warnings ESLint             | 56 (-42%)  |
+| Warnings `any`              | 36 (-53%)  |
 | `any` dans src/             | **0** ✅   |
 | Exports inutilisés          | **0** ✅   |
 | Options TypeScript strictes | **7/7** ✅ |
+
+### Après Phase 2 (Type Aliases Pattern - 2025-12-26)
+
+Suite à l'implémentation du pattern type aliases (ADR-008), les métriques ont été encore améliorées :
+
+| Métrique                         | Valeur   |
+| -------------------------------- | -------- |
+| Type assertions (`as`) dans src/ | **0** ✅ |
+| Type aliases créés               | 6        |
+| Pattern réutilisable documenté   | ✅       |
 
 ## Implémentation
 
@@ -205,13 +215,16 @@ app.use((_req, res, next) => {
 
 - ✅ 0 `any` dans src/
 - ✅ 0 exports inutilisés
-- ✅ ESLint sous le seuil (55/110)
+- ✅ ESLint sous le seuil (56/110)
+- ✅ 0 type assertions dans src/
 
 ## Liens
 
+- [Index des ADRs](./INDEX.md)
 - [Documentation standards qualité](../code-quality-standards.md)
+- [ADR-008 - Type Aliases Pattern](./ADR-008-typescript-request-type-aliases.md)
 - [Issue #52 - ESLint cleanup](https://github.com/SandrineCipolla/stockhub_back/issues/52)
-- [Issue #54 - Typage any](https://github.com/SandrineCipolla/stockhub_back/issues/54)
+- [Issue #54 - Typage any](https://github.com/SandrineCipolla/stockhub_back/issues/54) ✅ Complétée
 - [TypeScript Strict Mode](https://www.typescriptlang.org/tsconfig#strict)
 - [Conventional Commits](https://www.conventionalcommits.org/)
 
@@ -225,4 +238,4 @@ Les hooks Git peuvent être temporairement désactivés avec `git commit --no-ve
 
 **Auteur** : Équipe technique
 **Approuvé par** : Tech Lead
-**Dernière révision** : 2024-12-19
+**Dernière révision** : 2025-12-26 (Phase 2 - Type Aliases)
