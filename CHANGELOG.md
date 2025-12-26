@@ -2,14 +2,13 @@
 
 ## [2.0.0](https://github.com/SandrineCipolla/stockhub_back/compare/v1.2.0...v2.0.0) (2025-12-26)
 
-
 ### ⚠ BREAKING CHANGES
 
-* Enable strict TypeScript compiler options and enhanced git hooks
+- Enable strict TypeScript compiler options and enhanced git hooks
 
 ### 🔧 Chores
 
-* clean up ESLint warnings and fix TypeScript errors (Issue [#52](https://github.com/SandrineCipolla/stockhub_back/issues/52)) ([#55](https://github.com/SandrineCipolla/stockhub_back/issues/55)) ([1dd70d7](https://github.com/SandrineCipolla/stockhub_back/commit/1dd70d759a8a2daa0165b58d98dbe03a7b982877))
+- clean up ESLint warnings and fix TypeScript errors (Issue [#52](https://github.com/SandrineCipolla/stockhub_back/issues/52)) ([#55](https://github.com/SandrineCipolla/stockhub_back/issues/55)) ([1dd70d7](https://github.com/SandrineCipolla/stockhub_back/commit/1dd70d759a8a2daa0165b58d98dbe03a7b982877))
 
 ## [1.2.0](https://github.com/SandrineCipolla/stockhub_back/compare/v1.1.0...v1.2.0) (2025-12-16)
 
