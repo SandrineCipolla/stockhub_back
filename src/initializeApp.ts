@@ -73,7 +73,7 @@ export async function initializeApp() {
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
       authenticationMiddleware(req, res, next);
     },
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    (_req: express.Request, _res: express.Response, next: express.NextFunction) => {
       next();
     },
     (
@@ -95,7 +95,7 @@ export async function initializeApp() {
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
       authenticationMiddleware(req, res, next);
     },
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    (_req: express.Request, _res: express.Response, next: express.NextFunction) => {
       next();
     },
     (
@@ -117,14 +117,14 @@ export async function initializeApp() {
   const userRoutes = await configureUserRoutes();
   app.use('/api/v1', userRoutes);
 
-  app.use((req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  app.use((_req: express.Request, res: express.Response, _next: express.NextFunction) => {
     res.status(404).send('Route not found');
   });
 
   app.use(
     (
       err: CustomError,
-      req: express.Request,
+      _req: express.Request,
       res: express.Response,
       _next: express.NextFunction
     ) => {

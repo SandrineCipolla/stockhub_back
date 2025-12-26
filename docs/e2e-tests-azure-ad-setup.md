@@ -35,6 +35,7 @@ Cleanup: Delete test data                      ✅
 ### Prérequis OBLIGATOIRES pour lancer les tests
 
 1. **Démarrer le serveur backend** :
+
    ```bash
    npm run start:dev
    ```
@@ -97,21 +98,21 @@ Le backend a été modifié pour supporter dynamiquement la politique ROPC :
 ```typescript
 // Use ROPC policy if explicitly enabled (for E2E tests)
 const useROPC = process.env.AZURE_USE_ROPC_POLICY === 'true';
-const activePolicy = useROPC && authConfig.policies.ropc
-    ? authConfig.policies.ropc
-    : authConfig.policies.policyName;
+const activePolicy =
+  useROPC && authConfig.policies.ropc ? authConfig.policies.ropc : authConfig.policies.policyName;
 
 // Use ROPC client ID if ROPC is enabled
-const activeClientID = useROPC && process.env.AZURE_ROPC_CLIENT_ID
+const activeClientID =
+  useROPC && process.env.AZURE_ROPC_CLIENT_ID
     ? process.env.AZURE_ROPC_CLIENT_ID
     : authConfig.credentials.clientID;
 
 export const authConfigoptions: AuthConfigOptions = {
-    identityMetadata: `https://${authConfig.metadata.b2cDomain}/${authConfig.credentials.tenantName}/${activePolicy}/${authConfig.metadata.version}/${authConfig.metadata.discovery}`,
-    clientID: activeClientID,
-    audience: activeClientID,
-    policyName: activePolicy,
-    // ...
+  identityMetadata: `https://${authConfig.metadata.b2cDomain}/${authConfig.credentials.tenantName}/${activePolicy}/${authConfig.metadata.version}/${authConfig.metadata.discovery}`,
+  clientID: activeClientID,
+  audience: activeClientID,
+  policyName: activePolicy,
+  // ...
 };
 ```
 
@@ -175,7 +176,7 @@ export default defineConfig({
   testDir: './tests/e2e',
   timeout: 30000,
   expect: {
-    timeout: 5000
+    timeout: 5000,
   },
   fullyParallel: false, // Important: tests must run sequentially
   forbidOnly: !!process.env.CI,
@@ -201,38 +202,38 @@ export default defineConfig({
 import * as msal from '@azure/msal-node';
 
 export interface AzureAuthHelper {
-    getBearerToken(): Promise<string>;
+  getBearerToken(): Promise<string>;
 }
 
 export function createAzureAuthHelper(): AzureAuthHelper {
-    const config: msal.Configuration = {
-        auth: {
-            clientId: process.env.AZURE_CLIENT_ID!,
-            authority: `https://${process.env.AZURE_B2C_DOMAIN}/${process.env.AZURE_TENANT}/${process.env.AZURE_B2C_POLICY}`,
-            knownAuthorities: [process.env.AZURE_B2C_DOMAIN!]
-        }
-    };
+  const config: msal.Configuration = {
+    auth: {
+      clientId: process.env.AZURE_CLIENT_ID!,
+      authority: `https://${process.env.AZURE_B2C_DOMAIN}/${process.env.AZURE_TENANT}/${process.env.AZURE_B2C_POLICY}`,
+      knownAuthorities: [process.env.AZURE_B2C_DOMAIN!],
+    },
+  };
 
-    const pca = new msal.PublicClientApplication(config);
+  const pca = new msal.PublicClientApplication(config);
 
-    return {
-        async getBearerToken(): Promise<string> {
-            const usernamePasswordRequest: msal.UsernamePasswordRequest = {
-                scopes: [`${process.env.AZURE_CLIENT_ID}/.default`],
-                username: process.env.AZURE_TEST_USERNAME!,
-                password: process.env.AZURE_TEST_PASSWORD!
-            };
+  return {
+    async getBearerToken(): Promise<string> {
+      const usernamePasswordRequest: msal.UsernamePasswordRequest = {
+        scopes: [`${process.env.AZURE_CLIENT_ID}/.default`],
+        username: process.env.AZURE_TEST_USERNAME!,
+        password: process.env.AZURE_TEST_PASSWORD!,
+      };
 
-            try {
-                const response = await pca.acquireTokenByUsernamePassword(usernamePasswordRequest);
-                console.log('✅ Successfully obtained Azure AD B2C token');
-                return `Bearer ${response.accessToken}`;
-            } catch (error: any) {
-                console.error('❌ Failed to obtain Azure AD B2C token:', error.message);
-                throw error;
-            }
-        }
-    };
+      try {
+        const response = await pca.acquireTokenByUsernamePassword(usernamePasswordRequest);
+        console.log('✅ Successfully obtained Azure AD B2C token');
+        return `Bearer ${response.accessToken}`;
+      } catch (error: any) {
+        console.error('❌ Failed to obtain Azure AD B2C token:', error.message);
+        throw error;
+      }
+    },
+  };
 }
 ```
 
@@ -244,53 +245,53 @@ Le test E2E couvre le workflow complet de gestion de stock :
 
 ```typescript
 test.describe('Stock Management E2E Workflow with Azure AD', () => {
-    const baseURL = process.env.API_BASE_URL || 'http://localhost:3006';
-    const apiV1 = `${baseURL}/api/v1`; // POST/PUT operations
-    const apiV2 = `${baseURL}/api/v2`; // GET operations
-    let stockId: number;
-    let itemId1: number;
-    let itemId2: number;
-    let authToken: string;
-    const createdStockIds: number[] = []; // Pour le cleanup
+  const baseURL = process.env.API_BASE_URL || 'http://localhost:3006';
+  const apiV1 = `${baseURL}/api/v1`; // POST/PUT operations
+  const apiV2 = `${baseURL}/api/v2`; // GET operations
+  let stockId: number;
+  let itemId1: number;
+  let itemId2: number;
+  let authToken: string;
+  const createdStockIds: number[] = []; // Pour le cleanup
 
-    test.beforeAll(async () => {
-        // Authentification Azure AD B2C
-        const authHelper = createAzureAuthHelper();
-        authToken = await authHelper.getBearerToken();
-    });
+  test.beforeAll(async () => {
+    // Authentification Azure AD B2C
+    const authHelper = createAzureAuthHelper();
+    authToken = await authHelper.getBearerToken();
+  });
 
-    test('Step 1: Create a new stock', async ({request}) => {
-        // Création d'un stock
-    });
+  test('Step 1: Create a new stock', async ({ request }) => {
+    // Création d'un stock
+  });
 
-    test('Step 2: Add first item (normal stock)', async ({request}) => {
-        // Ajout d'un item avec stock normal
-    });
+  test('Step 2: Add first item (normal stock)', async ({ request }) => {
+    // Ajout d'un item avec stock normal
+  });
 
-    test('Step 3: Add second item (low stock)', async ({request}) => {
-        // Ajout d'un item avec stock faible
-    });
+  test('Step 3: Add second item (low stock)', async ({ request }) => {
+    // Ajout d'un item avec stock faible
+  });
 
-    test('Step 4: Visualize stock and verify items', async ({request}) => {
-        // Vérification de la visualisation
-    });
+  test('Step 4: Visualize stock and verify items', async ({ request }) => {
+    // Vérification de la visualisation
+  });
 
-    test('Step 5: Update item quantity', async ({request}) => {
-        // Mise à jour de quantité
-    });
+  test('Step 5: Update item quantity', async ({ request }) => {
+    // Mise à jour de quantité
+  });
 
-    test('Step 6: Check for low stock items', async ({request}) => {
-        // Vérification des items en stock faible
-    });
+  test('Step 6: Check for low stock items', async ({ request }) => {
+    // Vérification des items en stock faible
+  });
 
-    test.afterAll(async ({request}) => {
-        // Nettoyage des données de test
-        for (const id of createdStockIds) {
-            await request.delete(`${apiV1}/stocks/${id}`, {
-                headers: { 'Authorization': authToken }
-            });
-        }
-    });
+  test.afterAll(async ({ request }) => {
+    // Nettoyage des données de test
+    for (const id of createdStockIds) {
+      await request.delete(`${apiV1}/stocks/${id}`, {
+        headers: { Authorization: authToken },
+      });
+    }
+  });
 });
 ```
 
@@ -383,15 +384,15 @@ async readLowStockItems(userId: number) {
 **Fichier** : `src/routes/stockRoutes.ts`
 
 ```typescript
-router.get("/low-stock-items", async (req, res) => {
-    try {
-        await stockController.getLowStockItems(req, res);
-    } catch (error) {
-        console.error("Error in Get /low-stock-items:", error);
-        res.status(HTTP_CODE_INTERNAL_SERVER_ERROR).json({
-            error: "Error while quering the database for low stock items",
-        });
-    }
+router.get('/low-stock-items', async (req, res) => {
+  try {
+    await stockController.getLowStockItems(req, res);
+  } catch (error) {
+    console.error('Error in Get /low-stock-items:', error);
+    res.status(HTTP_CODE_INTERNAL_SERVER_ERROR).json({
+      error: 'Error while quering the database for low stock items',
+    });
+  }
 });
 ```
 
@@ -402,29 +403,29 @@ Un test de nettoyage a été créé pour supprimer les anciennes données de tes
 **Fichier** : `tests/e2e/cleanup-test-data.e2e.test.ts`
 
 ```typescript
-test('Clean up all E2E test stocks', async ({request}) => {
-    const getAllResponse = await request.get(`${apiV2}/stocks`, {
-        headers: { 'Authorization': authToken }
+test('Clean up all E2E test stocks', async ({ request }) => {
+  const getAllResponse = await request.get(`${apiV2}/stocks`, {
+    headers: { Authorization: authToken },
+  });
+
+  const stocks = await getAllResponse.json();
+
+  // Filter test stocks
+  const testStocks = stocks.filter(
+    (s: any) => s.label === 'E2E Test Stock with Azure AD' || s.description?.includes('E2E test')
+  );
+
+  // Delete each test stock
+  for (const stock of testStocks) {
+    await request.delete(`${apiV1}/stocks/${stock.id}`, {
+      headers: { Authorization: authToken },
     });
-
-    const stocks = await getAllResponse.json();
-
-    // Filter test stocks
-    const testStocks = stocks.filter((s: any) =>
-        s.label === 'E2E Test Stock with Azure AD' ||
-        s.description?.includes('E2E test')
-    );
-
-    // Delete each test stock
-    for (const stock of testStocks) {
-        await request.delete(`${apiV1}/stocks/${stock.id}`, {
-            headers: { 'Authorization': authToken }
-        });
-    }
+  }
 });
 ```
 
 **Exécution** :
+
 ```bash
 npx playwright test tests/e2e/cleanup-test-data.e2e.test.ts
 ```
@@ -478,6 +479,7 @@ npx playwright show-report
 ### 1. ⚠️ Erreur ECONNREFUSED - Serveur backend non démarré
 
 **Symptôme** :
+
 ```
 Error: apiRequestContext.get: connect ECONNREFUSED ::1:3006
 ```
@@ -485,6 +487,7 @@ Error: apiRequestContext.get: connect ECONNREFUSED ::1:3006
 **Cause** : Le serveur backend n'est pas en cours d'exécution.
 
 **Solution** : **IMPORTANT - Toujours démarrer le serveur avant les tests E2E** :
+
 ```bash
 # Terminal 1 : Démarrer le serveur backend
 npm run start:dev
@@ -519,11 +522,13 @@ Les tests E2E nécessitent que le serveur soit déjà en cours d'exécution car 
 #### Solution temporaire actuelle : ✅ Utilisation d'un compte personnel
 
 **Compte utilisé** : `sandrine.cipolla@gmail.com`
+
 - ✅ Ce compte a été créé via le flow d'inscription standard B2C (B2C_1_signupsignin)
 - ✅ Possède un mot de passe permanent qui fonctionne avec ROPC
 - ✅ Fonctionne parfaitement pour les tests
 
 **Configuration dans `.env.test`** :
+
 ```bash
 AZURE_TEST_USERNAME=sandrine.cipolla@gmail.com
 AZURE_TEST_PASSWORD=Test@2024
@@ -556,6 +561,7 @@ AZURE_TEST_PASSWORD=Test@2024
 **Symptôme** : Le backend rejette les tokens ROPC
 
 **Solution** :
+
 - Vérifier que `AZURE_USE_ROPC_POLICY=true` dans `.env`
 - Vérifier que `AZURE_ROPC_CLIENT_ID` est correctement configuré
 - S'assurer que le serveur a redémarré après modification de `.env`
@@ -571,10 +577,12 @@ AZURE_TEST_PASSWORD=Test@2024
 **Symptôme** : Les tests passent parfois mais échouent d'autres fois
 
 **Causes possibles** :
+
 - Tests s'exécutant en parallèle (workers > 1)
 - Données de test non nettoyées entre les exécutions
 
 **Solution** :
+
 - Configurer `workers: 1` dans `playwright.config.ts`
 - Implémenter `afterAll` pour nettoyer les données
 - Exécuter le script de nettoyage régulièrement
@@ -584,6 +592,7 @@ AZURE_TEST_PASSWORD=Test@2024
 **Symptôme** : Les tests cherchent `LABEL` mais trouvent `label`
 
 **Solution** : Utiliser une approche compatible avec les deux :
+
 ```typescript
 const value = item.label || item.LABEL;
 const id = item.id || item.ID;
@@ -594,6 +603,7 @@ const id = item.id || item.ID;
 **Symptôme** : `GET /low-stock-items` retourne un tableau vide
 
 **Causes corrigées** :
+
 - La requête SQL comparait avec 1 au lieu de `MINIMUM_STOCK`
 - Le champ `MINIMUM_STOCK` n'était pas stocké lors de la création d'item
 - Le contrôleur ne lisait pas `MINIMUM_STOCK` du body de la requête
@@ -648,9 +658,9 @@ name: E2E Tests
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   e2e-tests:
@@ -764,6 +774,7 @@ auth.getBearerToken().then(token => console.log('Token obtenu:', token.substring
 ## Contact et Support
 
 Pour toute question ou problème :
+
 - Créer une issue dans le repository
 - Consulter cette documentation
 - Vérifier les logs du serveur et de Playwright

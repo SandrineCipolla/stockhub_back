@@ -57,26 +57,31 @@ Implémentation des routes POST/PATCH manquantes pour compléter le module **man
 
 ```typescript
 export class StockControllerManipulation {
-    constructor(
-        private readonly createStockHandler: CreateStockCommandHandler,
-        private readonly addItemHandler: AddItemToStockCommandHandler,
-        private readonly updateQuantityHandler: UpdateItemQuantityCommandHandler,
-        private readonly userService: UserService
-    ) {}
+  constructor(
+    private readonly createStockHandler: CreateStockCommandHandler,
+    private readonly addItemHandler: AddItemToStockCommandHandler,
+    private readonly updateQuantityHandler: UpdateItemQuantityCommandHandler,
+    private readonly userService: UserService
+  ) {}
 
-    public async createStock(req: AuthenticatedRequest, res: Response) {
-        const userID = await this.userService.convertOIDtoUserID(req.userID);
-        const command = new CreateStockCommand(/* ... */);
-        const stock = await this.createStockHandler.handle(command);
-        res.status(HTTP_CODE_CREATED).json(stock);
-    }
+  public async createStock(req: AuthenticatedRequest, res: Response) {
+    const userID = await this.userService.convertOIDtoUserID(req.userID);
+    const command = new CreateStockCommand(/* ... */);
+    const stock = await this.createStockHandler.handle(command);
+    res.status(HTTP_CODE_CREATED).json(stock);
+  }
 
-    public async addItemToStock(req: AuthenticatedRequest, res: Response) { /* ... */ }
-    public async updateItemQuantity(req: AuthenticatedRequest, res: Response) { /* ... */ }
+  public async addItemToStock(req: AuthenticatedRequest, res: Response) {
+    /* ... */
+  }
+  public async updateItemQuantity(req: AuthenticatedRequest, res: Response) {
+    /* ... */
+  }
 }
 ```
 
 **Responsabilités:**
+
 - Extraction et validation des données de la requête
 - Conversion OID → UserID via UserService
 - Création des Commands
@@ -89,21 +94,23 @@ export class StockControllerManipulation {
 **Fichier:** `src/api/types/AuthenticatedRequest.ts`
 
 ```typescript
-import {Request} from "express";
+import { Request } from 'express';
 
 export interface AuthenticatedRequest extends Request {
-    userID: string;
+  userID: string;
 }
 ```
 
 **Problème résolu:**
 
 Avant, on devait écrire partout:
+
 ```typescript
-const OID = (req as any).userID as string;  // ❌ Double "as"
+const OID = (req as any).userID as string; // ❌ Double "as"
 ```
 
 Maintenant:
+
 ```typescript
 public async createStock(req: AuthenticatedRequest, res: Response) {
     const OID = req.userID;  // ✅ Typé correctement
@@ -111,6 +118,7 @@ public async createStock(req: AuthenticatedRequest, res: Response) {
 ```
 
 **Avantages:**
+
 - Typage fort pour `req.userID` (ajouté par le middleware d'authentification)
 - Réduction drastique des type assertions (`as`)
 - Auto-complétion IDE
@@ -122,23 +130,23 @@ public async createStock(req: AuthenticatedRequest, res: Response) {
 
 ```typescript
 const manipulationController = new StockControllerManipulation(
-    createStockHandler,
-    addItemHandler,
-    updateQuantityHandler,
-    userService
+  createStockHandler,
+  addItemHandler,
+  updateQuantityHandler,
+  userService
 );
 
 // Manipulation routes
-router.post("/stocks", async (req, res) => {
-    await manipulationController.createStock(req as any, res);
+router.post('/stocks', async (req, res) => {
+  await manipulationController.createStock(req as any, res);
 });
 
-router.post("/stocks/:stockId/items", async (req, res) => {
-    await manipulationController.addItemToStock(req as any, res);
+router.post('/stocks/:stockId/items', async (req, res) => {
+  await manipulationController.addItemToStock(req as any, res);
 });
 
-router.patch("/stocks/:stockId/items/:itemId", async (req, res) => {
-    await manipulationController.updateItemQuantity(req as any, res);
+router.patch('/stocks/:stockId/items/:itemId', async (req, res) => {
+  await manipulationController.updateItemQuantity(req as any, res);
 });
 ```
 
@@ -149,6 +157,7 @@ router.patch("/stocks/:stockId/items/:itemId", async (req, res) => {
 ### POST /api/v2/stocks - Créer un stock
 
 **Request:**
+
 ```json
 POST /api/v2/stocks
 Authorization: Bearer <token>
@@ -161,6 +170,7 @@ Authorization: Bearer <token>
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "id": 42,
@@ -172,6 +182,7 @@ Authorization: Bearer <token>
 ```
 
 **Validations:**
+
 - Label: minimum 3 caractères, maximum 50 caractères
 - Description: non vide
 - Category: non vide
@@ -182,6 +193,7 @@ Authorization: Bearer <token>
 ### POST /api/v2/stocks/:stockId/items - Ajouter un item
 
 **Request:**
+
 ```json
 POST /api/v2/stocks/42/items
 Authorization: Bearer <token>
@@ -195,6 +207,7 @@ Authorization: Bearer <token>
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "id": 42,
@@ -212,6 +225,7 @@ Authorization: Bearer <token>
 ```
 
 **Validations:**
+
 - Label: non vide, pas de duplicate (case-insensitive)
 - Quantity: >= 0
 - MinimumStock: par défaut 1
@@ -221,6 +235,7 @@ Authorization: Bearer <token>
 ### PATCH /api/v2/stocks/:stockId/items/:itemId - Mettre à jour la quantité
 
 **Request:**
+
 ```json
 PATCH /api/v2/stocks/42/items/1
 Authorization: Bearer <token>
@@ -231,6 +246,7 @@ Authorization: Bearer <token>
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "id": 42,
@@ -247,6 +263,7 @@ Authorization: Bearer <token>
 ```
 
 **Validations:**
+
 - Quantity: >= 0
 - Item doit exister dans le stock
 
@@ -260,26 +277,31 @@ Structure avec describe imbriqués:
 
 ```typescript
 describe('StockControllerManipulation', () => {
-    describe('createStock()', () => {
-        describe('when the handler call is successful', () => {
-            it('should return 201 and the created stock', async () => {
-                // Test happy path
-            })
-        })
+  describe('createStock()', () => {
+    describe('when the handler call is successful', () => {
+      it('should return 201 and the created stock', async () => {
+        // Test happy path
+      });
+    });
 
-        describe('when the handler call fails', () => {
-            it('should call sendError', async () => {
-                // Test error handling
-            })
-        })
-    })
+    describe('when the handler call fails', () => {
+      it('should call sendError', async () => {
+        // Test error handling
+      });
+    });
+  });
 
-    describe('addItemToStock()', () => { /* ... */ })
-    describe('updateItemQuantity()', () => { /* ... */ })
-})
+  describe('addItemToStock()', () => {
+    /* ... */
+  });
+  describe('updateItemQuantity()', () => {
+    /* ... */
+  });
+});
 ```
 
 **Couverture:**
+
 - Happy paths (201 Created, 200 OK)
 - Error handling (sendError appelé)
 - Validation des réponses
@@ -292,30 +314,54 @@ Ajout de 12 nouveaux tests pour les méthodes métier utilisées en production:
 
 ```typescript
 describe('Stock', () => {
-    describe('addItem()', () => {
-        describe('when adding a valid item', () => { /* ... */ })
-        describe('when label is empty', () => { /* ... */ })
-        describe('when quantity is negative', () => { /* ... */ })
-        describe('when item with same label already exists', () => { /* ... */ })
-        describe('when item with same label but different case', () => { /* ... */ })
-    })
+  describe('addItem()', () => {
+    describe('when adding a valid item', () => {
+      /* ... */
+    });
+    describe('when label is empty', () => {
+      /* ... */
+    });
+    describe('when quantity is negative', () => {
+      /* ... */
+    });
+    describe('when item with same label already exists', () => {
+      /* ... */
+    });
+    describe('when item with same label but different case', () => {
+      /* ... */
+    });
+  });
 
-    describe('updateItemQuantity()', () => {
-        describe('when updating with a valid quantity', () => { /* ... */ })
-        describe('when quantity is negative', () => { /* ... */ })
-        describe('when item does not exist', () => { /* ... */ })
-    })
+  describe('updateItemQuantity()', () => {
+    describe('when updating with a valid quantity', () => {
+      /* ... */
+    });
+    describe('when quantity is negative', () => {
+      /* ... */
+    });
+    describe('when item does not exist', () => {
+      /* ... */
+    });
+  });
 
-    describe('getLowStockItems()', () => {
-        describe('when no items are low on stock', () => { /* ... */ })
-        describe('when some items are low on stock', () => { /* ... */ })
-    })
+  describe('getLowStockItems()', () => {
+    describe('when no items are low on stock', () => {
+      /* ... */
+    });
+    describe('when some items are low on stock', () => {
+      /* ... */
+    });
+  });
 
-    describe('hasLowStockItems()', () => {
-        describe('when there are no low stock items', () => { /* ... */ })
-        describe('when there are low stock items', () => { /* ... */ })
-    })
-})
+  describe('hasLowStockItems()', () => {
+    describe('when there are no low stock items', () => {
+      /* ... */
+    });
+    describe('when there are low stock items', () => {
+      /* ... */
+    });
+  });
+});
 ```
 
 **Total:** 53 tests unitaires domaine ✅ tous passent
@@ -326,22 +372,24 @@ describe('Stock', () => {
 
 ```typescript
 try {
-    const stock = await this.createStockHandler.handle(command);
-    rootMain.info(`createStock OID=${OID} stockId=${stock.id}`);
-    res.status(HTTP_CODE_CREATED).json(stock);
+  const stock = await this.createStockHandler.handle(command);
+  rootMain.info(`createStock OID=${OID} stockId=${stock.id}`);
+  res.status(HTTP_CODE_CREATED).json(stock);
 } catch (err) {
-    rootException(err as Error);        // Application Insights
-    sendError(res, err as CustomError); // Response client
+  rootException(err as Error); // Application Insights
+  sendError(res, err as CustomError); // Response client
 }
 ```
 
 **Logs envoyés à Application Insights:**
+
 - `rootMain.info()` - Opérations réussies avec contexte (OID, stockId)
 - `rootException()` - Exceptions avec stack trace complète
 
 ### Réponses d'erreur
 
 La fonction `sendError()` gère automatiquement:
+
 - `ValidationError` → 400 Bad Request
 - `NotFoundError` → 404 Not Found
 - `DatabaseError` → 500 Internal Server Error
@@ -351,12 +399,12 @@ La fonction `sendError()` gère automatiquement:
 
 ### Séparation des responsabilités
 
-| Couche | Responsabilité | Exemple |
-|--------|----------------|---------|
-| **API** | HTTP, validation format, auth | StockControllerManipulation |
-| **Application** | Orchestration, use cases | CreateStockCommandHandler |
-| **Domain** | Logique métier, règles business | Stock.addItem() |
-| **Infrastructure** | Persistence, DB | PrismaStockCommandRepository |
+| Couche             | Responsabilité                  | Exemple                      |
+| ------------------ | ------------------------------- | ---------------------------- |
+| **API**            | HTTP, validation format, auth   | StockControllerManipulation  |
+| **Application**    | Orchestration, use cases        | CreateStockCommandHandler    |
+| **Domain**         | Logique métier, règles business | Stock.addItem()              |
+| **Infrastructure** | Persistence, DB                 | PrismaStockCommandRepository |
 
 ### Logique métier dans le domaine
 
@@ -389,24 +437,24 @@ class Stock {
 ```typescript
 // StockLabel - Encapsulation + validation
 export class StockLabel {
-    private readonly value: string;
-    private static readonly MIN_LENGTH = 3;
-    private static readonly MAX_LENGTH = 50;
+  private readonly value: string;
+  private static readonly MIN_LENGTH = 3;
+  private static readonly MAX_LENGTH = 50;
 
-    constructor(label: string) {
-        if (typeof label !== "string") {
-            throw new Error("Stock label must be a string.");
-        }
-        const normalized = label.trim();
-        if (normalized.length < StockLabel.MIN_LENGTH) {
-            throw new Error(`Stock label must be at least ${StockLabel.MIN_LENGTH} characters.`);
-        }
-        this.value = normalized;
+  constructor(label: string) {
+    if (typeof label !== 'string') {
+      throw new Error('Stock label must be a string.');
     }
+    const normalized = label.trim();
+    if (normalized.length < StockLabel.MIN_LENGTH) {
+      throw new Error(`Stock label must be at least ${StockLabel.MIN_LENGTH} characters.`);
+    }
+    this.value = normalized;
+  }
 
-    public getValue(): string {
-        return this.value;
-    }
+  public getValue(): string {
+    return this.value;
+  }
 }
 ```
 
@@ -415,13 +463,15 @@ export class StockLabel {
 ### Minimisation des type assertions
 
 **Avant (code legacy):**
+
 ```typescript
-const OID = (req as any).userID as string;           // ❌ Double "as"
-const stock = mockData as any as Stock;               // ❌ Double "as"
-sendError(res, err as CustomError);                   // ❌ "as" nécessaire mais dupliqué
+const OID = (req as any).userID as string; // ❌ Double "as"
+const stock = mockData as any as Stock; // ❌ Double "as"
+sendError(res, err as CustomError); // ❌ "as" nécessaire mais dupliqué
 ```
 
 **Après (nouveau code):**
+
 ```typescript
 // Controller
 public async createStock(req: AuthenticatedRequest, res: Response) {
@@ -433,6 +483,7 @@ const mockStock: Partial<Stock> = { /* ... */ };  // ✅ Partial au lieu de "as 
 ```
 
 **"as" restants (justifiés):**
+
 - `err as Error` dans les catch blocks (TypeScript type err comme `unknown`)
 - `req as any` dans les routes Express (limitation du typage Express)
 - `err as CustomError` pour sendError (pattern établi dans la codebase)

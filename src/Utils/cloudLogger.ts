@@ -17,7 +17,7 @@ rootMain.info('Application Insights started.');
 
 const client = appInsights.defaultClient;
 
-export const rootCloudEvent = (eventName: string, eventData: any) => {
+export const rootCloudEvent = (eventName: string, eventData: unknown) => {
   client.trackEvent({
     name: eventName,
     properties: { customProperty: eventData },

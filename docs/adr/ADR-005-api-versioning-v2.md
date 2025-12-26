@@ -17,10 +17,12 @@ Cette question soulève un débat légitime sur le versioning prématuré.
 ### Contexte technique
 
 Le projet StockHub a démarré avec :
+
 - **API V1 initiale** : Prototype rapide, code legacy non structuré
 - **API V2** : Refonte complète en DDD/CQRS (architecture propre)
 
 **Routes actuelles :**
+
 ```
 /api/v2/stocks              (GET, POST)
 /api/v2/stocks/:id          (GET)
@@ -44,6 +46,7 @@ Le projet StockHub a démarré avec :
 ### 1. V1 n'a jamais été en production
 
 **Faits :**
+
 - ❌ V1 n'a jamais été déployée en production
 - ❌ V1 n'a jamais eu d'utilisateurs réels
 - ❌ V1 était un prototype pour apprentissage
@@ -79,10 +82,11 @@ En méthodologie Agile, un **spike** est un prototype jetable pour explorer une 
 
 ```typescript
 // Aujourd'hui : /api/v1/stocks (hypothétique)
-GET /api/v1/stocks
+GET / api / v1 / stocks;
 ```
 
 **Dans 6 mois, ajout de features (ML, containers) :**
+
 ```typescript
 // Breaking changes nécessaires
 GET /api/v2/stocks?include=predictions  // Nouveau champ
@@ -91,6 +95,7 @@ GET /api/v2/stocks?include=predictions  // Nouveau champ
 **Problème :** On devrait maintenir V1 ET V2 en parallèle, alors qu'il n'y a **aucun client V1** à supporter.
 
 **Solution actuelle :**
+
 ```typescript
 // Aujourd'hui : /api/v2/stocks (actuel)
 GET /api/v2/stocks
@@ -106,6 +111,7 @@ GET /api/v3/stocks?include=predictions
 Le projet StockHub a des **évolutions planifiées** qui nécessiteront des breaking changes :
 
 **Phase 3 (2025 Q1) : Prédictions ML**
+
 ```json
 // V2 actuel
 {
@@ -134,11 +140,11 @@ En appelant l'API actuelle "V2", on a la **marge de manœuvre** pour créer V3 s
 
 **Principe :** Le numéro de version reflète l'**architecture**, pas la chronologie de développement.
 
-| Version | Architecture | Statut |
-|---------|-------------|--------|
-| ❌ V1 | Transaction Script (legacy) | Prototype, jamais en prod |
-| ✅ V2 | DDD/CQRS (propre) | Production-ready |
-| 🔮 V3 | DDD/CQRS + ML (futur) | Planifié 2025 |
+| Version | Architecture                | Statut                    |
+| ------- | --------------------------- | ------------------------- |
+| ❌ V1   | Transaction Script (legacy) | Prototype, jamais en prod |
+| ✅ V2   | DDD/CQRS (propre)           | Production-ready          |
+| 🔮 V3   | DDD/CQRS + ML (futur)       | Planifié 2025             |
 
 **Message envoyé :** "V2 = architecture mûre, stable, production-ready".
 
@@ -152,17 +158,19 @@ En appelant l'API actuelle "V2", on a la **marge de manœuvre** pour créer V3 s
 
 ```typescript
 // Aujourd'hui
-GET /api/v1/stocks
+GET / api / v1 / stocks;
 
 // Plus tard (breaking changes)
-GET /api/v2/stocks
+GET / api / v2 / stocks;
 ```
 
 **Avantages :**
+
 - ✅ Suit la convention "première version = V1"
 - ✅ Évite les questions de l'encadrant
 
 **Inconvénients :**
+
 - ❌ Crée confusion : "V1 = architecture legacy" vs "V1 = production"
 - ❌ Obligation de maintenir V1 + V2 même si aucun client V1
 - ❌ Gaspillage de numéro de version (V1 utilisé pour prototype)
@@ -176,19 +184,22 @@ GET /api/v2/stocks
 **Principe :** Pas de `/v1/` ou `/v2/`, juste `/api/stocks`.
 
 ```typescript
-GET /api/stocks  // Stable, pas de breaking changes
+GET / api / stocks; // Stable, pas de breaking changes
 ```
 
 **Avantages :**
+
 - ✅ Simplicité (pas de gestion de versions)
 - ✅ Évite confusion
 
 **Inconvénients :**
+
 - ❌ **Impossible d'introduire breaking changes** sans casser clients existants
 - ❌ Obligation de compatibilité ascendante infinie
 - ❌ Code pollué par flags de compatibilité
 
 **Example de pollution :**
+
 ```typescript
 // ❌ Code pollué par compatibilité rétroactive
 GET /api/stocks?legacy_format=true  // Flag pour ancien format
@@ -208,10 +219,12 @@ Accept: application/vnd.stockhub.v2+json
 ```
 
 **Avantages :**
+
 - ✅ URLs stables
 - ✅ Standard REST (GitHub API utilise ça)
 
 **Inconvénients :**
+
 - ❌ Complexité pour clients (headers custom)
 - ❌ Moins visible/debuggable (version cachée dans headers)
 - ❌ Overkill pour projet de cette taille
@@ -261,11 +274,13 @@ Accept: application/vnd.stockhub.v2+json
 ### Risques
 
 **Risque 1 : Mauvaise impression lors d'audit**
+
 - **Impact :** Auditeurs pensent que projet mal géré (V1 perdue)
 - **Probabilité :** Moyenne
 - **Mitigation :** **Cet ADR** explique clairement la décision rationnelle
 
 **Risque 2 : Clients futurs confus**
+
 - **Impact :** Nouveaux utilisateurs cherchent V1
 - **Probabilité :** Faible (documentation indique V2 = première version stable)
 - **Mitigation :** Documentation API claire
@@ -277,14 +292,17 @@ Accept: application/vnd.stockhub.v2+json
 ### Métriques de succès
 
 ✅ **Clarté :**
+
 - Documentation API indique clairement : "V2 = première version stable"
 - README explique l'absence de V1
 
 ✅ **Maintenance :**
+
 - Une seule version en production : V2
 - Coût maintenance : **0** (pas de support V1)
 
 ✅ **Évolutivité :**
+
 - Possibilité de créer V3 sans dette technique V1
 
 ---

@@ -9,6 +9,7 @@
 ## Contexte
 
 Le projet StockHub nécessite un ORM (Object-Relational Mapping) TypeScript pour interagir avec la base de données MySQL Azure. Les critères de sélection incluaient :
+
 - Type-safety forte (génération automatique de types TypeScript)
 - Migrations simples et fiables
 - Performance des requêtes
@@ -28,8 +29,8 @@ Prisma génère automatiquement des types TypeScript à partir du schéma, garan
 ```typescript
 // Types générés automatiquement par Prisma
 const stock = await prisma.stocks.findUnique({
-    where: { ID: stockId },  // ✅ Auto-complétion
-    include: { items: true } // ✅ Type-safe
+  where: { ID: stockId }, // ✅ Auto-complétion
+  include: { items: true }, // ✅ Type-safe
 });
 
 // stock.ID     → number (typé)
@@ -58,6 +59,7 @@ prisma migrate deploy                         # Déployer en prod
 - Requêtes optimisées automatiquement
 
 **Benchmark interne :**
+
 - Temps de réponse moyen : **~50ms** pour requêtes simples
 - Connection pooling efficace (pas de timeout observé)
 
@@ -72,9 +74,9 @@ prisma migrate deploy                         # Déployer en prod
 ```typescript
 // Syntaxe moderne et lisible
 const lowStockItems = await prisma.items.findMany({
-    where: {
-        QUANTITY: { lte: prisma.items.fields.MINIMUM_STOCK }
-    }
+  where: {
+    QUANTITY: { lte: prisma.items.fields.MINIMUM_STOCK },
+  },
 });
 ```
 
@@ -89,37 +91,40 @@ const lowStockItems = await prisma.items.findMany({
 ### Alternative 1: TypeORM
 
 **Avantages :**
+
 - ✅ Plus mature (2016 vs 2019 pour Prisma)
 - ✅ Plus de fonctionnalités avancées (subscribers, listeners)
 - ✅ Support de multiples patterns (Data Mapper, Active Record)
 - ✅ Compatible avec plus de databases
 
 **Inconvénients :**
+
 - ❌ Types générés moins fiables (nécessite `@Entity` decorators)
 - ❌ Syntaxe plus verbeuse (Query Builder complexe)
 - ❌ Migrations moins intuitives
 - ❌ Performance inférieure au query engine Rust de Prisma
 
 **Exemple TypeORM :**
+
 ```typescript
 // ❌ Plus verbeux, types manuels
 @Entity()
 export class Stock {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    label: string;
+  @Column()
+  label: string;
 
-    @OneToMany(() => Item, item => item.stock)
-    items: Item[];
+  @OneToMany(() => Item, item => item.stock)
+  items: Item[];
 }
 
 const stock = await stockRepository
-    .createQueryBuilder("stock")
-    .leftJoinAndSelect("stock.items", "items")
-    .where("stock.id = :id", { id: stockId })
-    .getOne();
+  .createQueryBuilder('stock')
+  .leftJoinAndSelect('stock.items', 'items')
+  .where('stock.id = :id', { id: stockId })
+  .getOne();
 ```
 
 **Pourquoi rejeté :** La verbosité et la complexité du Query Builder ne sont pas justifiées pour un projet de cette taille. Prisma offre une meilleure DX avec moins de boilerplate.
@@ -129,11 +134,13 @@ const stock = await stockRepository
 ### Alternative 2: Drizzle ORM
 
 **Avantages :**
+
 - ✅ Très performant (pas de runtime overhead)
 - ✅ Syntaxe SQL-like (familière pour devs SQL)
 - ✅ Légèreté (bundle size réduit)
 
 **Inconvénients :**
+
 - ❌ Trop récent (2022, communauté petite)
 - ❌ Documentation moins complète
 - ❌ Écosystème immature (peu de ressources, tutoriels)
@@ -146,10 +153,12 @@ const stock = await stockRepository
 ### Alternative 3: Sequelize
 
 **Avantages :**
+
 - ✅ Très mature (2011)
 - ✅ Grande communauté
 
 **Inconvénients :**
+
 - ❌ Type-safety faible en TypeScript
 - ❌ Syntaxe héritée de JavaScript (pas TypeScript-first)
 - ❌ Pas de génération automatique de types
@@ -200,11 +209,13 @@ const stock = await stockRepository
 ### Risques
 
 **Risque 1 : Vendor lock-in**
+
 - **Impact :** Changement d'ORM coûteux
 - **Probabilité :** Faible (Prisma mature et stable)
 - **Mitigation :** Pattern Repository isole Prisma dans la couche Infrastructure
 
 **Risque 2 : Évolution incompatible**
+
 - **Impact :** Breaking changes dans nouvelles versions
 - **Probabilité :** Faible (versioning sémantique respecté)
 - **Mitigation :** Tests d'intégration complets (détection rapide des régressions)
@@ -216,14 +227,17 @@ const stock = await stockRepository
 ### Métriques de succès
 
 ✅ **Performances :**
+
 - Temps de réponse API < 100ms : ✅ Atteint (~50ms)
 - Pas de timeout de connexion : ✅ Vérifié
 
 ✅ **Qualité du code :**
+
 - Erreurs de type : Réduction de 90% depuis migration vers Prisma
 - Couverture tests : 53 tests domaine + 2 tests intégration Prisma
 
 ✅ **Developer Experience :**
+
 - Temps de setup nouveau dev : < 10min (npm install + prisma generate)
 - Satisfaction équipe : ⭐⭐⭐⭐⭐ (auto-complétion + documentation)
 

@@ -5,9 +5,9 @@ name: CI/CD Pipeline - stockhub-back
 
 on:
   push:
-    branches: [ "*" ]  # CI s'exécute sur toutes les branches
+    branches: ['*'] # CI s'exécute sur toutes les branches
   pull_request:
-    branches: [ "*" ]
+    branches: ['*']
   workflow_dispatch:
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: "20.x"
+          node-version: '20.x'
       - run: npm ci
       - run: npx tsc --noEmit
       - run: npm run lint --if-present
@@ -32,13 +32,13 @@ jobs:
     needs:
       - continuous-integration
     environment:
-      name: "Production"
+      name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: "18.x"
+          node-version: '18.x'
 
       - name: Install dependencies
         run: npm ci
@@ -67,8 +67,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "stockhub-back"
-          slot-name: "Production"
+          app-name: 'stockhub-back'
+          slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0AA0D7238FBD4490A877AF8BEC437386 }}
           package: .
-

@@ -22,7 +22,7 @@ interactifs (authorization code flow).
 1. Dans votre application, allez dans **Authentication**
 2. Descendez vers la section **Advanced settings**
 3. **Activez** "Allow public client flows"
-    - Mettez cette option sur **Yes**
+   - Mettez cette option sur **Yes**
 4. Cliquez sur **Save**
 
 ### 3. Configuration des permissions API ⭐ DÉTAILLÉ
@@ -31,18 +31,19 @@ interactifs (authorization code flow).
 2. Vous devez avoir **EXACTEMENT** ces permissions :
 
    **a) Microsoft Graph (permissions déléguées):**
-    - ✅ `openid` - Sign in and read user profile
-    - ✅ `offline_access` - Maintain access to data you have given it access to
+   - ✅ `openid` - Sign in and read user profile
+   - ✅ `offline_access` - Maintain access to data you have given it access to
 
    **b) Votre propre API (si vous en avez exposé une):**
-    - ✅ Votre scope personnalisé (généralement votre `AZURE_CLIENT_ID`)
+   - ✅ Votre scope personnalisé (généralement votre `AZURE_CLIENT_ID`)
 
    **c) Permissions minimales pour ROPC:**
+
    ```
    Microsoft Graph:
    - openid (Delegated)
    - offline_access (Delegated)
-   
+
    Votre API B2C (optionnel):
    - [Votre-Client-ID] (Delegated)
    ```
@@ -53,20 +54,21 @@ interactifs (authorization code flow).
 ### 4. Configuration spécifique pour ROPC dans B2C
 
 1. **Dans votre User Flow (B2C_1_signinsignup):**
-    - Allez dans **Properties**
-    - **Activez** "Username" comme Local account sign-in page
-    - **Application claims** doivent inclure :
-        - ✅ `Object ID` (obligatoire pour votre backend)
-        - ✅ `Display Name`
-        - ✅ `Given Name` et `Surname` (optionnel)
+   - Allez dans **Properties**
+   - **Activez** "Username" comme Local account sign-in page
+   - **Application claims** doivent inclure :
+     - ✅ `Object ID` (obligatoire pour votre backend)
+     - ✅ `Display Name`
+     - ✅ `Given Name` et `Surname` (optionnel)
 
 2. **Permissions API exactes requises:**
+
    ```
    API / Permissions name                          Type        Status
    Microsoft Graph
    ├── openid                                      Delegated   ✅ Granted
    └── offline_access                              Delegated   ✅ Granted
-   
+
    [Votre API B2C] (si applicable)
    └── [Votre-Client-ID]                          Delegated   ✅ Granted
    ```
@@ -77,7 +79,7 @@ Votre helper d'auth utilise automatiquement le bon scope :
 
 ```typescript
 // Pour Azure AD B2C, utilise le client ID comme scope
-const scopes = [process.env.AZURE_CLIENT_ID!]
+const scopes = [process.env.AZURE_CLIENT_ID!];
 ```
 
 ### 6. Test de la configuration

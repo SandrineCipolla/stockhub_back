@@ -25,6 +25,7 @@ Le projet StockHub nécessite un système d'authentification et d'autorisation s
 ### 1. Tier gratuit généreux
 
 **Azure AD B2C** offre :
+
 - ✅ **50,000 utilisateurs actifs mensuels gratuits**
 - ✅ **50,000 authentifications/mois gratuites**
 
@@ -40,6 +41,7 @@ Pour un projet StockHub en phase développement/évaluation, c'est largement suf
 ### 2. Standards OAuth 2.0 / OpenID Connect
 
 Azure AD B2C implémente les **standards ouverts** :
+
 - OAuth 2.0 pour l'autorisation
 - OpenID Connect pour l'authentification
 - JWT (JSON Web Tokens) pour les tokens
@@ -62,10 +64,12 @@ app.use(passport.authenticate('oauth-bearer', { session: false }));
 ### 3. Intégration Microsoft ecosystem
 
 Le backend StockHub utilise déjà Azure :
+
 - Azure MySQL Flexible Server
 - Azure Application Insights (monitoring)
 
 **Avantages intégration :**
+
 - Facturation centralisée (un seul portail Azure)
 - Logs centralisés (Azure Monitor)
 - Réseau privé possible (VNet integration)
@@ -91,11 +95,13 @@ Le backend StockHub utilise déjà Azure :
 ### Alternative 1: Auth0
 
 **Avantages :**
+
 - ✅ Excellent DX (documentation, SDKs)
 - ✅ Interface UI intuitive
 - ✅ Large communauté
 
 **Inconvénients :**
+
 - ❌ Tier gratuit limité : **7,000 MAU** (vs 50,000 Azure)
 - ❌ Prix élevé après : **$23/mois minimum**
 - ❌ Vendor lock-in (plus difficile de migrer qu'avec OAuth standard)
@@ -107,11 +113,13 @@ Le backend StockHub utilise déjà Azure :
 ### Alternative 2: Firebase Authentication
 
 **Avantages :**
+
 - ✅ Gratuit illimité (pas de limite MAU)
 - ✅ Setup très rapide
 - ✅ Bonne intégration avec Firebase (Firestore, etc.)
 
 **Inconvénients :**
+
 - ❌ **Lock-in Google** (écosystème Firebase propriétaire)
 - ❌ Moins de fonctionnalités enterprise (MFA basique)
 - ❌ Pas d'intégration native avec Azure backend
@@ -124,11 +132,13 @@ Le backend StockHub utilise déjà Azure :
 ### Alternative 3: JWT custom (backend maison)
 
 **Avantages :**
+
 - ✅ Contrôle total
 - ✅ Pas de coût externe
 - ✅ Pas de dépendance tierce
 
 **Inconvénients :**
+
 - ❌ **Sécurité à charge** : gestion mots de passe, hashing, salt
 - ❌ Pas de MFA natif
 - ❌ Pas de social logins
@@ -142,11 +152,13 @@ Le backend StockHub utilise déjà Azure :
 ### Alternative 4: AWS Cognito
 
 **Avantages :**
+
 - ✅ Tier gratuit : 50,000 MAU (équivalent Azure)
 - ✅ Intégration AWS native
 - ✅ OAuth 2.0 / OpenID Connect
 
 **Inconvénients :**
+
 - ❌ Backend déjà sur Azure (mixer Azure + AWS = complexité)
 - ❌ DX moins bonne qu'Auth0/Azure (configuration complexe)
 - ❌ Custom UI moins flexible
@@ -201,11 +213,13 @@ Le backend StockHub utilise déjà Azure :
 ### Risques
 
 **Risque 1 : Changement de pricing Azure**
+
 - **Impact :** Coût pourrait augmenter si Microsoft change tier gratuit
 - **Probabilité :** Faible (pricing stable depuis 3+ ans)
 - **Mitigation :** Standards OAuth permettent migration vers Auth0/Cognito si nécessaire
 
 **Risque 2 : Disponibilité service**
+
 - **Impact :** Si Azure AD B2C down, authentification impossible
 - **Probabilité :** Très faible (SLA 99.9%)
 - **Mitigation :** Acceptable pour projet étudiant (pas de SLA contractuel)
@@ -217,16 +231,19 @@ Le backend StockHub utilise déjà Azure :
 ### Métriques de succès
 
 ✅ **Fonctionnel :**
+
 - Authentification JWT fonctionnelle : ✅ Vérifié
 - Middleware Express intégré : ✅ passport-azure-ad
 - Tokens validés côté backend : ✅ Tests E2E passent
 
 ✅ **Sécurité :**
+
 - Pas de mots de passe stockés côté backend : ✅ Vérifié
 - Tokens JWT avec expiration : ✅ exp: 1h (configurable)
 - Middleware rejette tokens invalides : ✅ Tests unitaires
 
 ✅ **Coût :**
+
 - Coût actuel : **$0.00/mois** (tier gratuit)
 - Utilisateurs actifs : < 50 (largement sous la limite)
 

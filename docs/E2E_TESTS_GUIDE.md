@@ -63,6 +63,7 @@ npm run test:e2e
 ### ⚠️ Erreur courante : Serveur non démarré
 
 **Symptôme** :
+
 ```
 Error: apiRequestContext.get: connect ECONNREFUSED ::1:3006
 ```
@@ -87,15 +88,16 @@ Nous avions **3 options principales** pour authentifier les tests E2E :
 import * as msal from '@azure/msal-node';
 
 const request: msal.UsernamePasswordRequest = {
-    scopes: ['access_as_user'],
-    username: 'sandrine.cipolla@gmail.com',
-    password: 'Test@2024',
+  scopes: ['access_as_user'],
+  username: 'sandrine.cipolla@gmail.com',
+  password: 'Test@2024',
 };
 
 const response = await msalClient.acquireTokenByUsernamePassword(request);
 ```
 
 **Avantages** :
+
 - ✅ **Rapide** : Pas de navigateur à lancer
 - ✅ **Simple** : Username + password direct
 - ✅ **Automatique** : Pas d'interaction utilisateur
@@ -103,11 +105,13 @@ const response = await msalClient.acquireTokenByUsernamePassword(request);
 - ✅ **Reproductible** : Même résultat à chaque fois
 
 **Inconvénients** :
+
 - ⚠️ **Déconseillé en production** : Microsoft le déconseille pour les vraies apps
 - ⚠️ **Pas de MFA** : Incompatible avec l'authentification multi-facteurs
 - ⚠️ **Comptes locaux uniquement** : Ne fonctionne pas avec Google, Facebook, etc.
 
 **Pourquoi on l'a choisi** :
+
 - On teste uniquement l'API backend (pas de frontend)
 - On a besoin d'automatisation complète pour les tests
 - C'est acceptable pour les tests (pas pour la production)
@@ -128,23 +132,26 @@ await browser.close();
 
 // Puis utiliser le token pour les requêtes API
 await request.get('/api/v2/stocks', {
-    headers: { 'Authorization': `Bearer ${token}` }
+  headers: { Authorization: `Bearer ${token}` },
 });
 ```
 
 **Avantages** :
+
 - ✅ **Simule le vrai comportement utilisateur**
 - ✅ **Fonctionne avec MFA, redirections, providers sociaux**
 - ✅ **Plus réaliste**
 - ✅ **Standard pour tests E2E frontend**
 
 **Inconvénients** :
+
 - ❌ **Lent** : Doit lancer un navigateur
 - ❌ **Complexe** : Gestion des sélecteurs, timeouts, popups
 - ❌ **Overkill pour API** : On n'a pas de page web à tester
 - ❌ **Flaky** : Peut être instable (changements d'UI Azure)
 
 **Pourquoi on ne l'a PAS choisi** :
+
 - On teste uniquement l'API backend, pas le frontend
 - Pas besoin de lancer un navigateur juste pour obtenir un token
 - Trop complexe pour notre cas d'usage
@@ -158,40 +165,43 @@ await request.get('/api/v2/stocks', {
 ```typescript
 const axios = require('axios');
 const params = new URLSearchParams({
-    grant_type: 'password',
-    client_id: process.env.AZURE_CLIENT_ID,
-    username: process.env.AZURE_TEST_USERNAME,
-    password: process.env.AZURE_TEST_PASSWORD,
-    scope: 'https://stockhubb2c.onmicrosoft.com/stockhub-api/FilesRead'
+  grant_type: 'password',
+  client_id: process.env.AZURE_CLIENT_ID,
+  username: process.env.AZURE_TEST_USERNAME,
+  password: process.env.AZURE_TEST_PASSWORD,
+  scope: 'https://stockhubb2c.onmicrosoft.com/stockhub-api/FilesRead',
 });
 
 const response = await axios.post(tokenEndpoint, params);
 ```
 
 **Avantages** :
+
 - ✅ **Très simple** : Pas de librairie MSAL
 - ✅ **Contrôle total** : On voit exactement ce qui se passe
 
 **Inconvénients** :
+
 - ❌ **Bas niveau** : Il faut gérer manuellement tout
 - ❌ **Moins maintenable** : Si Azure change son API, ça casse
 - ❌ **Pas de gestion d'erreurs** : MSAL gère beaucoup de cas automatiquement
 - ❌ **Réinventer la roue** : MSAL fait déjà ce travail
 
 **Pourquoi on ne l'a PAS choisi** :
+
 - MSAL est mieux maintenu et plus robuste
 - Pas besoin de réinventer ce qui existe déjà
 
 ### Comparaison des méthodes
 
-| Critère | ROPC (notre choix) | Playwright Interactive | HTTP Direct |
-|---------|-------------------|------------------------|-------------|
-| **Vitesse** | ✅ Rapide (< 1s) | ❌ Lent (~5-10s) | ✅ Rapide (< 1s) |
-| **Complexité** | ✅ Simple | ❌ Complexe | ✅ Très simple |
-| **Adapté backend API** | ✅ Parfait | ❌ Overkill | ✅ OK |
-| **Adapté frontend UI** | ❌ Non | ✅ Parfait | ❌ Non |
-| **Maintenabilité** | ✅ Bonne (MSAL) | ⚠️ Moyenne (UI peut changer) | ❌ Faible |
-| **Recommandé par Microsoft** | ⚠️ Tests uniquement | ✅ Oui pour E2E UI | ❌ Non |
+| Critère                      | ROPC (notre choix)  | Playwright Interactive       | HTTP Direct      |
+| ---------------------------- | ------------------- | ---------------------------- | ---------------- |
+| **Vitesse**                  | ✅ Rapide (< 1s)    | ❌ Lent (~5-10s)             | ✅ Rapide (< 1s) |
+| **Complexité**               | ✅ Simple           | ❌ Complexe                  | ✅ Très simple   |
+| **Adapté backend API**       | ✅ Parfait          | ❌ Overkill                  | ✅ OK            |
+| **Adapté frontend UI**       | ❌ Non              | ✅ Parfait                   | ❌ Non           |
+| **Maintenabilité**           | ✅ Bonne (MSAL)     | ⚠️ Moyenne (UI peut changer) | ❌ Faible        |
+| **Recommandé par Microsoft** | ⚠️ Tests uniquement | ✅ Oui pour E2E UI           | ❌ Non           |
 
 ### Notre configuration finale
 
@@ -204,22 +214,25 @@ const response = await axios.post(tokenEndpoint, params);
 **Politique Azure B2C** : `B2C_1_ROPC` (spéciale pour ROPC)
 
 **Utilisation** :
+
 ```typescript
 test.beforeAll(async () => {
-    const authHelper = createAzureAuthHelper();
-    authToken = await authHelper.getBearerToken();
-    // Token utilisé pour tous les appels API
+  const authHelper = createAzureAuthHelper();
+  authToken = await authHelper.getBearerToken();
+  // Token utilisé pour tous les appels API
 });
 ```
 
 ### ⚠️ Important : ROPC est UNIQUEMENT pour les tests
 
 **NE JAMAIS utiliser ROPC dans une vraie application** :
+
 - 🚫 Pas pour du code de production
 - 🚫 Pas pour de vrais utilisateurs finaux
 - 🚫 Pas si vous avez besoin de MFA
 
 **Utilisation acceptable de ROPC** :
+
 - ✅ Tests E2E backend automatisés (notre cas)
 - ✅ Tests d'intégration
 - ✅ Scripts CI/CD
@@ -232,23 +245,23 @@ test.beforeAll(async () => {
 ```typescript
 // Setup une seule fois
 test('setup', async ({ page }) => {
-    await page.goto('https://stockhub-frontend.com');
-    await page.click('Sign in');
-    await page.fill('email', 'test@test.com');
-    await page.fill('password', 'Test@2024');
-    await page.click('Submit');
+  await page.goto('https://stockhub-frontend.com');
+  await page.click('Sign in');
+  await page.fill('email', 'test@test.com');
+  await page.fill('password', 'Test@2024');
+  await page.click('Submit');
 
-    // Sauvegarder la session
-    await page.context().storageState({ path: 'auth.json' });
+  // Sauvegarder la session
+  await page.context().storageState({ path: 'auth.json' });
 });
 
 // Réutiliser dans tous les tests
 test.use({ storageState: 'auth.json' });
 
 test('can create stock', async ({ page }) => {
-    // Déjà authentifié grâce au storage state !
-    await page.goto('/stocks');
-    await page.click('Create stock');
+  // Déjà authentifié grâce au storage state !
+  await page.goto('/stocks');
+  await page.click('Create stock');
 });
 ```
 
@@ -368,12 +381,14 @@ authToken = await authHelper.getBearerToken();
 ```
 
 **Ce qui se passe** :
+
 1. Connexion à Azure AD B2C avec MSAL Node
 2. Utilisation du flow ROPC (username + password)
 3. Obtention d'un token JWT Bearer
 4. Le token est utilisé pour tous les appels API suivants
 
 **Logs** :
+
 ```
 🔐 Authenticating with Azure AD B2C...
 ✅ Successfully obtained Azure AD B2C token
@@ -386,15 +401,16 @@ authToken = await authHelper.getBearerToken();
 
 ```typescript
 await request.post(`${apiV1}/stocks`, {
-    headers: { 'Authorization': authToken },
-    data: {
-        LABEL: 'E2E Test Stock with Azure AD',
-        DESCRIPTION: 'Stock created via E2E test'
-    }
+  headers: { Authorization: authToken },
+  data: {
+    LABEL: 'E2E Test Stock with Azure AD',
+    DESCRIPTION: 'Stock created via E2E test',
+  },
 });
 ```
 
 **Vérifications** :
+
 - ✅ Status 201 Created
 - ✅ Message de confirmation
 - ✅ Récupération du stock ID
@@ -404,6 +420,7 @@ await request.post(`${apiV1}/stocks`, {
 **API** : `POST /api/v1/stocks/{stockId}/items`
 
 **Item 1 - Pommes Bio (stock normal)** :
+
 ```typescript
 {
     LABEL: 'Pommes Bio',
@@ -414,6 +431,7 @@ await request.post(`${apiV1}/stocks`, {
 ```
 
 **Item 2 - Bananes (stock faible)** :
+
 ```typescript
 {
     LABEL: 'Bananes',
@@ -424,6 +442,7 @@ await request.post(`${apiV1}/stocks`, {
 ```
 
 **Logs** :
+
 ```
 ✅ First item (Pommes) added successfully
 🍎 Item ID 1: 117
@@ -436,6 +455,7 @@ await request.post(`${apiV1}/stocks`, {
 **API** : `GET /api/v2/stocks/{stockId}/items`
 
 **Vérifications** :
+
 - ✅ Status 200 OK
 - ✅ Array de 2 items retourné
 - ✅ Pommes : 50 unités
@@ -443,6 +463,7 @@ await request.post(`${apiV1}/stocks`, {
 - ✅ Gestion des champs majuscules/minuscules (V1 vs V2)
 
 **Logs** :
+
 ```
 ✅ Stock visualization successful - Found 2 items
 🍎 Pommes Bio: 50 units
@@ -455,17 +476,19 @@ await request.post(`${apiV1}/stocks`, {
 
 ```typescript
 await request.put(`${apiV1}/stocks/${stockId}/items/${itemId1}`, {
-    headers: { 'Authorization': authToken },
-    data: { QUANTITY: 75 }
+  headers: { Authorization: authToken },
+  data: { QUANTITY: 75 },
 });
 ```
 
 **Vérifications** :
+
 - ✅ Status 200 OK
 - ✅ Quantité mise à jour : 50 → 75
 - ✅ Vérification via GET
 
 **Logs** :
+
 ```
 ✅ Item quantity updated from 50 to 75
 ✅ Quantity update verified: 75 units
@@ -476,11 +499,13 @@ await request.put(`${apiV1}/stocks/${stockId}/items/${itemId1}`, {
 **API** : `GET /api/v1/low-stock-items`
 
 **Vérifications** :
+
 - ✅ Status 200 OK
 - ✅ Bananes détectées (5 unités < 20 minimum)
 - ✅ Pommes non détectées (75 unités > 10 minimum)
 
 **Logs** :
+
 ```
 ✅ Low stock check successful - Found 1 low stock items
 🚨 Low stock item: Bananes (5/20)
@@ -493,6 +518,7 @@ await request.put(`${apiV1}/stocks/${stockId}/items/${itemId1}`, {
 Exécuté dans `test.afterAll()` pour nettoyer les données de test.
 
 **Logs** :
+
 ```
 🧹 Cleaning up test data...
 ✅ Test stock 57 deleted successfully
@@ -508,11 +534,13 @@ Exécuté dans `test.afterAll()` pour nettoyer les données de test.
 **LE problème le plus courant !**
 
 **Erreur** :
+
 ```
 Error: apiRequestContext.get: connect ECONNREFUSED ::1:3006
 ```
 
 **Solution** :
+
 ```bash
 # Terminal 1
 npm run start:dev
@@ -537,18 +565,21 @@ npm run test:e2e
 **Solution adoptée** : Utiliser un compte personnel créé via le frontend
 
 **Comment créer l'utilisateur** :
+
 1. Ouvrir l'application frontend StockHub
 2. Cliquer sur "Sign up" (inscription)
 3. Créer un compte avec email + mot de passe permanent
 4. Utiliser ces credentials dans `.env.test`
 
 **Avantages** :
+
 - ✅ Mot de passe permanent (pas temporaire)
 - ✅ Pas de changement requis au premier login
 - ✅ Compatible ROPC
 - ✅ Fonctionne immédiatement
 
 **TODO pour le futur** :
+
 - Trouver comment créer programmatiquement un utilisateur B2C avec mot de passe permanent
 - Documentation à consulter :
   - [Microsoft Graph API - B2C User Management](https://learn.microsoft.com/en-us/graph/api/user-post-users)
@@ -563,8 +594,8 @@ npm run test:e2e
 ```typescript
 // playwright.config.ts
 export default defineConfig({
-  workers: 1,              // UN SEUL worker
-  fullyParallel: false,    // Pas de parallélisme
+  workers: 1, // UN SEUL worker
+  fullyParallel: false, // Pas de parallélisme
   // ...
 });
 ```
@@ -600,6 +631,7 @@ const quantity = item.quantity || item.QUANTITY;
 ### Architecture des tests
 
 Les tests E2E utilisent :
+
 - **Playwright** : Framework de test
 - **@azure/msal-node** : Authentification ROPC
 - **dotenv** : Chargement des variables d'environnement
@@ -663,6 +695,7 @@ logLevel: 3, // Verbose logging
 ✅ **Les tests E2E fonctionnent !**
 
 **Pour lancer les tests** :
+
 1. Démarrer le serveur : `npm run start:dev`
 2. Lancer les tests : `npm run test:e2e`
 

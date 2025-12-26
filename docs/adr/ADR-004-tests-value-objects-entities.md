@@ -17,10 +17,12 @@ Cette question soulève un débat légitime : **où placer les tests dans une ar
 ### Contexte technique
 
 Notre architecture DDD/CQRS place la **logique métier dans le domaine** :
+
 - **Value Objects :** Encapsulent validation (ex: `StockLabel` doit avoir 3-50 caractères)
 - **Entities :** Encapsulent règles business (ex: `Stock.addItem()` interdit les duplicates)
 
 **Exemple concret :**
+
 ```typescript
 // Value Object avec validation
 export class StockLabel {
@@ -84,11 +86,13 @@ describe('Stock.addItem()', () => {
 ### 2. Feedback immédiat (< 1 seconde)
 
 **Tests unitaires domaine (53 tests) :**
+
 - Temps d'exécution : **~200ms**
 - Pas d'I/O (pas de DB, pas de HTTP)
 - Exécutables en local sans infrastructure
 
 **Tests d'intégration (2 tests) :**
+
 - Temps d'exécution : **~2-3 secondes**
 - Nécessitent DB de test (Docker, seed data)
 - Plus lents à itérer
@@ -100,6 +104,7 @@ describe('Stock.addItem()', () => {
 **Principe :** Tester la logique métier **sans** la complexité de l'infrastructure.
 
 **Sans tests domaine (seulement intégration) :**
+
 ```typescript
 // ❌ Test d'intégration qui teste TOUT
 it('should reject duplicate items via API', async () => {
@@ -121,6 +126,7 @@ it('should reject duplicate items via API', async () => {
 ```
 
 **Avec tests domaine :**
+
 ```typescript
 // ✅ Test unitaire qui teste UNIQUEMENT la règle métier
 it('should reject duplicate items', () => {
@@ -176,6 +182,7 @@ addItem(params: {...}) {
 ```
 
 **Le test unitaire échoue immédiatement :**
+
 ```
 ❌ FAIL: should reject duplicate items (case-insensitive)
 Expected: Error('already exists')
@@ -205,10 +212,12 @@ it('should call repository.addItemToStock()', async () => {
 ```
 
 **Avantages :**
+
 - ✅ Tests rapides (mocks)
 - ✅ Isole la responsabilité du Handler
 
 **Inconvénients :**
+
 - ❌ Ne teste PAS la validation métier (dans `Stock.addItem()`)
 - ❌ Mock peut masquer des bugs (faux positif)
 - ❌ Ne documente pas les règles business
@@ -222,10 +231,12 @@ it('should call repository.addItemToStock()', async () => {
 **Principe :** Tester uniquement via les repositories Prisma (avec DB de test).
 
 **Avantages :**
+
 - ✅ Teste la stack complète
 - ✅ Détecte bugs SQL, mappings Prisma
 
 **Inconvénients :**
+
 - ❌ **Lent** : 2-3 secondes par test (vs 200ms pour 53 tests domaine)
 - ❌ **Setup complexe** : nécessite Docker, seed data
 - ❌ **Diagnostic difficile** : Un test qui échoue peut être causé par DB, Prisma, ou logique métier
@@ -284,10 +295,12 @@ it('should call repository.addItemToStock()', async () => {
 ### Risques
 
 **Risque 1 : Tests domaine passent, mais intégration échoue**
+
 - **Cause :** Mapping Prisma incorrect (ex: `LABEL` au lieu de `label`)
 - **Mitigation :** Tests d'intégration complémentaires (2 tests repository)
 
 **Risque 2 : Faux sentiment de sécurité**
+
 - **Cause :** Tests unitaires peuvent masquer bugs d'intégration
 - **Mitigation :** Pyramide de tests (unitaires + intégration + E2E)
 
@@ -298,15 +311,18 @@ it('should call repository.addItemToStock()', async () => {
 ### Métriques de succès
 
 ✅ **Couverture :**
+
 - Logique métier : **100%** des méthodes utilisées en production
 - Value Objects : **3 fichiers** testés (StockLabel, StockDescription, Quantity)
 - Entities : **2 fichiers** testés (Stock, StockItem)
 
 ✅ **Performance :**
+
 - Temps exécution 53 tests domaine : **~200ms** ✅
 - Feedback instantané pour TDD
 
 ✅ **Qualité :**
+
 - Bugs détectés avant merge : **5+ cas** (duplicates case-sensitive, quantité négative, etc.)
 - Régressions évitées : **2 cas** (refactoring `addItem()`)
 
@@ -327,6 +343,7 @@ it('should call repository.addItemToStock()', async () => {
 **Réponse à l'encadrant :**
 
 > "Les tests d'entités ne sont pas redondants avec les tests d'intégration. Ils servent un objectif différent :
+>
 > - **Tests domaine :** Vérifient la **logique métier** de manière isolée et rapide (200ms)
 > - **Tests d'intégration :** Vérifient l'**intégration** avec la DB (mappings, transactions)
 > - **Tests E2E :** Vérifient le **flux complet** (API + Auth + DB)

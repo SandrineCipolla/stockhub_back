@@ -1,12 +1,16 @@
-import passportAzureAd from 'passport-azure-ad';
+import passportAzureAd, { ITokenPayload, VerifyCallback } from 'passport-azure-ad';
 import express from 'express';
-import { CustomError } from '@core/errors';
 import { rootMain } from '@utils/logger';
 
 import { ReadUserRepository } from '@services/readUserRepository';
 import { WriteUserRepository } from '@services/writeUserRepository';
 import { UserService } from '@services/userService';
 import { authConfigoptions } from '@config/authenticationConfig';
+
+interface AzureB2CTokenPayload extends ITokenPayload {
+  emails?: string[];
+  error_description?: string;
+}
 
 async function createUserService() {
   const readUserRepository = new ReadUserRepository();
@@ -17,11 +21,7 @@ async function createUserService() {
 
 export const authConfigbearerStrategy = new passportAzureAd.BearerStrategy(
   authConfigoptions,
-  async (
-    req: express.Request,
-    token: any,
-    done: (err: CustomError | null, user?: any, info?: any) => void
-  ) => {
+  async (req: express.Request, token: AzureB2CTokenPayload, done: VerifyCallback) => {
     rootMain.debug('Token received:', token);
     // 💡 Cas spécial : utilisateur a cliqué sur "Forgot password"
     if (token?.error_description?.includes('AADB2C90118')) {
@@ -35,7 +35,12 @@ export const authConfigbearerStrategy = new passportAzureAd.BearerStrategy(
       const resetUrl = `https://${domain}/${tenant}/oauth2/v2.0/authorize?p=${resetPolicy}&client_id=${clientId}&nonce=defaultNonce&redirect_uri=${redirectUri}&scope=openid&response_type=id_token&prompt=login`;
 
       // Redirige directement vers le flow reset
-      return (req as any).res.redirect(resetUrl);
+      // Note: This may not work as expected - BearerStrategy doesn't have access to res
+      // This is a workaround for password reset flow
+      interface RequestWithRes extends express.Request {
+        res: express.Response;
+      }
+      return (req as RequestWithRes).res.redirect(resetUrl);
     }
     // 🔒 Vérification du token normal
     if (!Object.prototype.hasOwnProperty.call(token, 'scp')) {
@@ -47,6 +52,10 @@ export const authConfigbearerStrategy = new passportAzureAd.BearerStrategy(
     try {
       const userService = await createUserService();
 
+      if (!token.emails || token.emails.length === 0) {
+        return done(new Error('No email found in token'), null);
+      }
+
       const email = token.emails[0];
       let userID = await userService.convertOIDtoUserID(email);
       if (userID.empty) {
@@ -56,7 +65,7 @@ export const authConfigbearerStrategy = new passportAzureAd.BearerStrategy(
       done(null, { userID }, token);
     } catch (error) {
       rootMain.error('Error during authentication:', error);
-      done(error as CustomError, null);
+      done(error as Error, null);
     }
   }
 );

@@ -35,7 +35,7 @@ export class AzureAuthHelper {
       },
       system: {
         loggerOptions: {
-          loggerCallback(loglevel: any, message: any, containsPii: any) {
+          loggerCallback(_loglevel: any, message: any, containsPii: any) {
             if (containsPii) return;
             console.log(message);
           },

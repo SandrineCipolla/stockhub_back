@@ -33,7 +33,7 @@ describe('Stock API V2 Integration Tests', () => {
     app.use(express.json());
 
     // Mock authentication middleware
-    app.use((req, res, next) => {
+    app.use((req, _res, next) => {
       (req as any).userID = 'test-user-oid-123';
       next();
     });
