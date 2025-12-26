@@ -1,5 +1,10 @@
 import express from 'express';
 import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
+import {
+  CreateStockRequest,
+  AddItemToStockRequest,
+  UpdateItemQuantityRequest,
+} from '@api/types/StockRequestTypes';
 import { UserService } from '@services/userService';
 import { CreateStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/CreateStockCommandHandler';
 import { AddItemToStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/AddItemToStockCommandHandler';
@@ -29,7 +34,7 @@ export class StockControllerManipulation {
     return OID;
   }
 
-  public async createStock(req: AuthenticatedRequest, res: express.Response) {
+  public async createStock(req: CreateStockRequest, res: express.Response) {
     try {
       const OID = this.getValidatedOID(req, res);
       if (!OID) return;
@@ -51,7 +56,7 @@ export class StockControllerManipulation {
     }
   }
 
-  public async addItemToStock(req: AuthenticatedRequest, res: express.Response) {
+  public async addItemToStock(req: AddItemToStockRequest, res: express.Response) {
     try {
       const OID = this.getValidatedOID(req, res);
       if (!OID) return;
@@ -78,7 +83,7 @@ export class StockControllerManipulation {
     }
   }
 
-  public async updateItemQuantity(req: AuthenticatedRequest, res: express.Response) {
+  public async updateItemQuantity(req: UpdateItemQuantityRequest, res: express.Response) {
     try {
       const OID = this.getValidatedOID(req, res);
       if (!OID) return;

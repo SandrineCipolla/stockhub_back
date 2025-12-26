@@ -1,7 +1,11 @@
 import { StockControllerManipulation } from '@api/controllers/StockControllerManipulation';
 import { sendError } from '@core/errors';
 import { HTTP_CODE_CREATED, HTTP_CODE_OK } from '@utils/httpCodes';
-import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
+import {
+  CreateStockRequest,
+  AddItemToStockRequest,
+  UpdateItemQuantityRequest,
+} from '@api/types/StockRequestTypes';
 
 jest.mock('@core/errors', () => ({
   sendError: jest.fn(),
@@ -9,7 +13,7 @@ jest.mock('@core/errors', () => ({
 
 describe('StockControllerManipulation', () => {
   let controller: StockControllerManipulation;
-  let req: Partial<AuthenticatedRequest>;
+  let req: any;
   let res: any;
   let mockCreateStockHandler: any;
   let mockAddItemHandler: any;
@@ -19,10 +23,6 @@ describe('StockControllerManipulation', () => {
   beforeEach(() => {
     mockUserService = {
       convertOIDtoUserID: jest.fn(),
-    };
-
-    mockCreateStockHandler = {
-      handle: jest.fn(),
     };
 
     mockAddItemHandler = {
@@ -71,7 +71,7 @@ describe('StockControllerManipulation', () => {
 
         mockCreateStockHandler.handle = jest.fn().mockResolvedValue(mockStock);
 
-        await controller.createStock(req as AuthenticatedRequest, res);
+        await controller.createStock(req as CreateStockRequest, res);
 
         expect(res.status).toHaveBeenCalledWith(HTTP_CODE_CREATED);
         expect(res.json).toHaveBeenCalledWith(mockStock);
@@ -91,7 +91,7 @@ describe('StockControllerManipulation', () => {
         const error = new Error('fail');
         mockUserService.convertOIDtoUserID = jest.fn().mockRejectedValue(error);
 
-        await controller.createStock(req as AuthenticatedRequest, res);
+        await controller.createStock(req as CreateStockRequest, res);
 
         expect(sendError).toHaveBeenCalled();
       });
@@ -120,7 +120,7 @@ describe('StockControllerManipulation', () => {
 
         mockAddItemHandler.handle = jest.fn().mockResolvedValue(mockStock);
 
-        await controller.addItemToStock(req as AuthenticatedRequest, res);
+        await controller.addItemToStock(req as AddItemToStockRequest, res);
 
         expect(res.status).toHaveBeenCalledWith(HTTP_CODE_CREATED);
         expect(res.json).toHaveBeenCalledWith(mockStock);
@@ -140,7 +140,7 @@ describe('StockControllerManipulation', () => {
         const error = new Error('fail to add item');
         mockUserService.convertOIDtoUserID = jest.fn().mockRejectedValue(error);
 
-        await controller.addItemToStock(req as AuthenticatedRequest, res);
+        await controller.addItemToStock(req as AddItemToStockRequest, res);
 
         expect(sendError).toHaveBeenCalled();
       });
@@ -166,7 +166,7 @@ describe('StockControllerManipulation', () => {
 
         mockUpdateQuantityHandler.handle = jest.fn().mockResolvedValue(mockStock);
 
-        await controller.updateItemQuantity(req as AuthenticatedRequest, res);
+        await controller.updateItemQuantity(req as UpdateItemQuantityRequest, res);
 
         expect(res.status).toHaveBeenCalledWith(HTTP_CODE_OK);
         expect(res.json).toHaveBeenCalledWith(mockStock);
@@ -185,7 +185,7 @@ describe('StockControllerManipulation', () => {
         const error = new Error('fail to update quantity');
         mockUserService.convertOIDtoUserID = jest.fn().mockRejectedValue(error);
 
-        await controller.updateItemQuantity(req as AuthenticatedRequest, res);
+        await controller.updateItemQuantity(req as UpdateItemQuantityRequest, res);
 
         expect(sendError).toHaveBeenCalled();
       });

@@ -36,8 +36,11 @@ export const authConfigbearerStrategy = new passportAzureAd.BearerStrategy(
 
       // Redirige directement vers le flow reset
       // Note: This may not work as expected - BearerStrategy doesn't have access to res
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (req as any).res.redirect(resetUrl);
+      // This is a workaround for password reset flow
+      interface RequestWithRes extends express.Request {
+        res: express.Response;
+      }
+      return (req as RequestWithRes).res.redirect(resetUrl);
     }
     // 🔒 Vérification du token normal
     if (!Object.prototype.hasOwnProperty.call(token, 'scp')) {

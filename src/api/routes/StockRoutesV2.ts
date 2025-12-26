@@ -2,7 +2,11 @@ import { StockVisualizationService } from '@domain/stock-management/visualizatio
 import { UserService } from '@services/userService';
 import { StockControllerVisualization } from '@api/controllers/StockControllerVisualization';
 import { StockControllerManipulation } from '@api/controllers/StockControllerManipulation';
-import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
+import {
+  CreateStockRequest,
+  AddItemToStockRequest,
+  UpdateItemQuantityRequest,
+} from '@api/types/StockRequestTypes';
 import express, { Router } from 'express';
 import { ReadUserRepository } from '@services/readUserRepository';
 import { WriteUserRepository } from '@services/writeUserRepository';
@@ -61,24 +65,21 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   logger.info('Routes for /stocks/:stockId/items configured');
 
   // Manipulation routes
-  router.post('/stocks', async (req: express.Request, res: express.Response) => {
-    await manipulationController.createStock(req as AuthenticatedRequest, res);
+  router.post('/stocks', async (req, res: express.Response) => {
+    await manipulationController.createStock(req as CreateStockRequest, res);
   });
 
   logger.info('Routes for POST /stocks configured');
 
-  router.post('/stocks/:stockId/items', async (req: express.Request, res: express.Response) => {
-    await manipulationController.addItemToStock(req as AuthenticatedRequest, res);
+  router.post('/stocks/:stockId/items', async (req, res: express.Response) => {
+    await manipulationController.addItemToStock(req as AddItemToStockRequest, res);
   });
 
   logger.info('Routes for POST /stocks/:stockId/items configured');
 
-  router.patch(
-    '/stocks/:stockId/items/:itemId',
-    async (req: express.Request, res: express.Response) => {
-      await manipulationController.updateItemQuantity(req as AuthenticatedRequest, res);
-    }
-  );
+  router.patch('/stocks/:stockId/items/:itemId', async (req, res: express.Response) => {
+    await manipulationController.updateItemQuantity(req as UpdateItemQuantityRequest, res);
+  });
 
   logger.info('Routes for PATCH /stocks/:stockId/items/:itemId configured');
 
