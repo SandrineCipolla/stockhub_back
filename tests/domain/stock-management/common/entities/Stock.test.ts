@@ -3,6 +3,35 @@ import { StockItem } from '@domain/stock-management/common/entities/StockItem';
 import { StockLabel } from '@domain/stock-management/common/value-objects/StockLabel';
 import { StockDescription } from '@domain/stock-management/common/value-objects/StockDescription';
 
+// Test helpers to reduce duplication
+const createTestStock = (overrides?: {
+  label?: string;
+  description?: string;
+  category?: string;
+  userId?: number;
+}) => {
+  return Stock.create({
+    label: overrides?.label ?? 'Stock 1',
+    description: overrides?.description ?? 'Description 1',
+    category: overrides?.category ?? 'alimentation',
+    userId: overrides?.userId ?? 1,
+  });
+};
+
+const createTestItem = (overrides?: {
+  label?: string;
+  description?: string;
+  quantity?: number;
+  minimumStock?: number;
+}) => {
+  return {
+    label: overrides?.label ?? 'Tomates',
+    description: overrides?.description ?? 'Tomates fraîches',
+    quantity: overrides?.quantity ?? 10,
+    minimumStock: overrides?.minimumStock ?? 3,
+  };
+};
+
 describe('Stock', () => {
   describe('create()', () => {
     describe('when creating with Value Objects', () => {
@@ -92,19 +121,9 @@ describe('Stock', () => {
   describe('addItem()', () => {
     describe('when adding a valid item', () => {
       it('should add the item to the stock', () => {
-        const stock = Stock.create({
-          label: 'Stock 1',
-          description: 'Description 1',
-          category: 'alimentation',
-          userId: 1,
-        });
+        const stock = createTestStock();
 
-        const item = stock.addItem({
-          label: 'Tomates',
-          description: 'Tomates fraîches',
-          quantity: 10,
-          minimumStock: 3,
-        });
+        const item = stock.addItem(createTestItem());
 
         expect(stock.items).toHaveLength(1);
         expect(stock.items[0]).toBe(item);
@@ -116,77 +135,45 @@ describe('Stock', () => {
 
     describe('when label is empty', () => {
       it('should throw an error', () => {
-        const stock = Stock.create({
-          label: 'Stock 1',
-          description: 'Description 1',
-          category: 'alimentation',
-          userId: 1,
-        });
+        const stock = createTestStock();
 
-        expect(() =>
-          stock.addItem({
-            label: '',
-            quantity: 10,
-          })
-        ).toThrow('Item label cannot be empty');
+        expect(() => stock.addItem(createTestItem({ label: '' }))).toThrow(
+          'Item label cannot be empty'
+        );
       });
     });
 
     describe('when quantity is negative', () => {
       it('should throw an error', () => {
-        const stock = Stock.create({
-          label: 'Stock 1',
-          description: 'Description 1',
-          category: 'alimentation',
-          userId: 1,
-        });
+        const stock = createTestStock();
 
-        expect(() =>
-          stock.addItem({
-            label: 'Item 1',
-            quantity: -5,
-          })
-        ).toThrow('Item quantity cannot be negative');
+        expect(() => stock.addItem(createTestItem({ label: 'Item 1', quantity: -5 }))).toThrow(
+          'Item quantity cannot be negative'
+        );
       });
     });
 
     describe('when item with same label already exists', () => {
       it('should throw an error', () => {
-        const stock = Stock.create({
-          label: 'Stock 1',
-          description: 'Description 1',
-          category: 'alimentation',
-          userId: 1,
-        });
+        const stock = createTestStock();
 
-        stock.addItem({ label: 'Tomates', quantity: 10 });
+        stock.addItem(createTestItem());
 
-        expect(() =>
-          stock.addItem({
-            label: 'Tomates',
-            quantity: 5,
-          })
-        ).toThrow('Item with label "Tomates" already exists in this stock');
+        expect(() => stock.addItem(createTestItem({ quantity: 5 }))).toThrow(
+          'Item with label "Tomates" already exists in this stock'
+        );
       });
     });
 
     describe('when item with same label but different case', () => {
       it('should throw an error', () => {
-        const stock = Stock.create({
-          label: 'Stock 1',
-          description: 'Description 1',
-          category: 'alimentation',
-          userId: 1,
-        });
+        const stock = createTestStock();
 
-        stock.addItem({ label: 'Tomates', quantity: 10 });
+        stock.addItem(createTestItem());
 
-        expect(() =>
-          stock.addItem({
-            label: 'TOMATES',
-            quantity: 5,
-          })
-        ).toThrow('Item with label "TOMATES" already exists in this stock');
+        expect(() => stock.addItem(createTestItem({ label: 'TOMATES', quantity: 5 }))).toThrow(
+          'Item with label "TOMATES" already exists in this stock'
+        );
       });
     });
   });
@@ -194,14 +181,9 @@ describe('Stock', () => {
   describe('updateItemQuantity()', () => {
     describe('when updating with a valid quantity', () => {
       it('should update the item quantity', () => {
-        const stock = Stock.create({
-          label: 'Stock 1',
-          description: 'Description 1',
-          category: 'alimentation',
-          userId: 1,
-        });
+        const stock = createTestStock();
 
-        const item = stock.addItem({ label: 'Tomates', quantity: 10 });
+        const item = stock.addItem(createTestItem());
 
         stock.updateItemQuantity(item.ID, 25);
 
@@ -211,14 +193,9 @@ describe('Stock', () => {
 
     describe('when quantity is negative', () => {
       it('should throw an error', () => {
-        const stock = Stock.create({
-          label: 'Stock 1',
-          description: 'Description 1',
-          category: 'alimentation',
-          userId: 1,
-        });
+        const stock = createTestStock();
 
-        const item = stock.addItem({ label: 'Tomates', quantity: 10 });
+        const item = stock.addItem(createTestItem());
 
         expect(() => stock.updateItemQuantity(item.ID, -5)).toThrow('Quantity cannot be negative');
       });
@@ -226,12 +203,7 @@ describe('Stock', () => {
 
     describe('when item does not exist', () => {
       it('should throw an error', () => {
-        const stock = Stock.create({
-          label: 'Stock 1',
-          description: 'Description 1',
-          category: 'alimentation',
-          userId: 1,
-        });
+        const stock = createTestStock();
 
         expect(() => stock.updateItemQuantity(999, 10)).toThrow(
           'Item with ID 999 not found in this stock'
@@ -243,15 +215,10 @@ describe('Stock', () => {
   describe('getLowStockItems()', () => {
     describe('when no items are low on stock', () => {
       it('should return an empty array', () => {
-        const stock = Stock.create({
-          label: 'Stock 1',
-          description: 'Description 1',
-          category: 'alimentation',
-          userId: 1,
-        });
+        const stock = createTestStock();
 
-        stock.addItem({ label: 'Tomates', quantity: 10, minimumStock: 3 });
-        stock.addItem({ label: 'Carottes', quantity: 15, minimumStock: 5 });
+        stock.addItem(createTestItem());
+        stock.addItem(createTestItem({ label: 'Carottes', quantity: 15, minimumStock: 5 }));
 
         expect(stock.getLowStockItems()).toHaveLength(0);
       });
@@ -259,16 +226,11 @@ describe('Stock', () => {
 
     describe('when some items are low on stock', () => {
       it('should return only the low stock items', () => {
-        const stock = Stock.create({
-          label: 'Stock 1',
-          description: 'Description 1',
-          category: 'alimentation',
-          userId: 1,
-        });
+        const stock = createTestStock();
 
-        stock.addItem({ label: 'Tomates', quantity: 2, minimumStock: 5 });
-        stock.addItem({ label: 'Carottes', quantity: 15, minimumStock: 3 });
-        stock.addItem({ label: 'Pommes', quantity: 1, minimumStock: 10 });
+        stock.addItem(createTestItem({ quantity: 2, minimumStock: 5 }));
+        stock.addItem(createTestItem({ label: 'Carottes', quantity: 15, minimumStock: 3 }));
+        stock.addItem(createTestItem({ label: 'Pommes', quantity: 1, minimumStock: 10 }));
 
         const lowStockItems = stock.getLowStockItems();
 
@@ -282,14 +244,9 @@ describe('Stock', () => {
   describe('hasLowStockItems()', () => {
     describe('when there are no low stock items', () => {
       it('should return false', () => {
-        const stock = Stock.create({
-          label: 'Stock 1',
-          description: 'Description 1',
-          category: 'alimentation',
-          userId: 1,
-        });
+        const stock = createTestStock();
 
-        stock.addItem({ label: 'Tomates', quantity: 10, minimumStock: 3 });
+        stock.addItem(createTestItem());
 
         expect(stock.hasLowStockItems()).toBe(false);
       });
@@ -297,14 +254,9 @@ describe('Stock', () => {
 
     describe('when there are low stock items', () => {
       it('should return true', () => {
-        const stock = Stock.create({
-          label: 'Stock 1',
-          description: 'Description 1',
-          category: 'alimentation',
-          userId: 1,
-        });
+        const stock = createTestStock();
 
-        stock.addItem({ label: 'Tomates', quantity: 2, minimumStock: 5 });
+        stock.addItem(createTestItem({ quantity: 2, minimumStock: 5 }));
 
         expect(stock.hasLowStockItems()).toBe(true);
       });
