@@ -27,7 +27,7 @@
   - Routes GET complètes
   - DTO Mapper (`StockDTO.ts`, `StockMapper.ts`)
 - **Documentation:**
-  - 8 ADRs complets (docs/adr/) justifiant tous les choix techniques
+  - 10 ADRs complets (docs/adr/) justifiant tous les choix techniques
   - Guide d'implémentation DDD
   - Architecture README
 - **Tests E2E:** Playwright avec Azure AD B2C (PR #40)
@@ -151,9 +151,10 @@ Feedback encadrant: "Il manque cependant des ADR ou l'équivalent qui **justifie
 - [x] ✅ ADR-007: Code Quality Enforcement (2024-12-19)
 - [x] ✅ ADR-008: TypeScript Request Type Aliases (2025-12-26)
 - [x] ✅ ADR-009: Système d'autorisation hybride (2025-12-27)
+- [x] ✅ ADR-010: Optimisation pipeline CI/CD (2025-12-27)
 - [x] ✅ INDEX.md + TEMPLATE.md
 
-**Localisation:** `docs/adr/` (9 ADRs complets)
+**Localisation:** `docs/adr/` (10 ADRs complets)
 
 ---
 
@@ -216,7 +217,7 @@ Gestion des contenants (fûts, bouteilles, caisses)
 
 ### ✅ Phase 2 COMPLÉTÉE - Documentation RNCP
 
-3. ✅ Issue #46 - ADRs (8 ADRs complets)
+3. ✅ Issue #46 - ADRs (10 ADRs complets)
 
 ### ⏳ Phase 2bis EN COURS - Sécurité & Qualité
 
@@ -261,7 +262,7 @@ Gestion des contenants (fûts, bouteilles, caisses)
 | Période            | Focus                      | Issues                          | Statut   |
 | ------------------ | -------------------------- | ------------------------------- | -------- |
 | ✅ Déc 2025 (S1-4) | Architecture DDD/CQRS      | #37, Tests E2E                  | COMPLÉTÉ |
-| ✅ Déc 2025 (S5)   | Documentation RNCP         | #46 (8 ADRs)                    | COMPLÉTÉ |
+| ✅ Déc 2025 (S5)   | Documentation RNCP         | #46 (10 ADRs)                   | COMPLÉTÉ |
 | ⏳ Jan 2026        | Sécurité & Qualité         | #44 (Autorisation), #45 (audit) | EN COURS |
 | 📋 Fév-Mars 2026   | Refactoring & Optimisation | #36, #53                        | PLANIFIÉ |
 | 📋 Avr-Déc 2026    | Features avancées          | #41, #43                        | PLANIFIÉ |
@@ -278,7 +279,7 @@ Gestion des contenants (fûts, bouteilles, caisses)
 - [x] ✅ API CRUD fonctionnelle (POST/PATCH/GET)
 - [x] ✅ DTOs compatibles Frontend (StockDTO, StockMapper)
 - [x] ✅ Tests E2E passants (Playwright + Azure AD B2C)
-- [x] ✅ Documentation technique (8 ADRs complets)
+- [x] ✅ Documentation technique (10 ADRs complets)
 
 ### Production-ready ⏳ EN COURS
 
@@ -290,7 +291,7 @@ Gestion des contenants (fûts, bouteilles, caisses)
 
 ### Qualité RNCP ⏳ EN COURS
 
-- [x] ✅ 9 ADRs complets (justification tous choix techniques)
+- [x] ✅ 10 ADRs complets (justification tous choix techniques)
 - [x] ✅ Tests unitaires domaine (53 tests)
 - [x] ✅ Tests intégration (repository)
 - [x] ✅ Tests E2E (Playwright)
