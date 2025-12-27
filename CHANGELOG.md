@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.1.0...v2.1.1) (2025-12-27)
+
+
+### 📚 Documentation
+
+* ADR-009 - Système d'autorisation hybride (Issue [#44](https://github.com/SandrineCipolla/stockhub_back/issues/44) planning) ([#66](https://github.com/SandrineCipolla/stockhub_back/issues/66)) ([1b8a7fd](https://github.com/SandrineCipolla/stockhub_back/commit/1b8a7fd171281a8d5b7947f3b52492fac03e9f80))
+
 ## [2.1.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.0.0...v2.1.0) (2025-12-27)
 
 
