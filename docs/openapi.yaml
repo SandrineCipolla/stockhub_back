@@ -1,3 +1,9 @@
+# ⚠️ IMPORTANT: Ce fichier doit être mis à jour à chaque modification des endpoints API
+# Penser à mettre à jour les schémas, exemples et descriptions lors de changements dans:
+# - Routes (ajout/suppression d'endpoints)
+# - DTOs (modification des structures de données)
+# - Business rules (changement de logique métier affectant les réponses)
+
 openapi: 3.0.0
 
 info:

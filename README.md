@@ -78,6 +78,8 @@ Documentation interactive Swagger UI disponible :
 - Authentification Azure AD B2C (Bearer token)
 - Séparation Read/Write (CQRS)
 
+⚠️ **Maintenance :** Le fichier `docs/openapi.yaml` doit être mis à jour manuellement lors de toute modification des routes, DTOs ou logique métier de l'API.
+
 ### Cloud
 
 Déploiement cible Azure App Service + DB MySQL Azure.
