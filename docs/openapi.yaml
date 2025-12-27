@@ -1,0 +1,557 @@
+openapi: 3.0.0
+
+info:
+  title: StockHub Backend API
+  version: 2.0.0
+  description: |
+    API REST pour la gestion de stocks (alimentation, hygiène, artistique)
+
+    **Architecture:** DDD/CQRS avec séparation Read/Write
+    - **Read Side (Visualization):** Consultation des stocks
+    - **Write Side (Manipulation):** Création et modification des stocks
+
+    **Authentification:** Azure AD B2C avec tokens JWT Bearer
+
+  contact:
+    name: Sandrine Cipolla
+    email: sandrine.cipolla@gmail.com
+  license:
+    name: Private - RNCP Project
+
+servers:
+  - url: http://localhost:3006
+    description: Serveur de développement local
+  - url: https://stockhub-back.azurewebsites.net
+    description: Serveur de production Azure
+
+tags:
+  - name: Stock Visualization (READ)
+    description: Endpoints de consultation des stocks (CQRS Read Side)
+  - name: Stock Manipulation (WRITE)
+    description: Endpoints de création et modification des stocks (CQRS Write Side)
+
+security:
+  - BearerAuth: []
+
+paths:
+  /api/v2/stocks:
+    get:
+      summary: Récupérer tous les stocks
+      description: Retourne la liste complète des stocks appartenant à l'utilisateur authentifié
+      tags:
+        - Stock Visualization (READ)
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Liste des stocks récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StockDTO'
+              examples:
+                success:
+                  summary: Exemple de réponse réussie
+                  value:
+                    - id: 1
+                      name: Stock Aquarelle
+                      description: Stock de peinture aquarelle pour loisirs créatifs
+                      category: artistique
+                      quantity: 15
+                      unit: unités
+                      minimumStock: 5
+                      status: optimal
+                    - id: 2
+                      name: Stock Alimentaire
+                      description: Stock de conserves et denrées non périssables
+                      category: alimentation
+                      quantity: 8
+                      unit: unités
+                      minimumStock: 10
+                      status: low
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      summary: Créer un nouveau stock
+      description: Crée un nouveau stock vide pour l'utilisateur authentifié
+      tags:
+        - Stock Manipulation (WRITE)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStockBody'
+            examples:
+              aquarelle:
+                summary: Création d'un stock artistique
+                value:
+                  label: Stock Aquarelle
+                  description: Stock de peinture aquarelle pour loisirs créatifs
+                  category: artistique
+              alimentaire:
+                summary: Création d'un stock alimentaire
+                value:
+                  label: Stock Alimentaire
+                  description: Stock de conserves et denrées non périssables
+                  category: alimentation
+      responses:
+        '201':
+          description: Stock créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockDTO'
+              example:
+                id: 1
+                name: Stock Aquarelle
+                description: Stock de peinture aquarelle pour loisirs créatifs
+                category: artistique
+                quantity: 0
+                unit: unités
+                minimumStock: 0
+                status: out-of-stock
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/v2/stocks/{stockId}:
+    get:
+      summary: Récupérer les détails d'un stock
+      description: Retourne les informations détaillées d'un stock spécifique
+      tags:
+        - Stock Visualization (READ)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Détails du stock récupérés avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockDTO'
+              example:
+                id: 1
+                name: Stock Aquarelle
+                description: Stock de peinture aquarelle pour loisirs créatifs
+                category: artistique
+                quantity: 15
+                unit: unités
+                minimumStock: 5
+                status: optimal
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/v2/stocks/{stockId}/items:
+    get:
+      summary: Récupérer les items d'un stock
+      description: Retourne la liste des items appartenant à un stock spécifique
+      tags:
+        - Stock Visualization (READ)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Liste des items récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StockItemDTO'
+              examples:
+                success:
+                  summary: Exemple avec plusieurs items
+                  value:
+                    - id: 1
+                      label: Aquarelle Rouge Vermillon
+                      description: Tube 12ml
+                      quantity: 3
+                      minimumStock: 1
+                      stockId: 1
+                    - id: 2
+                      label: Aquarelle Bleu Outremer
+                      description: Tube 12ml
+                      quantity: 5
+                      minimumStock: 2
+                      stockId: 1
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      summary: Ajouter un item au stock
+      description: Ajoute un nouvel item (produit) à un stock existant
+      tags:
+        - Stock Manipulation (WRITE)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddItemToStockBody'
+            example:
+              label: Aquarelle Rouge Vermillon
+              description: Tube 12ml
+              quantity: 3
+              minimumStock: 1
+      responses:
+        '201':
+          description: Item ajouté avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockItemDTO'
+              example:
+                id: 1
+                label: Aquarelle Rouge Vermillon
+                description: Tube 12ml
+                quantity: 3
+                minimumStock: 1
+                stockId: 1
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/v2/stocks/{stockId}/items/{itemId}:
+    patch:
+      summary: Modifier la quantité d'un item
+      description: Met à jour la quantité d'un item spécifique dans un stock
+      tags:
+        - Stock Manipulation (WRITE)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+        - name: itemId
+          in: path
+          required: true
+          description: Identifiant unique de l'item
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateItemQuantityBody'
+            examples:
+              increase:
+                summary: Augmentation de quantité
+                value:
+                  quantity: 5
+              decrease:
+                summary: Diminution de quantité
+                value:
+                  quantity: 1
+      responses:
+        '200':
+          description: Quantité modifiée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockItemDTO'
+              example:
+                id: 1
+                label: Aquarelle Rouge Vermillon
+                description: Tube 12ml
+                quantity: 5
+                minimumStock: 1
+                stockId: 1
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Token JWT Azure AD B2C obtenu via authentification OAuth2
+
+        **Format:** `Bearer {token}`
+
+        **Obtention du token:**
+        1. Authentification via Azure AD B2C (flow ROPC ou Implicit)
+        2. Récupération du token JWT
+        3. Inclusion dans le header: `Authorization: Bearer {token}`
+
+  schemas:
+    # DTOs de réponse (Response)
+    StockDTO:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - category
+        - quantity
+        - unit
+        - minimumStock
+        - status
+      properties:
+        id:
+          type: integer
+          description: Identifiant unique du stock
+          example: 1
+        name:
+          type: string
+          description: Nom du stock
+          example: Stock Aquarelle
+        description:
+          type: string
+          description: Description du stock
+          example: Stock de peinture aquarelle pour loisirs créatifs
+        category:
+          type: string
+          description: Catégorie du stock
+          enum:
+            - alimentation
+            - hygiene
+            - artistique
+          example: artistique
+        quantity:
+          type: number
+          description: Quantité totale (somme de tous les items)
+          example: 15
+        unit:
+          type: string
+          description: Unité de mesure
+          example: unités
+          default: unités
+        minimumStock:
+          type: number
+          description: Stock minimum requis (somme des minimums de tous les items)
+          example: 5
+        status:
+          type: string
+          enum:
+            - optimal
+            - low
+            - critical
+            - out-of-stock
+          description: |
+            Statut calculé automatiquement :
+            - `out-of-stock`: quantity === 0
+            - `critical`: quantity < 10% minimumStock
+            - `low`: quantity < 30% minimumStock
+            - `optimal`: quantity >= 30% minimumStock
+          example: optimal
+
+    StockItemDTO:
+      type: object
+      required:
+        - id
+        - label
+        - description
+        - quantity
+        - minimumStock
+        - stockId
+      properties:
+        id:
+          type: integer
+          description: Identifiant unique de l'item
+          example: 1
+        label:
+          type: string
+          description: Label de l'item
+          example: Aquarelle Rouge Vermillon
+        description:
+          type: string
+          description: Description de l'item
+          example: Tube 12ml
+        quantity:
+          type: number
+          description: Quantité de cet item spécifique
+          example: 3
+        minimumStock:
+          type: number
+          description: Stock minimum pour cet item
+          example: 1
+        stockId:
+          type: integer
+          description: ID du stock parent
+          example: 1
+
+    # DTOs de requête (Request Bodies)
+    CreateStockBody:
+      type: object
+      required:
+        - label
+        - description
+        - category
+      properties:
+        label:
+          type: string
+          description: Nom du stock
+          example: Stock Aquarelle
+          minLength: 1
+        description:
+          type: string
+          description: Description du stock
+          example: Stock de peinture aquarelle pour loisirs créatifs
+          minLength: 1
+        category:
+          type: string
+          description: Catégorie du stock
+          enum:
+            - alimentation
+            - hygiene
+            - artistique
+          example: artistique
+
+    AddItemToStockBody:
+      type: object
+      required:
+        - label
+        - quantity
+        - description
+        - minimumStock
+      properties:
+        label:
+          type: string
+          description: Label de l'item
+          example: Aquarelle Rouge Vermillon
+          minLength: 1
+        quantity:
+          type: number
+          description: Quantité initiale
+          example: 3
+          minimum: 0
+        description:
+          type: string
+          description: Description de l'item
+          example: Tube 12ml
+          minLength: 1
+        minimumStock:
+          type: number
+          description: Stock minimum requis
+          example: 1
+          minimum: 0
+
+    UpdateItemQuantityBody:
+      type: object
+      required:
+        - quantity
+      properties:
+        quantity:
+          type: number
+          description: Nouvelle quantité
+          example: 5
+          minimum: 0
+
+    # Réponses d'erreur
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Message d'erreur
+          example: Resource not found
+        details:
+          type: string
+          description: Détails supplémentaires sur l'erreur
+          example: Stock with ID 999 does not exist
+
+  responses:
+    UnauthorizedError:
+      description: Non authentifié - token manquant ou invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: Unauthorized
+            details: JWT token is missing or invalid
+
+    NotFoundError:
+      description: Ressource non trouvée
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: Not Found
+            details: Stock with ID 999 does not exist
+
+    BadRequestError:
+      description: Requête invalide - données manquantes ou incorrectes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: Bad Request
+            details: Field 'label' is required
+
+    InternalServerError:
+      description: Erreur serveur interne
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: Internal Server Error
+            details: An unexpected error occurred

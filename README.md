@@ -63,6 +63,21 @@ MySQL (Azure). → Prisma + migrations.
 
 Routes REST Express `/api/v2/stocks`.
 
+### Documentation API (OpenAPI 3.0)
+
+Documentation interactive Swagger UI disponible :
+
+- **Développement local :** [http://localhost:3006/api-docs](http://localhost:3006/api-docs)
+- **Production :** [https://stockhub-back.azurewebsites.net/api-docs](https://stockhub-back.azurewebsites.net/api-docs)
+- **Fichier OpenAPI :** [docs/openapi.yaml](./docs/openapi.yaml)
+
+📖 La documentation OpenAPI 3.0 couvre tous les endpoints v2 avec :
+
+- Schémas de requêtes/réponses complets
+- Exemples de payloads
+- Authentification Azure AD B2C (Bearer token)
+- Séparation Read/Write (CQRS)
+
 ### Cloud
 
 Déploiement cible Azure App Service + DB MySQL Azure.
