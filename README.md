@@ -59,7 +59,11 @@ TDD appliqué sur `Quantity`, `StockItem`, `Stock`, puis `StockVisualizationServ
 
 ### Sécurité
 
-- **V1** et **V2** = routes protégées par auth Bearer (Azure)
+- **Authentification:** Azure AD B2C avec tokens JWT Bearer (routes V1 et V2)
+- **Autorisation:** Système hybride basé sur les ressources (en cours - voir [ADR-009](./docs/adr/ADR-009-resource-based-authorization.md))
+  - Groupes familiaux + rôles par stock (OWNER/EDITOR/VIEWER/VIEWER_CONTRIBUTOR)
+  - Workflow de suggestions pour collaboration sécurisée
+  - Notifications temps réel (Phases 1-4 - Issues #62, #63, #64, #65)
 
 ### Base de données
 
@@ -108,6 +112,7 @@ Les **ADRs** documentent les décisions techniques majeures du projet avec leur 
 | [ADR-006](./docs/adr/ADR-006-mysql-azure-cloud.md)               | MySQL Azure vs autres clouds              | Déc 2025 |
 | [ADR-007](./docs/adr/ADR-007-code-quality-enforcement.md)        | Standards de qualité de code stricts      | Déc 2024 |
 | [ADR-008](./docs/adr/ADR-008-typescript-request-type-aliases.md) | Type Aliases pour requêtes Express typées | Déc 2025 |
+| [ADR-009](./docs/adr/ADR-009-resource-based-authorization.md)    | Système d'autorisation hybride            | Déc 2025 |
 
 ### Documentation complète
 

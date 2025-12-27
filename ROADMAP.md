@@ -1,7 +1,7 @@
 # 🗺️ StockHub Backend - Roadmap
 
 **Date de création:** 2025-12-09
-**Dernière mise à jour:** 2025-12-26
+**Dernière mise à jour:** 2025-12-27
 **Version actuelle:** 2.0.0
 **Statut:** ✅ Architecture DDD/CQRS complète - Module manipulation terminé
 
@@ -79,34 +79,30 @@
 **Objectif:** Adresser feedback encadrant pour validation RNCP
 **Issues:** #44, #45, #46
 
-#### Issue #44: Implémenter couche d'autorisation
+#### Issue #44: Implémenter couche d'autorisation (EPIC - 4 phases)
 
-**Priorité:** MOYENNE
+**Priorité:** HAUTE
+**Statut:** ⏳ EN COURS - ADR-009 créé, plan en 4 phases
 **Description:**
 
-Actuellement: seulement **authentification** (JWT Azure AD)
-Manque: **autorisation** (qui peut accéder à quoi)
+Système d'autorisation hybride basé sur les ressources avec:
 
-**Tâches:**
+- Groupes familiaux
+- Rôles par stock (OWNER/EDITOR/VIEWER/VIEWER_CONTRIBUTOR)
+- Workflow de suggestions
+- Notifications temps réel
 
-- [ ] Définir modèle de permissions (RBAC ou ABAC)
-- [ ] Créer middleware `authorize(resource, action)`
-- [ ] Appliquer aux routes:
-  - User peut seulement lire/modifier SES stocks
-  - Admin peut tout faire
-- [ ] Tests unitaires middleware
-- [ ] Documenter dans ADR
+**Issues enfants (Timeline ~3-4 mois):**
 
-**Exemple:**
+- [ ] #62 - Phase 1: Fondations (groupes familiaux + rôles) - 3-4 sem
+- [ ] #63 - Phase 2: Workflow suggestions - 4-6 sem
+- [ ] #64 - Phase 3: Notifications temps réel (SSE) - 2-3 sem
+- [ ] #65 - Phase 4: Features avancées (audit log, analytics) - 2-4 sem
 
-```typescript
-router.post(
-  '/stocks',
-  passport.authenticate('oauth-bearer', { session: false }),
-  authorize('stock', 'create'), // NOUVEAU
-  stockController.createStock
-);
-```
+**Documentation:**
+
+- ✅ ADR-009: docs/adr/ADR-009-resource-based-authorization.md
+- Cas d'usage familiaux concrets documentés
 
 ---
 
@@ -154,9 +150,10 @@ Feedback encadrant: "Il manque cependant des ADR ou l'équivalent qui **justifie
 - [x] ✅ ADR-006: MySQL Azure Cloud (2025-12-08)
 - [x] ✅ ADR-007: Code Quality Enforcement (2024-12-19)
 - [x] ✅ ADR-008: TypeScript Request Type Aliases (2025-12-26)
+- [x] ✅ ADR-009: Système d'autorisation hybride (2025-12-27)
 - [x] ✅ INDEX.md + TEMPLATE.md
 
-**Localisation:** `docs/adr/` (8 ADRs complets)
+**Localisation:** `docs/adr/` (9 ADRs complets)
 
 ---
 
@@ -291,19 +288,19 @@ Gestion des contenants (fûts, bouteilles, caisses)
 - [x] ✅ TypeScript strict mode (fait en v2.0.0)
 - [ ] 📋 CI/CD optimisée (Issue #53)
 
-### Qualité RNCP ✅ COMPLÉTÉ (Documentation)
+### Qualité RNCP ⏳ EN COURS
 
-- [x] ✅ 8 ADRs complets (justification tous choix techniques)
+- [x] ✅ 9 ADRs complets (justification tous choix techniques)
 - [x] ✅ Tests unitaires domaine (53 tests)
 - [x] ✅ Tests intégration (repository)
 - [x] ✅ Tests E2E (Playwright)
 - [x] ✅ Documentation architecture
-- [ ] ⏳ Couche d'autorisation (Issue #44 - feedback encadrant)
-- [ ] ⏳ npm audit CI/CD (Issue #45 - feedback encadrant)
+- [ ] ⏳ Couche d'autorisation (Issue #44 - ADR-009 créé, 4 phases planifiées #62-65)
+- [x] ✅ npm audit CI/CD (Issue #45 - complété)
 
 ---
 
 **Auteur:** Sandrine Cipolla
-**Dernière mise à jour:** 2025-12-26
+**Dernière mise à jour:** 2025-12-27
 **Version:** 2.0.0
 **Reviewer:** [Encadrant RNCP]
