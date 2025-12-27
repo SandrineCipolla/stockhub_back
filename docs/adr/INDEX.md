@@ -25,6 +25,7 @@ Un ADR (Architecture Decision Record) est un document qui capture une **décisio
 | [ADR-006](./ADR-006-mysql-azure-cloud.md)               | MySQL sur Azure Cloud                        | 2025-12-08 | ✅ Accepté |
 | [ADR-007](./ADR-007-code-quality-enforcement.md)        | Application stricte des standards de qualité | 2024-12-19 | ✅ Accepté |
 | [ADR-008](./ADR-008-typescript-request-type-aliases.md) | Type Aliases pour requêtes Express           | 2025-12-26 | ✅ Accepté |
+| [ADR-009](./ADR-009-resource-based-authorization.md)    | Système d'autorisation hybride               | 2025-12-27 | ✅ Accepté |
 
 ## 📖 Comment lire un ADR ?
 
@@ -120,5 +121,5 @@ Si une décision change :
 
 ---
 
-**Dernière mise à jour** : 2025-12-26  
+**Dernière mise à jour** : 2025-12-27
 **Mainteneur** : Équipe StockHub Backend
