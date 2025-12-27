@@ -1,5 +1,11 @@
 # StockHub Backend - Module de Visualisation des Stocks
 
+![CI/CD Pipeline](https://github.com/sandrineCipolla/stockhub_back/actions/workflows/main_stockhub-back.yml/badge.svg)
+![Version](https://img.shields.io/badge/version-2.0.0-blue)
+![Security](https://img.shields.io/badge/security-npm%20audit-green)
+![Node](https://img.shields.io/badge/node-20.x-brightgreen)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
+
 StockHub est une application web conçue pour aider les familles à gérer leurs stocks de produits (entre autres stocks
 alimentaires, artistiques...). Elle permet aux utilisateurs de visualiser l'état des stocks mais aussi de les mettre à
 jour facilement.
