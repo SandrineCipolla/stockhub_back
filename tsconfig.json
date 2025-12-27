@@ -29,7 +29,11 @@
       "@serverSetup/*": ["src/serverSetup/*"],
       "@core/*": ["src/*"],
       "@helpers/*": ["tests/helpers/*", "src/helpers/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./src/Utils"]
+  },
+  "ts-node": {
+    "files": true
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "tests/**/*.ts", "tests/**/*.d.ts"],
   "exclude": ["node_modules", "dist"]

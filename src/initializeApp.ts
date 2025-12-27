@@ -10,6 +10,8 @@ import { authConfigbearerStrategy } from '@authentication/authBearerStrategy';
 import { authenticationMiddleware } from '@authentication/authenticateMiddleware';
 import { setupHttpServer } from '@serverSetup/setupHttpServer';
 import configureStockRoutesV2 from '@api/routes/StockRoutesV2';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec, openApiYamlContent } from '@config/openapi.config';
 
 export async function initializeApp() {
   const app = express();
@@ -63,6 +65,31 @@ export async function initializeApp() {
   passport.use(bearerStrategy);
 
   rootSecurity.info('initialization of authentication DONE!');
+
+  // ----------- Swagger/OpenAPI Documentation -----------
+
+  app.use(
+    '/api-docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+      customCss: '.swagger-ui .topbar { display: none }',
+      customSiteTitle: 'StockHub API Documentation',
+    })
+  );
+
+  app.get('/api-docs.json', (_req: express.Request, res: express.Response) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+  });
+
+  app.get('/api-docs.yaml', (_req: express.Request, res: express.Response) => {
+    res.setHeader('Content-Type', 'text/yaml');
+    res.send(openApiYamlContent);
+  });
+
+  rootMain.info('Swagger UI available at /api-docs');
+  rootMain.info('OpenAPI JSON spec available at /api-docs.json');
+  rootMain.info('OpenAPI YAML spec available at /api-docs.yaml');
 
   // ----------- Routes setup -----------
 
