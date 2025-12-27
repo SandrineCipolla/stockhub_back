@@ -3,7 +3,10 @@ import { join } from 'path';
 import yaml from 'js-yaml';
 
 // Charger le fichier OpenAPI YAML
-const openApiYamlPath = join(__dirname, '../../docs/openapi.yaml');
+// Toujours pointer vers le fichier source dans docs/ (pas dans dist/)
+// En dev: process.cwd() = project root
+// En prod (webpack): process.cwd() = project root aussi
+const openApiYamlPath = join(process.cwd(), 'docs/openapi.yaml');
 const openApiYaml = readFileSync(openApiYamlPath, 'utf8');
 
 // Exporter la spec parsée (pour Swagger UI)
