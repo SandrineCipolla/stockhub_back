@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.1.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.0.0...v2.1.0) (2025-12-27)
+
+
+### ✨ Features
+
+* **api:** add OpenAPI 3.0 interactive documentation with Swagger UI ([60e9c24](https://github.com/SandrineCipolla/stockhub_back/commit/60e9c2460c12b8c26de5286c196a7d438f3a009c)), closes [#60](https://github.com/SandrineCipolla/stockhub_back/issues/60)
+* integrate npm audit into CI/CD pipeline and update dependencies (issue[#45](https://github.com/SandrineCipolla/stockhub_back/issues/45)) ([#59](https://github.com/SandrineCipolla/stockhub_back/issues/59)) ([e0cf0ec](https://github.com/SandrineCipolla/stockhub_back/commit/e0cf0ecc01ab20971591dc6dcc246361ff146c8f))
+
+
+### 📚 Documentation
+
+* update ROADMAP - mark Issue [#46](https://github.com/SandrineCipolla/stockhub_back/issues/46) (ADRs) as completed ([a2a991a](https://github.com/SandrineCipolla/stockhub_back/commit/a2a991a71e6b2c61f2e604abc646462912c1242f))
+* update ROADMAP.md to reflect v2.0.0 and RNCP timeline ([f36a2e5](https://github.com/SandrineCipolla/stockhub_back/commit/f36a2e574ddef4b630d089afd2a64d1336aac0b4))
+
+
+### 🔧 Chores
+
+* add PR template with Conventional Commits reminder ([4e85fe1](https://github.com/SandrineCipolla/stockhub_back/commit/4e85fe1182e5885df492e1290834654f898c344f))
+
 ## [2.0.0](https://github.com/SandrineCipolla/stockhub_back/compare/v1.2.0...v2.0.0) (2025-12-26)
 
 ### ⚠ BREAKING CHANGES
