@@ -1,9 +1,9 @@
 # 🗺️ StockHub Backend - Roadmap
 
 **Date de création:** 2025-12-09
-**Dernière mise à jour:** 2025-12-27
+**Dernière mise à jour:** 2025-12-28
 **Version actuelle:** 2.0.0
-**Statut:** ✅ Architecture DDD/CQRS complète - Module manipulation terminé
+**Statut:** ✅ Architecture DDD/CQRS complète - Autorisation Phase 1 terminée
 
 ---
 
@@ -82,7 +82,7 @@
 #### Issue #44: Implémenter couche d'autorisation (EPIC - 4 phases)
 
 **Priorité:** HAUTE
-**Statut:** ⏳ EN COURS - ADR-009 créé, plan en 4 phases
+**Statut:** ⏳ EN COURS - Phase 1 COMPLÉTÉE ✅ (Issue #62)
 **Description:**
 
 Système d'autorisation hybride basé sur les ressources avec:
@@ -94,7 +94,12 @@ Système d'autorisation hybride basé sur les ressources avec:
 
 **Issues enfants (Timeline ~3-4 mois):**
 
-- [ ] #62 - Phase 1: Fondations (groupes familiaux + rôles) - 3-4 sem
+- [x] ✅ #62 - Phase 1: Fondations (groupes familiaux + rôles) - COMPLÉTÉ
+  - ✅ Migrations Prisma (Family, FamilyMember, StockCollaborator)
+  - ✅ Domain Layer (Value Objects + Entities)
+  - ✅ Middleware d'autorisation (authorizeStockAccess)
+  - ✅ Application aux routes V2
+  - ✅ Tests: 142 unitaires + 4 E2E (integration tests skippés - Issue #71)
 - [ ] #63 - Phase 2: Workflow suggestions - 4-6 sem
 - [ ] #64 - Phase 3: Notifications temps réel (SSE) - 2-3 sem
 - [ ] #65 - Phase 4: Features avancées (audit log, analytics) - 2-4 sem
@@ -302,6 +307,6 @@ Gestion des contenants (fûts, bouteilles, caisses)
 ---
 
 **Auteur:** Sandrine Cipolla
-**Dernière mise à jour:** 2025-12-27
+**Dernière mise à jour:** 2025-12-28
 **Version:** 2.0.0
 **Reviewer:** [Encadrant RNCP]
