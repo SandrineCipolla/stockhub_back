@@ -60,8 +60,4 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   mode: 'production',
-  devtool: false, // Désactiver source maps (gain ~10s)
-  optimization: {
-    minimize: false, // Pas besoin de minification pour backend Node.js (gain ~5-10s)
-  },
 };

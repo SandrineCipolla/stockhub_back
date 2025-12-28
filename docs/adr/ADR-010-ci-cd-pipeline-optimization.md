@@ -218,16 +218,43 @@ steps:
 
 - **Pourquoi rejetée:** Coût/maintenance disproportionnés pour le besoin.
 
+### Alternative 6: Optimisations Webpack (devtool, minimize)
+
+**Principe:** Désactiver source maps et minification dans webpack.config.js
+
+```javascript
+module.exports = {
+  mode: 'production',
+  devtool: false, // Désactiver source maps
+  optimization: {
+    minimize: false, // Désactiver minification
+  },
+};
+```
+
+- **Avantages:**
+  - Source maps inutiles en production backend
+  - Minification inutile pour code Node.js (pas de taille réseau)
+  - Gain théorique ~15-20s
+
+- **Inconvénients:**
+  - **TESTÉ ET REJETÉ (PR #70)** : A causé une **régression de +12s** au lieu d'un gain
+  - Temps total : 5m44s → 5m56s (+12s)
+  - Build job : 4m50s → 5m0s (+10s)
+  - Désactiver les optimizations par défaut de Webpack mode production interfère avec d'autres optimisations internes
+
+- **Pourquoi rejetée:** Tests empiriques ont montré une dégradation des performances. En mode production, webpack applique un ensemble d'optimisations qui fonctionnent bien ensemble. Désactiver explicitement certaines d'entre elles perturbe cet équilibre et ajoute de l'overhead plutôt que du gain.
+
 ## Conséquences
 
 ### Positives
 
-- ✅ **Gain de temps ~40-50%** : 8 min → 4-5 min (feedback plus rapide)
-- ✅ **Developer Experience** : Cycles itératifs plus courts
-- ✅ **Économie minutes GitHub** : Optimisation importante si multiplication PRs
+- ✅ **Gain de temps réel : 25%** : 7m36s → 5m44s (économie de 1m52s par exécution)
+- ✅ **Developer Experience** : Cycles itératifs plus courts (feedback en <6 min)
+- ✅ **Économie minutes GitHub** : ~112 min/mois économisées (basé sur ~60 runs/mois)
 - ✅ **Cohérence environnement** : Node 20.x partout (réduit bugs environnement)
-- ✅ **Simplicité** : Configuration minimale, pas de dépendances externes
-- ✅ **Démonstration RNCP** : Capacité d'analyse et optimisation infrastructure
+- ✅ **Simplicité** : Configuration minimale (1 ligne `cache: 'npm'`), pas de dépendances externes
+- ✅ **Démonstration RNCP** : Capacité d'analyse, optimisation infrastructure, et validation empirique
 
 ### Négatives
 
@@ -293,6 +320,31 @@ gh run list --workflow="CI/CD Pipeline" --limit 10
 | CI (npm ci)    | 2 min (cache rebuild)                         |
 | Build (npm ci) | 2 min (cache rebuild)                         |
 | **TOTAL**      | **~8 min** (pas de gain, mais situation rare) |
+
+### Résultats réels (mesurés en production)
+
+**PR #68 (optimisations retenues) - Run #153 (2025-12-28):**
+
+| Métrique           | Avant (baseline) | Après PR #68 | Gain      |
+| ------------------ | ---------------- | ------------ | --------- |
+| Temps total CI/CD  | 7m36s            | 5m44s        | -1m52s    |
+| % amélioration     | -                | -            | **25%**   |
+| CI job (cache hit) | ~3m              | ~47s         | -2m13s    |
+| Build+Deploy       | ~4m36s           | 4m50s        | (stable)  |
+| npm ci avec cache  | 2m               | ~25-30s      | -75%      |
+| Taux cache hit     | N/A              | ~95%         | Excellent |
+
+**Validation critères de succès :**
+
+- ✅ Temps total < 6 min (atteint : 5m44s)
+- ✅ npm ci avec cache < 30s (atteint : ~25-30s)
+- ✅ Taux cache hit > 90% (atteint : ~95%)
+- ✅ Déploiement Azure fonctionne sans régression
+- ✅ Pipeline CI/CD stable sur toutes les branches
+
+**Note sur PR #70 (tentative d'optimisation webpack) - Rejetée :**
+
+Une tentative d'optimisation supplémentaire en désactivant source maps et minification webpack a été testée (PR #70) mais a causé une régression de +12s (5m44s → 5m56s). Cette approche a été documentée dans "Alternative 6" et revertée.
 
 ## Détails techniques
 
