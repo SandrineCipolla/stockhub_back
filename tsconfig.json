@@ -26,6 +26,7 @@
       "@controllers/*": ["src/controllers/*"],
       "@routes/*": ["src/routes/*"],
       "@authentication/*": ["src/authentication/*"],
+      "@authorization/*": ["src/authorization/*"],
       "@serverSetup/*": ["src/serverSetup/*"],
       "@core/*": ["src/*"],
       "@helpers/*": ["tests/helpers/*", "src/helpers/*"]
