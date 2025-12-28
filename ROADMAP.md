@@ -224,7 +224,7 @@ Gestion des contenants (fûts, bouteilles, caisses)
 4. ⏳ Issue #44 - Couche d'autorisation (feedback encadrant)
 5. ⏳ Issue #45 - npm audit dans CI/CD (feedback encadrant)
 6. 📋 Issue #36 - Normaliser module visualization
-7. 📋 Issue #53 - Optimiser CI/CD (8min → 4-5min)
+7. ✅ Issue #53 - Optimiser CI/CD (25% amélioration : 7m36s → 5m44s)
 
 ### 📋 Phase 3 - Features avancées (Avant RNCP Mars 2027)
 
@@ -262,9 +262,9 @@ Gestion des contenants (fûts, bouteilles, caisses)
 | Période            | Focus                      | Issues                          | Statut   |
 | ------------------ | -------------------------- | ------------------------------- | -------- |
 | ✅ Déc 2025 (S1-4) | Architecture DDD/CQRS      | #37, Tests E2E                  | COMPLÉTÉ |
-| ✅ Déc 2025 (S5)   | Documentation RNCP         | #46 (10 ADRs)                   | COMPLÉTÉ |
+| ✅ Déc 2025 (S5)   | Documentation RNCP         | #46 (10 ADRs), #53 (CI/CD)      | COMPLÉTÉ |
 | ⏳ Jan 2026        | Sécurité & Qualité         | #44 (Autorisation), #45 (audit) | EN COURS |
-| 📋 Fév-Mars 2026   | Refactoring & Optimisation | #36, #53                        | PLANIFIÉ |
+| 📋 Fév-Mars 2026   | Refactoring & Optimisation | #36                             | PLANIFIÉ |
 | 📋 Avr-Déc 2026    | Features avancées          | #41, #43                        | PLANIFIÉ |
 | 📋 Jan-Fév 2027    | ML & Leisure Mode          | #47, #48, #49                   | PLANIFIÉ |
 | 🎯 Mars 2027       | **Présentation RNCP**      | -                               | OBJECTIF |
