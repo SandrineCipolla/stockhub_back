@@ -29,12 +29,8 @@ jobs:
         continue-on-error: false
 
       - run: npx tsc --noEmit
-
-      - name: Run lint and tests in parallel
-        run: |
-          npm run lint --if-present &
-          npm run test:unit &
-          wait
+      - run: npm run lint --if-present
+      - run: npm run test:unit
 
   # Build et Deploy - ne s'exécute QUE sur la branche main
   build-and-deploy:
