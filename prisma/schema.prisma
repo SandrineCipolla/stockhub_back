@@ -21,25 +21,79 @@ model items {
 }
 
 model stocks {
-  ID          Int             @id @default(autoincrement())
-  LABEL       String          @db.VarChar(255)
-  DESCRIPTION String?         @db.VarChar(255)
-  CATEGORY    stocks_CATEGORY @default(alimentation)
-  USER_ID     Int?
-  items       items[]
-  users       users?          @relation(fields: [USER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "stocks_ibfk_1")
+  ID            Int                 @id @default(autoincrement())
+  LABEL         String              @db.VarChar(255)
+  DESCRIPTION   String?             @db.VarChar(255)
+  CATEGORY      stocks_CATEGORY     @default(alimentation)
+  USER_ID       Int?
+  items         items[]
+  collaborators StockCollaborator[]
+  users         users?              @relation(fields: [USER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "stocks_ibfk_1")
 
   @@index([USER_ID], map: "stocks_ibfk_1")
 }
 
 model users {
-  ID     Int      @id @default(autoincrement())
-  EMAIL  String   @unique(map: "unique_email") @db.VarChar(255)
-  stocks stocks[]
+  ID                      Int                  @id @default(autoincrement())
+  EMAIL                   String               @unique(map: "unique_email") @db.VarChar(255)
+  stocks                  stocks[]
+  familyMemberships       FamilyMember[]
+  stockCollaborations     StockCollaborator[]  @relation("UserCollaborations")
+  grantedCollaborations   StockCollaborator[]  @relation("GrantedByUser")
+}
+
+model Family {
+  id        Int            @id @default(autoincrement()) @map("ID")
+  name      String         @db.VarChar(255) @map("NAME")
+  createdAt DateTime       @default(now()) @map("CREATED_AT")
+  members   FamilyMember[]
+}
+
+model FamilyMember {
+  id        Int        @id @default(autoincrement()) @map("ID")
+  familyId  Int        @map("FAMILY_ID")
+  userId    Int        @map("USER_ID")
+  role      FamilyRole @default(MEMBER) @map("ROLE")
+  joinedAt  DateTime   @default(now()) @map("JOINED_AT")
+  family    Family     @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  user      users      @relation(fields: [userId], references: [ID], onDelete: Cascade)
+
+  @@unique([familyId, userId])
+  @@index([familyId])
+  @@index([userId])
+}
+
+model StockCollaborator {
+  id            Int       @id @default(autoincrement()) @map("ID")
+  stockId       Int       @map("STOCK_ID")
+  userId        Int       @map("USER_ID")
+  role          StockRole @default(VIEWER) @map("ROLE")
+  grantedAt     DateTime  @default(now()) @map("GRANTED_AT")
+  grantedBy     Int?      @map("GRANTED_BY")
+  stock         stocks    @relation(fields: [stockId], references: [ID], onDelete: Cascade)
+  user          users     @relation("UserCollaborations", fields: [userId], references: [ID], onDelete: Cascade)
+  grantedByUser users?    @relation("GrantedByUser", fields: [grantedBy], references: [ID], onDelete: SetNull)
+
+  @@unique([stockId, userId])
+  @@index([stockId])
+  @@index([userId])
+  @@index([grantedBy])
 }
 
 enum stocks_CATEGORY {
   alimentation
   hygiene
   artistique
+}
+
+enum FamilyRole {
+  ADMIN
+  MEMBER
+}
+
+enum StockRole {
+  OWNER
+  EDITOR
+  VIEWER
+  VIEWER_CONTRIBUTOR
 }
