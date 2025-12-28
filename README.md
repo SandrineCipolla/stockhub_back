@@ -102,17 +102,18 @@ Les **ADRs** documentent les décisions techniques majeures du projet avec leur 
 
 📖 **[Voir tous les ADRs](./docs/adr/INDEX.md)**
 
-| #                                                                | Décision                                  | Date     |
-| ---------------------------------------------------------------- | ----------------------------------------- | -------- |
-| [ADR-001](./docs/adr/ADR-001-migration-ddd-cqrs.md)              | Migration vers DDD/CQRS                   | Nov 2025 |
-| [ADR-002](./docs/adr/ADR-002-choix-prisma-orm.md)                | Choix de Prisma vs TypeORM                | Déc 2025 |
-| [ADR-003](./docs/adr/ADR-003-azure-ad-b2c-authentication.md)     | Azure AD B2C pour authentification        | Déc 2025 |
-| [ADR-004](./docs/adr/ADR-004-tests-value-objects-entities.md)    | Tests sur Value Objects et Entities       | Déc 2025 |
-| [ADR-005](./docs/adr/ADR-005-api-versioning-v2.md)               | Versioning API (V2 sans V1)               | Déc 2025 |
-| [ADR-006](./docs/adr/ADR-006-mysql-azure-cloud.md)               | MySQL Azure vs autres clouds              | Déc 2025 |
-| [ADR-007](./docs/adr/ADR-007-code-quality-enforcement.md)        | Standards de qualité de code stricts      | Déc 2024 |
-| [ADR-008](./docs/adr/ADR-008-typescript-request-type-aliases.md) | Type Aliases pour requêtes Express typées | Déc 2025 |
-| [ADR-009](./docs/adr/ADR-009-resource-based-authorization.md)    | Système d'autorisation hybride            | Déc 2025 |
+| #                                                                | Décision                                    | Date     |
+| ---------------------------------------------------------------- | ------------------------------------------- | -------- |
+| [ADR-001](./docs/adr/ADR-001-migration-ddd-cqrs.md)              | Migration vers DDD/CQRS                     | Nov 2025 |
+| [ADR-002](./docs/adr/ADR-002-choix-prisma-orm.md)                | Choix de Prisma vs TypeORM                  | Déc 2025 |
+| [ADR-003](./docs/adr/ADR-003-azure-ad-b2c-authentication.md)     | Azure AD B2C pour authentification          | Déc 2025 |
+| [ADR-004](./docs/adr/ADR-004-tests-value-objects-entities.md)    | Tests sur Value Objects et Entities         | Déc 2025 |
+| [ADR-005](./docs/adr/ADR-005-api-versioning-v2.md)               | Versioning API (V2 sans V1)                 | Déc 2025 |
+| [ADR-006](./docs/adr/ADR-006-mysql-azure-cloud.md)               | MySQL Azure vs autres clouds                | Déc 2025 |
+| [ADR-007](./docs/adr/ADR-007-code-quality-enforcement.md)        | Standards de qualité de code stricts        | Déc 2024 |
+| [ADR-008](./docs/adr/ADR-008-typescript-request-type-aliases.md) | Type Aliases pour requêtes Express typées   | Déc 2025 |
+| [ADR-009](./docs/adr/ADR-009-resource-based-authorization.md)    | Système d'autorisation hybride              | Déc 2025 |
+| [ADR-010](./docs/adr/ADR-010-ci-cd-pipeline-optimization.md)     | Optimisation pipeline CI/CD (8min → 4-5min) | Déc 2025 |
 
 ### Documentation complète
 
