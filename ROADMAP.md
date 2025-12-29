@@ -44,10 +44,10 @@
 
 ## 🎯 Phases de développement
 
-### Phase 1: Déblocage connexion Frontend ✅ COMPLÉTÉE
+### Phase 1: Déblocage connexion Frontend ⏳ EN COURS (Backend prêt, Frontend à connecter)
 
 **Objectif:** Permettre au Frontend de consommer l'API
-**Issues associées:** #37, Tests E2E (PR #40)
+**Issues associées:** #37, Tests E2E (PR #40), **Frontend V2 Issue #57**
 
 #### ✅ Issue #37: Module DDD/CQRS Manipulation - COMPLÉTÉ (PR #49)
 
@@ -71,6 +71,34 @@
 - ✅ Authentification Azure AD B2C intégrée
 - ✅ Tests E2E scénario CRUD complet
 - ✅ Documentation E2E testing
+
+#### ⏳ Frontend V2 Integration - EN COURS (Issue #57)
+
+**Objectif:** Connecter Frontend V2 au Backend avec Azure AD B2C
+
+**État:**
+
+- ✅ Backend prêt à 100% (API, Auth, Tests)
+- ✅ Guide technique complet (`docs/technical/frontend-v2-integration.md`)
+- ⏳ Frontend V2 à connecter (actuellement données mockées)
+
+**Issue Frontend:** https://github.com/SandrineCipolla/stockHub_V2_front/issues/57
+
+**Planning (5-6h):**
+
+1. Installation MSAL (`@azure/msal-browser`, `@azure/msal-react`) - 15min
+2. Configuration `.env` avec Azure AD B2C - 15min
+3. Création `authConfig.ts` (MSAL config) - 30min
+4. Création `ConfigManager.ts` (token management) - 30min
+5. Création `utils.ts` + `stocksAPI.ts` (API client) - 2h
+6. Modification `main.tsx` (MSAL init) - 30min
+7. Modification `App.tsx` (token capture) - 30min
+8. Tests (login, CRUD, erreurs) - 1h
+9. Documentation - 30min
+
+**Timeline:** **Fin Déc 2025 / Début Jan 2026** (avant Issue #44 Autorisation)
+
+**Priorité:** 🔴 HAUTE - Débloque tests visuels et démos encadrant
 
 ---
 
@@ -210,21 +238,28 @@ Gestion des contenants (fûts, bouteilles, caisses)
 
 ## 📊 Priorisation globale
 
-### ✅ Phase 1 COMPLÉTÉE - Déblocage connexion Frontend
+### ✅ Phase 1 BACKEND - Déblocage connexion Frontend (Backend)
 
 1. ✅ Issue #37 - Module DDD/CQRS Manipulation (PR #49)
 2. ✅ Tests E2E - Infrastructure Playwright (PR #40)
 
+### ⏳ Phase 1 FRONTEND - Connexion Frontend V2 (EN COURS)
+
+3. ⏳ **Frontend Issue #57** - Connecter Frontend V2 au Backend (5-6h)
+   - Installation MSAL + Configuration Azure AD B2C
+   - Création API client + Token management
+   - Tests login + CRUD complet
+
 ### ✅ Phase 2 COMPLÉTÉE - Documentation RNCP
 
-3. ✅ Issue #46 - ADRs (10 ADRs complets)
+4. ✅ Issue #46 - ADRs (10 ADRs complets)
 
 ### ⏳ Phase 2bis EN COURS - Sécurité & Qualité
 
-4. ⏳ Issue #44 - Couche d'autorisation (feedback encadrant)
-5. ⏳ Issue #45 - npm audit dans CI/CD (feedback encadrant)
-6. 📋 Issue #36 - Normaliser module visualization
-7. ✅ Issue #53 - Optimiser CI/CD (25% amélioration : 7m36s → 5m44s)
+5. ⏳ Issue #44 - Couche d'autorisation (feedback encadrant)
+6. ⏳ Issue #45 - npm audit dans CI/CD (feedback encadrant)
+7. 📋 Issue #36 - Normaliser module visualization
+8. ✅ Issue #53 - Optimiser CI/CD (25% amélioration : 7m36s → 5m44s)
 
 ### 📋 Phase 3 - Features avancées (Avant RNCP Mars 2027)
 
@@ -259,15 +294,16 @@ Gestion des contenants (fûts, bouteilles, caisses)
 
 ## 📅 Timeline (jusqu'au RNCP - Mars 2027)
 
-| Période            | Focus                      | Issues                          | Statut   |
-| ------------------ | -------------------------- | ------------------------------- | -------- |
-| ✅ Déc 2025 (S1-4) | Architecture DDD/CQRS      | #37, Tests E2E                  | COMPLÉTÉ |
-| ✅ Déc 2025 (S5)   | Documentation RNCP         | #46 (10 ADRs), #53 (CI/CD)      | COMPLÉTÉ |
-| ⏳ Jan 2026        | Sécurité & Qualité         | #44 (Autorisation), #45 (audit) | EN COURS |
-| 📋 Fév-Mars 2026   | Refactoring & Optimisation | #36                             | PLANIFIÉ |
-| 📋 Avr-Déc 2026    | Features avancées          | #41, #43                        | PLANIFIÉ |
-| 📋 Jan-Fév 2027    | ML & Leisure Mode          | #47, #48, #49                   | PLANIFIÉ |
-| 🎯 Mars 2027       | **Présentation RNCP**      | -                               | OBJECTIF |
+| Période                    | Focus                       | Issues                          | Statut       |
+| -------------------------- | --------------------------- | ------------------------------- | ------------ |
+| ✅ Déc 2025 (S1-4)         | Architecture DDD/CQRS       | #37, Tests E2E                  | COMPLÉTÉ     |
+| ✅ Déc 2025 (S5)           | Documentation RNCP          | #46 (10 ADRs), #53 (CI/CD)      | COMPLÉTÉ     |
+| ⏳ **Déc 2025 / Jan 2026** | **Frontend V2 Integration** | **Frontend Issue #57 (5-6h)**   | **EN COURS** |
+| ⏳ Jan 2026                | Sécurité & Qualité          | #44 (Autorisation), #45 (audit) | PLANIFIÉ     |
+| 📋 Fév-Mars 2026           | Refactoring & Optimisation  | #36                             | PLANIFIÉ     |
+| 📋 Avr-Déc 2026            | Features avancées           | #41, #43                        | PLANIFIÉ     |
+| 📋 Jan-Fév 2027            | ML & Leisure Mode           | #47, #48, #49                   | PLANIFIÉ     |
+| 🎯 Mars 2027               | **Présentation RNCP**       | -                               | OBJECTIF     |
 
 ---
 
