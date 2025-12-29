@@ -96,7 +96,7 @@
 
 ### 2. Utiliser le template
 
-Copier le contenu de [sessions/README.md](sessions/README.md) comme point de départ.
+Copier le contenu de [sessions/README.md](sessions/TEMPLATE.md) comme point de départ.
 
 ### 3. Sections obligatoires
 
@@ -220,7 +220,8 @@ Consulter ce fichier (7-SESSIONS.md) qui maintient un index organisé.
 
 ---
 
-**🎯 Rappel** : La documentation des sessions est **obligatoire** pour chaque session de développement. C'est un outil précieux pour :
+**🎯 Rappel** : La documentation des sessions est **obligatoire** pour chaque session de développement. C'est un outil
+précieux pour :
 
 - Garder une trace des décisions
 - Faciliter les reviews
