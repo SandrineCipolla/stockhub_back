@@ -58,13 +58,14 @@
 > **Documentation détaillée sur des sujets spécifiques**
 > Localisation : [technical/](technical/)
 
-| Catégorie        | Fichier                                                                | Description                             |
-| ---------------- | ---------------------------------------------------------------------- | --------------------------------------- |
-| **Architecture** | [technical/dependency-injection.md](technical/dependency-injection.md) | Dependency Injection - Best Practices   |
-| **Tests**        | [technical/e2e-testing.md](technical/e2e-testing.md)                   | Tests E2E avec Playwright               |
-| **Tests**        | [technical/testcontainers.md](technical/testcontainers.md)             | Tests d'intégration avec TestContainers |
-| **Auth**         | [technical/azure-b2c-setup.md](technical/azure-b2c-setup.md)           | Setup Azure AD B2C (ROPC)               |
-| **Database**     | [technical/prisma-mapping.md](technical/prisma-mapping.md)             | Prisma - Mapping TypeScript ↔ MySQL     |
+| Catégorie        | Fichier                                                                      | Description                             |
+| ---------------- | ---------------------------------------------------------------------------- | --------------------------------------- |
+| **Architecture** | [technical/dependency-injection.md](technical/dependency-injection.md)       | Dependency Injection - Best Practices   |
+| **Frontend**     | [technical/frontend-v2-integration.md](technical/frontend-v2-integration.md) | Intégration Frontend V2 avec Backend    |
+| **Tests**        | [technical/e2e-testing.md](technical/e2e-testing.md)                         | Tests E2E avec Playwright               |
+| **Tests**        | [technical/testcontainers.md](technical/testcontainers.md)                   | Tests d'intégration avec TestContainers |
+| **Auth**         | [technical/azure-b2c-setup.md](technical/azure-b2c-setup.md)                 | Setup Azure AD B2C (ROPC)               |
+| **Database**     | [technical/prisma-mapping.md](technical/prisma-mapping.md)                   | Prisma - Mapping TypeScript ↔ MySQL     |
 
 ---
 
