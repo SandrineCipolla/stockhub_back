@@ -183,6 +183,8 @@ tests/
 ### Qualité du code
 
 - **TypeScript**: Mode strict, 0 erreur tolérée
+  - ⚠️ **IMPORTANT**: Éviter l'utilisation de `as` (type assertion) sauf si vraiment impossible autrement
+  - Préférer le type narrowing, les type guards, ou refactorer pour avoir un typage correct
 - **ESLint**: 0 warning toléré (--max-warnings 0)
 - **Prettier**: Formatage automatique avec `endOfLine: "lf"`
 - **Knip**: Détection code mort activée
@@ -561,4 +563,5 @@ Voir DTOs dans `src/api/dto/` et mappers dans `src/api/dto/mappers/`.
 - Documenter les décisions architecturales dans des ADRs
 - Écrire des tests pour chaque nouvelle fonctionnalité
 - Pattern Dependency Injection avec fallback pour la testabilité
+- ⚠️ **Éviter `as` (type assertion)** - Préférer type narrowing ou type guards
 - Les hooks pre-commit et pre-push automatisent les vérifications
