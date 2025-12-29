@@ -2,8 +2,6 @@ import { PrismaClient, StockRole as PrismaStockRole } from '@prisma/client';
 import express from 'express';
 import { StockRole } from '@domain/authorization/common/value-objects/StockRole';
 
-const prisma = new PrismaClient();
-
 export interface AuthorizedRequest extends express.Request {
   userID?: string;
   stockRole?: PrismaStockRole;
@@ -15,8 +13,16 @@ export type RequiredPermission = 'read' | 'write' | 'suggest';
 /**
  * Middleware to authorize access to stock resources
  * Must be used AFTER authenticationMiddleware
+ *
+ * @param requiredPermission - The permission level required (read, write, suggest)
+ * @param prismaClient - Optional PrismaClient for dependency injection (useful for testing)
  */
-export function authorizeStockAccess(requiredPermission: RequiredPermission = 'read') {
+export function authorizeStockAccess(
+  requiredPermission: RequiredPermission = 'read',
+  prismaClient?: PrismaClient
+) {
+  const prisma = prismaClient ?? new PrismaClient();
+
   return async (req: AuthorizedRequest, res: express.Response, next: express.NextFunction) => {
     try {
       // 1. Check if user is authenticated
@@ -113,15 +119,21 @@ export function authorizeStockAccess(requiredPermission: RequiredPermission = 'r
 
 /**
  * Shorthand middleware for read access
+ * @param prismaClient - Optional PrismaClient for dependency injection (useful for testing)
  */
-export const authorizeStockRead = authorizeStockAccess('read');
+export const authorizeStockRead = (prismaClient?: PrismaClient) =>
+  authorizeStockAccess('read', prismaClient);
 
 /**
  * Shorthand middleware for write access
+ * @param prismaClient - Optional PrismaClient for dependency injection (useful for testing)
  */
-export const authorizeStockWrite = authorizeStockAccess('write');
+export const authorizeStockWrite = (prismaClient?: PrismaClient) =>
+  authorizeStockAccess('write', prismaClient);
 
 /**
  * Shorthand middleware for suggest access
+ * @param prismaClient - Optional PrismaClient for dependency injection (useful for testing)
  */
-export const authorizeStockSuggest = authorizeStockAccess('suggest');
+export const authorizeStockSuggest = (prismaClient?: PrismaClient) =>
+  authorizeStockAccess('suggest', prismaClient);

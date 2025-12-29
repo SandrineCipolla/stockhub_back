@@ -55,7 +55,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   router.get(
     '/stocks/:stockId',
-    authorizeStockRead,
+    authorizeStockRead(prismaClient),
     async (req: express.Request, res: express.Response) => {
       await stockController.getStockDetails(req, res);
     }
@@ -65,7 +65,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   router.get(
     '/stocks/:stockId/items',
-    authorizeStockRead,
+    authorizeStockRead(prismaClient),
     async (req: express.Request, res: express.Response) => {
       await stockController.getStockItems(req, res);
     }
@@ -80,15 +80,19 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   logger.info('Routes for POST /stocks configured');
 
-  router.post('/stocks/:stockId/items', authorizeStockWrite, async (req, res: express.Response) => {
-    await manipulationController.addItemToStock(req as AddItemToStockRequest, res);
-  });
+  router.post(
+    '/stocks/:stockId/items',
+    authorizeStockWrite(prismaClient),
+    async (req, res: express.Response) => {
+      await manipulationController.addItemToStock(req as AddItemToStockRequest, res);
+    }
+  );
 
   logger.info('Routes for POST /stocks/:stockId/items configured (with authorization)');
 
   router.patch(
     '/stocks/:stockId/items/:itemId',
-    authorizeStockWrite,
+    authorizeStockWrite(prismaClient),
     async (req, res: express.Response) => {
       await manipulationController.updateItemQuantity(req as UpdateItemQuantityRequest, res);
     }
