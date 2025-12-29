@@ -285,11 +285,19 @@ npm run test:e2e:ui    # Mode UI
 
 **IMPORTANT**: Mettre à jour la documentation suivante:
 
-1. **ROADMAP.md**: Marquer les issues complétées
-2. **ADR** (Architecture Decision Records): Documenter les décisions architecturales
-3. **Tests**: Ajouter tests pour nouvelles features
-4. **GitHub Project**: Mettre à jour le statut des tâches
-5. **CHANGELOG**: Automatique via Release Please
+1. **Session documentée** : Créer `docs/sessions/YYYY-MM-DD-description.md` (voir `docs/7-SESSIONS.md` pour template)
+2. **ROADMAP.md**: Marquer les issues complétées
+3. **ADR** (Architecture Decision Records): Documenter les décisions architecturales
+4. **Tests**: Ajouter tests pour nouvelles features
+5. **GitHub Project**: Mettre à jour le statut des tâches
+6. **CHANGELOG**: Automatique via Release Please
+
+**Checklist documentation session** :
+
+- [ ] Fichier session créé dans `docs/sessions/` avec format `YYYY-MM-DD-description.md`
+- [ ] Objectifs, réalisations, et décisions techniques documentés
+- [ ] `docs/7-SESSIONS.md` mis à jour avec entrée pour la session
+- [ ] Commits référencés, issues/PRs liées mentionnées
 
 ### Avant de pusher
 

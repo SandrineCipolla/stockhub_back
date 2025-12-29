@@ -1,0 +1,229 @@
+# 📅 Sessions de Développement - StockHub V2 Backend
+
+> Index chronologique de toutes les sessions de développement avec liens vers les récapitulatifs détaillés
+
+---
+
+## 📊 Vue d'Ensemble
+
+**Total sessions documentées** : 2
+**Période** : Décembre 2025 - En cours
+**Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
+
+---
+
+## 🗓️ Sessions Documentées
+
+### Session du 29 Décembre 2025 - Réorganisation Documentation
+
+**Fichier** : [sessions/2025-12-29-doc-reorganization.md](sessions/2025-12-29-doc-reorganization.md)
+
+**Objectif** : Réorganiser et structurer la documentation du projet
+
+**Réalisations** :
+
+- ✅ **Structure de documentation créée**
+  - Fichiers numérotés (0-INDEX à 7-SESSIONS)
+  - Dossiers thématiques (technical/, troubleshooting/, sessions/, archive/)
+  - Index principal avec sommaire complet
+- ✅ **Guides consolidés**
+  - Architecture DDD/CQRS
+  - Authentication Azure AD B2C
+  - Testing (unit, integration, E2E)
+  - Code Quality
+  - Development Workflow
+  - API Documentation
+- ✅ **Réorganisation fichiers existants**
+  - Déplacement vers dossiers appropriés
+  - Suppression doublons
+  - Archive anciennes docs
+- ✅ **Ajout documentation sessions**
+  - Template de session
+  - Instructions claires
+  - Intégration dans claude.md
+
+**Décisions techniques** :
+
+- Structure mixte : fichiers numérotés pour guides essentiels + dossiers thématiques
+- Format sessions : `YYYY-MM-DD-DESCRIPTION.md`
+- Préfixes numériques pour ordre logique
+
+---
+
+### Session du 28 Décembre 2025 - Authorization Phase 1 & Tests
+
+**Fichier** : [sessions/2025-12-28-authorization-phase1.md](sessions/2025-12-28-authorization-phase1.md)
+
+**Objectif** : Implémenter Phase 1 de l'autorisation avec tests complets
+
+**Réalisations** :
+
+- ✅ **Domain Layer** - 142 tests unitaires
+  - StockRole value object (89 tests)
+  - FamilyRole value object (15 tests)
+  - Family entity (38 tests)
+- ✅ **Middleware d'autorisation**
+  - authorizeMiddleware.ts avec permissions (read, write, suggest)
+  - Integration avec routes V2
+  - 9 tests d'intégration avec TestContainers
+- ✅ **Tests E2E**
+  - 4 tests avec Playwright + Azure AD B2C
+  - Vérification ownership et collaborations
+- ✅ **Documentation**
+  - ADR-009: Resource-Based Authorization
+  - Best practices Dependency Injection
+  - Mise à jour ROADMAP
+
+**Décisions techniques** :
+
+- Pattern DI avec fallback: `prismaClient ?? new PrismaClient()`
+- Structure tests: 4 niveaux de describe
+- Line endings: LF forcé via .gitattributes
+
+---
+
+## 📝 Comment Documenter une Session
+
+**IMPORTANT** : À la fin de chaque session de développement, créer un fichier de documentation.
+
+### 1. Créer le fichier
+
+**Format du nom** : `YYYY-MM-DD-DESCRIPTION.md`
+
+**Localisation** : `docs/sessions/`
+
+**Exemple** : `2025-12-30-api-v3-endpoints.md`
+
+### 2. Utiliser le template
+
+Copier le contenu de [sessions/README.md](sessions/README.md) comme point de départ.
+
+### 3. Sections obligatoires
+
+```markdown
+# 📅 Session du DD Mois YYYY - Titre Descriptif
+
+## 🎯 Objectif
+
+[Objectif principal de la session]
+
+## ✅ Réalisations
+
+- ✅ **Catégorie 1**
+  - Détail 1
+  - Détail 2
+- ✅ **Catégorie 2**
+  - Détail 1
+
+## 🏗️ Changements Techniques
+
+### Fichiers Modifiés
+
+- `chemin/fichier.ts` - Description changement
+- `autre/fichier.ts` - Description changement
+
+### Nouveaux Fichiers
+
+- `nouveau/fichier.ts` - Description
+
+## 🧪 Tests
+
+- Tests unitaires : X/X passent
+- Tests d'intégration : X/X passent
+- Tests E2E : X/X passent
+
+## 📚 Documentation
+
+- [ ] ADR créé (si nécessaire)
+- [ ] ROADMAP mis à jour
+- [ ] Tests documentés
+- [ ] Session documentée
+
+## 🔗 Références
+
+- Issue #XX
+- PR #XX
+- Commits : abc123, def456
+
+## 💡 Décisions & Learnings
+
+[Décisions importantes prises, problèmes rencontrés, solutions trouvées]
+```
+
+### 4. Mettre à jour 7-SESSIONS.md
+
+Ajouter une entrée dans ce fichier pour référencer la nouvelle session.
+
+### 5. Mettre à jour ROADMAP.md
+
+Si des issues ont été complétées, marquer dans ROADMAP.md.
+
+---
+
+## 🎯 Checklist Fin de Session
+
+Avant de terminer une session de développement :
+
+- [ ] **Code committé** avec messages conventional commits
+- [ ] **Tests passent** (unit + integration + E2E si applicable)
+- [ ] **Documentation session créée** dans `sessions/YYYY-MM-DD-description.md`
+- [ ] **7-SESSIONS.md mis à jour** avec nouvelle entrée
+- [ ] **ROADMAP.md mis à jour** si issues complétées
+- [ ] **ADR créé** si décision architecturale importante
+- [ ] **PR créée** si feature complète
+- [ ] **GitHub Project mis à jour**
+
+---
+
+## 📁 Organisation des Sessions
+
+### Par Date (Chronologique)
+
+Fichiers dans `sessions/` triés par date décroissante (plus récent en premier)
+
+### Par Catégorie
+
+Les sessions peuvent être catégorisées par :
+
+- **Features** : Nouvelles fonctionnalités
+- **Refactoring** : Améliorations du code
+- **Testing** : Ajout/amélioration tests
+- **Documentation** : Documentation technique
+- **Bugfixes** : Corrections de bugs
+- **Infrastructure** : CI/CD, configuration
+
+### Archive
+
+Sessions très anciennes (> 6 mois) peuvent être archivées dans `archive/sessions/` si nécessaire.
+
+---
+
+## 🔍 Rechercher une Session
+
+### Par Date
+
+Fichiers nommés `YYYY-MM-DD-*` facilitent la recherche chronologique.
+
+### Par Mot-Clé
+
+Utiliser `grep` dans le dossier sessions :
+
+```bash
+grep -r "authorization" docs/sessions/
+grep -r "Azure AD" docs/sessions/
+grep -r "Issue #62" docs/sessions/
+```
+
+### Par Index
+
+Consulter ce fichier (7-SESSIONS.md) qui maintient un index organisé.
+
+---
+
+**🎯 Rappel** : La documentation des sessions est **obligatoire** pour chaque session de développement. C'est un outil précieux pour :
+
+- Garder une trace des décisions
+- Faciliter les reviews
+- Comprendre l'évolution du projet
+- Onboarding nouveaux développeurs
+- Préparation aux soutenances RNCP
