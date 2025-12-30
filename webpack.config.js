@@ -51,6 +51,7 @@ module.exports = {
       '@controllers': path.resolve(__dirname, 'src/controllers'),
       '@routes': path.resolve(__dirname, 'src/routes'),
       '@authentication': path.resolve(__dirname, 'src/authentication'),
+      '@authorization': path.resolve(__dirname, 'src/authorization'),
       '@serverSetup': path.resolve(__dirname, 'src/serverSetup'),
       '@core': path.resolve(__dirname, 'src'),
     },
