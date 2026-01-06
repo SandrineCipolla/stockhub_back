@@ -532,6 +532,73 @@ export const createMemberData = (...) => {
 
 ---
 
+## 12. Webpack Path Alias - Clarification Configuration
+
+**Question**: Le reviewer demande: `"question: no slash at the end ?"` (ligne 54 de webpack.config.js)
+
+**Contexte**: Différence entre tsconfig.json et webpack.config.js
+
+**Analyse**:
+
+```javascript
+// webpack.config.js - SANS trailing slash (CORRECT)
+alias: {
+  '@authorization': path.resolve(__dirname, 'src/authorization'),
+  '@domain': path.resolve(__dirname, 'src/domain'),
+}
+
+// tsconfig.json - AVEC trailing slash /* (CORRECT)
+"paths": {
+  "@authorization/*": ["src/authorization/*"],
+  "@domain/*": ["src/domain/*"]
+}
+```
+
+**Réponse**:
+
+La configuration actuelle est **correcte**. Les deux outils ont des syntaxes différentes:
+
+1. **TypeScript** (`tsconfig.json`) nécessite `/*` pour indiquer "tous les fichiers sous ce chemin"
+2. **Webpack** (`webpack.config.js`) utilise `path.resolve()` qui retourne un chemin absolu complet et résout automatiquement les sous-chemins
+
+**Fichier modifié**:
+
+- `webpack.config.js`
+
+**Changement**:
+
+```javascript
+// Ajout de commentaires explicatifs
+resolve: {
+  extensions: ['.ts', '.js'],
+  // Path aliases for module resolution
+  // Note: No trailing slash needed here (unlike tsconfig.json)
+  // Webpack automatically resolves sub-paths from these base directories
+  alias: {
+    '@authorization': path.resolve(__dirname, 'src/authorization'),
+    // ...
+  }
+}
+```
+
+**Vérification**: Import actuel fonctionne correctement:
+
+```typescript
+// src/api/routes/StockRoutesV2.ts
+import { authorizeStockRead } from '@authorization/authorizeMiddleware'; // ✅ Fonctionne
+```
+
+**Raison**:
+
+- ✅ **Webpack**: Pas besoin de trailing slash avec `path.resolve()`
+- ✅ **TypeScript**: Nécessite `/*` pour pattern matching
+- ✅ **Build**: Webpack compile sans erreur
+- ✅ **Tests**: TypeScript compile sans erreur
+
+**Résultat**: Configuration correcte, question clarifiée avec commentaires
+
+---
+
 ## Tâches Restantes (Suggestions optionnelles)
 
 ### Issues Bloquantes
@@ -547,9 +614,9 @@ export const createMemberData = (...) => {
 - [x] **Family: createAdminMember factory method** - ✅ Implémenté
 - [x] **Family: use typed errors** - ✅ Toutes les méthodes utilisent erreurs typées
 - [x] **FamilyMemberData: add isAdmin method** - ✅ Converti en Value Object class
-- [ ] **Family.getMember: return empty** - Null Object Pattern (question ouverte)
-- [ ] **Constants for routes** - Extraire noms de routes dans constantes (optionnel)
-- [ ] **Webpack path alias trailing slash** - Clarifier si nécessaire (question)
+- [x] **Webpack path alias trailing slash** - ✅ Question clarifiée avec commentaires
+- [ ] **Family.getMember: return empty** - Null Object Pattern (question ouverte avec reviewer)
+- [ ] **Constants for routes** - Extraire noms de routes dans constantes (optionnel, non demandé par reviewer)
 
 ---
 
@@ -602,18 +669,21 @@ export const createMemberData = (...) => {
 **Auteur**: Claude Code (avec Sandrine Cipolla)
 **Date**: 6 janvier 2026
 **Durée**: ~4h
-**Statut**: 15/17 commentaires traités (88%)
+**Statut**: 16/17 commentaires traités (94%)
 
 ## Résumé des Améliorations
 
 - ✅ **5 issues bloquantes** résolues sur 5 (100%)
-- ✅ **10 suggestions** implémentées sur 10 (100%)
+- ✅ **11 suggestions** implémentées sur 11 (100%)
+- ✅ **1 question** clarifiée (100%)
 - ✅ **142 tests** passent (domain layer)
 - ✅ **35 tests Family** passent après split
 - ✅ **0 erreur TypeScript**
+- ✅ **Build webpack** fonctionne
 - ✅ Documentation best practices ajoutée à `CLAUDE.md`
 - ✅ Tests divisés en 4 fichiers de ~100 lignes chacun
 - ✅ FamilyMemberData converti en Value Object (DDD)
+- ✅ Webpack path alias clarification documentée
 
 **Commits**:
 
@@ -621,14 +691,18 @@ export const createMemberData = (...) => {
 2. `test(family): split Family.test.ts into smaller, focused test files`
 3. `docs: update PR #72 session with test split completion`
 4. `refactor(family): convert FamilyMemberData to Value Object class`
+5. `docs: add FamilyMemberData Value Object section to session`
+6. `docs(webpack): clarify path alias configuration`
 
-**Commentaires restants (2 questions ouvertes)**:
+**Commentaire restant (1 question ouverte)**:
 
-1. **Family.getMember: return empty** - Null Object Pattern (discussion ouverte avec reviewer)
-2. **Webpack path alias trailing slash** - Question de clarification (non-bloquant)
+1. **Family.getMember: return empty** - Null Object Pattern (question ouverte - nécessite discussion avec reviewer)
+
+**Note**: Le commentaire "Constants for routes" n'a jamais été demandé par le reviewer, il ne fait pas partie des 17 commentaires originaux.
 
 **Prochaines étapes**:
 
-1. Vérifier webpack path alias trailing slash (tsconfig.json)
-2. (Optionnel) Discuter Null Object Pattern avec reviewer
-3. Push et demande de re-review
+1. Commit final de la documentation
+2. (Optionnel) Discuter Null Object Pattern avec reviewer si souhaité
+3. Push vers GitHub
+4. Demander re-review de la PR #72
