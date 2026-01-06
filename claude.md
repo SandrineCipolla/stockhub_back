@@ -442,6 +442,467 @@ export function middleware() {
 
 **Documentation complète**: `docs/architecture/DEPENDENCY-INJECTION-BEST-PRACTICES.md`
 
+## Best Practices from Code Reviews
+
+Cette section compile les meilleures pratiques identifiées lors des code reviews pour maintenir une qualité de code élevée.
+
+### 1. Repository Pattern - Encapsuler l'accès aux données
+
+**Principe**: Isoler les requêtes base de données dans des repositories dédiés.
+
+❌ **À éviter**:
+
+```typescript
+// Dans un middleware
+const user = await prisma.users.findUnique({
+  where: { EMAIL: email },
+});
+```
+
+✅ **Recommandé**:
+
+```typescript
+// AuthorizationRepository.ts
+export class AuthorizationRepository {
+  constructor(private prisma: PrismaClient) {}
+
+  async findUserByEmail(email: string): Promise<User | null> {
+    return this.prisma.users.findUnique({
+      where: { EMAIL: email },
+    });
+  }
+}
+
+// Dans le middleware
+const user = await authRepository.findUserByEmail(email);
+```
+
+**Avantages**: Testabilité, réutilisabilité, séparation des responsabilités.
+
+---
+
+### 2. Typed Errors - Éviter les Error génériques
+
+**Principe**: Créer des classes d'erreurs typées pour faciliter le debugging et le handling.
+
+❌ **À éviter**:
+
+```typescript
+throw new Error('Family name is required');
+throw new Error('Family must have at least one admin');
+```
+
+✅ **Recommandé**:
+
+```typescript
+// errors/FamilyErrors.ts
+export class FamilyNameRequiredError extends Error {
+  constructor() {
+    super('Family name is required');
+    this.name = 'FamilyNameRequiredError';
+  }
+}
+
+export class NoAdminError extends Error {
+  constructor() {
+    super('Family must have at least one admin');
+    this.name = 'NoAdminError';
+  }
+}
+
+// Utilisation
+throw new FamilyNameRequiredError();
+throw new NoAdminError();
+```
+
+**Avantages**: Type safety, error handling précis, meilleur debugging.
+
+---
+
+### 3. Constants - Utiliser des constantes pour les valeurs magiques
+
+**Principe**: Extraire les valeurs hardcodées dans des constantes nommées.
+
+❌ **À éviter**:
+
+```typescript
+if (permission === 'read') {
+  /* ... */
+}
+if (permission === 'write') {
+  /* ... */
+}
+```
+
+✅ **Recommandé**:
+
+```typescript
+// constants/permissions.ts
+export const PERMISSIONS = {
+  READ: 'read' as const,
+  WRITE: 'write' as const,
+  SUGGEST: 'suggest' as const,
+} as const;
+
+export const ROUTES = {
+  STOCKS_LIST: '/stocks',
+  STOCK_DETAIL: '/stocks/:stockId',
+} as const;
+
+// Utilisation
+if (permission === PERMISSIONS.READ) {
+  /* ... */
+}
+```
+
+**Avantages**: Maintenabilité, refactoring sûr, autocomplete.
+
+---
+
+### 4. Logic in Value Objects - Déplacer la logique métier dans les Value Objects
+
+**Principe**: Les Value Objects doivent contenir leur propre logique de validation et comportement.
+
+❌ **À éviter**:
+
+```typescript
+// Dans le middleware
+switch (stockRole.role) {
+  case StockRoleEnum.OWNER:
+  case StockRoleEnum.EDITOR:
+    return true;
+  case StockRoleEnum.VIEWER_CONTRIBUTOR:
+    return requiredPermission === 'suggest';
+  default:
+    return false;
+}
+```
+
+✅ **Recommandé**:
+
+```typescript
+// StockRole.ts (Value Object)
+export class StockRole {
+  constructor(private role: StockRoleEnum) {}
+
+  hasRequiredPermission(permission: RequiredPermission): boolean {
+    switch (this.role) {
+      case StockRoleEnum.OWNER:
+      case StockRoleEnum.EDITOR:
+        return true;
+      case StockRoleEnum.VIEWER_CONTRIBUTOR:
+        return permission === 'suggest';
+      default:
+        return false;
+    }
+  }
+}
+
+// Dans le middleware
+if (!stockRole.hasRequiredPermission(requiredPermission)) {
+  return res.status(403).json({ error: 'Insufficient permissions' });
+}
+```
+
+**Avantages**: Cohésion, testabilité, réutilisabilité.
+
+---
+
+### 5. Factory Methods - Créer des helpers pour les objets complexes
+
+**Principe**: Utiliser des factory methods pour éviter la duplication de code de création d'objets.
+
+❌ **À éviter**:
+
+```typescript
+const family = new Family({
+  name: params.name,
+  members: [
+    {
+      id: 0,
+      userId: params.creatorUserId,
+      role: FamilyRoleEnum.ADMIN,
+      joinedAt: new Date(),
+    },
+  ],
+});
+```
+
+✅ **Recommandé**:
+
+```typescript
+// Dans Family.ts
+private static createAdminMember(userId: number): FamilyMemberData {
+  return {
+    id: 0,
+    userId,
+    role: FamilyRoleEnum.ADMIN,
+    joinedAt: new Date(),
+  };
+}
+
+// Utilisation
+const family = new Family({
+  name: params.name,
+  members: [Family.createAdminMember(params.creatorUserId)],
+});
+```
+
+**Avantages**: DRY, moins de duplication, évolution centralisée.
+
+---
+
+### 6. Reuse Existing Methods - Réutiliser les méthodes existantes
+
+**Principe**: Éviter de réimplémenter une logique qui existe déjà dans une méthode.
+
+❌ **À éviter**:
+
+```typescript
+removeMember(userId: number): void {
+  const index = this.members.findIndex(m => m.userId === userId);
+  if (index === -1) {
+    throw new Error('Member not found');
+  }
+  this.members.splice(index, 1);
+}
+```
+
+✅ **Recommandé**:
+
+```typescript
+removeMember(userId: number): void {
+  const member = this.getMember(userId); // Réutilise la méthode existante
+  if (!member) {
+    throw new MemberNotFoundError(userId);
+  }
+  const index = this.members.indexOf(member);
+  this.members.splice(index, 1);
+}
+```
+
+**Avantages**: DRY, maintenance simplifiée, cohérence.
+
+---
+
+### 7. Extract Complex Logic - Extraire la logique complexe dans des méthodes dédiées
+
+**Principe**: Déplacer les vérifications complexes dans des méthodes privées bien nommées.
+
+❌ **À éviter**:
+
+```typescript
+removeMember(userId: number): void {
+  // ...
+  if (this.members.filter(m => m.role === FamilyRoleEnum.ADMIN).length === 0) {
+    throw new Error('Family must have at least one admin');
+  }
+}
+```
+
+✅ **Recommandé**:
+
+```typescript
+private hasAdmin(): boolean {
+  return this.members.some(m => m.role === FamilyRoleEnum.ADMIN);
+}
+
+removeMember(userId: number): void {
+  // ...
+  if (!this.hasAdmin()) {
+    throw new NoAdminError();
+  }
+}
+```
+
+**Avantages**: Lisibilité, testabilité, intention claire.
+
+---
+
+### 8. Null Object Pattern - Retourner des objets vides au lieu de undefined
+
+**Principe**: Éviter les `undefined` en retournant des objets neutres (Null Object Pattern).
+
+❌ **À éviter**:
+
+```typescript
+getMember(userId: number): FamilyMemberData | undefined {
+  return this.members.find(m => m.userId === userId);
+}
+
+// Usage problématique
+const member = family.getMember(123);
+if (member) { // Vérification nécessaire partout
+  // ...
+}
+```
+
+✅ **Recommandé (si applicable)**:
+
+```typescript
+// NullMember.ts
+export const NULL_MEMBER: FamilyMemberData = {
+  id: -1,
+  userId: -1,
+  role: FamilyRoleEnum.VIEWER,
+  joinedAt: new Date(0),
+};
+
+getMember(userId: number): FamilyMemberData {
+  return this.members.find(m => m.userId === userId) ?? NULL_MEMBER;
+}
+```
+
+**Note**: Utiliser avec précaution. Parfois `undefined` est plus explicite.
+
+---
+
+### 9. Methods on Business Objects - Ajouter des méthodes sur les objets métier
+
+**Principe**: Les objets métier doivent encapsuler leurs propres comportements.
+
+❌ **À éviter**:
+
+```typescript
+// Vérification externe
+const isAdmin = member.role === FamilyRoleEnum.ADMIN;
+```
+
+✅ **Recommandé**:
+
+```typescript
+// FamilyMember.ts
+export class FamilyMember {
+  constructor(private data: FamilyMemberData) {}
+
+  isAdmin(): boolean {
+    return this.data.role === FamilyRoleEnum.ADMIN;
+  }
+
+  canManageMembers(): boolean {
+    return this.isAdmin();
+  }
+}
+
+// Utilisation
+if (member.isAdmin()) {
+  /* ... */
+}
+```
+
+**Avantages**: Encapsulation, cohésion, expressivité.
+
+---
+
+### 10. File Organization - Séparer les enums dans des fichiers dédiés
+
+**Principe**: Les enums doivent être dans des fichiers séparés pour faciliter leur réutilisation.
+
+❌ **À éviter**:
+
+```typescript
+// StockRole.ts
+export enum StockRoleEnum {
+  OWNER = 'owner',
+  EDITOR = 'editor',
+  VIEWER = 'viewer',
+}
+
+export class StockRole {
+  // ...
+}
+```
+
+✅ **Recommandé**:
+
+```typescript
+// StockRoleEnum.ts
+export enum StockRoleEnum {
+  OWNER = 'owner',
+  EDITOR = 'editor',
+  VIEWER = 'viewer',
+}
+
+// StockRole.ts
+import { StockRoleEnum } from './StockRoleEnum';
+
+export class StockRole {
+  // ...
+}
+```
+
+**Avantages**: Réutilisabilité, imports clairs, séparation des responsabilités.
+
+---
+
+### 11. Split Large Test Files - Diviser les fichiers de tests volumineux
+
+**Principe**: Les fichiers de tests de plus de 500 lignes doivent être divisés.
+
+❌ **À éviter**:
+
+```
+Family.test.ts (1200 lignes)
+  - create()
+  - addMember()
+  - removeMember()
+  - getMember()
+  - etc.
+```
+
+✅ **Recommandé**:
+
+```
+Family.create.test.ts
+Family.addMember.test.ts
+Family.removeMember.test.ts
+Family.getMember.test.ts
+```
+
+**Avantages**: Lisibilité, maintenance, navigation facile, parallélisation.
+
+---
+
+### 12. Input Validation - Valider les entrées avec des messages clairs
+
+**Principe**: Toujours valider les inputs avec des messages d'erreur explicites.
+
+✅ **Déjà bien fait** (exemple à suivre):
+
+```typescript
+export class StockRole {
+  constructor(role: string) {
+    if (!Object.values(StockRoleEnum).includes(role as StockRoleEnum)) {
+      throw new InvalidStockRoleError(`Invalid role: ${role}`);
+    }
+    this.role = role as StockRoleEnum;
+  }
+}
+```
+
+**Avantages**: Fail-fast, debugging facile, error messages utiles.
+
+---
+
+### Checklist Best Practices
+
+Avant chaque PR, vérifier:
+
+- [ ] **Repository Pattern**: Tous les accès DB sont dans des repositories
+- [ ] **Typed Errors**: Pas de `throw new Error()` générique
+- [ ] **Constants**: Pas de strings/numbers hardcodés
+- [ ] **Logic in VOs**: La logique métier est dans les Value Objects
+- [ ] **Factory Methods**: Pas de duplication dans la création d'objets
+- [ ] **Reuse Methods**: Pas de réimplémentation de logique existante
+- [ ] **Extract Logic**: Pas de logique complexe inline
+- [ ] **Null Object**: Utilisation appropriée (si applicable)
+- [ ] **Methods on Objects**: Comportements encapsulés dans les objets
+- [ ] **File Organization**: Enums dans des fichiers séparés
+- [ ] **Test Files**: Fichiers de tests < 500 lignes
+- [ ] **Input Validation**: Toutes les entrées sont validées
+
+---
+
 ## Naming conventions
 
 ### Fichiers & Dossiers
