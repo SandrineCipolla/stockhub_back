@@ -392,7 +392,44 @@ removeMember(userId: number): void {
 
 ---
 
-## Tâches Restantes (En cours)
+## 10. Split Family.test.ts - Test Organization
+
+**Issue bloquante**: Fichier de test trop volumineux (408 lignes) pour une review efficace.
+
+**Fichiers créés**:
+
+- `tests/domain/authorization/common/entities/Family.helpers.ts` - Utilitaires de test partagés
+- `tests/domain/authorization/common/entities/Family.create.test.ts` - Tests création entité
+- `tests/domain/authorization/common/entities/Family.members.test.ts` - Tests gestion membres
+- `tests/domain/authorization/common/entities/Family.roles.test.ts` - Tests gestion rôles
+- `tests/domain/authorization/common/entities/Family.info.test.ts` - Tests informations famille
+
+**Fichier supprimé**:
+
+- `tests/domain/authorization/common/entities/Family.test.ts` (408 lignes)
+
+**Organisation des tests**:
+
+| Fichier                | Méthodes testées                                     | Lignes | Tests |
+| ---------------------- | ---------------------------------------------------- | ------ | ----- |
+| Family.helpers.ts      | createTestFamily(), createMemberData()               | 30     | N/A   |
+| Family.create.test.ts  | create()                                             | ~97    | 8     |
+| Family.members.test.ts | addMember(), removeMember(), getMember(), isMember() | ~119   | 10    |
+| Family.roles.test.ts   | isAdmin(), updateMemberRole(), getAdmins()           | ~105   | 11    |
+| Family.info.test.ts    | getTotalMembers(), updateName()                      | ~79    | 6     |
+
+**Raison**:
+
+- ✅ **Lisibilité**: Fichiers de ~100 lignes plus faciles à reviewer
+- ✅ **Organisation**: Tests groupés par fonctionnalité
+- ✅ **Maintenance**: Plus facile de trouver et modifier des tests spécifiques
+- ✅ **Réutilisabilité**: Helpers partagés évitent duplication
+
+**Résultat**: 35 tests passent, 0 fonctionnalité perdue, structure plus claire
+
+---
+
+## Tâches Restantes (Suggestions optionnelles)
 
 ### Issues Bloquantes
 
@@ -400,7 +437,7 @@ removeMember(userId: number): void {
 - [x] **Extract FamilyRoleEnum** - ✅ Déplacé dans fichier séparé
 - [x] **Create typed errors for Family** - ✅ 7 classes d'erreurs créées
 - [x] **Family.removeMember: use getMember** - ✅ Refactoré
-- [ ] **Split Family.test.ts** - Diviser en fichiers plus petits (actuellement 408 lignes)
+- [x] **Split Family.test.ts** - ✅ Divisé en 4 fichiers + 1 fichier helpers
 
 ### Suggestions (Non-bloquantes)
 
@@ -461,21 +498,28 @@ removeMember(userId: number): void {
 
 **Auteur**: Claude Code (avec Sandrine Cipolla)
 **Date**: 6 janvier 2026
-**Durée**: ~2h
-**Statut**: 13/17 commentaires traités (76%)
+**Durée**: ~3h
+**Statut**: 14/17 commentaires traités (82%)
 
 ## Résumé des Améliorations
 
-- ✅ **4 issues bloquantes** résolues sur 5
+- ✅ **5 issues bloquantes** résolues sur 5 (100%)
 - ✅ **9 suggestions** implémentées sur 10
 - ✅ **142 tests** passent (domain layer)
-- ✅ **35 tests Family** passent après refactoring
+- ✅ **35 tests Family** passent après split
 - ✅ **0 erreur TypeScript**
 - ✅ Documentation best practices ajoutée à `CLAUDE.md`
+- ✅ Tests divisés en 4 fichiers de ~100 lignes chacun
+
+**Commits**:
+
+1. `refactor(authorization): address PR #72 code review comments (13/17)`
+2. `test(family): split Family.test.ts into smaller, focused test files`
 
 **Prochaines étapes**:
 
-1. Diviser `Family.test.ts` en fichiers plus petits (408 lignes → ~100 lignes par fichier)
-2. (Optionnel) Ajouter `isAdmin()` sur `FamilyMemberData`
-3. (Optionnel) Webpack path alias trailing slash
-4. Push et demande de re-review
+1. (Optionnel) Ajouter `isAdmin()` sur `FamilyMemberData` - Nécessiterait conversion en classe
+2. (Question) Family.getMember: return empty - Null Object Pattern (discussion ouverte)
+3. (Optionnel) Constants for routes - Extraire noms de routes dans constantes
+4. (Question) Webpack path alias trailing slash - Clarifier si nécessaire
+5. Push et demande de re-review
