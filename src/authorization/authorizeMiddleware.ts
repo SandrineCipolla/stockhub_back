@@ -1,53 +1,54 @@
-import { PrismaClient, StockRole as PrismaStockRole } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import express from 'express';
 import { StockRole } from '@domain/authorization/common/value-objects/StockRole';
-
-const prisma = new PrismaClient();
+import { AuthorizationRepository } from './repositories/AuthorizationRepository';
+import { PERMISSIONS, RequiredPermission, AUTH_ERROR_MESSAGES } from './constants/permissions';
 
 export interface AuthorizedRequest extends express.Request {
   userID?: string;
-  stockRole?: PrismaStockRole;
+  stockRole?: string;
   isStockOwner?: boolean;
 }
-
-export type RequiredPermission = 'read' | 'write' | 'suggest';
 
 /**
  * Middleware to authorize access to stock resources
  * Must be used AFTER authenticationMiddleware
+ *
+ * @param requiredPermission - Permission level required (read, write, suggest)
+ * @param prismaClient - Optional PrismaClient for dependency injection (testing)
  */
-export function authorizeStockAccess(requiredPermission: RequiredPermission = 'read') {
+export function authorizeStockAccess(
+  requiredPermission: RequiredPermission = PERMISSIONS.READ,
+  prismaClient?: PrismaClient
+) {
+  const prisma = prismaClient ?? new PrismaClient();
+  const repository = new AuthorizationRepository(prisma);
+
   return async (req: AuthorizedRequest, res: express.Response, next: express.NextFunction) => {
     try {
       // 1. Check if user is authenticated
       if (!req.userID) {
-        return res.status(401).json({ error: 'Unauthorized - Authentication required' });
+        return res.status(401).json({ error: AUTH_ERROR_MESSAGES.UNAUTHORIZED });
       }
 
       // 2. Extract stockId from route params
       const stockId = parseInt(req.params.stockId, 10);
       if (isNaN(stockId)) {
-        return res.status(400).json({ error: 'Invalid stock ID' });
+        return res.status(400).json({ error: AUTH_ERROR_MESSAGES.INVALID_STOCK_ID });
       }
 
       // 3. Get user from database
-      const user = await prisma.users.findUnique({
-        where: { EMAIL: req.userID },
-        select: { ID: true },
-      });
+      const user = await repository.findUserByEmail(req.userID);
 
       if (!user) {
-        return res.status(401).json({ error: 'User not found' });
+        return res.status(401).json({ error: AUTH_ERROR_MESSAGES.USER_NOT_FOUND });
       }
 
       // 4. Check if stock exists
-      const stock = await prisma.stocks.findUnique({
-        where: { ID: stockId },
-        select: { ID: true, USER_ID: true },
-      });
+      const stock = await repository.findStockById(stockId);
 
       if (!stock) {
-        return res.status(404).json({ error: 'Stock not found' });
+        return res.status(404).json({ error: AUTH_ERROR_MESSAGES.STOCK_NOT_FOUND });
       }
 
       // 5. Check if user is the stock owner
@@ -61,19 +62,11 @@ export function authorizeStockAccess(requiredPermission: RequiredPermission = 'r
       }
 
       // 6. Check if user has a collaborator role
-      const collaborator = await prisma.stockCollaborator.findUnique({
-        where: {
-          stockId_userId: {
-            stockId: stockId,
-            userId: user.ID,
-          },
-        },
-        select: { role: true },
-      });
+      const collaborator = await repository.findCollaboratorByUserAndStock(stockId, user.ID);
 
       if (!collaborator) {
         return res.status(403).json({
-          error: 'Forbidden - You do not have access to this stock',
+          error: AUTH_ERROR_MESSAGES.FORBIDDEN,
         });
       }
 
@@ -82,23 +75,12 @@ export function authorizeStockAccess(requiredPermission: RequiredPermission = 'r
       const role = new StockRole(roleValue);
       req.stockRole = roleValue;
 
-      let hasPermission = false;
-
-      switch (requiredPermission) {
-        case 'read':
-          hasPermission = role.canRead();
-          break;
-        case 'write':
-          hasPermission = role.canWrite();
-          break;
-        case 'suggest':
-          hasPermission = role.canSuggest();
-          break;
-      }
-
-      if (!hasPermission) {
+      if (!role.hasRequiredPermission(requiredPermission)) {
         return res.status(403).json({
-          error: `Forbidden - Your role (${collaborator.role}) does not allow ${requiredPermission} access`,
+          error: AUTH_ERROR_MESSAGES.INSUFFICIENT_PERMISSIONS(
+            collaborator.role,
+            requiredPermission
+          ),
         });
       }
 
@@ -106,7 +88,7 @@ export function authorizeStockAccess(requiredPermission: RequiredPermission = 'r
       return next();
     } catch (error) {
       console.error('Authorization error:', error);
-      return res.status(500).json({ error: 'Internal server error during authorization' });
+      return res.status(500).json({ error: AUTH_ERROR_MESSAGES.INTERNAL_ERROR });
     }
   };
 }
@@ -114,14 +96,14 @@ export function authorizeStockAccess(requiredPermission: RequiredPermission = 'r
 /**
  * Shorthand middleware for read access
  */
-export const authorizeStockRead = authorizeStockAccess('read');
+export const authorizeStockRead = authorizeStockAccess(PERMISSIONS.READ);
 
 /**
  * Shorthand middleware for write access
  */
-export const authorizeStockWrite = authorizeStockAccess('write');
+export const authorizeStockWrite = authorizeStockAccess(PERMISSIONS.WRITE);
 
 /**
  * Shorthand middleware for suggest access
  */
-export const authorizeStockSuggest = authorizeStockAccess('suggest');
+export const authorizeStockSuggest = authorizeStockAccess(PERMISSIONS.SUGGEST);

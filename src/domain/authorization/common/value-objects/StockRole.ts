@@ -1,9 +1,4 @@
-export enum StockRoleEnum {
-  OWNER = 'OWNER',
-  EDITOR = 'EDITOR',
-  VIEWER = 'VIEWER',
-  VIEWER_CONTRIBUTOR = 'VIEWER_CONTRIBUTOR',
-}
+import { StockRoleEnum } from './StockRoleEnum';
 
 export class StockRole {
   private readonly value: StockRoleEnum;
@@ -52,6 +47,24 @@ export class StockRole {
       this.value === StockRoleEnum.OWNER ||
       this.value === StockRoleEnum.EDITOR
     );
+  }
+
+  /**
+   * Check if the role has the required permission
+   * @param permission - Required permission (read, write, suggest)
+   * @returns true if the role has the required permission
+   */
+  public hasRequiredPermission(permission: 'read' | 'write' | 'suggest'): boolean {
+    switch (permission) {
+      case 'read':
+        return this.canRead();
+      case 'write':
+        return this.canWrite();
+      case 'suggest':
+        return this.canSuggest();
+      default:
+        return false;
+    }
   }
 
   public static createOwner(): StockRole {

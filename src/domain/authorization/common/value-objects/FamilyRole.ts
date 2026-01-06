@@ -1,7 +1,4 @@
-export enum FamilyRoleEnum {
-  ADMIN = 'ADMIN',
-  MEMBER = 'MEMBER',
-}
+import { FamilyRoleEnum } from './FamilyRoleEnum';
 
 export class FamilyRole {
   private readonly value: FamilyRoleEnum;
