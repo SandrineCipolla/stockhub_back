@@ -11,6 +11,7 @@ import {
   authorizeStockSuggest,
   authorizeStockWrite,
 } from '@authorization/authorizeMiddleware';
+import { AuthorizationRepository } from '@authorization/repositories/AuthorizationRepository';
 import { StockRole, stocks_CATEGORY } from '@prisma/client';
 
 // Test helpers to reduce duplication
@@ -54,9 +55,11 @@ const createTestApp = (userEmail: string) => {
 
 describe('Authorization Middleware Integration Tests', () => {
   let setup: TestDatabaseSetup;
+  let repository: AuthorizationRepository;
 
   beforeAll(async () => {
     setup = await setupTestDatabase();
+    repository = new AuthorizationRepository(setup.prisma);
   }, 60000);
 
   afterAll(async () => {
@@ -71,7 +74,7 @@ describe('Authorization Middleware Integration Tests', () => {
     it('should return 401 Unauthorized', async () => {
       const app = express();
       app.use(express.json());
-      app.get('/stocks/:stockId', authorizeStockRead(setup.prisma), (_req, res) => {
+      app.get('/stocks/:stockId', authorizeStockRead(repository), (_req, res) => {
         res.status(200).json({ success: true });
       });
 
@@ -86,7 +89,7 @@ describe('Authorization Middleware Integration Tests', () => {
   describe('when stockId is invalid', () => {
     it('should return 400 Bad Request', async () => {
       const app = createTestApp('test@example.com');
-      app.get('/stocks/:stockId', authorizeStockRead(setup.prisma), (_req, res) => {
+      app.get('/stocks/:stockId', authorizeStockRead(repository), (_req, res) => {
         res.status(200).json({ success: true });
       });
 
@@ -101,7 +104,7 @@ describe('Authorization Middleware Integration Tests', () => {
   describe('when user does not exist in database', () => {
     it('should return 401 Unauthorized', async () => {
       const app = createTestApp('nonexistent@example.com');
-      app.get('/stocks/:stockId', authorizeStockRead(setup.prisma), (_req, res) => {
+      app.get('/stocks/:stockId', authorizeStockRead(repository), (_req, res) => {
         res.status(200).json({ success: true });
       });
 
@@ -118,7 +121,7 @@ describe('Authorization Middleware Integration Tests', () => {
       await createTestUser(setup.prisma, { id: 1, email: 'test@example.com' });
 
       const app = createTestApp('test@example.com');
-      app.get('/stocks/:stockId', authorizeStockRead(setup.prisma), (_req, res) => {
+      app.get('/stocks/:stockId', authorizeStockRead(repository), (_req, res) => {
         res.status(200).json({ success: true });
       });
 
@@ -136,13 +139,13 @@ describe('Authorization Middleware Integration Tests', () => {
       const stock = await createTestStock(setup.prisma, owner.ID);
 
       const app = createTestApp('owner@example.com');
-      app.get('/stocks/:stockId', authorizeStockRead(setup.prisma), (_req, res) =>
+      app.get('/stocks/:stockId', authorizeStockRead(repository), (_req, res) =>
         res.json({ success: true })
       );
-      app.post('/stocks/:stockId/items', authorizeStockWrite(setup.prisma), (_req, res) =>
+      app.post('/stocks/:stockId/items', authorizeStockWrite(repository), (_req, res) =>
         res.json({ success: true })
       );
-      app.post('/stocks/:stockId/suggest', authorizeStockSuggest(setup.prisma), (_req, res) =>
+      app.post('/stocks/:stockId/suggest', authorizeStockSuggest(repository), (_req, res) =>
         res.json({ success: true })
       );
 
@@ -159,7 +162,7 @@ describe('Authorization Middleware Integration Tests', () => {
       const stock = await createTestStock(setup.prisma, owner.ID);
 
       const app = createTestApp('other@example.com');
-      app.get('/stocks/:stockId', authorizeStockRead(setup.prisma), (_req, res) =>
+      app.get('/stocks/:stockId', authorizeStockRead(repository), (_req, res) =>
         res.json({ success: true })
       );
 
@@ -187,13 +190,13 @@ describe('Authorization Middleware Integration Tests', () => {
       });
 
       const app = createTestApp('editor@example.com');
-      app.get('/stocks/:stockId', authorizeStockRead(setup.prisma), (_req, res) =>
+      app.get('/stocks/:stockId', authorizeStockRead(repository), (_req, res) =>
         res.json({ success: true })
       );
-      app.post('/stocks/:stockId/items', authorizeStockWrite(setup.prisma), (_req, res) =>
+      app.post('/stocks/:stockId/items', authorizeStockWrite(repository), (_req, res) =>
         res.json({ success: true })
       );
-      app.post('/stocks/:stockId/suggest', authorizeStockSuggest(setup.prisma), (_req, res) =>
+      app.post('/stocks/:stockId/suggest', authorizeStockSuggest(repository), (_req, res) =>
         res.json({ success: true })
       );
 
@@ -219,13 +222,13 @@ describe('Authorization Middleware Integration Tests', () => {
       });
 
       const app = createTestApp('viewer@example.com');
-      app.get('/stocks/:stockId', authorizeStockRead(setup.prisma), (_req, res) =>
+      app.get('/stocks/:stockId', authorizeStockRead(repository), (_req, res) =>
         res.json({ success: true })
       );
-      app.post('/stocks/:stockId/items', authorizeStockWrite(setup.prisma), (_req, res) =>
+      app.post('/stocks/:stockId/items', authorizeStockWrite(repository), (_req, res) =>
         res.json({ success: true })
       );
-      app.post('/stocks/:stockId/suggest', authorizeStockSuggest(setup.prisma), (_req, res) =>
+      app.post('/stocks/:stockId/suggest', authorizeStockSuggest(repository), (_req, res) =>
         res.json({ success: true })
       );
 
@@ -258,13 +261,13 @@ describe('Authorization Middleware Integration Tests', () => {
       });
 
       const app = createTestApp('contributor@example.com');
-      app.get('/stocks/:stockId', authorizeStockRead(setup.prisma), (_req, res) =>
+      app.get('/stocks/:stockId', authorizeStockRead(repository), (_req, res) =>
         res.json({ success: true })
       );
-      app.post('/stocks/:stockId/items', authorizeStockWrite(setup.prisma), (_req, res) =>
+      app.post('/stocks/:stockId/items', authorizeStockWrite(repository), (_req, res) =>
         res.json({ success: true })
       );
-      app.post('/stocks/:stockId/suggest', authorizeStockSuggest(setup.prisma), (_req, res) =>
+      app.post('/stocks/:stockId/suggest', authorizeStockSuggest(repository), (_req, res) =>
         res.json({ success: true })
       );
 

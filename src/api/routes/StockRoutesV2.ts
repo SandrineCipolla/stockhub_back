@@ -18,8 +18,12 @@ import { UpdateItemQuantityCommandHandler } from '@domain/stock-management/manip
 import { rootController } from '@utils/logger';
 import { PrismaClient } from '@prisma/client';
 import { authorizeStockRead, authorizeStockWrite } from '@authorization/authorizeMiddleware';
+import { AuthorizationRepository } from '@authorization/repositories/AuthorizationRepository';
 
 const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Router> => {
+  const prisma = prismaClient ?? new PrismaClient();
+  const authorizationRepository = new AuthorizationRepository(prisma);
+
   const prismaRepository = new PrismaStockVisualizationRepository(prismaClient);
 
   const stockVisualizationService = new StockVisualizationService(prismaRepository);
@@ -55,7 +59,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   router.get(
     '/stocks/:stockId',
-    authorizeStockRead(prismaClient),
+    authorizeStockRead(authorizationRepository),
     async (req: express.Request, res: express.Response) => {
       await stockController.getStockDetails(req, res);
     }
@@ -65,7 +69,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   router.get(
     '/stocks/:stockId/items',
-    authorizeStockRead(prismaClient),
+    authorizeStockRead(authorizationRepository),
     async (req: express.Request, res: express.Response) => {
       await stockController.getStockItems(req, res);
     }
@@ -82,7 +86,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   router.post(
     '/stocks/:stockId/items',
-    authorizeStockWrite(prismaClient),
+    authorizeStockWrite(authorizationRepository),
     async (req, res: express.Response) => {
       await manipulationController.addItemToStock(req as AddItemToStockRequest, res);
     }
@@ -92,7 +96,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   router.patch(
     '/stocks/:stockId/items/:itemId',
-    authorizeStockWrite(prismaClient),
+    authorizeStockWrite(authorizationRepository),
     async (req, res: express.Response) => {
       await manipulationController.updateItemQuantity(req as UpdateItemQuantityRequest, res);
     }

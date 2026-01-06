@@ -185,12 +185,13 @@ Avant d'écrire une nouvelle classe, service, ou middleware qui accède à la ba
 
 ### ✅ Exemples corrects
 
-| Fichier                                  | Pattern utilisé                        |
-| ---------------------------------------- | -------------------------------------- |
-| `PrismaStockCommandRepository.ts`        | Constructor injection avec fallback    |
-| `PrismaStockVisualizationRepository.ts`  | Constructor injection avec fallback    |
-| `authorizeMiddleware.ts` (après fix #71) | Parameter injection avec fallback      |
-| `StockRoutesV2.ts`                       | Injection du même PrismaClient partout |
+| Fichier                                 | Pattern utilisé                                      |
+| --------------------------------------- | ---------------------------------------------------- |
+| `PrismaStockCommandRepository.ts`       | Constructor injection avec fallback                  |
+| `PrismaStockVisualizationRepository.ts` | Constructor injection avec fallback                  |
+| `AuthorizationRepository.ts` (PR #73)   | Repository Pattern DDD (encapsulation complète)      |
+| `authorizeMiddleware.ts` (après PR #73) | Repository injection avec fallback                   |
+| `StockRoutesV2.ts`                      | Injection repository + partage instance PrismaClient |
 
 ### ❌ Exemples à corriger (si rencontrés)
 
@@ -277,6 +278,208 @@ describe('Authorization Middleware Integration Tests', () => {
 
 ---
 
+## 🏛️ Évolution : Repository Pattern (DDD)
+
+**Date de mise à jour :** 2026-01-06
+**Contexte :** Code review PR #72/#73 - Amélioration architecture DDD
+
+### Problème identifié lors de la code review
+
+**Commentaire du reviewer (PR #73) :**
+
+> **issue(blocking)**: prisma client creation should be in a repository.
+
+Bien que l'injection de PrismaClient ait résolu le problème de testabilité, le middleware violait toujours les principes DDD :
+
+```typescript
+// ❌ Middleware couplé à Prisma (pas DDD)
+export function authorizeStockAccess(
+  requiredPermission: RequiredPermission = 'read',
+  prismaClient?: PrismaClient  // Dépendance technique dans le middleware
+) {
+  const prisma = prismaClient ?? new PrismaClient();
+
+  return async (req, res, next) => {
+    // Middleware contient de la logique d'accès aux données
+    const user = await prisma.users.findUnique({ ... });
+    const stock = await prisma.stocks.findUnique({ ... });
+    const collaborator = await prisma.stockCollaborator.findUnique({ ... });
+  };
+}
+```
+
+**Problèmes :**
+
+1. **Violation de la séparation des couches** : Le middleware (couche application) accède directement à Prisma (couche infrastructure)
+2. **Couplage fort** : Le middleware connaît le schéma Prisma et les détails d'implémentation
+3. **Pas DDD** : Pas d'abstraction entre la logique métier et la persistance
+4. **Difficile à tester unitairement** : Impossible de mocker facilement les requêtes
+
+### Solution : Repository Pattern
+
+Le **Repository Pattern** est un pattern DDD qui encapsule toute la logique d'accès aux données dans une classe dédiée.
+
+#### Étape 1 : Créer le Repository
+
+```typescript
+// src/authorization/repositories/AuthorizationRepository.ts
+import { PrismaClient, StockRole as PrismaStockRole } from '@prisma/client';
+
+export interface UserIdentity {
+  ID: number;
+}
+
+export interface StockIdentity {
+  ID: number;
+  USER_ID: number | null;
+}
+
+export interface CollaboratorRole {
+  role: PrismaStockRole;
+}
+
+/**
+ * Repository for authorization-related database queries
+ * Encapsulates Prisma queries to improve testability and maintainability
+ */
+export class AuthorizationRepository {
+  constructor(private prisma: PrismaClient) {}
+
+  async findUserByEmail(email: string): Promise<UserIdentity | null> {
+    return this.prisma.users.findUnique({
+      where: { EMAIL: email },
+      select: { ID: true },
+    });
+  }
+
+  async findStockById(stockId: number): Promise<StockIdentity | null> {
+    return this.prisma.stocks.findUnique({
+      where: { ID: stockId },
+      select: { ID: true, USER_ID: true },
+    });
+  }
+
+  async findCollaboratorByUserAndStock(
+    stockId: number,
+    userId: number
+  ): Promise<CollaboratorRole | null> {
+    return this.prisma.stockCollaborator.findUnique({
+      where: { stockId_userId: { stockId, userId } },
+      select: { role: true },
+    });
+  }
+}
+```
+
+**Avantages du Repository :**
+
+- ✅ **Encapsulation** : Toute la logique Prisma est dans un seul endroit
+- ✅ **Abstraction** : Le middleware ne connaît plus Prisma
+- ✅ **DDD** : Séparation claire entre domaine et infrastructure
+- ✅ **Testabilité** : Facile de mocker le repository avec des interfaces
+- ✅ **Maintenabilité** : Changements de schéma localisés dans le repository
+
+#### Étape 2 : Refactorer le Middleware
+
+```typescript
+// src/authorization/authorizeMiddleware.ts
+import { AuthorizationRepository } from './repositories/AuthorizationRepository';
+
+// ✅ BON : Injection du Repository (pas de PrismaClient)
+export function authorizeStockAccess(
+  requiredPermission: RequiredPermission = 'read',
+  repository?: AuthorizationRepository // ← Repository au lieu de PrismaClient
+) {
+  const authRepository = repository ?? new AuthorizationRepository(new PrismaClient());
+
+  return async (req, res, next) => {
+    // Utilise le repository (méthodes métier)
+    const user = await authRepository.findUserByEmail(req.userID);
+    const stock = await authRepository.findStockById(stockId);
+    const collaborator = await authRepository.findCollaboratorByUserAndStock(stockId, user.ID);
+  };
+}
+```
+
+**Améliorations :**
+
+- 🏛️ **Architecture DDD** : Middleware → Repository → Prisma (séparation des couches)
+- 📦 **Encapsulation** : Le middleware appelle des méthodes métier (`findUserByEmail`) au lieu de méthodes techniques (`prisma.users.findUnique`)
+- 🧪 **Tests unitaires** : Possibilité de mocker le repository facilement
+- 🔧 **Maintenance** : Changements de schéma Prisma isolés dans le repository
+
+#### Étape 3 : Mettre à jour les Routes
+
+```typescript
+// src/api/routes/StockRoutesV2.ts
+const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Router> => {
+  const prisma = prismaClient ?? new PrismaClient();
+  const authorizationRepository = new AuthorizationRepository(prisma);  // ← Créer le repository
+
+  router.get(
+    '/stocks/:stockId',
+    authorizeStockRead(authorizationRepository),  // ← Injecter le repository
+    async (req, res) => { ... }
+  );
+};
+```
+
+#### Étape 4 : Mettre à jour les Tests
+
+```typescript
+// tests/integration/authorization/authorizeMiddleware.integration.test.ts
+describe('Authorization Middleware Integration Tests', () => {
+  let setup: TestDatabaseSetup;
+  let repository: AuthorizationRepository; // ← Repository de test
+
+  beforeAll(async () => {
+    setup = await setupTestDatabase();
+    repository = new AuthorizationRepository(setup.prisma); // ← Injection du Prisma de test
+  });
+
+  it('should authorize owner', async () => {
+    const app = express();
+    app.get('/stocks/:id', authorizeStockRead(repository), handler); // ← Injection du repository
+    // ✅ Tests utilisent le repository avec la base de test
+  });
+});
+```
+
+### Comparaison Avant/Après
+
+| Aspect              | Avant (PrismaClient injection) | Après (Repository Pattern)                           |
+| ------------------- | ------------------------------ | ---------------------------------------------------- |
+| **Architecture**    | ❌ Middleware couplé à Prisma  | ✅ Séparation DDD (Middleware → Repository → Prisma) |
+| **Testabilité**     | ⚠️ Injection possible          | ✅ Facile à mocker avec interfaces                   |
+| **Maintenabilité**  | ❌ Logique Prisma dispersée    | ✅ Logique centralisée dans le repository            |
+| **DDD**             | ❌ Violation séparation layers | ✅ Conforme architecture DDD                         |
+| **Lisibilité**      | ⚠️ Méthodes techniques         | ✅ Méthodes métier (`findUserByEmail`)               |
+| **Réutilisabilité** | ❌ Logique dupliquée           | ✅ Repository partagé entre middlewares              |
+
+### Pattern complet : Injection avec Repository
+
+```typescript
+// ✅ Pattern DDD complet
+class AuthorizationRepository {
+  constructor(private prisma: PrismaClient) {}
+  // Méthodes d'accès aux données
+}
+
+function authorizeMiddleware(repository?: AuthorizationRepository) {
+  const repo = repository ?? new AuthorizationRepository(new PrismaClient());
+  // Utilise le repository
+}
+
+// En production
+app.use(authorizeMiddleware()); // Utilise le fallback
+
+// En tests
+const testRepo = new AuthorizationRepository(testPrisma);
+app.use(authorizeMiddleware(testRepo)); // Injecte le repository de test
+```
+
+---
+
 ## 📝 Résumé
 
 **Règle d'or :** Toute dépendance externe doit être injectable avec un fallback pour la production.
@@ -301,5 +504,6 @@ constructor(dependency?: ExternalDependency) {
 
 **Auteur :** Sandrine Cipolla
 **Assistance :** Claude Code (Sonnet 4.5)
-**Date :** 2025-12-28
-**Issue :** #71
+**Date de création :** 2025-12-28 (Issue #71 - Injection de dépendances)
+**Mise à jour :** 2026-01-06 (PR #73 - Repository Pattern DDD)
+**Issues :** #71, #73

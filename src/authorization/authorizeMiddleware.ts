@@ -1,6 +1,7 @@
 import { PrismaClient, StockRole as PrismaStockRole } from '@prisma/client';
 import express from 'express';
 import { StockRole } from '@domain/authorization/common/value-objects/StockRole';
+import { AuthorizationRepository } from './repositories/AuthorizationRepository';
 
 export interface AuthorizedRequest extends express.Request {
   userID?: string;
@@ -15,13 +16,13 @@ export type RequiredPermission = 'read' | 'write' | 'suggest';
  * Must be used AFTER authenticationMiddleware
  *
  * @param requiredPermission - The permission level required (read, write, suggest)
- * @param prismaClient - Optional PrismaClient for dependency injection (useful for testing)
+ * @param repository - Optional AuthorizationRepository for dependency injection (useful for testing)
  */
 export function authorizeStockAccess(
   requiredPermission: RequiredPermission = 'read',
-  prismaClient?: PrismaClient
+  repository?: AuthorizationRepository
 ) {
-  const prisma = prismaClient ?? new PrismaClient();
+  const authRepository = repository ?? new AuthorizationRepository(new PrismaClient());
 
   return async (req: AuthorizedRequest, res: express.Response, next: express.NextFunction) => {
     try {
@@ -37,20 +38,14 @@ export function authorizeStockAccess(
       }
 
       // 3. Get user from database
-      const user = await prisma.users.findUnique({
-        where: { EMAIL: req.userID },
-        select: { ID: true },
-      });
+      const user = await authRepository.findUserByEmail(req.userID);
 
       if (!user) {
         return res.status(401).json({ error: 'User not found' });
       }
 
       // 4. Check if stock exists
-      const stock = await prisma.stocks.findUnique({
-        where: { ID: stockId },
-        select: { ID: true, USER_ID: true },
-      });
+      const stock = await authRepository.findStockById(stockId);
 
       if (!stock) {
         return res.status(404).json({ error: 'Stock not found' });
@@ -67,15 +62,7 @@ export function authorizeStockAccess(
       }
 
       // 6. Check if user has a collaborator role
-      const collaborator = await prisma.stockCollaborator.findUnique({
-        where: {
-          stockId_userId: {
-            stockId: stockId,
-            userId: user.ID,
-          },
-        },
-        select: { role: true },
-      });
+      const collaborator = await authRepository.findCollaboratorByUserAndStock(stockId, user.ID);
 
       if (!collaborator) {
         return res.status(403).json({
@@ -119,21 +106,21 @@ export function authorizeStockAccess(
 
 /**
  * Shorthand middleware for read access
- * @param prismaClient - Optional PrismaClient for dependency injection (useful for testing)
+ * @param repository - Optional AuthorizationRepository for dependency injection (useful for testing)
  */
-export const authorizeStockRead = (prismaClient?: PrismaClient) =>
-  authorizeStockAccess('read', prismaClient);
+export const authorizeStockRead = (repository?: AuthorizationRepository) =>
+  authorizeStockAccess('read', repository);
 
 /**
  * Shorthand middleware for write access
- * @param prismaClient - Optional PrismaClient for dependency injection (useful for testing)
+ * @param repository - Optional AuthorizationRepository for dependency injection (useful for testing)
  */
-export const authorizeStockWrite = (prismaClient?: PrismaClient) =>
-  authorizeStockAccess('write', prismaClient);
+export const authorizeStockWrite = (repository?: AuthorizationRepository) =>
+  authorizeStockAccess('write', repository);
 
 /**
  * Shorthand middleware for suggest access
- * @param prismaClient - Optional PrismaClient for dependency injection (useful for testing)
+ * @param repository - Optional AuthorizationRepository for dependency injection (useful for testing)
  */
-export const authorizeStockSuggest = (prismaClient?: PrismaClient) =>
-  authorizeStockAccess('suggest', prismaClient);
+export const authorizeStockSuggest = (repository?: AuthorizationRepository) =>
+  authorizeStockAccess('suggest', repository);
