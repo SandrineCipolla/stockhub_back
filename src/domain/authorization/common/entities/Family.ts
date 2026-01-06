@@ -10,11 +10,33 @@ import {
   LastAdminError,
 } from '../errors/FamilyErrors';
 
-export interface FamilyMemberData {
-  id: number;
-  userId: number;
-  role: FamilyRoleEnum;
-  joinedAt: Date;
+/**
+ * Value Object representing a family member with their role
+ * Encapsulates member data and role-related behavior
+ */
+export class FamilyMemberData {
+  constructor(
+    public readonly id: number,
+    public readonly userId: number,
+    public role: FamilyRoleEnum, // Mutable to allow role updates
+    public readonly joinedAt: Date
+  ) {}
+
+  /**
+   * Check if this member has the ADMIN role
+   * @returns true if member is an admin
+   */
+  isAdmin(): boolean {
+    return this.role === FamilyRoleEnum.ADMIN;
+  }
+
+  /**
+   * Get the full FamilyRole Value Object for this member
+   * @returns FamilyRole instance
+   */
+  getRole(): FamilyRole {
+    return new FamilyRole(this.role);
+  }
 }
 
 export class Family {
@@ -31,12 +53,7 @@ export class Family {
    * @returns FamilyMemberData with ADMIN role
    */
   private static createAdminMember(userId: number): FamilyMemberData {
-    return {
-      id: 0,
-      userId,
-      role: FamilyRoleEnum.ADMIN,
-      joinedAt: new Date(),
-    };
+    return new FamilyMemberData(0, userId, FamilyRoleEnum.ADMIN, new Date());
   }
 
   static create(params: { name: string; creatorUserId: number; id?: number }): Family {
@@ -82,10 +99,8 @@ export class Family {
       throw new UserNotMemberError(userId);
     }
 
-    const role = new FamilyRole(member.role);
-
     // Prevent removing the last admin
-    if (role.isAdmin() && this.getAdmins().length === 1) {
+    if (member.isAdmin() && this.getAdmins().length === 1) {
       throw new LastAdminError('remove');
     }
 
@@ -105,8 +120,7 @@ export class Family {
     const member = this.getMember(userId);
     if (!member) return false;
 
-    const role = new FamilyRole(member.role);
-    return role.isAdmin();
+    return member.isAdmin();
   }
 
   updateMemberRole(userId: number, newRole: FamilyRoleEnum): void {
@@ -116,14 +130,8 @@ export class Family {
       throw new UserNotMemberError(userId);
     }
 
-    const currentRole = new FamilyRole(member.role);
-
     // Prevent demoting the last admin
-    if (
-      currentRole.isAdmin() &&
-      newRole !== FamilyRoleEnum.ADMIN &&
-      this.getAdmins().length === 1
-    ) {
+    if (member.isAdmin() && newRole !== FamilyRoleEnum.ADMIN && this.getAdmins().length === 1) {
       throw new LastAdminError('demote');
     }
 

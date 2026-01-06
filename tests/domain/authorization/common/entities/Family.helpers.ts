@@ -20,10 +20,10 @@ export const createMemberData = (overrides?: {
   role?: FamilyRoleEnum;
   joinedAt?: Date;
 }): FamilyMemberData => {
-  return {
-    id: overrides?.id ?? 0,
-    userId: overrides?.userId ?? 2,
-    role: overrides?.role ?? FamilyRoleEnum.MEMBER,
-    joinedAt: overrides?.joinedAt ?? new Date(),
-  };
+  return new FamilyMemberData(
+    overrides?.id ?? 0,
+    overrides?.userId ?? 2,
+    overrides?.role ?? FamilyRoleEnum.MEMBER,
+    overrides?.joinedAt ?? new Date()
+  );
 };
