@@ -429,6 +429,109 @@ removeMember(userId: number): void {
 
 ---
 
+## 11. FamilyMemberData Value Object - DDD Pattern
+
+**Suggestion**: Ajouter une méthode `isAdmin()` sur `FamilyMemberData` pour encapsuler le comportement.
+
+**Contexte du reviewer**:
+
+> "we create FamilyRole from member, so I guess member should have a isAdmin method"
+
+**Problème DDD**: `FamilyMemberData` était une **interface** (modèle anémique, anti-pattern en DDD).
+
+**Fichier modifié**:
+
+- `src/domain/authorization/common/entities/Family.ts`
+- `tests/domain/authorization/common/entities/Family.helpers.ts`
+
+**Avant** (interface):
+
+```typescript
+export interface FamilyMemberData {
+  id: number;
+  userId: number;
+  role: FamilyRoleEnum;
+  joinedAt: Date;
+}
+
+// Usage verbose dans Family entity (3 endroits)
+const role = new FamilyRole(member.role);
+if (role.isAdmin()) { ... }
+```
+
+**Après** (classe Value Object):
+
+```typescript
+export class FamilyMemberData {
+  constructor(
+    public readonly id: number,
+    public readonly userId: number,
+    public role: FamilyRoleEnum, // Mutable to allow role updates
+    public readonly joinedAt: Date
+  ) {}
+
+  /**
+   * Check if this member has the ADMIN role
+   */
+  isAdmin(): boolean {
+    return this.role === FamilyRoleEnum.ADMIN;
+  }
+
+  /**
+   * Get the full FamilyRole Value Object
+   */
+  getRole(): FamilyRole {
+    return new FamilyRole(this.role);
+  }
+}
+
+// Usage simplifié
+if (member.isAdmin()) { ... }
+```
+
+**Changements dans Family entity**:
+
+| Méthode               | Avant                                   | Après                                         |
+| --------------------- | --------------------------------------- | --------------------------------------------- |
+| `removeMember()`      | `new FamilyRole(member.role).isAdmin()` | `member.isAdmin()`                            |
+| `isAdmin()`           | `new FamilyRole(member.role).isAdmin()` | `member.isAdmin()`                            |
+| `updateMemberRole()`  | `new FamilyRole(member.role).isAdmin()` | `member.isAdmin()`                            |
+| `createAdminMember()` | `return { id: 0, userId, ... }`         | `return new FamilyMemberData(0, userId, ...)` |
+
+**Test helper mis à jour**:
+
+```typescript
+// Avant
+export const createMemberData = (...) => {
+  return {
+    id: overrides?.id ?? 0,
+    // ...
+  };
+};
+
+// Après
+export const createMemberData = (...) => {
+  return new FamilyMemberData(
+    overrides?.id ?? 0,
+    overrides?.userId ?? 2,
+    overrides?.role ?? FamilyRoleEnum.MEMBER,
+    overrides?.joinedAt ?? new Date()
+  );
+};
+```
+
+**Raison**:
+
+- ✅ **DDD Rich Domain Model**: Élimine le modèle anémique
+- ✅ **Encapsulation**: Comportement avec les données
+- ✅ **Cohérence**: Comme StockRole et FamilyRole (Value Objects)
+- ✅ **Lisibilité**: `member.isAdmin()` > `new FamilyRole(member.role).isAdmin()`
+- ✅ **Tell, Don't Ask**: Principe DDD respecté
+
+**Résultat**: 142 tests passent, code plus DDD-compliant
+
+---
+
 ## Tâches Restantes (Suggestions optionnelles)
 
 ### Issues Bloquantes
@@ -443,7 +546,7 @@ removeMember(userId: number): void {
 
 - [x] **Family: createAdminMember factory method** - ✅ Implémenté
 - [x] **Family: use typed errors** - ✅ Toutes les méthodes utilisent erreurs typées
-- [ ] **FamilyMemberData: add isAdmin method** - Encapsuler comportement dans l'objet
+- [x] **FamilyMemberData: add isAdmin method** - ✅ Converti en Value Object class
 - [ ] **Family.getMember: return empty** - Null Object Pattern (question ouverte)
 - [ ] **Constants for routes** - Extraire noms de routes dans constantes (optionnel)
 - [ ] **Webpack path alias trailing slash** - Clarifier si nécessaire (question)
@@ -498,28 +601,34 @@ removeMember(userId: number): void {
 
 **Auteur**: Claude Code (avec Sandrine Cipolla)
 **Date**: 6 janvier 2026
-**Durée**: ~3h
-**Statut**: 14/17 commentaires traités (82%)
+**Durée**: ~4h
+**Statut**: 15/17 commentaires traités (88%)
 
 ## Résumé des Améliorations
 
 - ✅ **5 issues bloquantes** résolues sur 5 (100%)
-- ✅ **9 suggestions** implémentées sur 10
+- ✅ **10 suggestions** implémentées sur 10 (100%)
 - ✅ **142 tests** passent (domain layer)
 - ✅ **35 tests Family** passent après split
 - ✅ **0 erreur TypeScript**
 - ✅ Documentation best practices ajoutée à `CLAUDE.md`
 - ✅ Tests divisés en 4 fichiers de ~100 lignes chacun
+- ✅ FamilyMemberData converti en Value Object (DDD)
 
 **Commits**:
 
 1. `refactor(authorization): address PR #72 code review comments (13/17)`
 2. `test(family): split Family.test.ts into smaller, focused test files`
+3. `docs: update PR #72 session with test split completion`
+4. `refactor(family): convert FamilyMemberData to Value Object class`
+
+**Commentaires restants (2 questions ouvertes)**:
+
+1. **Family.getMember: return empty** - Null Object Pattern (discussion ouverte avec reviewer)
+2. **Webpack path alias trailing slash** - Question de clarification (non-bloquant)
 
 **Prochaines étapes**:
 
-1. (Optionnel) Ajouter `isAdmin()` sur `FamilyMemberData` - Nécessiterait conversion en classe
-2. (Question) Family.getMember: return empty - Null Object Pattern (discussion ouverte)
-3. (Optionnel) Constants for routes - Extraire noms de routes dans constantes
-4. (Question) Webpack path alias trailing slash - Clarifier si nécessaire
-5. Push et demande de re-review
+1. Vérifier webpack path alias trailing slash (tsconfig.json)
+2. (Optionnel) Discuter Null Object Pattern avec reviewer
+3. Push et demande de re-review
