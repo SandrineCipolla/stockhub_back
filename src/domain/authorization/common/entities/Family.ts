@@ -1,4 +1,14 @@
-import { FamilyRole, FamilyRoleEnum } from '../value-objects/FamilyRole';
+import { FamilyRole } from '../value-objects/FamilyRole';
+import { FamilyRoleEnum } from '../value-objects/FamilyRoleEnum';
+import {
+  FamilyNameEmptyError,
+  FamilyNameTooShortError,
+  FamilyNameTooLongError,
+  InvalidCreatorUserIdError,
+  UserAlreadyMemberError,
+  UserNotMemberError,
+  LastAdminError,
+} from '../errors/FamilyErrors';
 
 export interface FamilyMemberData {
   id: number;
@@ -15,32 +25,41 @@ export class Family {
     public members: FamilyMemberData[] = []
   ) {}
 
+  /**
+   * Create an admin member data object
+   * @param userId - User ID to create as admin
+   * @returns FamilyMemberData with ADMIN role
+   */
+  private static createAdminMember(userId: number): FamilyMemberData {
+    return {
+      id: 0,
+      userId,
+      role: FamilyRoleEnum.ADMIN,
+      joinedAt: new Date(),
+    };
+  }
+
   static create(params: { name: string; creatorUserId: number; id?: number }): Family {
     if (!params.name || params.name.trim() === '') {
-      throw new Error('Family name cannot be empty');
+      throw new FamilyNameEmptyError();
     }
 
     if (params.name.trim().length < 3) {
-      throw new Error('Family name must be at least 3 characters');
+      throw new FamilyNameTooShortError(3);
     }
 
     if (params.name.trim().length > 255) {
-      throw new Error('Family name must not exceed 255 characters');
+      throw new FamilyNameTooLongError(255);
     }
 
     if (!params.creatorUserId || params.creatorUserId <= 0) {
-      throw new Error('Creator user ID must be valid');
+      throw new InvalidCreatorUserIdError();
     }
 
     const family = new Family(params.id ?? 0, params.name.trim(), new Date(), []);
 
-    // Add creator as ADMIN
-    family.addMember({
-      id: 0,
-      userId: params.creatorUserId,
-      role: FamilyRoleEnum.ADMIN,
-      joinedAt: new Date(),
-    });
+    // Add creator as ADMIN using factory method
+    family.addMember(Family.createAdminMember(params.creatorUserId));
 
     return family;
   }
@@ -49,30 +68,28 @@ export class Family {
     const existingMember = this.members.find(m => m.userId === memberData.userId);
 
     if (existingMember) {
-      throw new Error(`User ${memberData.userId} is already a member of this family`);
+      throw new UserAlreadyMemberError(memberData.userId);
     }
 
     this.members.push(memberData);
   }
 
   removeMember(userId: number): void {
-    const index = this.members.findIndex(m => m.userId === userId);
+    // Use getMember instead of findIndex to avoid duplication
+    const member = this.getMember(userId);
 
-    if (index === -1) {
-      throw new Error(`User ${userId} is not a member of this family`);
+    if (!member) {
+      throw new UserNotMemberError(userId);
     }
 
-    const member = this.members[index];
     const role = new FamilyRole(member.role);
 
     // Prevent removing the last admin
-    if (role.isAdmin()) {
-      const adminCount = this.members.filter(m => m.role === FamilyRoleEnum.ADMIN).length;
-      if (adminCount === 1) {
-        throw new Error('Cannot remove the last admin from the family');
-      }
+    if (role.isAdmin() && this.getAdmins().length === 1) {
+      throw new LastAdminError('remove');
     }
 
+    const index = this.members.indexOf(member);
     this.members.splice(index, 1);
   }
 
@@ -96,17 +113,18 @@ export class Family {
     const member = this.getMember(userId);
 
     if (!member) {
-      throw new Error(`User ${userId} is not a member of this family`);
+      throw new UserNotMemberError(userId);
     }
 
     const currentRole = new FamilyRole(member.role);
 
     // Prevent demoting the last admin
-    if (currentRole.isAdmin() && newRole !== FamilyRoleEnum.ADMIN) {
-      const adminCount = this.members.filter(m => m.role === FamilyRoleEnum.ADMIN).length;
-      if (adminCount === 1) {
-        throw new Error('Cannot demote the last admin');
-      }
+    if (
+      currentRole.isAdmin() &&
+      newRole !== FamilyRoleEnum.ADMIN &&
+      this.getAdmins().length === 1
+    ) {
+      throw new LastAdminError('demote');
     }
 
     member.role = newRole;
@@ -122,15 +140,15 @@ export class Family {
 
   updateName(newName: string): void {
     if (!newName || newName.trim() === '') {
-      throw new Error('Family name cannot be empty');
+      throw new FamilyNameEmptyError();
     }
 
     if (newName.trim().length < 3) {
-      throw new Error('Family name must be at least 3 characters');
+      throw new FamilyNameTooShortError(3);
     }
 
     if (newName.trim().length > 255) {
-      throw new Error('Family name must not exceed 255 characters');
+      throw new FamilyNameTooLongError(255);
     }
 
     this.name = newName.trim();

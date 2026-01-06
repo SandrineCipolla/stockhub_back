@@ -1,4 +1,5 @@
-import { FamilyRole, FamilyRoleEnum } from '@domain/authorization/common/value-objects/FamilyRole';
+import { FamilyRole } from '@domain/authorization/common/value-objects/FamilyRole';
+import { FamilyRoleEnum } from '@domain/authorization/common/value-objects/FamilyRoleEnum';
 
 describe('FamilyRole', () => {
   describe('when the role is invalid', () => {

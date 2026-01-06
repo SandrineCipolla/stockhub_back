@@ -1,4 +1,5 @@
-import { StockRole, StockRoleEnum } from '@domain/authorization/common/value-objects/StockRole';
+import { StockRole } from '@domain/authorization/common/value-objects/StockRole';
+import { StockRoleEnum } from '@domain/authorization/common/value-objects/StockRoleEnum';
 
 describe('StockRole', () => {
   describe('when the role is invalid', () => {

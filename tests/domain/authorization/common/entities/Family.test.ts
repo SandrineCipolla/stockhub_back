@@ -1,5 +1,5 @@
 import { Family, FamilyMemberData } from '@domain/authorization/common/entities/Family';
-import { FamilyRoleEnum } from '@domain/authorization/common/value-objects/FamilyRole';
+import { FamilyRoleEnum } from '@domain/authorization/common/value-objects/FamilyRoleEnum';
 
 // Test helper to create a test family
 const createTestFamily = (overrides?: { name?: string; creatorUserId?: number }) => {
