@@ -40,6 +40,9 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
+    // Path aliases for module resolution
+    // Note: No trailing slash needed here (unlike tsconfig.json)
+    // Webpack automatically resolves sub-paths from these base directories
     alias: {
       '@domain': path.resolve(__dirname, 'src/domain'),
       '@infrastructure': path.resolve(__dirname, 'src/infrastructure'),
