@@ -14,6 +14,8 @@ describe('CreateStockCommandHandler', () => {
           findById: jest.fn(),
           addItemToStock: jest.fn(),
           updateItemQuantity: jest.fn(),
+          updateStock: jest.fn(),
+          deleteStock: jest.fn(),
         };
 
         const handler = new CreateStockCommandHandler(mockRepository);
