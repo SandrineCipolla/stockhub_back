@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.2.0...v2.2.1) (2026-01-07)
+
+
+### 💄 Styles
+
+* format CHANGELOG.md with Prettier ([fc2defb](https://github.com/SandrineCipolla/stockhub_back/commit/fc2defba481d1a3edcd1e0b6cd904967ec392562))
+
+
+### 🔧 Chores
+
+* rename claude.md to CLAUDE.md for consistency ([ee0cedf](https://github.com/SandrineCipolla/stockhub_back/commit/ee0cedfb2a132be25832200fe219f8fdaf004db1))
+
 ## [2.2.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.1.1...v2.2.0) (2026-01-07)
 
 ### ✨ Features
