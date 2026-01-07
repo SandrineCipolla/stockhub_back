@@ -2,34 +2,30 @@
 
 ## [2.2.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.1.1...v2.2.0) (2026-01-07)
 
-
 ### ✨ Features
 
-* **ci:** Add dedicated Security Audit workflow with dynamic badge (Issue [#45](https://github.com/SandrineCipolla/stockhub_back/issues/45)) ([#76](https://github.com/SandrineCipolla/stockhub_back/issues/76)) ([e49f6ce](https://github.com/SandrineCipolla/stockhub_back/commit/e49f6ce5440c081e6e55ae2533c6bdadad69edc6))
-* optimize CI/CD pipeline for faster builds and deployments ([#68](https://github.com/SandrineCipolla/stockhub_back/issues/68)) ([ad257c5](https://github.com/SandrineCipolla/stockhub_back/commit/ad257c5113912e9658e9301fa7992a07cbbaf4a6))
-
+- **ci:** Add dedicated Security Audit workflow with dynamic badge (Issue [#45](https://github.com/SandrineCipolla/stockhub_back/issues/45)) ([#76](https://github.com/SandrineCipolla/stockhub_back/issues/76)) ([e49f6ce](https://github.com/SandrineCipolla/stockhub_back/commit/e49f6ce5440c081e6e55ae2533c6bdadad69edc6))
+- optimize CI/CD pipeline for faster builds and deployments ([#68](https://github.com/SandrineCipolla/stockhub_back/issues/68)) ([ad257c5](https://github.com/SandrineCipolla/stockhub_back/commit/ad257c5113912e9658e9301fa7992a07cbbaf4a6))
 
 ### ⚡ Performance Improvements
 
-* **ci:** further optimize CI/CD pipeline ([#70](https://github.com/SandrineCipolla/stockhub_back/issues/70)) ([5feaf7c](https://github.com/SandrineCipolla/stockhub_back/commit/5feaf7cc1d4fb80e2a286b58e07a57fe524c7795))
-
+- **ci:** further optimize CI/CD pipeline ([#70](https://github.com/SandrineCipolla/stockhub_back/issues/70)) ([5feaf7c](https://github.com/SandrineCipolla/stockhub_back/commit/5feaf7cc1d4fb80e2a286b58e07a57fe524c7795))
 
 ### 📚 Documentation
 
-* add Best Practices section from PR [#72](https://github.com/SandrineCipolla/stockhub_back/issues/72) code review ([e297a4c](https://github.com/SandrineCipolla/stockhub_back/commit/e297a4c58f4c8fb0439611d20de4fb959e2b6dd4))
-* add claude.md context file for AI assistant sessions ([1e10ba2](https://github.com/SandrineCipolla/stockhub_back/commit/1e10ba24a529521a3bfd6a438cec10f6c48efde0))
-* add comprehensive Frontend V2 integration guide ([5f11cdc](https://github.com/SandrineCipolla/stockhub_back/commit/5f11cdc5fad887de428ba91468f7c025a0909a13))
-* add Frontend V2 integration to roadmap (Issue [#57](https://github.com/SandrineCipolla/stockhub_back/issues/57)) ([41771f6](https://github.com/SandrineCipolla/stockhub_back/commit/41771f67ceba4c5d8b70af046e6c26c4f3859b61))
-* add structured documentation with sessions tracking ([59ead71](https://github.com/SandrineCipolla/stockhub_back/commit/59ead713499da15c07d48157a95da4614a506a85))
-* **claude.md:** add rule to avoid type assertions (as) ([af6bebe](https://github.com/SandrineCipolla/stockhub_back/commit/af6bebe34f7330f7974ffb823858978f3d7a0130))
-* reorganize documentation files into thematic folders ([75090d6](https://github.com/SandrineCipolla/stockhub_back/commit/75090d6200481618e850f7396f9abb72126c01a6))
-* update ROADMAP - mark Issue [#53](https://github.com/SandrineCipolla/stockhub_back/issues/53) as completed (25% CI/CD improvement) ([f2557eb](https://github.com/SandrineCipolla/stockhub_back/commit/f2557ebfa68d5b8dbfa1de86e6ed17a61788cbd6))
-
+- add Best Practices section from PR [#72](https://github.com/SandrineCipolla/stockhub_back/issues/72) code review ([e297a4c](https://github.com/SandrineCipolla/stockhub_back/commit/e297a4c58f4c8fb0439611d20de4fb959e2b6dd4))
+- add claude.md context file for AI assistant sessions ([1e10ba2](https://github.com/SandrineCipolla/stockhub_back/commit/1e10ba24a529521a3bfd6a438cec10f6c48efde0))
+- add comprehensive Frontend V2 integration guide ([5f11cdc](https://github.com/SandrineCipolla/stockhub_back/commit/5f11cdc5fad887de428ba91468f7c025a0909a13))
+- add Frontend V2 integration to roadmap (Issue [#57](https://github.com/SandrineCipolla/stockhub_back/issues/57)) ([41771f6](https://github.com/SandrineCipolla/stockhub_back/commit/41771f67ceba4c5d8b70af046e6c26c4f3859b61))
+- add structured documentation with sessions tracking ([59ead71](https://github.com/SandrineCipolla/stockhub_back/commit/59ead713499da15c07d48157a95da4614a506a85))
+- **claude.md:** add rule to avoid type assertions (as) ([af6bebe](https://github.com/SandrineCipolla/stockhub_back/commit/af6bebe34f7330f7974ffb823858978f3d7a0130))
+- reorganize documentation files into thematic folders ([75090d6](https://github.com/SandrineCipolla/stockhub_back/commit/75090d6200481618e850f7396f9abb72126c01a6))
+- update ROADMAP - mark Issue [#53](https://github.com/SandrineCipolla/stockhub_back/issues/53) as completed (25% CI/CD improvement) ([f2557eb](https://github.com/SandrineCipolla/stockhub_back/commit/f2557ebfa68d5b8dbfa1de86e6ed17a61788cbd6))
 
 ### 🔧 Chores
 
-* **db:** add SQL seed scripts for test data ([70ed71c](https://github.com/SandrineCipolla/stockhub_back/commit/70ed71cb022040cfaa3911014d949aa301011b84))
-* enforce LF line endings and auto-stage modified files ([6ea75f8](https://github.com/SandrineCipolla/stockhub_back/commit/6ea75f852654053f37e8ec5f5523c0f47dbeb85d))
+- **db:** add SQL seed scripts for test data ([70ed71c](https://github.com/SandrineCipolla/stockhub_back/commit/70ed71cb022040cfaa3911014d949aa301011b84))
+- enforce LF line endings and auto-stage modified files ([6ea75f8](https://github.com/SandrineCipolla/stockhub_back/commit/6ea75f852654053f37e8ec5f5523c0f47dbeb85d))
 
 ## [2.1.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.1.0...v2.1.1) (2025-12-27)
 
