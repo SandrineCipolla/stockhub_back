@@ -256,6 +256,12 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
         throw new Error(`Stock with ID ${stockId} not found`);
       }
 
+      // Delete all items first (due to onDelete: NoAction in schema)
+      await this.prisma.items.deleteMany({
+        where: { STOCK_ID: stockId },
+      });
+
+      // Then delete the stock
       await this.prisma.stocks.delete({
         where: { ID: stockId },
       });
@@ -267,7 +273,7 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
     } finally {
       rootDependency({
         name: DEPENDENCY_NAME,
-        data: `prisma.stocks.delete({ where: {ID: ${stockId}} })`,
+        data: `prisma.stocks.delete({ where: {ID: ${stockId}} }) with items cascade`,
         duration: 0,
         success: success,
         resultCode: 0,

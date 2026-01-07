@@ -93,25 +93,18 @@ export async function initializeApp() {
 
   // ----------- Routes setup -----------
 
+  // Debug middleware - Log all incoming requests
+  app.use((req: express.Request, _res: express.Response, next: express.NextFunction) => {
+    rootMain.info(`📥 ${req.method} ${req.path} - Body: ${JSON.stringify(req.body)}`);
+    next();
+  });
+
   const stockRoutesV2 = await configureStockRoutesV2();
 
   app.use(
     '/api/v2',
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
       authenticationMiddleware(req, res, next);
-    },
-    (_req: express.Request, _res: express.Response, next: express.NextFunction) => {
-      next();
-    },
-    (
-      err: CustomError,
-      req: express.Request,
-      res: express.Response,
-      _next: express.NextFunction
-    ) => {
-      res.locals.message = err.message;
-      res.locals.error = req.app.get('env') === 'development' ? err : {};
-      res.status(err.status || 500).send(err);
     },
     stockRoutesV2
   );
