@@ -1,8 +1,8 @@
 # StockHub Backend - Module de Visualisation des Stocks
 
 ![CI/CD Pipeline](https://github.com/sandrineCipolla/stockhub_back/actions/workflows/main_stockhub-back.yml/badge.svg)
+![Security Audit](https://github.com/SandrineCipolla/stockhub_back/actions/workflows/security-audit.yml/badge.svg)
 ![Version](https://img.shields.io/badge/version-2.0.0-blue)
-![Security](https://img.shields.io/badge/security-npm%20audit-green)
 ![Node](https://img.shields.io/badge/node-20.x-brightgreen)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
 

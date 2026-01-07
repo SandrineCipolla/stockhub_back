@@ -30,11 +30,26 @@ If you discover a security vulnerability in StockHub Backend, please report it b
 
 ### Automated Security Checks
 
-This project uses automated security scanning:
+This project uses automated security scanning with **two dedicated workflows**:
 
-- **npm audit:** Runs on every CI/CD pipeline execution
-- **Vulnerability threshold:** High and Critical vulnerabilities block builds
-- **Dependency updates:** Regular security patches via Dependabot (if enabled)
+#### 1. Main CI/CD Pipeline (`.github/workflows/main_stockhub-back.yml`)
+
+- Runs on: Every push and PR
+- Includes: Tests, Lint, Build, **npm audit**
+- Badge: ![CI/CD](https://github.com/SandrineCipolla/stockhub_back/actions/workflows/main_stockhub-back.yml/badge.svg)
+
+#### 2. Security Audit Workflow (`.github/workflows/security-audit.yml`)
+
+- **Dedicated security monitoring**
+- Runs on: Push, PR, **weekly schedule (Monday 00:00 UTC)**, manual trigger
+- Includes: **npm audit only**
+- Badge: ![Security](https://github.com/SandrineCipolla/stockhub_back/actions/workflows/security-audit.yml/badge.svg)
+- **Advantage:** Isolated security status visible at a glance
+
+**Vulnerability threshold:** HIGH and CRITICAL vulnerabilities block builds
+**Dependency updates:** Regular security patches recommended via Dependabot
+
+For technical details on the Security Audit workflow, see: [docs/ci-cd/SECURITY-AUDIT-WORKFLOW.md](docs/ci-cd/SECURITY-AUDIT-WORKFLOW.md)
 
 ### Authentication & Authorization
 
@@ -60,11 +75,12 @@ When contributing to this project:
 
 ## Security Audit History
 
+- **2026-01-06:** Created dedicated Security Audit workflow with dynamic badge (Issue #45)
 - **2025-12-27:** npm audit integrated into CI/CD pipeline (Issue #45)
 - **2025-11-30:** Azure AD B2C authentication implemented (ADR-003)
 
 ---
 
-**Last Updated:** 2025-12-27
+**Last Updated:** 2026-01-06
 **Maintainer:** Sandrine Cipolla
 **Project:** StockHub Backend (RNCP Project)
