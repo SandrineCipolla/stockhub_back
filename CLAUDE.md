@@ -270,7 +270,7 @@ npm run test:integration
 - Tester les repositories Prisma
 - Tester les middlewares avec injection de PrismaClient test
 
-**Tests E2E** (avec Playwright):
+**Tests E2E API** (avec Playwright):
 
 ```bash
 npm run test:e2e
@@ -278,8 +278,10 @@ npm run test:e2e:ui    # Mode UI
 ```
 
 - Utilise Azure AD B2C ROPC (Resource Owner Password Credentials)
-- Tester les flows complets (authentification + API)
-- Nommer les tests: "Step 1:", "Step 2:", etc.
+- Teste les workflows complets de l'API backend (sans interface utilisateur)
+- Simule comment un client (frontend React, app mobile) appellerait l'API
+- **Note**: Ces tests ont été créés avant l'intégration Frontend V2 (2026-01-07)
+- Pour de vrais tests E2E frontend + backend, voir issue correspondante
 
 ### Après chaque session de développement
 
@@ -900,6 +902,412 @@ Avant chaque PR, vérifier:
 - [ ] **File Organization**: Enums dans des fichiers séparés
 - [ ] **Test Files**: Fichiers de tests < 500 lignes
 - [ ] **Input Validation**: Toutes les entrées sont validées
+- [ ] **Logging**: Pas de `console.*`, utilisation de `rootController`, `rootDatabase`, etc.
+- [ ] **Security**: Pas de credentials, tokens, ou infos sensibles dans les logs
+
+---
+
+## Logging System
+
+Le projet utilise un système de logging structuré à deux niveaux : `logger.ts` (logs locaux) et `cloudLogger.ts` (monitoring cloud Azure Application Insights).
+
+### Architecture du Logging
+
+```
+src/Utils/
+  ├── logger.ts        # Système de logging local (typescript-logging)
+  └── cloudLogger.ts   # Intégration Azure Application Insights
+```
+
+**Principe**: Tous les logs doivent passer par le système `logger.ts`, qui sont automatiquement capturés par `cloudLogger.ts` pour monitoring en production.
+
+---
+
+### 1. Logger Local (`logger.ts`)
+
+**Bibliothèque**: `typescript-logging-category-style`
+
+**Structure hiérarchique**:
+
+```typescript
+import { rootController, rootDatabase, rootSecurity, rootUtils } from '@utils/logger';
+
+// Catégories principales
+rootController; // Pour les controllers et routes
+rootDatabase; // Pour les repositories
+rootSecurity; // Pour l'authentification/autorisation
+rootUtils; // Pour les utilitaires
+
+// Sous-catégories (child categories)
+const rootConfigureStockRoutes = rootController.getChildCategory('configureStockRoutes');
+const rootStockRepository = rootDatabase.getChildCategory('stockRepository');
+```
+
+**Méthodes disponibles**:
+
+```typescript
+rootController.info('Message informatif', data);      // Niveau INFO
+rootController.error('Message d'erreur', error);      // Niveau ERROR
+rootController.warn('Message d'avertissement');       // Niveau WARN
+rootController.debug('Message de debug', metadata);   // Niveau DEBUG
+```
+
+---
+
+### 2. Cloud Logger (`cloudLogger.ts`)
+
+**Intégration**: Azure Application Insights
+
+**Configuration automatique**:
+
+```typescript
+appInsights
+  .setup(process.env.APPLICATIONINSIGHTS_CONNECTION_STRING)
+  .setAutoCollectConsole(true) // ⚠️ Capture automatique des logs console
+  .setAutoCollectRequests(true)
+  .setAutoCollectExceptions(true)
+  .start();
+```
+
+**Fonctions disponibles**:
+
+```typescript
+import { rootCloudEvent, rootDependency, rootException } from '@utils/cloudLogger';
+
+// Tracker un événement métier
+rootCloudEvent('StockCreated', { stockId: 123, category: 'alimentation' });
+
+// Tracker une dépendance externe (API, DB)
+rootDependency({
+  target: 'MySQL',
+  name: 'findStockById',
+  data: 'SELECT * FROM STOCKS WHERE ID = ?',
+  duration: 45,
+  resultCode: 200,
+  success: true,
+  dependencyTypeName: 'SQL',
+});
+
+// Tracker une exception
+rootException(new Error('Database connection failed'));
+```
+
+---
+
+### 3. Bonnes Pratiques de Logging
+
+#### ❌ À ÉVITER - Utilisation de console.\*
+
+```typescript
+// ❌ MAUVAIS: Pas de structure, pas de contexte, pas de monitoring cloud
+console.log('Stock créé:', stock);
+console.error('Erreur lors de la création:', error);
+console.info('Nouvelle quantité:', quantity);
+console.warn('Stock faible:', stockId);
+```
+
+**Problèmes**:
+
+- Pas de catégorisation
+- Pas de niveau de log (tout est au même niveau dans la console)
+- Pas de métadonnées (timestamp, hostname, etc.)
+- Difficile à filtrer en production
+- Peut exposer des informations sensibles sans contrôle
+
+---
+
+#### ✅ RECOMMANDÉ - Utilisation du logger structuré
+
+**Dans les routes/controllers**:
+
+```typescript
+import { rootController } from '@utils/logger';
+
+router.get('/stocks', async (req, res) => {
+  try {
+    await stockController.getAllStocks(req, res);
+  } catch (error) {
+    rootController.error('Error in GET /stocks:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+```
+
+**Dans les repositories**:
+
+```typescript
+import { rootDatabase } from '@utils/logger';
+
+export class PrismaStockRepository {
+  private logger = rootDatabase.getChildCategory('stockRepository');
+
+  async findById(id: number): Promise<Stock | null> {
+    try {
+      this.logger.info('Finding stock by ID: {id}', id);
+      const stock = await this.prisma.stocks.findUnique({ where: { ID: id } });
+      return stock;
+    } catch (error) {
+      this.logger.error('Error finding stock by ID: {id}', id, error);
+      throw error;
+    }
+  }
+}
+```
+
+**Dans les services**:
+
+```typescript
+import { rootSecurity } from '@utils/logger';
+
+export class AuthService {
+  private logger = rootSecurity.getChildCategory('authService');
+
+  async validateToken(token: string): Promise<boolean> {
+    this.logger.debug('Validating token...');
+    try {
+      // Validation logic
+      this.logger.info('Token validated successfully');
+      return true;
+    } catch (error) {
+      this.logger.error('Token validation failed:', error);
+      return false;
+    }
+  }
+}
+```
+
+---
+
+### 4. Catégories de Logs Disponibles
+
+| Catégorie            | Import                              | Usage                                 |
+| -------------------- | ----------------------------------- | ------------------------------------- |
+| `rootMain`           | `import { rootMain }`               | Logs généraux de l'application        |
+| `rootController`     | `import { rootController }`         | Controllers et routes                 |
+| `rootDatabase`       | `import { rootDatabase }`           | Repositories et accès base de données |
+| `rootSecurity`       | `import { rootSecurity }`           | Authentification et autorisation      |
+| `rootUtils`          | `import { rootUtils }`              | Utilitaires et helpers                |
+| `rootServerSetup`    | `import { rootServerSetup }`        | Configuration serveur                 |
+| `rootUserService`    | `import { rootUserService }`        | Service utilisateur                   |
+| `rootReadUserRepo`   | `import { rootReadUserRepository }` | Repository lecture utilisateur        |
+| `rootWriteStockRepo` | `import { rootWriteStockRepo }`     | Repository écriture stock             |
+| `rootSecurityAuthMW` | `import { rootSecurityAuthMW }`     | Middleware authentification           |
+
+**Créer des sous-catégories**:
+
+```typescript
+import { rootController } from '@utils/logger';
+
+// Créer une sous-catégorie spécifique
+const routerLogger = rootController.getChildCategory('stockRoutes');
+const methodLogger = routerLogger.getChildCategory('getAllStocks');
+
+methodLogger.info('Fetching all stocks for user: {userId}', userId);
+```
+
+---
+
+### 5. Niveaux de Log
+
+| Niveau  | Quand l'utiliser                                          | Exemple                                          |
+| ------- | --------------------------------------------------------- | ------------------------------------------------ |
+| `debug` | Debugging détaillé (désactivé en production par défaut)   | Variables internes, flow d'exécution             |
+| `info`  | Informations opérationnelles normales                     | Requête traitée, stock créé, connexion réussie   |
+| `warn`  | Situation anormale mais non bloquante                     | Stock faible, token proche expiration            |
+| `error` | Erreur nécessitant attention (exception, échec opération) | Base de données inaccessible, validation échouée |
+
+**Configuration du niveau** (dans `logger.ts`):
+
+```typescript
+const provider = CategoryProvider.createProvider('ExampleProvider', {
+  level: LogLevel.Info, // En production: Info (pas de debug)
+});
+```
+
+---
+
+### 6. Sécurité et Logs Sensibles
+
+#### ⚠️ NE JAMAIS LOGGER:
+
+```typescript
+// ❌ MAUVAIS: Expose des informations sensibles
+logger.info('Client ID: {clientID}', authConfig.credentials.clientID);
+logger.info('User password: {password}', password);
+logger.info('JWT token: {token}', token);
+logger.info('Database connection string: {conn}', databaseUrl);
+logger.info('API key: {key}', apiKey);
+```
+
+#### ✅ LOGGER EN TOUTE SÉCURITÉ:
+
+```typescript
+// ✅ BON: Informations non sensibles uniquement
+logger.info('User logged in: {userId}', user.id);
+logger.info('Stock created: {stockId}', stock.id);
+logger.error('Database connection failed', error); // Pas de credentials
+logger.info('Authentication attempt from IP: {ip}', request.ip);
+```
+
+**Règle d'or**: Si l'information peut être utilisée pour attaquer le système, **ne pas la logger en production**.
+
+---
+
+### 7. Format des Messages
+
+**Utiliser des placeholders**:
+
+```typescript
+// ✅ BON: Placeholders structurés
+logger.info('Stock {stockId} created by user {userId}', stockId, userId);
+logger.error('Failed to create stock {stockId}: {reason}', stockId, reason, error);
+
+// ❌ MAUVAIS: Concaténation de strings
+logger.info(`Stock ${stockId} created by user ${userId}`);
+logger.error('Failed to create stock ' + stockId + ': ' + reason);
+```
+
+**Avantages des placeholders**:
+
+- Facilite le parsing et l'analyse
+- Meilleure performance (pas de string interpolation)
+- Structuration automatique des données
+
+---
+
+### 8. Monitoring en Production (Azure Application Insights)
+
+**Flux automatique**:
+
+```
+1. Code utilise rootController.error(...)
+   ↓
+2. logger.ts affiche en console (développement)
+   ↓
+3. cloudLogger.ts capture automatiquement (.setAutoCollectConsole: true)
+   ↓
+4. Logs envoyés vers Azure Application Insights
+   ↓
+5. Analyse et alertes dans Azure Portal
+```
+
+**Métriques collectées automatiquement**:
+
+- ✅ Requêtes HTTP (latence, statut)
+- ✅ Exceptions non catchées
+- ✅ Dépendances externes (DB, APIs)
+- ✅ Performance serveur (CPU, mémoire)
+- ✅ Logs console (via `rootController`, `rootDatabase`, etc.)
+
+---
+
+### 9. Exemples Complets
+
+#### Exemple 1: Routes Express
+
+```typescript
+import { Router } from 'express';
+import { rootController } from '@utils/logger';
+
+const configureStockRoutes = async (): Promise<Router> => {
+  const logger = rootController.getChildCategory('configureStockRoutes');
+  logger.info('Configuring stock routes...');
+
+  const router = Router();
+
+  router.get('/stocks', async (req, res) => {
+    try {
+      await stockController.getAllStocks(req, res);
+    } catch (error) {
+      rootController.error('Error in GET /stocks:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  logger.info('Stock routes configured successfully');
+  return router;
+};
+```
+
+#### Exemple 2: Repository Prisma
+
+```typescript
+import { rootDatabase } from '@utils/logger';
+
+export class PrismaStockCommandRepository {
+  private logger = rootDatabase.getChildCategory('stockCommandRepository');
+
+  async createStock(command: CreateStockCommand): Promise<Stock> {
+    this.logger.info('Creating stock: {label}', command.label);
+
+    try {
+      const stock = await this.prisma.stocks.create({
+        data: {
+          LABEL: command.label,
+          DESCRIPTION: command.description,
+          CATEGORY: command.category,
+        },
+      });
+
+      this.logger.info('Stock created successfully: {stockId}', stock.ID);
+      return stock;
+    } catch (error) {
+      this.logger.error('Failed to create stock: {label}', command.label, error);
+      throw error;
+    }
+  }
+}
+```
+
+#### Exemple 3: Middleware d'authentification
+
+```typescript
+import { rootSecurity } from '@utils/logger';
+
+export const authenticateMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  const logger = rootSecurity.getChildCategory('authMiddleware');
+
+  logger.debug('Authenticating request...');
+
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+      logger.warn('Authentication failed: No token provided');
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    // Validation du token
+    logger.info('Token validated successfully for user: {userId}', user.id);
+    next();
+  } catch (error) {
+    logger.error('Authentication error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+```
+
+---
+
+### 10. Checklist Logging
+
+Avant chaque commit, vérifier:
+
+- [ ] **Pas de console.\***: Aucun `console.log`, `console.error`, `console.warn`, `console.info`
+- [ ] **Logger structuré**: Utilisation de `rootController`, `rootDatabase`, etc.
+- [ ] **Placeholders**: Messages avec `{placeholder}` au lieu de concaténation
+- [ ] **Pas d'infos sensibles**: Pas de credentials, tokens, passwords, clientID dans les logs
+- [ ] **Niveau approprié**: `debug` pour détails, `info` pour opérations, `warn` pour anomalies, `error` pour erreurs
+- [ ] **Sous-catégories**: Utilisation de `.getChildCategory()` pour logs spécifiques
+- [ ] **Try/catch loggés**: Toutes les exceptions sont loggées avec `logger.error()`
+
+---
+
+### Documentation Complète
+
+- **Fichiers sources**: `src/Utils/logger.ts`, `src/Utils/cloudLogger.ts`
+- **Bibliothèque**: [typescript-logging](https://github.com/mreuvers/typescript-logging)
+- **Azure Application Insights**: [Documentation Microsoft](https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview)
 
 ---
 
@@ -1011,7 +1419,9 @@ Voir DTOs dans `src/api/dto/` et mappers dans `src/api/dto/mappers/`.
 3. ✅ `npm run lint` - Aucune erreur ESLint (automatique via lint-staged)
 4. ✅ `tsc --noEmit` - Aucune erreur TypeScript (automatique via pre-commit)
 5. ✅ Tests appropriés écrits (unit/integration/E2E)
-6. ✅ Conventional Commit respecté (vérifié par commitlint)
+6. ✅ **Logging correct**: Pas de `console.*`, utilisation de `rootController`, `rootDatabase`, etc.
+7. ✅ **Pas d'infos sensibles**: Pas de credentials, tokens, passwords dans les logs
+8. ✅ Conventional Commit respecté (vérifié par commitlint)
 
 ## 🚨 Checklist avant chaque push
 

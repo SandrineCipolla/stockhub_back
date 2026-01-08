@@ -2,18 +2,28 @@ import { expect, test } from '@playwright/test';
 import { createAzureAuthHelper } from '../helpers/azureAuth';
 
 /**
- * E2E Test Suite: Stock Management Complete Workflow with Azure AD Authentication
+ * API E2E Test Suite: Stock Management Complete Workflow
  *
- * This test suite validates the complete stock management workflow using v1 API:
+ * These tests validate the backend API end-to-end with real Azure AD B2C authentication.
+ * They simulate how a client (React frontend, mobile app) would call the API.
+ *
+ * IMPORTANT: These tests were created before Frontend V2 integration (2026-01-07).
+ * They test the API layer only, not the user interface.
+ *
+ * Workflow tested:
  * 1. Authenticate with Azure AD B2C to get real token
  * 2. Create a new stock
  * 3. Add items to the stock
  * 4. Visualize the stock and its items
  * 5. Update item quantities
  * 6. Check for low stock items
+ *
+ * For full E2E tests including React UI, see:
+ * - Future issue: Full E2E tests with frontend + backend
+ * - Repository: stockHub_V2_front/tests/e2e-full/
  */
 
-test.describe('Stock Management E2E Workflow with Azure AD', () => {
+test.describe('Stock Management API E2E Workflow with Azure AD', () => {
   const baseURL = process.env.API_BASE_URL || 'http://localhost:3006';
   const apiV1 = `${baseURL}/api/v1`; // Used for POST/PUT (creation/modification)
   const apiV2 = `${baseURL}/api/v2`; // Used for GET (reading)

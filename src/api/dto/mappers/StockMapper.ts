@@ -98,23 +98,23 @@ export class StockMapper {
   private static calculateStatus(quantity: number, minimumStock: number): StockStatus {
     // Cas 1: Rupture de stock
     if (quantity === 0) {
-      return 'out-of-stock';
+      return StockStatus.OUT_OF_STOCK;
     }
 
     // Cas 2: Stock critique (< 10% du minimum)
     const criticalThreshold = minimumStock * 0.1;
     if (quantity < criticalThreshold) {
-      return 'critical';
+      return StockStatus.CRITICAL;
     }
 
     // Cas 3: Stock faible (< 30% du minimum)
     const lowThreshold = minimumStock * 0.3;
     if (quantity < lowThreshold) {
-      return 'low';
+      return StockStatus.LOW;
     }
 
     // Cas 4: Stock optimal
-    return 'optimal';
+    return StockStatus.OPTIMAL;
   }
 
   /**

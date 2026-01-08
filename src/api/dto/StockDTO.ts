@@ -5,7 +5,16 @@
  * Il transforme les Value Objects DDD en JSON simple.
  */
 
-export type StockStatus = 'optimal' | 'low' | 'critical' | 'out-of-stock';
+/**
+ * Enum pour les statuts de stock
+ * Utilisé pour la cohérence entre l'API et les tests
+ */
+export enum StockStatus {
+  OPTIMAL = 'optimal',
+  LOW = 'low',
+  CRITICAL = 'critical',
+  OUT_OF_STOCK = 'out-of-stock',
+}
 
 export interface StockDTO {
   /**
