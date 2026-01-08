@@ -270,7 +270,7 @@ npm run test:integration
 - Tester les repositories Prisma
 - Tester les middlewares avec injection de PrismaClient test
 
-**Tests E2E** (avec Playwright):
+**Tests E2E API** (avec Playwright):
 
 ```bash
 npm run test:e2e
@@ -278,8 +278,10 @@ npm run test:e2e:ui    # Mode UI
 ```
 
 - Utilise Azure AD B2C ROPC (Resource Owner Password Credentials)
-- Tester les flows complets (authentification + API)
-- Nommer les tests: "Step 1:", "Step 2:", etc.
+- Teste les workflows complets de l'API backend (sans interface utilisateur)
+- Simule comment un client (frontend React, app mobile) appellerait l'API
+- **Note**: Ces tests ont été créés avant l'intégration Frontend V2 (2026-01-07)
+- Pour de vrais tests E2E frontend + backend, voir issue correspondante
 
 ### Après chaque session de développement
 
