@@ -21,9 +21,6 @@ const activeClientID =
     ? process.env.AZURE_ROPC_CLIENT_ID
     : authConfig.credentials.clientID;
 
-rootSecurityAuthenticationMiddleware.info('Active Azure AD B2C policy: {policy}', activePolicy);
-rootSecurityAuthenticationMiddleware.info('ROPC mode enabled: {ropcEnabled}', useROPC);
-
 export const authConfigoptions: AuthConfigOptions = {
   identityMetadata: `https://${authConfig.metadata.b2cDomain}/${authConfig.credentials.tenantName}/${activePolicy}/${authConfig.metadata.version}/${authConfig.metadata.discovery}`,
   clientID: activeClientID,
