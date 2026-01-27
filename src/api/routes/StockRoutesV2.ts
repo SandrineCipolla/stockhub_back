@@ -17,6 +17,8 @@ import { AddItemToStockCommandHandler } from '@domain/stock-management/manipulat
 import { UpdateItemQuantityCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateItemQuantityCommandHandler';
 import { rootController } from '@utils/logger';
 import { PrismaClient } from '@prisma/client';
+import { authorizeStockRead, authorizeStockWrite } from '@authorization/authorizeMiddleware';
+import { STOCK_ROUTES } from './constants/routePaths';
 
 const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Router> => {
   const prismaRepository = new PrismaStockVisualizationRepository(prismaClient);
@@ -46,42 +48,54 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   const router = Router();
 
-  router.get('/stocks', async (req: express.Request, res: express.Response) => {
+  router.get(STOCK_ROUTES.LIST, async (req: express.Request, res: express.Response) => {
     await stockController.getAllStocks(req, res);
   });
 
   logger.info('Routes for /stocks configured');
 
-  router.get('/stocks/:stockId', async (req: express.Request, res: express.Response) => {
-    await stockController.getStockDetails(req, res);
-  });
+  router.get(
+    STOCK_ROUTES.DETAILS,
+    authorizeStockRead,
+    async (req: express.Request, res: express.Response) => {
+      await stockController.getStockDetails(req, res);
+    }
+  );
 
-  logger.info('Routes for /stocks/:stockId configured');
+  logger.info('Routes for /stocks/:stockId configured (with authorization)');
 
-  router.get('/stocks/:stockId/items', async (req: express.Request, res: express.Response) => {
-    await stockController.getStockItems(req, res);
-  });
+  router.get(
+    STOCK_ROUTES.ITEMS,
+    authorizeStockRead,
+    async (req: express.Request, res: express.Response) => {
+      await stockController.getStockItems(req, res);
+    }
+  );
 
   logger.info('Routes for /stocks/:stockId/items configured');
 
   // Manipulation routes
-  router.post('/stocks', async (req, res: express.Response) => {
+  router.post(STOCK_ROUTES.CREATE, async (req, res: express.Response) => {
     await manipulationController.createStock(req as CreateStockRequest, res);
   });
 
   logger.info('Routes for POST /stocks configured');
 
-  router.post('/stocks/:stockId/items', async (req, res: express.Response) => {
+  router.post(STOCK_ROUTES.ADD_ITEM, authorizeStockWrite, async (req, res: express.Response) => {
     await manipulationController.addItemToStock(req as AddItemToStockRequest, res);
   });
 
-  logger.info('Routes for POST /stocks/:stockId/items configured');
+  logger.info('Routes for POST /stocks/:stockId/items configured (with authorization)');
 
-  router.patch('/stocks/:stockId/items/:itemId', async (req, res: express.Response) => {
-    await manipulationController.updateItemQuantity(req as UpdateItemQuantityRequest, res);
-  });
+  router.patch(
+    STOCK_ROUTES.UPDATE_ITEM_QUANTITY,
+    authorizeStockWrite,
+    async (req, res: express.Response) => {
+      await manipulationController.updateItemQuantity(req as UpdateItemQuantityRequest, res);
+    }
+  );
 
-  logger.info('Routes for PATCH /stocks/:stockId/items/:itemId configured');
+  logger.info('Routes for PATCH /stocks/:stockId/items/:itemId configured (with authorization)');
 
   return router;
 };
