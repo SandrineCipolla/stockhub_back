@@ -87,6 +87,8 @@ export function authorizeStockAccess(
       // 8. Authorization successful
       return next();
     } catch (error) {
+      // Note: Consider using structured logger (rootSecurity) instead of console.error
+      // See: CLAUDE.md Logging System section
       console.error('Authorization error:', error);
       return res.status(500).json({ error: AUTH_ERROR_MESSAGES.INTERNAL_ERROR });
     }
