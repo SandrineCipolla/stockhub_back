@@ -13,6 +13,17 @@ export const PERMISSIONS = {
 export type RequiredPermission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
 
 /**
+ * HTTP status codes for authorization responses
+ */
+export const HTTP_STATUS = {
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  INTERNAL_ERROR: 500,
+} as const;
+
+/**
  * Error messages for authorization
  */
 export const AUTH_ERROR_MESSAGES = {
@@ -25,3 +36,19 @@ export const AUTH_ERROR_MESSAGES = {
     `Forbidden - Your role (${role}) does not allow ${permission} access`,
   INTERNAL_ERROR: 'Internal server error during authorization',
 } as const;
+
+/**
+ * Helper function to send error response
+ * Reduces code duplication for error responses
+ *
+ * @param res - Express response object
+ * @param statusCode - HTTP status code
+ * @param errorMessage - Error message to send
+ */
+export const sendErrorResponse = (
+  res: { status: (code: number) => { json: (body: { error: string }) => void } },
+  statusCode: number,
+  errorMessage: string
+): void => {
+  res.status(statusCode).json({ error: errorMessage });
+};
