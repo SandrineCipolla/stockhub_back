@@ -18,9 +18,15 @@ describe('StockControllerManipulation', () => {
   let mockCreateStockHandler: any;
   let mockAddItemHandler: any;
   let mockUpdateQuantityHandler: any;
+  let mockUpdateStockHandler: any;
+  let mockDeleteStockHandler: any;
   let mockUserService: any;
 
   beforeEach(() => {
+    mockCreateStockHandler = {
+      handle: jest.fn(),
+    };
+
     mockUserService = {
       convertOIDtoUserID: jest.fn(),
     };
@@ -33,10 +39,20 @@ describe('StockControllerManipulation', () => {
       handle: jest.fn(),
     };
 
+    mockUpdateStockHandler = {
+      handle: jest.fn(),
+    };
+
+    mockDeleteStockHandler = {
+      handle: jest.fn(),
+    };
+
     controller = new StockControllerManipulation(
       mockCreateStockHandler,
       mockAddItemHandler,
       mockUpdateQuantityHandler,
+      mockUpdateStockHandler,
+      mockDeleteStockHandler,
       mockUserService
     );
 
