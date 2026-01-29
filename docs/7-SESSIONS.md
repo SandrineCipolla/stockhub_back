@@ -6,7 +6,7 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 3
+**Total sessions documentées** : 4
 **Période** : Décembre 2025 - Janvier 2026
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
@@ -51,6 +51,41 @@
 - 12/12 suggestions actionnables implémentées
 - 4/4 non-blocking optionnels complétés
 - 2 discussions philosophiques (non-bloquant)
+
+---
+
+### Session du 6 Janvier 2026 - PR #72 Code Review Improvements
+
+**Fichier** : [sessions/2026-01-06-pr72-code-review-improvements.md](sessions/2026-01-06-pr72-code-review-improvements.md)
+
+**Objectif** : Adresser les 17 commentaires de code review de la PR #72
+
+**Réalisations** :
+
+- ✅ **Repository Pattern DDD**
+  - AuthorizationRepository créé pour encapsuler les requêtes Prisma
+  - Injection dans le middleware (résout Issue #71)
+- ✅ **Constants et Typed Errors**
+  - `PERMISSIONS`, `AUTH_ERROR_MESSAGES` dans permissions.ts
+  - 7 classes d'erreurs typées dans FamilyErrors.ts
+- ✅ **Logic in Value Objects**
+  - Méthode `hasRequiredPermission()` dans StockRole
+  - FamilyMemberData converti en Value Object class
+- ✅ **File Organization**
+  - Enums extraits dans fichiers séparés (StockRoleEnum.ts, FamilyRoleEnum.ts)
+  - Family.test.ts splitté en 4 fichiers
+
+**Décisions techniques** :
+
+- Repository Pattern préféré à l'injection directe de PrismaClient
+- Typed errors pour meilleur debugging et error handling
+- Factory methods pour éviter duplication de code
+
+**Review feedback** : 16/17 commentaires traités (94%)
+
+- 5/5 blocking issues résolus
+- 10/11 suggestions implémentées
+- 1 discussion philosophique (Null Object Pattern - non-bloquant)
 
 ---
 

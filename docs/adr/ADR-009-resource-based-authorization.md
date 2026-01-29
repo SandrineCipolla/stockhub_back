@@ -228,7 +228,7 @@ Requête → Authentification (JWT) → Autorisation (check ownership/role) → 
 - ✅ Tests E2E passent pour isolation (11/11 PASS)
 - ✅ Tests unitaires domaine (142/142 PASS)
 
-**Note:** Tests d'intégration créés mais skippés (Issue #71 - refactoring PrismaClient injection requis)
+**Note:** Tests d'intégration fonctionnels (9/9 PASS) - Issue #71 résolue via AuthorizationRepository
 
 ### Phase 2: Workflow de suggestions (4-6 semaines)
 

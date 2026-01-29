@@ -261,15 +261,19 @@ npm run test:unit
 
 - ✅ `tests/domain/authorization/common/value-objects/StockRole.test.ts` (89 tests)
 - ✅ `tests/domain/authorization/common/value-objects/FamilyRole.test.ts` (15 tests)
-- ✅ `tests/domain/authorization/common/entities/Family.test.ts` (38 tests)
+- ✅ Family entity tests (38 tests) - **split en 4 fichiers** :
+  - `Family.create.test.ts` : création d'entité
+  - `Family.members.test.ts` : gestion des membres
+  - `Family.roles.test.ts` : gestion des rôles
+  - `Family.info.test.ts` : informations famille
 
-### Tests d'intégration : ⚠️ SKIPPÉS (Issue #71)
+### Tests d'intégration : ✅ 9/9 PASS
 
 **Fichier :** `tests/integration/authorization/authorizeMiddleware.integration.test.ts`
 
-**Statut :** Tests créés mais skippés avec `describe.skip`
+**Statut :** ✅ FONCTIONNELS (Issue #71 résolue)
 
-**Raison :** Le middleware crée son propre `PrismaClient` ce qui empêche l'injection du client de test. Nécessite refactoring (documenté dans Issue #71).
+**Solution :** AuthorizationRepository injecté dans le middleware permet d'utiliser le PrismaClient de test.
 
 ### Tests E2E d'autorisation : ✅ 4/4 PASS
 
@@ -299,6 +303,39 @@ npm run test:unit
 
 ---
 
+---
+
+## 🔄 Améliorations Code Review (PR #72)
+
+Suite au code review, les améliorations suivantes ont été apportées :
+
+### Repository Pattern DDD
+
+- **AuthorizationRepository** créé (`src/authorization/repositories/`)
+  - `findUserByEmail()` : Recherche utilisateur par email
+  - `findStockById()` : Recherche stock par ID
+  - `findCollaboratorByUserAndStock()` : Recherche collaborateur
+
+### Constants et Typed Errors
+
+- **`permissions.ts`** : `PERMISSIONS`, `AUTH_ERROR_MESSAGES`, `HTTP_STATUS`
+- **`routePaths.ts`** : `STOCK_ROUTES` pour les chemins de routes
+- **`FamilyErrors.ts`** : 7 classes d'erreurs typées
+
+### Value Objects améliorés
+
+- **StockRole** : Ajout méthode `hasRequiredPermission()`
+- **FamilyMemberData** : Converti en Value Object class avec `isAdmin()`, `getRole()`
+- **Enums extraits** : StockRoleEnum.ts et FamilyRoleEnum.ts (fichiers séparés)
+
+### Middleware amélioré
+
+- Injection de dépendances via AuthorizationRepository
+- Helper function `sendErrorResponse()`
+- Structured logging avec `rootSecurity` logger
+
+---
+
 **Auteur :** Sandrine Cipolla
-**Assistance :** Claude Code (Sonnet 4.5)
-**Date :** 2025-12-28
+**Assistance :** Claude Code
+**Date :** 2026-01-27 (mis à jour)

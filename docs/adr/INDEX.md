@@ -122,5 +122,5 @@ Si une décision change :
 
 ---
 
-**Dernière mise à jour** : 2025-12-28
+**Dernière mise à jour** : 2026-01-27
 **Mainteneur** : Équipe StockHub Backend

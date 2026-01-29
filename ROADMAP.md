@@ -2,7 +2,7 @@
 
 **Date de création:** 2025-12-09
 **Dernière mise à jour:** 2025-12-28
-**Version actuelle:** 2.0.0
+**Version actuelle:** 2.2.0
 **Statut:** ✅ Architecture DDD/CQRS complète - Autorisation Phase 1 terminée
 
 ---
