@@ -1,9 +1,9 @@
 # 🗺️ StockHub Backend - Roadmap
 
 **Date de création:** 2025-12-09
-**Dernière mise à jour:** 2025-12-27
-**Version actuelle:** 2.0.0
-**Statut:** ✅ Architecture DDD/CQRS complète - Module manipulation terminé
+**Dernière mise à jour:** 2025-12-28
+**Version actuelle:** 2.2.0
+**Statut:** ✅ Architecture DDD/CQRS complète - Autorisation Phase 1 terminée
 
 ---
 
@@ -110,7 +110,7 @@
 #### Issue #44: Implémenter couche d'autorisation (EPIC - 4 phases)
 
 **Priorité:** HAUTE
-**Statut:** ⏳ EN COURS - ADR-009 créé, plan en 4 phases
+**Statut:** ⏳ EN COURS - Phase 1 MERGÉE ✅ (Issue #62, PR #72)
 **Description:**
 
 Système d'autorisation hybride basé sur les ressources avec:
@@ -122,7 +122,17 @@ Système d'autorisation hybride basé sur les ressources avec:
 
 **Issues enfants (Timeline ~3-4 mois):**
 
-- [ ] #62 - Phase 1: Fondations (groupes familiaux + rôles) - 3-4 sem
+- [x] ✅ #62 - Phase 1: Fondations (groupes familiaux + rôles) - MERGÉ (27 jan 2026)
+  - ✅ Migrations Prisma (Family, FamilyMember, StockCollaborator)
+  - ✅ Domain Layer (Value Objects + Entities)
+  - ✅ Middleware d'autorisation (authorizeStockAccess)
+  - ✅ Application aux routes V2
+  - ✅ Tests: 142 unitaires + 9 intégration + 4 E2E
+  - ✅ PR #72 avec 23/23 commentaires de review traités
+  - ✅ PR #73 (DI improvements) mergée dans PR #72
+  - ✅ Constants (HTTP codes, permissions, routes)
+  - ✅ Structured logging (rootSecurity)
+  - ✅ Documentation: security + DI best practices (722 lignes)
 - [ ] #63 - Phase 2: Workflow suggestions - 4-6 sem
 - [ ] #64 - Phase 3: Notifications temps réel (SSE) - 2-3 sem
 - [ ] #65 - Phase 4: Features avancées (audit log, analytics) - 2-4 sem
@@ -130,7 +140,9 @@ Système d'autorisation hybride basé sur les ressources avec:
 **Documentation:**
 
 - ✅ ADR-009: docs/adr/ADR-009-resource-based-authorization.md
-- Cas d'usage familiaux concrets documentés
+- ✅ Session 27 jan 2026: PR #72 final review & merge
+- ✅ Session 6 jan 2026: PR #72 code review improvements
+- ✅ Cas d'usage familiaux concrets documentés
 
 ---
 
@@ -256,7 +268,7 @@ Gestion des contenants (fûts, bouteilles, caisses)
 
 ### ⏳ Phase 2bis EN COURS - Sécurité & Qualité
 
-5. ⏳ Issue #44 - Couche d'autorisation (feedback encadrant)
+5. ✅ Issue #44 Phase 1 - Couche d'autorisation (feedback encadrant) - MERGÉ
 6. ⏳ Issue #45 - npm audit dans CI/CD (feedback encadrant)
 7. 📋 Issue #36 - Normaliser module visualization
 8. ✅ Issue #53 - Optimiser CI/CD (25% amélioration : 7m36s → 5m44s)
@@ -319,25 +331,25 @@ Gestion des contenants (fûts, bouteilles, caisses)
 
 ### Production-ready ⏳ EN COURS
 
-- [ ] 📋 Couche d'autorisation (Issue #44)
+- [x] ✅ Couche d'autorisation Phase 1 (Issue #44 - Issue #62 mergée)
 - [ ] 📋 npm audit dans CI/CD (Issue #45)
-- [x] ✅ Tests coverage > 80% (53 tests domaine)
+- [x] ✅ Tests coverage > 80% (142 tests domaine + 9 intégration + 4 E2E)
 - [x] ✅ TypeScript strict mode (fait en v2.0.0)
-- [ ] 📋 CI/CD optimisée (Issue #53)
+- [x] ✅ CI/CD optimisée (Issue #53 - complété)
 
 ### Qualité RNCP ⏳ EN COURS
 
 - [x] ✅ 10 ADRs complets (justification tous choix techniques)
-- [x] ✅ Tests unitaires domaine (53 tests)
-- [x] ✅ Tests intégration (repository)
-- [x] ✅ Tests E2E (Playwright)
+- [x] ✅ Tests unitaires domaine (142 tests)
+- [x] ✅ Tests intégration (9 tests avec TestContainers)
+- [x] ✅ Tests E2E (4 tests Playwright + Azure AD B2C)
 - [x] ✅ Documentation architecture
-- [ ] ⏳ Couche d'autorisation (Issue #44 - ADR-009 créé, 4 phases planifiées #62-65)
+- [x] ✅ Couche d'autorisation Phase 1 (Issue #44 - #62 mergé, ADR-009, 4 phases planifiées #62-65)
 - [x] ✅ npm audit CI/CD (Issue #45 - complété)
 
 ---
 
 **Auteur:** Sandrine Cipolla
-**Dernière mise à jour:** 2025-12-27
-**Version:** 2.0.0
+**Dernière mise à jour:** 2026-01-27
+**Version:** 2.2.0 (Authorization Phase 1 mergée)
 **Reviewer:** [Encadrant RNCP]

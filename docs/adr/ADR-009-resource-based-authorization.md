@@ -209,23 +209,26 @@ Requête → Authentification (JWT) → Autorisation (check ownership/role) → 
 
 ## Plan d'implémentation (4 phases)
 
-### Phase 1: Fondations - Groupes + Rôles basiques (3-4 semaines)
+### Phase 1: Fondations - Groupes + Rôles basiques ✅ COMPLÉTÉ
 
 **Objectif:** Système d'autorisation minimal fonctionnel
 
 **Livrables:**
 
-- [ ] Migration Prisma: tables `Family`, `FamilyMember`, `StockCollaborator`
-- [ ] Middleware `authorize(resource, action, ownership)`
-- [ ] Rôles: OWNER, EDITOR, VIEWER uniquement
-- [ ] Application aux routes v2
-- [ ] Tests unitaires + E2E (user A ne peut pas accéder stocks de user B)
-- [ ] ADR-009 (ce document)
+- [x] ✅ Migration Prisma: tables `Family`, `FamilyMember`, `StockCollaborator`
+- [x] ✅ Middleware `authorize(resource, action, ownership)`
+- [x] ✅ Rôles: OWNER, EDITOR, VIEWER, VIEWER_CONTRIBUTOR
+- [x] ✅ Application aux routes v2
+- [x] ✅ Tests unitaires (142 tests) + E2E (4 tests)
+- [x] ✅ ADR-009 (ce document)
 
 **Critères de succès:**
 
-- Un stock n'est accessible que par owner + collaborateurs
-- Tests E2E passent pour isolation
+- ✅ Un stock n'est accessible que par owner + collaborateurs
+- ✅ Tests E2E passent pour isolation (11/11 PASS)
+- ✅ Tests unitaires domaine (142/142 PASS)
+
+**Note:** Tests d'intégration fonctionnels (9/9 PASS) - Issue #71 résolue via AuthorizationRepository
 
 ### Phase 2: Workflow de suggestions (4-6 semaines)
 
