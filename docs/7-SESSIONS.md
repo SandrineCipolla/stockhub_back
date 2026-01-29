@@ -6,13 +6,48 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 4
+**Total sessions documentées** : 5
 **Période** : Décembre 2025 - Janvier 2026
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
 ---
 
 ## 🗓️ Sessions Documentées
+
+### Session du 29 Janvier 2026 - Mise en place des Milestones GitHub
+
+**Fichier** : [sessions/2026-01-29-milestones-setup.md](sessions/2026-01-29-milestones-setup.md)
+
+**Objectif** : Configurer des milestones GitHub pour le suivi d'avancement RNCP
+
+**Réalisations** :
+
+- ✅ **Milestones Backend** (9 milestones)
+  - 5 milestones par version (v2.3.0 à v4.0.0)
+  - 4 milestones RNCP (Architecture, Sécurité, Tests, Documentation)
+- ✅ **Milestones Frontend** (7 milestones)
+  - 4 milestones par version
+  - 3 milestones RNCP (UI/UX, Intégration, Tests)
+- ✅ **Milestones Design System** (6 milestones)
+  - 4 milestones par version
+  - 2 milestones RNCP (Composants, Accessibilité)
+- ✅ **Assignation des issues existantes**
+  - Toutes les issues ouvertes et fermées assignées
+  - Pourcentages d'avancement calculés automatiquement
+- ✅ **Documentation**
+  - Section ajoutée dans ROADMAP.md
+  - Session documentée
+
+**KPIs initiaux** :
+
+| Repo          | Milestone              | Avancement |
+| ------------- | ---------------------- | ---------- |
+| Backend       | RNCP - Documentation   | 100% ✅    |
+| Backend       | RNCP - Tests & Qualité | 66%        |
+| Frontend      | RNCP - UI/UX           | 68%        |
+| Design System | RNCP - Composants Core | 57%        |
+
+---
 
 ### Session du 27 Janvier 2026 - PR #72 Final Review & Merge Preparation
 

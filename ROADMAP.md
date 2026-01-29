@@ -349,7 +349,52 @@ Gestion des contenants (fûts, bouteilles, caisses)
 
 ---
 
+## 📊 Suivi d'avancement (Milestones GitHub)
+
+Les milestones GitHub permettent de suivre l'avancement du projet avec des KPIs visuels (% completion, burndown).
+
+### Milestones par repo
+
+#### Backend ([voir milestones](https://github.com/SandrineCipolla/stockhub_back/milestones))
+
+| Milestone                         | Description                          | Statut   |
+| --------------------------------- | ------------------------------------ | -------- |
+| ✅ v2.3.0 - Authorization P1      | Issue #62 - Fondations autorisation  | Fermé    |
+| RNCP - Architecture DDD/CQRS      | Démontrer maîtrise DDD/CQRS          | En cours |
+| RNCP - Sécurité & Auth            | Azure AD B2C, JWT, autorisation      | En cours |
+| RNCP - Tests & Qualité            | Tests, CI/CD, couverture >80%        | En cours |
+| ✅ RNCP - Documentation Technique | ADRs, OpenAPI, guides                | Fermé    |
+| v2.4.0 - Authorization P2         | Issue #63 - Workflow suggestions     | Planifié |
+| v2.5.0 - Authorization P3         | Issue #64 - Notifications temps réel | Planifié |
+| v3.0.0 - Authorization P4         | Issue #65 - Features avancées        | Planifié |
+
+#### Frontend ([voir milestones](https://github.com/SandrineCipolla/stockHub_V2_front/milestones))
+
+| Milestone                    | Description                               | Statut   |
+| ---------------------------- | ----------------------------------------- | -------- |
+| RNCP - UI/UX & Accessibilité | Interface responsive, WCAG, Design System | En cours |
+| RNCP - Intégration Backend   | Connexion API, gestion tokens             | À faire  |
+| RNCP - Tests Frontend        | Tests unitaires, E2E Playwright           | En cours |
+| v1.4.0 - Authorization P1 UI | Adaptation UI pour autorisation           | Planifié |
+
+#### Design System ([voir milestones](https://github.com/SandrineCipolla/stockhub_design_system/milestones))
+
+| Milestone                         | Description                       | Statut   |
+| --------------------------------- | --------------------------------- | -------- |
+| RNCP - Composants Core            | Web Components essentiels         | En cours |
+| RNCP - Accessibilité & Standards  | WCAG compliance, Storybook, tests | À faire  |
+| v1.4.0 - Authorization Components | Composants pour autorisation      | Planifié |
+
+### Utilisation pour le mémoire RNCP
+
+1. **Screenshots** : Capturer les progress bars sur les pages milestones
+2. **KPIs** : % d'avancement par domaine (Architecture, Sécurité, Tests, etc.)
+3. **Timeline** : Visualiser l'évolution entre les sessions de travail
+4. **Burndown** : Suivre la vélocité de fermeture des issues
+
+---
+
 **Auteur:** Sandrine Cipolla
-**Dernière mise à jour:** 2026-01-27
-**Version:** 2.2.0 (Authorization Phase 1 mergée)
+**Dernière mise à jour:** 2026-01-29
+**Version:** 2.3.0 (Authorization Phase 1 release)
 **Reviewer:** [Encadrant RNCP]
