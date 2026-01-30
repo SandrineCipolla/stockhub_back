@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.3.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.3.0...v2.3.1) (2026-01-30)
+
+
+### 📚 Documentation
+
+* add milestones documentation for RNCP tracking ([7a6371f](https://github.com/SandrineCipolla/stockhub_back/commit/7a6371fd10a6aba856535e06739cc4a2977c52d7))
+* create dedicated MILESTONES-GUIDE.md ([8537d29](https://github.com/SandrineCipolla/stockhub_back/commit/8537d29548325f35a84fbeae2586acd7b5e9522a))
+
+
+### 💄 Styles
+
+* format CHANGELOG.md with Prettier ([57c5af6](https://github.com/SandrineCipolla/stockhub_back/commit/57c5af67a2bfe18e078f3573501170738c7538fe))
+
 ## [2.3.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.2.0...v2.3.0) (2026-01-29)
 
 ### ✨ Features
