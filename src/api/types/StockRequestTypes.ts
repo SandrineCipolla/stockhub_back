@@ -22,6 +22,12 @@ export interface UpdateItemQuantityBody {
   quantity: number;
 }
 
+export interface UpdateStockBody {
+  label?: string;
+  description?: string;
+  category?: string;
+}
+
 /**
  * Route parameter types
  */
@@ -59,3 +65,7 @@ export type UpdateItemQuantityRequest = AuthenticatedRequest<
   unknown,
   UpdateItemQuantityBody
 >;
+
+export type UpdateStockRequest = AuthenticatedRequest<StockParams, unknown, UpdateStockBody>;
+
+export type DeleteStockRequest = AuthenticatedRequest<StockParams, unknown, unknown>;
