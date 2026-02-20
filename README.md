@@ -121,6 +121,8 @@ Les **ADRs** documentent les décisions techniques majeures du projet avec leur 
 - 📄 [Guide d'implémentation routes manipulation](./docs/ddd-manipulation-routes-implementation.md)
 - 🧪 [Guide des Tests E2E](./docs/E2E_TESTS_GUIDE.md)
 
+📚 **[Documentation complète du projet](https://github.com/SandrineCipolla/stockHub_V2_front/wiki)** — Architecture, guides techniques, métriques
+
 ## 5. Base de données
 
 ### Diagramme relationnel
