@@ -1,0 +1,132 @@
+name: "📖 User Story"
+description: "Rédiger une user story fonctionnelle"
+title: "[US-XXX] "
+labels: ["user-story"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📋 Informations générales
+
+  - type: input
+    id: reference
+    attributes:
+      label: "Référence US"
+      placeholder: "ex: US-042"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priorite
+    attributes:
+      label: "Priorité"
+      options:
+        - "🔴 Très haute"
+        - "🟠 Haute"
+        - "🟡 Moyenne"
+        - "🟢 Basse"
+        - "⚪ Très basse"
+    validations:
+      required: true
+
+  - type: input
+    id: estimation
+    attributes:
+      label: "Estimation (story points)"
+      placeholder: "ex: 3"
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: "Module"
+      options:
+        - "Frontend"
+        - "Backend"
+        - "Design System"
+        - "Transverse"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 👤 User Story
+
+  - type: textarea
+    id: user_story
+    attributes:
+      label: "Formulation"
+      description: "La user story au format standard"
+      value: |
+        **En tant que** [persona - ex: utilisateur connecté, administrateur famille]
+
+        **Je souhaite** [quoi - action ou fonctionnalité souhaitée]
+
+        **Afin de** [pourquoi - valeur ou bénéfice attendu]
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## ✅ Critères d'acceptation
+
+  - type: textarea
+    id: criteres
+    attributes:
+      label: "Scénario principal (Gherkin)"
+      value: |
+        **Étant donné que** [situation initiale / contexte]
+        **Lorsque** [action déclenchée par l'utilisateur]
+        **Alors** [résultats attendus]
+
+        - [ ] Critère 1
+        - [ ] Critère 2
+        - [ ] Critère 3
+    validations:
+      required: true
+
+  - type: textarea
+    id: criteres_negatifs
+    attributes:
+      label: "Scénarios alternatifs / cas d'erreur (optionnel)"
+      placeholder: |
+        **Étant donné que** [situation avec données invalides]
+        **Lorsque** [action]
+        **Alors** [message d'erreur / comportement attendu]
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## 🔧 Informations techniques
+
+  - type: textarea
+    id: notes_techniques
+    attributes:
+      label: "Notes techniques (optionnel)"
+      placeholder: |
+        - Composants impactés : StockCard, StockList...
+        - Endpoints API concernés : GET /api/v2/stocks
+        - Contraintes d'accessibilité (RGAA) : ...
+        - Dépendances : US-XXX doit être terminée avant
+
+  - type: textarea
+    id: maquettes
+    attributes:
+      label: "Lien(s) maquette / design (optionnel)"
+      placeholder: "URL Figma, screenshot, storybook..."
+
+  - type: checkboxes
+    id: definition_of_done
+    attributes:
+      label: "Definition of Done"
+      options:
+        - label: "Code implémenté et revu"
+        - label: "Tests unitaires écrits (couverture ≥ 80%)"
+        - label: "Tests d'accessibilité validés"
+        - label: "Documentation mise à jour"
+        - label: "Critères d'acceptation validés"
+        - label: "PR mergée sur main/develop"

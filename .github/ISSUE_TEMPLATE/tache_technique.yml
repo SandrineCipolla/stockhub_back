@@ -1,0 +1,63 @@
+name: "⚙️ Tâche technique"
+description: "Tâche technique sans valeur utilisateur directe (refacto, CI, docs...)"
+title: "[TECH] "
+labels: ["technique"]
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: "Type"
+      options:
+        - "Refactoring"
+        - "Tests"
+        - "CI/CD"
+        - "Documentation"
+        - "Performance"
+        - "Sécurité"
+        - "Infrastructure"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priorite
+    attributes:
+      label: "Priorité"
+      options:
+        - "🔴 Très haute"
+        - "🟠 Haute"
+        - "🟡 Moyenne"
+        - "🟢 Basse"
+    validations:
+      required: true
+
+  - type: input
+    id: estimation
+    attributes:
+      label: "Estimation (heures)"
+      placeholder: "ex: 2h"
+
+  - type: textarea
+    id: contexte
+    attributes:
+      label: "Contexte et objectif"
+      placeholder: "Pourquoi cette tâche est nécessaire..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description de la tâche"
+      placeholder: "Ce qui doit être fait concrètement..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: "Critère de complétion"
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Wiki StockHub V2
+    url: https://github.com/SandrineCipolla/stockHub_V2_front/wiki
+    about: "Consulter la documentation du projet"
+  - name: 🗂️ GitHub Project Board
+    url: https://github.com/users/SandrineCipolla/projects/3/views/2
+    about: "Voir le tableau de bord du projet"
