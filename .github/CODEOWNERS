@@ -1,0 +1,45 @@
+# CODEOWNERS — StockHub Backend
+# Documentation : https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# ---------------------------------------------------------------
+# Par défaut : Sandrine est owner de tout le repo
+# ---------------------------------------------------------------
+* @SandrineCipolla
+
+# ---------------------------------------------------------------
+# Review mentor obligatoire — Domaine métier DDD (cœur du projet)
+# ---------------------------------------------------------------
+
+# Entités et value objects du domaine
+/src/domain/ @SandrineCipolla @macreiben-dev
+
+# Couche infrastructure (repositories, adapters)
+/src/infrastructure/ @SandrineCipolla @macreiben-dev
+
+# Authentification & autorisation
+/src/authentication/ @SandrineCipolla @macreiben-dev
+/src/authorization/ @SandrineCipolla @macreiben-dev
+
+# Configuration serveur
+/src/config/ @SandrineCipolla @macreiben-dev
+/src/serverSetup/ @SandrineCipolla @macreiben-dev
+
+# Schéma Prisma (base de données)
+/prisma/ @SandrineCipolla @macreiben-dev
+
+# ---------------------------------------------------------------
+# Review mentor obligatoire — Infrastructure critique
+# ---------------------------------------------------------------
+
+/.github/workflows/ @SandrineCipolla @macreiben-dev
+/tsconfig.json @SandrineCipolla @macreiben-dev
+
+# ---------------------------------------------------------------
+# Sandrine seule — API, routes, DTOs
+# (itérations fréquentes)
+# ---------------------------------------------------------------
+
+/src/api/ @SandrineCipolla
+/src/routes/ @SandrineCipolla
+/src/controllers/ @SandrineCipolla
+/src/services/ @SandrineCipolla
