@@ -231,6 +231,72 @@ model users {
 - Pattern: Dependency Injection avec fallback `prismaClient ?? new PrismaClient()`
 - Documentation: `docs/adr/ADR-009-resource-based-authorization.md`
 
+## Gestion des Issues GitHub
+
+### ⚠️ AVANT de créer une issue GitHub
+
+Toujours relire cette section avant d'exécuter `gh issue create`. Ne pas improviser le format.
+
+**Format User Story** (à utiliser pour toute nouvelle fonctionnalité) :
+
+```
+**En tant que** [persona]
+**Je souhaite** [action souhaitée]
+**Afin de** [bénéfice attendu]
+
+---
+
+**Critères d'acceptation**
+
+Étant donné que [contexte]
+Lorsque [action]
+Alors :
+- [ ] Critère 1
+- [ ] Critère 2
+- [ ] Critère 3
+```
+
+**Ce qui est INTERDIT dans le body d'une issue :**
+
+- ❌ Les détails d'implémentation (couches DDD, fichiers, commandes)
+- ❌ Les étapes techniques de développement
+- ❌ Les commandes à exécuter
+- ❌ Les TODO techniques
+
+**Ces informations vont dans la PR**, pas dans l'issue.
+
+**Commande gh à utiliser :**
+
+```bash
+gh issue create \
+  --title "[US-XXX] Titre court orienté utilisateur" \
+  --label "user-story" \
+  --body "**En tant que** ...
+**Je souhaite** ...
+**Afin de** ...
+
+---
+
+**Critères d'acceptation**
+
+Étant donné que ...
+Lorsque ...
+Alors :
+- [ ] Critère 1
+- [ ] Critère 2"
+```
+
+**Où mettre les notes techniques ?**
+
+| Information                                | Où                      |
+| ------------------------------------------ | ----------------------- |
+| Valeur utilisateur, critères d'acceptation | Issue GitHub            |
+| Idées en cours de dev, questions           | Commentaire sur l'issue |
+| Choix DDD, couches impactées, ADR lié      | Description de la PR    |
+| Décisions d'architecture importantes       | `docs/adr/`             |
+
+---
+
 ## Workflow de développement
 
 ### Avant de commencer une feature
@@ -437,6 +503,7 @@ export function middleware(prismaClient?: PrismaClient) {
 
 // ❌ MAUVAIS : Hardcodé, impossible à tester
 const prisma = new PrismaClient();
+
 export function middleware() {
   // Utilise toujours la même instance
 }
@@ -446,7 +513,8 @@ export function middleware() {
 
 ## Best Practices from Code Reviews
 
-Cette section compile les meilleures pratiques identifiées lors des code reviews pour maintenir une qualité de code élevée.
+Cette section compile les meilleures pratiques identifiées lors des code reviews pour maintenir une qualité de code
+élevée.
 
 ### 1. Repository Pattern - Encapsuler l'accès aux données
 
@@ -634,19 +702,25 @@ const family = new Family({
 
 ```typescript
 // Dans Family.ts
-private static createAdminMember(userId: number): FamilyMemberData {
-  return {
-    id: 0,
-    userId,
-    role: FamilyRoleEnum.ADMIN,
-    joinedAt: new Date(),
-  };
+private static
+createAdminMember(userId
+:
+number
+):
+FamilyMemberData
+{
+    return {
+        id: 0,
+        userId,
+        role: FamilyRoleEnum.ADMIN,
+        joinedAt: new Date(),
+    };
 }
 
 // Utilisation
 const family = new Family({
-  name: params.name,
-  members: [Family.createAdminMember(params.creatorUserId)],
+    name: params.name,
+    members: [Family.createAdminMember(params.creatorUserId)],
 });
 ```
 
@@ -661,25 +735,38 @@ const family = new Family({
 ❌ **À éviter**:
 
 ```typescript
-removeMember(userId: number): void {
-  const index = this.members.findIndex(m => m.userId === userId);
-  if (index === -1) {
+removeMember(userId
+:
+number
+):
+void {
+    const index = this.members.findIndex(m => m.userId === userId);
+    if(index === -1
+)
+{
     throw new Error('Member not found');
-  }
-  this.members.splice(index, 1);
+}
+this.members.splice(index, 1);
 }
 ```
 
 ✅ **Recommandé**:
 
 ```typescript
-removeMember(userId: number): void {
-  const member = this.getMember(userId); // Réutilise la méthode existante
-  if (!member) {
+removeMember(userId
+:
+number
+):
+void {
+    const member = this.getMember(userId); // Réutilise la méthode existante
+    if(!
+member
+)
+{
     throw new MemberNotFoundError(userId);
-  }
-  const index = this.members.indexOf(member);
-  this.members.splice(index, 1);
+}
+const index = this.members.indexOf(member);
+this.members.splice(index, 1);
 }
 ```
 
@@ -694,26 +781,43 @@ removeMember(userId: number): void {
 ❌ **À éviter**:
 
 ```typescript
-removeMember(userId: number): void {
-  // ...
-  if (this.members.filter(m => m.role === FamilyRoleEnum.ADMIN).length === 0) {
+removeMember(userId
+:
+number
+):
+void {
+    // ...
+    if(this.members.filter(m => m.role === FamilyRoleEnum.ADMIN).length === 0
+)
+{
     throw new Error('Family must have at least one admin');
-  }
+}
 }
 ```
 
 ✅ **Recommandé**:
 
 ```typescript
-private hasAdmin(): boolean {
-  return this.members.some(m => m.role === FamilyRoleEnum.ADMIN);
+private
+hasAdmin()
+:
+boolean
+{
+    return this.members.some(m => m.role === FamilyRoleEnum.ADMIN);
 }
 
-removeMember(userId: number): void {
-  // ...
-  if (!this.hasAdmin()) {
+removeMember(userId
+:
+number
+):
+void {
+    // ...
+    if(!
+this.hasAdmin()
+)
+{
     throw new NoAdminError();
-  }
+}
 }
 ```
 
@@ -728,14 +832,19 @@ removeMember(userId: number): void {
 ❌ **À éviter**:
 
 ```typescript
-getMember(userId: number): FamilyMemberData | undefined {
-  return this.members.find(m => m.userId === userId);
+getMember(userId
+:
+number
+):
+FamilyMemberData | undefined
+{
+    return this.members.find(m => m.userId === userId);
 }
 
 // Usage problématique
 const member = family.getMember(123);
 if (member) { // Vérification nécessaire partout
-  // ...
+              // ...
 }
 ```
 
@@ -744,14 +853,19 @@ if (member) { // Vérification nécessaire partout
 ```typescript
 // NullMember.ts
 export const NULL_MEMBER: FamilyMemberData = {
-  id: -1,
-  userId: -1,
-  role: FamilyRoleEnum.VIEWER,
-  joinedAt: new Date(0),
+    id: -1,
+    userId: -1,
+    role: FamilyRoleEnum.VIEWER,
+    joinedAt: new Date(0),
 };
 
-getMember(userId: number): FamilyMemberData {
-  return this.members.find(m => m.userId === userId) ?? NULL_MEMBER;
+getMember(userId
+:
+number
+):
+FamilyMemberData
+{
+    return this.members.find(m => m.userId === userId) ?? NULL_MEMBER;
 }
 ```
 
@@ -909,7 +1023,8 @@ Avant chaque PR, vérifier:
 
 ## Logging System
 
-Le projet utilise un système de logging structuré à deux niveaux : `logger.ts` (logs locaux) et `cloudLogger.ts` (monitoring cloud Azure Application Insights).
+Le projet utilise un système de logging structuré à deux niveaux : `logger.ts` (logs locaux) et `cloudLogger.ts` (
+monitoring cloud Azure Application Insights).
 
 ### Architecture du Logging
 
@@ -919,7 +1034,8 @@ src/Utils/
   └── cloudLogger.ts   # Intégration Azure Application Insights
 ```
 
-**Principe**: Tous les logs doivent passer par le système `logger.ts`, qui sont automatiquement capturés par `cloudLogger.ts` pour monitoring en production.
+**Principe**: Tous les logs doivent passer par le système `logger.ts`, qui sont automatiquement capturés par
+`cloudLogger.ts` pour monitoring en production.
 
 ---
 
@@ -947,8 +1063,12 @@ const rootStockRepository = rootDatabase.getChildCategory('stockRepository');
 
 ```typescript
 rootController.info('Message informatif', data);      // Niveau INFO
-rootController.error('Message d'erreur', error);      // Niveau ERROR
-rootController.warn('Message d'avertissement');       // Niveau WARN
+rootController.error('Message d'
+erreur
+', error);      // Niveau ERROR
+rootController.warn('Message d'
+avertissement
+');       // Niveau WARN
 rootController.debug('Message de debug', metadata);   // Niveau DEBUG
 ```
 
@@ -1307,7 +1427,8 @@ Avant chaque commit, vérifier:
 
 - **Fichiers sources**: `src/Utils/logger.ts`, `src/Utils/cloudLogger.ts`
 - **Bibliothèque**: [typescript-logging](https://github.com/mreuvers/typescript-logging)
-- **Azure Application Insights**: [Documentation Microsoft](https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview)
+- **Azure Application Insights
+  **: [Documentation Microsoft](https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview)
 
 ---
 
@@ -1437,9 +1558,11 @@ Voir DTOs dans `src/api/dto/` et mappers dans `src/api/dto/mappers/`.
 
 **🎯 Rappel CRITIQUE**:
 
+- **Issues** = valeur utilisateur uniquement (US + critères d'acceptation)
+- **PRs** = détails techniques, couches DDD impactées, ADR lié
 - Toujours respecter l'architecture DDD/CQRS (domain → infrastructure → api)
 - Utiliser Prisma pour tous les accès base de données
-- Documenter les décisions architecturales dans des ADRs
+- Documenter les décisions architecturales dans des ADRs (`docs/adr/`)
 - Écrire des tests pour chaque nouvelle fonctionnalité
 - Pattern Dependency Injection avec fallback pour la testabilité
 - ⚠️ **Éviter `as` (type assertion)** - Préférer type narrowing ou type guards

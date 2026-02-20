@@ -6,54 +6,54 @@ Exemples:
   ✅ docs: update API documentation
   ✅ refactor: improve error handling
   ❌ feat/issue-123 add feature
-  ❌ [WIP] working on something
 
 Types valides: feat, fix, docs, style, refactor, perf, test, chore, ci, build, revert
 Optionnel: feat(scope): description
 -->
 
-## Summary
+## 🔗 Issue liée
 
-<!-- Décrivez brièvement les changements apportés par cette PR -->
+Closes #[numéro]
 
-## Changements
+## 📋 Description
 
-<!-- Liste des modifications principales -->
+<!-- Contexte et résumé des changements apportés -->
 
--
--
--
+## 🔧 Détails d'implémentation
 
-## Type de changement
+<!-- Couches DDD impactées (domain / infrastructure / api), choix techniques, ADR lié si applicable -->
 
-<!-- Cochez les cases appropriées -->
+## 🧪 Type de changement
 
-- [ ] Nouvelle fonctionnalité (feat)
-- [ ] Correction de bug (fix)
-- [ ] Documentation (docs)
-- [ ] Refactoring (refactor)
-- [ ] Tests (test)
-- [ ] Autre (chore, ci, build)
+- [ ] ✨ Nouvelle fonctionnalité (feat)
+- [ ] 🐛 Correction de bug (fix)
+- [ ] ♻️ Refactoring
+- [ ] 📚 Documentation
+- [ ] 🧪 Tests
+- [ ] ⚙️ CI/CD / Config (chore, ci, build)
 
-## Test Plan
+## ✅ Checklist
 
-<!-- Comment avez-vous testé ces changements? -->
+### Tests
 
-- [ ] Tests unitaires passent
-- [ ] Tests d'intégration passent
-- [ ] Tests manuels effectués
-- [ ] Build réussit
+- [ ] Tests unitaires passent (`npm run test:unit`)
+- [ ] Tests d'intégration passent (`npm run test:integration`)
+- [ ] Build réussit (`npm run build`)
 
-## Checklist
+### Qualité
 
-- [ ] Le titre de la PR suit le format Conventional Commits (feat:, fix:, docs:, etc.)
-- [ ] Le code respecte les standards du projet (ESLint, Prettier)
-- [ ] La documentation est à jour (README, OpenAPI si applicable)
-- [ ] Les tests sont ajoutés/mis à jour
+- [ ] Titre PR suit le format Conventional Commits
+- [ ] ESLint 0 warnings (`npm run lint`)
+- [ ] TypeScript 0 erreurs — pas de `as` non justifié
+- [ ] Pas de `console.*` — logging structuré utilisé
 - [ ] Pas de secrets exposés dans le code
 
-## Contexte additionnel
+### Documentation
 
-<!-- Ajoutez toute information supplémentaire utile pour la review -->
+- [ ] OpenAPI mis à jour si nouvel endpoint (`docs/openapi.yaml`)
+- [ ] ADR créé si décision architecturale importante (`docs/adr/`)
+- [ ] GitHub Project mis à jour
 
-Resolves #<!-- numéro de l'issue -->
+## ❓ Points à surveiller / Questions
+
+<!-- Points à valider ou questions pour le reviewer -->
