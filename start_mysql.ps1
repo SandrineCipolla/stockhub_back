@@ -25,11 +25,11 @@ try {
 
 Write-Host ""
 Write-Host "[INFO] Démarrage du serveur MySQL..." -ForegroundColor Yellow
-Write-Host "[INFO] Serveur : stockhub-database-mysql-restored" -ForegroundColor Gray
+Write-Host "[INFO] Serveur : stockhub-database-mysql-decembre" -ForegroundColor Gray
 Write-Host "[INFO] Cela peut prendre 1-2 minutes..." -ForegroundColor Gray
 Write-Host ""
 
-az mysql flexible-server start --resource-group StockHubApp-resources --name stockhub-database-mysql-restored
+az mysql flexible-server start --resource-group StockHubApp-resources --name stockhub-database-mysql-decembre
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host ""
@@ -45,7 +45,7 @@ Write-Host "========================================" -ForegroundColor Green
 Write-Host "   MYSQL DEMARRE AVEC SUCCES !" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
-Write-Host "[OK] Serveur : stockhub-database-mysql-restored" -ForegroundColor Green
+Write-Host "[OK] Serveur : stockhub-database-mysql-decembre" -ForegroundColor Green
 Write-Host "[OK] Votre application peut maintenant se connecter" -ForegroundColor Green
 Write-Host ""
 Write-Host "Commandes utiles :" -ForegroundColor Gray

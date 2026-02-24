@@ -25,11 +25,11 @@ try {
 
 Write-Host ""
 Write-Host "[INFO] Arrêt du serveur MySQL..." -ForegroundColor Yellow
-Write-Host "[INFO] Serveur : stockhub-database-mysql-restored" -ForegroundColor Gray
+Write-Host "[INFO] Serveur : stockhub-database-mysql-decembre" -ForegroundColor Gray
 Write-Host "[INFO] Coût pendant l'arrêt : presque 0€/jour" -ForegroundColor Gray
 Write-Host ""
 
-az mysql flexible-server stop --resource-group StockHubApp-resources --name stockhub-database-mysql-restored
+az mysql flexible-server stop --resource-group StockHubApp-resources --name stockhub-database-mysql-decembre
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host ""

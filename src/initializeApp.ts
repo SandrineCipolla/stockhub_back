@@ -21,26 +21,47 @@ export async function initializeApp() {
       .map(o => o.trim())
       .filter(Boolean) || [];
 
+  const vercelPreviewCors = process.env.VERCEL_PREVIEW_CORS === 'true';
+
   rootServerSetup
     .getChildCategory('cors')
     .info('Allowed origins: {allowedOrigins}', { allowedOrigins });
 
-  app.use(
-    cors({
-      origin: allowedOrigins,
-      credentials: true,
-      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-      allowedHeaders: [
-        'Content-Type',
-        'Authorization',
-        'X-Requested-With',
-        'Accept',
-        'Credentials',
-      ],
-    })
-  );
+  rootServerSetup
+    .getChildCategory('cors')
+    .info('Vercel preview CORS enabled: {vercelPreviewCors}', { vercelPreviewCors });
 
-  app.options('*', cors());
+  const originFn = (
+    origin: string | undefined,
+    callback: (err: Error | null, allow?: boolean) => void
+  ) => {
+    // Requêtes sans origin (same-origin, Postman, mobile)
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+    // Origines explicitement autorisées
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+    // Previews Vercel (activé par VERCEL_PREVIEW_CORS=true)
+    if (vercelPreviewCors && origin.endsWith('.vercel.app')) {
+      callback(null, true);
+      return;
+    }
+    callback(new Error(`CORS: Origin ${origin} not allowed`));
+  };
+
+  const corsOptions: cors.CorsOptions = {
+    origin: originFn,
+    credentials: true,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Credentials'],
+  };
+
+  app.use(cors(corsOptions));
+  app.options('*', cors(corsOptions));
 
   app.use(express.json());
 
