@@ -6,6 +6,8 @@ import {
   CreateStockRequest,
   AddItemToStockRequest,
   UpdateItemQuantityRequest,
+  UpdateStockRequest,
+  DeleteStockRequest,
 } from '@api/types/StockRequestTypes';
 import express, { Router } from 'express';
 import { ReadUserRepository } from '@services/readUserRepository';
@@ -15,6 +17,8 @@ import { PrismaStockCommandRepository } from '@infrastructure/stock-management/m
 import { CreateStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/CreateStockCommandHandler';
 import { AddItemToStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/AddItemToStockCommandHandler';
 import { UpdateItemQuantityCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateItemQuantityCommandHandler';
+import { UpdateStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateStockCommandHandler';
+import { DeleteStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/DeleteStockCommandHandler';
 import { rootController } from '@utils/logger';
 import { PrismaClient } from '@prisma/client';
 import { authorizeStockRead, authorizeStockWrite } from '@authorization/authorizeMiddleware';
@@ -36,11 +40,15 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   const createStockHandler = new CreateStockCommandHandler(commandRepository);
   const addItemHandler = new AddItemToStockCommandHandler(commandRepository);
   const updateQuantityHandler = new UpdateItemQuantityCommandHandler(commandRepository);
+  const updateStockHandler = new UpdateStockCommandHandler(commandRepository);
+  const deleteStockHandler = new DeleteStockCommandHandler(commandRepository);
 
   const manipulationController = new StockControllerManipulation(
     createStockHandler,
     addItemHandler,
     updateQuantityHandler,
+    updateStockHandler,
+    deleteStockHandler,
     userService
   );
 
@@ -96,6 +104,18 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   );
 
   logger.info('Routes for PATCH /stocks/:stockId/items/:itemId configured (with authorization)');
+
+  router.patch('/stocks/:stockId', async (req, res: express.Response) => {
+    await manipulationController.updateStock(req as UpdateStockRequest, res);
+  });
+
+  logger.info('Routes for PATCH /stocks/:stockId configured');
+
+  router.delete('/stocks/:stockId', async (req, res: express.Response) => {
+    await manipulationController.deleteStock(req as DeleteStockRequest, res);
+  });
+
+  logger.info('Routes for DELETE /stocks/:stockId configured');
 
   return router;
 };

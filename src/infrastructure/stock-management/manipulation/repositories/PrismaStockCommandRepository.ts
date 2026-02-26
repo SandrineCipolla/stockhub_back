@@ -185,6 +185,104 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
     }
   }
 
+  async updateStock(
+    stockId: number,
+    data: {
+      label?: string;
+      description?: string;
+      category?: string;
+    }
+  ): Promise<Stock> {
+    let success = false;
+
+    try {
+      const stock = await this.findById(stockId);
+      if (!stock) {
+        throw new Error(`Stock with ID ${stockId} not found`);
+      }
+
+      const updateData: {
+        LABEL?: string;
+        DESCRIPTION?: string;
+        CATEGORY?: stocks_CATEGORY;
+      } = {};
+
+      if (data.label !== undefined) {
+        updateData.LABEL = data.label;
+      }
+
+      if (data.description !== undefined) {
+        updateData.DESCRIPTION = data.description;
+      }
+
+      if (data.category !== undefined) {
+        updateData.CATEGORY = this.normalizeCategory(data.category);
+      }
+
+      await this.prisma.stocks.update({
+        where: { ID: stockId },
+        data: updateData,
+      });
+
+      success = true;
+
+      const updatedStock = await this.findById(stockId);
+      if (!updatedStock) {
+        throw new Error(`Failed to retrieve updated stock with ID ${stockId}`);
+      }
+      return updatedStock;
+    } catch (error) {
+      rootException(error as Error);
+      throw error;
+    } finally {
+      rootDependency({
+        name: DEPENDENCY_NAME,
+        data: `prisma.stocks.update({ where: {ID: ${stockId}}, data: ${JSON.stringify(data)} })`,
+        duration: 0,
+        success: success,
+        resultCode: 0,
+        target: DEPENDENCY_TARGET,
+        dependencyTypeName: DEPENDENCY_TYPE,
+      } as DependencyTelemetry);
+    }
+  }
+
+  async deleteStock(stockId: number): Promise<void> {
+    let success = false;
+
+    try {
+      const stock = await this.findById(stockId);
+      if (!stock) {
+        throw new Error(`Stock with ID ${stockId} not found`);
+      }
+
+      // Delete all items first (due to onDelete: NoAction in schema)
+      await this.prisma.items.deleteMany({
+        where: { STOCK_ID: stockId },
+      });
+
+      // Then delete the stock
+      await this.prisma.stocks.delete({
+        where: { ID: stockId },
+      });
+
+      success = true;
+    } catch (error) {
+      rootException(error as Error);
+      throw error;
+    } finally {
+      rootDependency({
+        name: DEPENDENCY_NAME,
+        data: `prisma.stocks.delete({ where: {ID: ${stockId}} }) with items cascade`,
+        duration: 0,
+        success: success,
+        resultCode: 0,
+        target: DEPENDENCY_TARGET,
+        dependencyTypeName: DEPENDENCY_TYPE,
+      } as DependencyTelemetry);
+    }
+  }
+
   private normalizeCategory(category: string | stocks_CATEGORY): stocks_CATEGORY {
     const lowerCategory = category.toLowerCase();
     const categoryValues = Object.values(stocks_CATEGORY);

@@ -825,26 +825,79 @@ export function StocksList() {
 
 ---
 
-## Endpoints Backend à Implémenter
+## Endpoints Backend Implémentés
 
-Selon l'architecture DDD/CQRS du backend, les endpoints suivants doivent être créés/vérifiés:
+**Date de mise à jour**: 2026-01-07
+**Statut**: Implémentation complète des endpoints CRUD
 
-### Stocks
+Selon l'architecture DDD/CQRS du backend, les endpoints suivants sont **IMPLÉMENTÉS** et **TESTÉS**:
 
-- `GET /api/v2/stocks` - Liste tous les stocks
-- `GET /api/v2/stocks/:id` - Détails d'un stock
-- `POST /api/v2/stocks` - Créer un stock
-- `PUT /api/v2/stocks/:id` - Mettre à jour un stock
-- `DELETE /api/v2/stocks/:id` - Supprimer un stock
+### Stocks - Endpoints Principaux
 
-### Manipulations
+- ✅ `GET /api/v2/stocks` - Liste tous les stocks (avec auth Azure AD B2C)
+- ✅ `GET /api/v2/stocks/:id` - Détails d'un stock (retour: id, label, description, category)
+- ✅ `POST /api/v2/stocks` - Créer un stock
+  - **Propriétés acceptées**: `{ label, description, category }`
+  - **Propriétés ignorées**: quantity, value, unit, supplier, minThreshold, maxThreshold
+  - **Retour**: Stock créé avec id, label, description, category
+- ✅ `PATCH /api/v2/stocks/:id` - Mise à jour partielle d'un stock
+  - **Propriétés acceptées**: `{ label?, description?, category? }`
+  - **Méthode HTTP**: PATCH (sémantique REST correcte pour partial update)
+  - **Implémentation**: UpdateStockCommand → UpdateStockCommandHandler → PrismaStockCommandRepository
+- ✅ `DELETE /api/v2/stocks/:id` - Supprimer un stock
+  - **⚠️ Important**: Suppression CASCADE manuelle des items associés avant suppression du stock
+  - **Raison**: Schéma Prisma avec `onDelete: NoAction` nécessite suppression explicite
+  - **Implémentation**: DeleteStockCommand → DeleteStockCommandHandler → PrismaStockCommandRepository
 
-- `GET /api/v2/stocks/:stockId/manipulations` - Liste manipulations d'un stock
-- `POST /api/v2/stocks/:stockId/manipulations` - Créer manipulation
+### Stocks Items - Endpoints Secondaires
 
-### Autres endpoints selon besoins...
+- ✅ `GET /api/v2/stocks/:stockId/items` - Liste items d'un stock
+- ✅ `POST /api/v2/stocks/:stockId/items` - Ajouter un item à un stock
+  - **Body**: `{ label, quantity, description?, minimumStock? }`
+- ✅ `PATCH /api/v2/stocks/:stockId/items/:itemId` - Modifier la quantité d'un item
 
-**⚠️ IMPORTANT**: Vérifier que le backend expose bien ces routes avec l'authentification Azure AD B2C.
+### Limitations Backend Actuelles
+
+**Propriétés Stock Non Supportées:**
+
+Le backend retourne uniquement les propriétés de base au niveau Stock:
+
+- ✅ `id` (number)
+- ✅ `label` (string)
+- ✅ `description` (string)
+- ✅ `category` (string)
+
+**Propriétés NON retournées** (doivent être calculées côté frontend si nécessaire):
+
+- ❌ `quantity` - Doit être calculée depuis la somme des items
+- ❌ `value` - Doit être calculée depuis la somme des valeurs des items
+- ❌ `status` - Doit être calculé selon la logique métier frontend
+- ❌ `lastUpdate` - Pas de timestamp de dernière modification
+- ❌ `unit`, `supplier`, `minThreshold`, `maxThreshold`, `sku` - Non implémentés
+
+**Architecture Stock/Items:**
+
+```
+Stock (conteneur logique)
+├── id, label, description, category
+└── items[] (éléments physiques stockés)
+    ├── Item: { id, label, quantity, description, minimumStock }
+    └── Les calculs quantity/value globaux se font depuis items
+```
+
+**⚠️ IMPORTANT**:
+
+- Le frontend doit mapper les données backend et ajouter les propriétés manquantes
+- Voir `stockHub_V2_front/src/services/api/stocksAPI.ts` → fonction `mapBackendStockToFrontend()`
+- Documentation frontend: `stockHub_V2_front/documentation/INTEGRATION_BACKEND_SESSION.md`
+
+### Authentification
+
+✅ **Tous les endpoints** nécessitent l'authentification Azure AD B2C:
+
+- Header: `Authorization: Bearer <token>`
+- Credentials: `include`
+- Scopes: `FilesRead`, `FilesWrite`
 
 ---
 
