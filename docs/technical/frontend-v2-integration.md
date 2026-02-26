@@ -837,11 +837,11 @@ Selon l'architecture DDD/CQRS du backend, les endpoints suivants sont **IMPLÉME
 - ✅ `GET /api/v2/stocks` - Liste tous les stocks (avec auth Azure AD B2C)
 - ✅ `GET /api/v2/stocks/:id` - Détails d'un stock (retour: id, label, description, category)
 - ✅ `POST /api/v2/stocks` - Créer un stock
-  - **Body accepté**: `{ label, description, category }`
+  - **Propriétés acceptées**: `{ label, description, category }`
   - **Propriétés ignorées**: quantity, value, unit, supplier, minThreshold, maxThreshold
   - **Retour**: Stock créé avec id, label, description, category
 - ✅ `PATCH /api/v2/stocks/:id` - Mise à jour partielle d'un stock
-  - **Body accepté**: `{ label?, description?, category? }`
+  - **Propriétés acceptées**: `{ label?, description?, category? }`
   - **Méthode HTTP**: PATCH (sémantique REST correcte pour partial update)
   - **Implémentation**: UpdateStockCommand → UpdateStockCommandHandler → PrismaStockCommandRepository
 - ✅ `DELETE /api/v2/stocks/:id` - Supprimer un stock

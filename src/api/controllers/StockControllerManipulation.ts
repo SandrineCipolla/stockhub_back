@@ -33,6 +33,18 @@ export class StockControllerManipulation {
     private readonly userService: UserService
   ) {}
 
+  /**
+   * Récupère et valide l'OID (Object Identifier) de l'utilisateur connecté.
+   *
+   * L'OID est l'identifiant unique Azure AD B2C extrait du token Bearer par le middleware
+   * d'authentification et attaché à `req.userID`. Il sert à deux fins :
+   *   1. Valider que l'utilisateur est bien authentifié (retourne null + 401 si absent)
+   *   2. Tracer l'action dans les logs (OID = qui a effectué l'opération)
+   *
+   * Note : pour createStock, l'OID est converti en userID interne via UserService.
+   * Pour updateStock/deleteStock, l'autorisation sur la ressource est déjà vérifiée
+   * par authorizeMiddleware en amont — l'OID n'est utilisé qu'à des fins de traçabilité.
+   */
   private getValidatedOID(req: AuthenticatedRequest, res: express.Response): string | null {
     const OID = req.userID;
     if (!OID || OID.trim() === '') {
