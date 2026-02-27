@@ -11,13 +11,15 @@ const dbConnectionLimit = process.env.DB_CONNECTION_LIMIT
   ? parseInt(process.env.DB_CONNECTION_LIMIT, 10)
   : 3;
 const dbMaxIdle = process.env.DB_MAX_IDLE ? parseInt(process.env.DB_MAX_IDLE, 10) : 3;
+const dbSsl = process.env.DB_SSL === 'true';
 
 rootDatabase.info(
-  'Database configuration {host}, {user}, {port}, {database}',
+  'Database configuration {host}, {user}, {port}, {database}, {ssl}',
   dbHost,
   dbUser,
   dbPort,
-  dbDatabase
+  dbDatabase,
+  dbSsl
 );
 
 export const connectionOptions = {
@@ -28,4 +30,5 @@ export const connectionOptions = {
   database: dbDatabase,
   connectionLimit: dbConnectionLimit,
   maxIdle: dbMaxIdle,
+  ...(dbSsl ? { ssl: { rejectUnauthorized: false } } : {}),
 };
