@@ -3,11 +3,11 @@ import { UserService } from '@services/userService';
 import { StockControllerVisualization } from '@api/controllers/StockControllerVisualization';
 import { StockControllerManipulation } from '@api/controllers/StockControllerManipulation';
 import {
-  CreateStockRequest,
   AddItemToStockRequest,
+  CreateStockRequest,
+  DeleteStockRequest,
   UpdateItemQuantityRequest,
   UpdateStockRequest,
-  DeleteStockRequest,
 } from '@api/types/StockRequestTypes';
 import express, { Router } from 'express';
 import { ReadUserRepository } from '@services/readUserRepository';

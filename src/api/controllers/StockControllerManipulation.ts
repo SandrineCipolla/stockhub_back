@@ -1,11 +1,11 @@
 import express from 'express';
 import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
 import {
-  CreateStockRequest,
   AddItemToStockRequest,
+  CreateStockRequest,
+  DeleteStockRequest,
   UpdateItemQuantityRequest,
   UpdateStockRequest,
-  DeleteStockRequest,
 } from '@api/types/StockRequestTypes';
 import { UserService } from '@services/userService';
 import { CreateStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/CreateStockCommandHandler';
