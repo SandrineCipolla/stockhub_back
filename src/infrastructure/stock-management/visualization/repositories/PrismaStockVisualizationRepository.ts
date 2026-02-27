@@ -2,7 +2,7 @@ import { Stock } from '@domain/stock-management/common/entities/Stock';
 import { StockItem } from '@domain/stock-management/common/entities/StockItem';
 import { IStockVisualizationRepository } from '@domain/stock-management/visualization/queries/IStockVisualizationRepository';
 
-import { items as PrismaItem, PrismaClient, stocks as PrismaStock } from '@prisma/client';
+import { Item as PrismaItem, PrismaClient, Stock as PrismaStock } from '@prisma/client';
 import { DependencyTelemetry, rootDependency, rootException } from '@utils/cloudLogger';
 
 const DEPENDENCY_NAME = process.env.DB_DATABASE;
@@ -17,48 +17,48 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
   }
 
   async getAllStocks(userId: number): Promise<Stock[]> {
-    const stocks = await this.prisma.stocks.findMany({
-      where: { USER_ID: userId },
+    const stocks = await this.prisma.stock.findMany({
+      where: { userId: userId },
     });
     return stocks.map(
       (stock: PrismaStock) =>
-        new Stock(stock.ID, stock.LABEL, stock.DESCRIPTION ?? '', stock.CATEGORY)
+        new Stock(stock.id, stock.label, stock.description ?? '', stock.category)
     );
   }
 
   async getStockDetails(stockId: number, userId: number): Promise<Stock | null> {
-    const stock = await this.prisma.stocks.findFirst({
-      where: { ID: stockId, USER_ID: userId },
+    const stock = await this.prisma.stock.findFirst({
+      where: { id: stockId, userId: userId },
     });
     if (!stock) {
       return null;
     }
-    return new Stock(stock.ID, stock.LABEL, stock.DESCRIPTION ?? '', stock.CATEGORY);
+    return new Stock(stock.id, stock.label, stock.description ?? '', stock.category);
   }
 
   async getStockItems(stockId: number, userId: number): Promise<StockItem[]> {
     const success = false;
 
     try {
-      const stock = await this.prisma.stocks.findFirst({
-        where: { ID: stockId, USER_ID: userId },
+      const stock = await this.prisma.stock.findFirst({
+        where: { id: stockId, userId: userId },
       });
       if (!stock) {
         throw new Error('Stock not found or access denied');
       }
 
-      const items = await this.prisma.items.findMany({
-        where: { STOCK_ID: stockId },
+      const items = await this.prisma.item.findMany({
+        where: { stockId: stockId },
       });
       return items.map(
         (item: PrismaItem) =>
           new StockItem(
-            item.ID,
-            item.LABEL ?? '',
-            item.QUANTITY ?? 0,
-            item.DESCRIPTION ?? '',
-            item.MINIMUM_STOCK,
-            item.STOCK_ID ?? stockId
+            item.id,
+            item.label ?? '',
+            item.quantity ?? 0,
+            item.description ?? '',
+            item.minimumStock,
+            item.stockId ?? stockId
           )
       );
     } catch (error) {
@@ -67,7 +67,7 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
     } finally {
       rootDependency({
         name: DEPENDENCY_NAME,
-        data: `prisma.stocks.findFirst({ where: {ID: ${stockId}, USER_ID: ${userId}}}) and prisma.items.findMany({ where: {STOCK_ID: ${stockId}}})`,
+        data: `prisma.stock.findFirst({ where: {id: ${stockId}, userId: ${userId}}}) and prisma.item.findMany({ where: {stockId: ${stockId}}})`,
         duration: 0,
         success: success,
         resultCode: 0,

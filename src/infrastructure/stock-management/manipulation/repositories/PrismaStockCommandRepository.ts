@@ -1,4 +1,4 @@
-import { items as PrismaItem, PrismaClient, stocks_CATEGORY } from '@prisma/client';
+import { Item as PrismaItem, PrismaClient, StockCategory } from '@prisma/client';
 import { IStockCommandRepository } from '@domain/stock-management/manipulation/repositories/IStockCommandRepository';
 import { Stock } from '@domain/stock-management/common/entities/Stock';
 import { StockItem } from '@domain/stock-management/common/entities/StockItem';
@@ -20,18 +20,18 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
     let success = false;
 
     try {
-      const createdStock = await this.prisma.stocks.create({
+      const createdStock = await this.prisma.stock.create({
         data: {
-          LABEL: stock.getLabelValue(),
-          DESCRIPTION: stock.getDescriptionValue(),
-          CATEGORY: this.normalizeCategory(stock.category),
-          USER_ID: userId,
+          label: stock.getLabelValue(),
+          description: stock.getDescriptionValue(),
+          category: this.normalizeCategory(stock.category),
+          userId: userId,
           items: {
             create: stock.items.map(item => ({
-              LABEL: item.LABEL,
-              DESCRIPTION: item.DESCRIPTION,
-              QUANTITY: item.QUANTITY,
-              MINIMUM_STOCK: item.minimumStock,
+              label: item.LABEL,
+              description: item.DESCRIPTION,
+              quantity: item.QUANTITY,
+              minimumStock: item.minimumStock,
             })),
           },
         },
@@ -48,7 +48,7 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
     } finally {
       rootDependency({
         name: DEPENDENCY_NAME,
-        data: `prisma.stocks.create({ LABEL: ${stock.getLabelValue()}, USER_ID: ${userId}, items: ${stock.items.length} })`,
+        data: `prisma.stock.create({ label: ${stock.getLabelValue()}, userId: ${userId}, items: ${stock.items.length} })`,
         duration: 0,
         success: success,
         resultCode: 0,
@@ -62,8 +62,8 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
     let success = false;
 
     try {
-      const stock = await this.prisma.stocks.findUnique({
-        where: { ID: stockId },
+      const stock = await this.prisma.stock.findUnique({
+        where: { id: stockId },
         include: { items: true },
       });
 
@@ -79,7 +79,7 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
     } finally {
       rootDependency({
         name: DEPENDENCY_NAME,
-        data: `prisma.stocks.findUnique({ where: {ID: ${stockId}} })`,
+        data: `prisma.stock.findUnique({ where: {id: ${stockId}} })`,
         duration: 0,
         success: success,
         resultCode: 0,
@@ -113,13 +113,13 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
         minimumStock: item.minimumStock,
       });
 
-      await this.prisma.items.create({
+      await this.prisma.item.create({
         data: {
-          LABEL: item.label,
-          DESCRIPTION: item.description || '',
-          QUANTITY: item.quantity,
-          MINIMUM_STOCK: item.minimumStock || 1,
-          STOCK_ID: stockId,
+          label: item.label,
+          description: item.description || '',
+          quantity: item.quantity,
+          minimumStock: item.minimumStock || 1,
+          stockId: stockId,
         },
       });
 
@@ -136,7 +136,7 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
     } finally {
       rootDependency({
         name: DEPENDENCY_NAME,
-        data: `prisma.items.create({ LABEL: ${item.label}, STOCK_ID: ${stockId} })`,
+        data: `prisma.item.create({ label: ${item.label}, stockId: ${stockId} })`,
         duration: 0,
         success: success,
         resultCode: 0,
@@ -157,9 +157,9 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
 
       stock.updateItemQuantity(itemId, newQuantity);
 
-      await this.prisma.items.update({
-        where: { ID: itemId },
-        data: { QUANTITY: newQuantity },
+      await this.prisma.item.update({
+        where: { id: itemId },
+        data: { quantity: newQuantity },
       });
 
       success = true;
@@ -175,7 +175,7 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
     } finally {
       rootDependency({
         name: DEPENDENCY_NAME,
-        data: `prisma.items.update({ where: {ID: ${itemId}}, data: {QUANTITY: ${newQuantity}} })`,
+        data: `prisma.item.update({ where: {id: ${itemId}}, data: {quantity: ${newQuantity}} })`,
         duration: 0,
         success: success,
         resultCode: 0,
@@ -202,25 +202,25 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
       }
 
       const updateData: {
-        LABEL?: string;
-        DESCRIPTION?: string;
-        CATEGORY?: stocks_CATEGORY;
+        label?: string;
+        description?: string;
+        category?: StockCategory;
       } = {};
 
       if (data.label !== undefined) {
-        updateData.LABEL = data.label;
+        updateData.label = data.label;
       }
 
       if (data.description !== undefined) {
-        updateData.DESCRIPTION = data.description;
+        updateData.description = data.description;
       }
 
       if (data.category !== undefined) {
-        updateData.CATEGORY = this.normalizeCategory(data.category);
+        updateData.category = this.normalizeCategory(data.category);
       }
 
-      await this.prisma.stocks.update({
-        where: { ID: stockId },
+      await this.prisma.stock.update({
+        where: { id: stockId },
         data: updateData,
       });
 
@@ -237,7 +237,7 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
     } finally {
       rootDependency({
         name: DEPENDENCY_NAME,
-        data: `prisma.stocks.update({ where: {ID: ${stockId}}, data: ${JSON.stringify(data)} })`,
+        data: `prisma.stock.update({ where: {id: ${stockId}}, data: ${JSON.stringify(data)} })`,
         duration: 0,
         success: success,
         resultCode: 0,
@@ -256,14 +256,9 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
         throw new Error(`Stock with ID ${stockId} not found`);
       }
 
-      // Delete all items first (due to onDelete: NoAction in schema)
-      await this.prisma.items.deleteMany({
-        where: { STOCK_ID: stockId },
-      });
-
-      // Then delete the stock
-      await this.prisma.stocks.delete({
-        where: { ID: stockId },
+      // Items are deleted automatically via onDelete: Cascade
+      await this.prisma.stock.delete({
+        where: { id: stockId },
       });
 
       success = true;
@@ -273,7 +268,7 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
     } finally {
       rootDependency({
         name: DEPENDENCY_NAME,
-        data: `prisma.stocks.delete({ where: {ID: ${stockId}} }) with items cascade`,
+        data: `prisma.stock.delete({ where: {id: ${stockId}} }) with cascade`,
         duration: 0,
         success: success,
         resultCode: 0,
@@ -283,9 +278,9 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
     }
   }
 
-  private normalizeCategory(category: string | stocks_CATEGORY): stocks_CATEGORY {
+  private normalizeCategory(category: string | StockCategory): StockCategory {
     const lowerCategory = category.toLowerCase();
-    const categoryValues = Object.values(stocks_CATEGORY);
+    const categoryValues = Object.values(StockCategory);
 
     const matchedCategory = categoryValues.find(catValue => catValue === lowerCategory);
 
@@ -303,20 +298,20 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
       prismaStock.items?.map(
         (item: PrismaItem) =>
           new StockItem(
-            item.ID,
-            item.LABEL ?? '',
-            item.QUANTITY ?? 0,
-            item.DESCRIPTION ?? '',
-            item.MINIMUM_STOCK,
-            item.STOCK_ID ?? prismaStock.ID
+            item.id,
+            item.label ?? '',
+            item.quantity ?? 0,
+            item.description ?? '',
+            item.minimumStock,
+            item.stockId ?? prismaStock.id
           )
       ) || [];
 
     return new Stock(
-      prismaStock.ID,
-      prismaStock.LABEL,
-      prismaStock.DESCRIPTION ?? '',
-      prismaStock.CATEGORY,
+      prismaStock.id,
+      prismaStock.label,
+      prismaStock.description ?? '',
+      prismaStock.category,
       items
     );
   }

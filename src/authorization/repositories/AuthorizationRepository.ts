@@ -1,12 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 
 export interface UserIdentity {
-  ID: number;
+  id: number;
 }
 
 export interface StockIdentity {
-  ID: number;
-  USER_ID: number | null;
+  id: number;
+  userId: number | null;
 }
 
 export interface CollaboratorRole {
@@ -23,24 +23,24 @@ export class AuthorizationRepository {
   /**
    * Find a user by their email address
    * @param email - User's email
-   * @returns User identity (ID) or null if not found
+   * @returns User identity (id) or null if not found
    */
   async findUserByEmail(email: string): Promise<UserIdentity | null> {
-    return this.prisma.users.findUnique({
-      where: { EMAIL: email },
-      select: { ID: true },
+    return this.prisma.user.findUnique({
+      where: { email: email },
+      select: { id: true },
     });
   }
 
   /**
    * Find a stock by its ID
    * @param stockId - Stock ID
-   * @returns Stock identity (ID, USER_ID) or null if not found
+   * @returns Stock identity (id, userId) or null if not found
    */
   async findStockById(stockId: number): Promise<StockIdentity | null> {
-    return this.prisma.stocks.findUnique({
-      where: { ID: stockId },
-      select: { ID: true, USER_ID: true },
+    return this.prisma.stock.findUnique({
+      where: { id: stockId },
+      select: { id: true, userId: true },
     });
   }
 

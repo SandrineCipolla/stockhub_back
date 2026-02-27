@@ -8,38 +8,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model items {
-  ID            Int     @id @default(autoincrement())
-  LABEL         String? @db.VarChar(255)
-  DESCRIPTION   String? @db.VarChar(255)
-  QUANTITY      Int?
-  MINIMUM_STOCK Int     @default(1)
-  STOCK_ID      Int?
-  stocks        stocks? @relation(fields: [STOCK_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "items_ibfk_1")
+model Item {
+  id           Int       @id @default(autoincrement())
+  label        String?   @db.VarChar(255)
+  description  String?   @db.VarChar(255)
+  quantity     Int?
+  minimumStock Int       @default(1)
+  stockId      Int?
+  stock        Stock?    @relation(fields: [stockId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@index([STOCK_ID], map: "STOCK_ID")
+  @@index([stockId])
+  @@map("items")
 }
 
-model stocks {
-  ID            Int                 @id @default(autoincrement())
-  LABEL         String              @db.VarChar(255)
-  DESCRIPTION   String?             @db.VarChar(255)
-  CATEGORY      stocks_CATEGORY     @default(alimentation)
-  USER_ID       Int?
-  items         items[]
+model Stock {
+  id            Int               @id @default(autoincrement())
+  label         String            @db.VarChar(255)
+  description   String?           @db.VarChar(255)
+  category      StockCategory     @default(alimentation)
+  userId        Int?
+  items         Item[]
   collaborators StockCollaborator[]
-  users         users?              @relation(fields: [USER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "stocks_ibfk_1")
+  user          User?             @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@index([USER_ID], map: "stocks_ibfk_1")
+  @@index([userId])
+  @@map("stocks")
 }
 
-model users {
-  ID                      Int                  @id @default(autoincrement())
-  EMAIL                   String               @unique(map: "unique_email") @db.VarChar(255)
-  stocks                  stocks[]
-  familyMemberships       FamilyMember[]
-  stockCollaborations     StockCollaborator[]  @relation("UserCollaborations")
-  grantedCollaborations   StockCollaborator[]  @relation("GrantedByUser")
+model User {
+  id                    Int                  @id @default(autoincrement())
+  email                 String               @unique @db.VarChar(255)
+  stocks                Stock[]
+  familyMemberships     FamilyMember[]
+  stockCollaborations   StockCollaborator[]  @relation("UserCollaborations")
+  grantedCollaborations StockCollaborator[]  @relation("GrantedByUser")
+
+  @@map("users")
 }
 
 model Family {
@@ -56,7 +60,7 @@ model FamilyMember {
   role      FamilyRole @default(MEMBER) @map("ROLE")
   joinedAt  DateTime   @default(now()) @map("JOINED_AT")
   family    Family     @relation(fields: [familyId], references: [id], onDelete: Cascade)
-  user      users      @relation(fields: [userId], references: [ID], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([familyId, userId])
   @@index([familyId])
@@ -70,9 +74,9 @@ model StockCollaborator {
   role          StockRole @default(VIEWER) @map("ROLE")
   grantedAt     DateTime  @default(now()) @map("GRANTED_AT")
   grantedBy     Int?      @map("GRANTED_BY")
-  stock         stocks    @relation(fields: [stockId], references: [ID], onDelete: Cascade)
-  user          users     @relation("UserCollaborations", fields: [userId], references: [ID], onDelete: Cascade)
-  grantedByUser users?    @relation("GrantedByUser", fields: [grantedBy], references: [ID], onDelete: SetNull)
+  stock         Stock     @relation(fields: [stockId], references: [id], onDelete: Cascade)
+  user          User      @relation("UserCollaborations", fields: [userId], references: [id], onDelete: Cascade)
+  grantedByUser User?     @relation("GrantedByUser", fields: [grantedBy], references: [id], onDelete: SetNull)
 
   @@unique([stockId, userId])
   @@index([stockId])
@@ -80,7 +84,7 @@ model StockCollaborator {
   @@index([grantedBy])
 }
 
-enum stocks_CATEGORY {
+enum StockCategory {
   alimentation
   hygiene
   artistique

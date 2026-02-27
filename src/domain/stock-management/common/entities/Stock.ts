@@ -1,7 +1,7 @@
 import { StockLabel } from '@domain/stock-management/common/value-objects/StockLabel';
 import { StockDescription } from '@domain/stock-management/common/value-objects/StockDescription';
 import { Quantity } from '@domain/stock-management/common/value-objects/Quantity';
-import { stocks_CATEGORY } from '@prisma/client';
+import { StockCategory } from '@prisma/client';
 import { StockItem } from '@domain/stock-management/common/entities/StockItem';
 
 export class Stock {
@@ -9,7 +9,7 @@ export class Stock {
     public id: number,
     public label: string | StockLabel,
     public description: string | StockDescription,
-    public category: string | stocks_CATEGORY,
+    public category: string | StockCategory,
     public items: StockItem[] = []
   ) {}
 

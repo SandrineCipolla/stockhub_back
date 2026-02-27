@@ -11,14 +11,14 @@ import {
   authorizeStockSuggest,
   authorizeStockWrite,
 } from '@authorization/authorizeMiddleware';
-import { StockRole, stocks_CATEGORY } from '@prisma/client';
+import { StockRole, StockCategory } from '@prisma/client';
 
 // Test helpers to reduce duplication
 const createTestUser = async (prisma: any, overrides?: { id?: number; email?: string }) => {
-  return prisma.users.create({
+  return prisma.user.create({
     data: {
-      ID: overrides?.id ?? 1,
-      EMAIL: overrides?.email ?? 'test@example.com',
+      id: overrides?.id ?? 1,
+      email: overrides?.email ?? 'test@example.com',
     },
   });
 };
@@ -29,15 +29,15 @@ const createTestStock = async (
   overrides?: {
     label?: string;
     description?: string;
-    category?: stocks_CATEGORY;
+    category?: StockCategory;
   }
 ) => {
-  return prisma.stocks.create({
+  return prisma.stock.create({
     data: {
-      LABEL: overrides?.label ?? 'Test Stock',
-      DESCRIPTION: overrides?.description ?? 'Test Description',
-      CATEGORY: overrides?.category ?? stocks_CATEGORY.alimentation,
-      USER_ID: userId,
+      label: overrides?.label ?? 'Test Stock',
+      description: overrides?.description ?? 'Test Description',
+      category: overrides?.category ?? StockCategory.alimentation,
+      userId: userId,
     },
   });
 };
@@ -136,7 +136,7 @@ describe.skip('Authorization Middleware Integration Tests', () => {
   describe('when user is the stock owner', () => {
     it('should grant full access (read, write, suggest)', async () => {
       const owner = await createTestUser(setup.prisma, { id: 1, email: 'owner@example.com' });
-      const stock = await createTestStock(setup.prisma, owner.ID);
+      const stock = await createTestStock(setup.prisma, owner.id);
 
       const app = createTestApp('owner@example.com');
       app.get('/stocks/:stockId', authorizeStockRead, (_req, res) => res.json({ success: true }));
@@ -147,9 +147,9 @@ describe.skip('Authorization Middleware Integration Tests', () => {
         res.json({ success: true })
       );
 
-      await request(app).get(`/stocks/${stock.ID}`).expect(200);
-      await request(app).post(`/stocks/${stock.ID}/items`).expect(200);
-      await request(app).post(`/stocks/${stock.ID}/suggest`).expect(200);
+      await request(app).get(`/stocks/${stock.id}`).expect(200);
+      await request(app).post(`/stocks/${stock.id}/items`).expect(200);
+      await request(app).post(`/stocks/${stock.id}/suggest`).expect(200);
     });
   });
 
@@ -157,12 +157,12 @@ describe.skip('Authorization Middleware Integration Tests', () => {
     it('should return 403 Forbidden', async () => {
       const owner = await createTestUser(setup.prisma, { id: 1, email: 'owner@example.com' });
       await createTestUser(setup.prisma, { id: 2, email: 'other@example.com' });
-      const stock = await createTestStock(setup.prisma, owner.ID);
+      const stock = await createTestStock(setup.prisma, owner.id);
 
       const app = createTestApp('other@example.com');
       app.get('/stocks/:stockId', authorizeStockRead, (_req, res) => res.json({ success: true }));
 
-      const response = await request(app).get(`/stocks/${stock.ID}`).expect(403);
+      const response = await request(app).get(`/stocks/${stock.id}`).expect(403);
 
       expect(response.body).toMatchObject({
         error: 'Forbidden - You do not have access to this stock',
@@ -174,14 +174,14 @@ describe.skip('Authorization Middleware Integration Tests', () => {
     it('should grant read, write, and suggest access', async () => {
       const owner = await createTestUser(setup.prisma, { id: 1, email: 'owner@example.com' });
       const editor = await createTestUser(setup.prisma, { id: 2, email: 'editor@example.com' });
-      const stock = await createTestStock(setup.prisma, owner.ID);
+      const stock = await createTestStock(setup.prisma, owner.id);
 
       await setup.prisma.stockCollaborator.create({
         data: {
-          stockId: stock.ID,
-          userId: editor.ID,
+          stockId: stock.id,
+          userId: editor.id,
           role: StockRole.EDITOR,
-          grantedBy: owner.ID,
+          grantedBy: owner.id,
         },
       });
 
@@ -194,9 +194,9 @@ describe.skip('Authorization Middleware Integration Tests', () => {
         res.json({ success: true })
       );
 
-      await request(app).get(`/stocks/${stock.ID}`).expect(200);
-      await request(app).post(`/stocks/${stock.ID}/items`).expect(200);
-      await request(app).post(`/stocks/${stock.ID}/suggest`).expect(200);
+      await request(app).get(`/stocks/${stock.id}`).expect(200);
+      await request(app).post(`/stocks/${stock.id}/items`).expect(200);
+      await request(app).post(`/stocks/${stock.id}/suggest`).expect(200);
     });
   });
 
@@ -204,14 +204,14 @@ describe.skip('Authorization Middleware Integration Tests', () => {
     it('should grant read access only', async () => {
       const owner = await createTestUser(setup.prisma, { id: 1, email: 'owner@example.com' });
       const viewer = await createTestUser(setup.prisma, { id: 2, email: 'viewer@example.com' });
-      const stock = await createTestStock(setup.prisma, owner.ID);
+      const stock = await createTestStock(setup.prisma, owner.id);
 
       await setup.prisma.stockCollaborator.create({
         data: {
-          stockId: stock.ID,
-          userId: viewer.ID,
+          stockId: stock.id,
+          userId: viewer.id,
           role: StockRole.VIEWER,
-          grantedBy: owner.ID,
+          grantedBy: owner.id,
         },
       });
 
@@ -224,12 +224,12 @@ describe.skip('Authorization Middleware Integration Tests', () => {
         res.json({ success: true })
       );
 
-      await request(app).get(`/stocks/${stock.ID}`).expect(200);
+      await request(app).get(`/stocks/${stock.id}`).expect(200);
 
-      const writeResponse = await request(app).post(`/stocks/${stock.ID}/items`).expect(403);
+      const writeResponse = await request(app).post(`/stocks/${stock.id}/items`).expect(403);
       expect(writeResponse.body.error).toContain('does not allow write access');
 
-      const suggestResponse = await request(app).post(`/stocks/${stock.ID}/suggest`).expect(403);
+      const suggestResponse = await request(app).post(`/stocks/${stock.id}/suggest`).expect(403);
       expect(suggestResponse.body.error).toContain('does not allow suggest access');
     });
   });
@@ -241,14 +241,14 @@ describe.skip('Authorization Middleware Integration Tests', () => {
         id: 2,
         email: 'contributor@example.com',
       });
-      const stock = await createTestStock(setup.prisma, owner.ID);
+      const stock = await createTestStock(setup.prisma, owner.id);
 
       await setup.prisma.stockCollaborator.create({
         data: {
-          stockId: stock.ID,
-          userId: contributor.ID,
+          stockId: stock.id,
+          userId: contributor.id,
           role: StockRole.VIEWER_CONTRIBUTOR,
-          grantedBy: owner.ID,
+          grantedBy: owner.id,
         },
       });
 
@@ -261,10 +261,10 @@ describe.skip('Authorization Middleware Integration Tests', () => {
         res.json({ success: true })
       );
 
-      await request(app).get(`/stocks/${stock.ID}`).expect(200);
-      await request(app).post(`/stocks/${stock.ID}/suggest`).expect(200);
+      await request(app).get(`/stocks/${stock.id}`).expect(200);
+      await request(app).post(`/stocks/${stock.id}/suggest`).expect(200);
 
-      const writeResponse = await request(app).post(`/stocks/${stock.ID}/items`).expect(403);
+      const writeResponse = await request(app).post(`/stocks/${stock.id}/items`).expect(403);
       expect(writeResponse.body.error).toContain('does not allow write access');
     });
   });

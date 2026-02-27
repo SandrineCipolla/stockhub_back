@@ -51,10 +51,10 @@ describe('Stock API V2 Integration Tests', () => {
     await clearTestData(setup.prisma);
 
     // Create a test user
-    await setup.prisma.users.create({
+    await setup.prisma.user.create({
       data: {
-        ID: 1,
-        EMAIL: 'test-user-oid-123',
+        id: 1,
+        email: 'test-user-oid-123',
       },
     });
   });
@@ -70,21 +70,21 @@ describe('Stock API V2 Integration Tests', () => {
 
     describe('when user has stocks', () => {
       it('should return all user stocks', async () => {
-        await setup.prisma.stocks.create({
+        await setup.prisma.stock.create({
           data: {
-            LABEL: 'Stock Alimentation',
-            DESCRIPTION: 'Stock pour produits alimentaires',
-            CATEGORY: 'alimentation',
-            USER_ID: 1,
+            label: 'Stock Alimentation',
+            description: 'Stock pour produits alimentaires',
+            category: 'alimentation',
+            userId: 1,
           },
         });
 
-        await setup.prisma.stocks.create({
+        await setup.prisma.stock.create({
           data: {
-            LABEL: 'Stock Hygiène',
-            DESCRIPTION: "Stock pour produits d'hygiène",
-            CATEGORY: 'hygiene',
-            USER_ID: 1,
+            label: 'Stock Hygiène',
+            description: "Stock pour produits d'hygiène",
+            category: 'hygiene',
+            userId: 1,
           },
         });
 

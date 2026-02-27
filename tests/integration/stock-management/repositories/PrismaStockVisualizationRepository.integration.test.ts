@@ -35,20 +35,20 @@ describe('PrismaStockVisualizationRepository', () => {
   describe('getStockDetails', () => {
     describe('when stock exists for user', () => {
       it('should return stock details', async () => {
-        const user = await setup.prisma.users.create({
-          data: { EMAIL: 'user@test.com' },
+        const user = await setup.prisma.user.create({
+          data: { email: 'user@test.com' },
         });
 
-        const stock = await setup.prisma.stocks.create({
+        const stock = await setup.prisma.stock.create({
           data: {
-            USER_ID: user.ID,
-            LABEL: 'Test Stock',
-            DESCRIPTION: 'desc',
-            CATEGORY: 'alimentation',
+            userId: user.id,
+            label: 'Test Stock',
+            description: 'desc',
+            category: 'alimentation',
           },
         });
 
-        const result = await repo.getStockDetails(stock.ID, user.ID);
+        const result = await repo.getStockDetails(stock.id, user.id);
 
         expect(result).not.toBeNull();
         expect(result?.label).toBe('Test Stock');
@@ -60,28 +60,28 @@ describe('PrismaStockVisualizationRepository', () => {
   describe('getStockItems', () => {
     describe('when stock contains items', () => {
       it('should return items of the stock', async () => {
-        const user = await setup.prisma.users.create({
-          data: { EMAIL: 'items@test.com' },
+        const user = await setup.prisma.user.create({
+          data: { email: 'items@test.com' },
         });
 
-        const stock = await setup.prisma.stocks.create({
+        const stock = await setup.prisma.stock.create({
           data: {
-            USER_ID: user.ID,
-            LABEL: 'Stock with items',
-            CATEGORY: 'alimentation',
+            userId: user.id,
+            label: 'Stock with items',
+            category: 'alimentation',
           },
         });
 
-        await setup.prisma.items.create({
+        await setup.prisma.item.create({
           data: {
-            LABEL: 'Item1',
-            QUANTITY: 5,
-            MINIMUM_STOCK: 1,
-            STOCK_ID: stock.ID,
+            label: 'Item1',
+            quantity: 5,
+            minimumStock: 1,
+            stockId: stock.id,
           },
         });
 
-        const items = await repo.getStockItems(stock.ID, user.ID);
+        const items = await repo.getStockItems(stock.id, user.id);
 
         expect(items).toHaveLength(1);
         expect(items[0].LABEL).toBe('Item1');
@@ -91,22 +91,22 @@ describe('PrismaStockVisualizationRepository', () => {
 
     describe('when stock belongs to another user', () => {
       it('should throw an error', async () => {
-        const user1 = await setup.prisma.users.create({
-          data: { EMAIL: 'user1@test.com' },
+        const user1 = await setup.prisma.user.create({
+          data: { email: 'user1@test.com' },
         });
-        const user2 = await setup.prisma.users.create({
-          data: { EMAIL: 'user2@test.com' },
+        const user2 = await setup.prisma.user.create({
+          data: { email: 'user2@test.com' },
         });
 
-        const stock = await setup.prisma.stocks.create({
+        const stock = await setup.prisma.stock.create({
           data: {
-            USER_ID: user2.ID,
-            LABEL: 'Stock other user',
-            CATEGORY: 'alimentation',
+            userId: user2.id,
+            label: 'Stock other user',
+            category: 'alimentation',
           },
         });
 
-        await expect(repo.getStockItems(stock.ID, user1.ID)).rejects.toThrow(
+        await expect(repo.getStockItems(stock.id, user1.id)).rejects.toThrow(
           'Stock not found or access denied'
         );
       });

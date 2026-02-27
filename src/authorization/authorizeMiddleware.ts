@@ -63,7 +63,7 @@ export function authorizeStockAccess(
       }
 
       // 5. Check if user is the stock owner
-      const isOwner = stock.USER_ID === user.ID;
+      const isOwner = stock.userId === user.id;
       req.isStockOwner = isOwner;
 
       if (isOwner) {
@@ -73,7 +73,7 @@ export function authorizeStockAccess(
       }
 
       // 6. Check if user has a collaborator role
-      const collaborator = await repository.findCollaboratorByUserAndStock(stockId, user.ID);
+      const collaborator = await repository.findCollaboratorByUserAndStock(stockId, user.id);
 
       if (!collaborator) {
         return sendErrorResponse(res, HTTP_STATUS.FORBIDDEN, AUTH_ERROR_MESSAGES.FORBIDDEN);

@@ -47,7 +47,7 @@ export async function closeTestDatabase(setup: TestDatabaseSetup): Promise<void>
 }
 
 export async function clearTestData(prisma: PrismaClient): Promise<void> {
-  await prisma.items.deleteMany({});
-  await prisma.stocks.deleteMany({});
-  await prisma.users.deleteMany({});
+  await prisma.item.deleteMany({});
+  await prisma.stock.deleteMany({});
+  await prisma.user.deleteMany({});
 }

@@ -24,10 +24,10 @@ describe('PrismaStockCommandRepository', () => {
     await clearTestData(setup.prisma);
 
     // Create a test user
-    await setup.prisma.users.create({
+    await setup.prisma.user.create({
       data: {
-        ID: 1,
-        EMAIL: 'test@test.com',
+        id: 1,
+        email: 'test@test.com',
       },
     });
   });
@@ -65,20 +65,20 @@ describe('PrismaStockCommandRepository', () => {
         expect(savedStock.getTotalQuantity()).toBe(30);
 
         // Verify directly in database
-        const stockInDb = await setup.prisma.stocks.findUnique({
-          where: { ID: savedStock.id },
+        const stockInDb = await setup.prisma.stock.findUnique({
+          where: { id: savedStock.id },
           include: { items: true },
         });
 
         expect(stockInDb).toBeDefined();
-        expect(stockInDb?.LABEL).toBe('Integration Test Stock');
-        expect(stockInDb?.DESCRIPTION).toBe('This is an integration test');
-        expect(stockInDb?.CATEGORY).toBe('alimentation');
+        expect(stockInDb?.label).toBe('Integration Test Stock');
+        expect(stockInDb?.description).toBe('This is an integration test');
+        expect(stockInDb?.category).toBe('alimentation');
         expect(stockInDb?.items).toHaveLength(2);
-        expect(stockInDb?.items[0].LABEL).toBe('Test Item 1');
-        expect(stockInDb?.items[0].QUANTITY).toBe(10);
-        expect(stockInDb?.items[1].LABEL).toBe('Test Item 2');
-        expect(stockInDb?.items[1].QUANTITY).toBe(20);
+        expect(stockInDb?.items[0].label).toBe('Test Item 1');
+        expect(stockInDb?.items[0].quantity).toBe(10);
+        expect(stockInDb?.items[1].label).toBe('Test Item 2');
+        expect(stockInDb?.items[1].quantity).toBe(20);
       });
     });
   });
@@ -86,26 +86,26 @@ describe('PrismaStockCommandRepository', () => {
   describe('addItemToStock()', () => {
     describe('when adding an item to an existing stock', () => {
       it('should persist the new item and update stock in MySQL', async () => {
-        const createdStock = await setup.prisma.stocks.create({
+        const createdStock = await setup.prisma.stock.create({
           data: {
-            LABEL: 'Existing Stock',
-            DESCRIPTION: 'Stock for item addition test',
-            CATEGORY: 'alimentation',
-            USER_ID: 1,
+            label: 'Existing Stock',
+            description: 'Stock for item addition test',
+            category: 'alimentation',
+            userId: 1,
           },
         });
 
-        await setup.prisma.items.create({
+        await setup.prisma.item.create({
           data: {
-            LABEL: 'Initial Item',
-            QUANTITY: 5,
-            DESCRIPTION: 'Initial item',
-            MINIMUM_STOCK: 2,
-            STOCK_ID: createdStock.ID,
+            label: 'Initial Item',
+            quantity: 5,
+            description: 'Initial item',
+            minimumStock: 2,
+            stockId: createdStock.id,
           },
         });
 
-        const updatedStock = await repository.addItemToStock(createdStock.ID, {
+        const updatedStock = await repository.addItemToStock(createdStock.id, {
           label: 'New Item',
           quantity: 15,
           description: 'Newly added item',
@@ -115,16 +115,16 @@ describe('PrismaStockCommandRepository', () => {
         expect(updatedStock.getTotalItems()).toBe(2);
         expect(updatedStock.getTotalQuantity()).toBe(20);
 
-        const stockInDb = await setup.prisma.stocks.findUnique({
-          where: { ID: createdStock.ID },
+        const stockInDb = await setup.prisma.stock.findUnique({
+          where: { id: createdStock.id },
           include: { items: true },
         });
 
         expect(stockInDb?.items).toHaveLength(2);
 
-        const newItem = stockInDb?.items.find(item => item.LABEL === 'New Item');
-        expect(newItem?.QUANTITY).toBe(15);
-        expect(newItem?.STOCK_ID).toBe(createdStock.ID);
+        const newItem = stockInDb?.items.find(item => item.label === 'New Item');
+        expect(newItem?.quantity).toBe(15);
+        expect(newItem?.stockId).toBe(createdStock.id);
       });
     });
   });

@@ -33,12 +33,12 @@ describe('StockRoutesV2 (integration with fake Azure auth)', () => {
   });
 
   beforeEach(async () => {
-    await prisma.items.deleteMany();
-    await prisma.stocks.deleteMany();
-    await prisma.users.deleteMany({ where: { EMAIL: TEST_OID } });
+    await prisma.item.deleteMany();
+    await prisma.stock.deleteMany();
+    await prisma.user.deleteMany({ where: { email: TEST_OID } });
 
-    const user = await prisma.users.create({ data: { EMAIL: TEST_OID } });
-    testUserId = user.ID;
+    const user = await prisma.user.create({ data: { email: TEST_OID } });
+    testUserId = user.id;
   });
 
   afterAll(async () => {
@@ -73,12 +73,12 @@ describe('StockRoutesV2 (integration with fake Azure auth)', () => {
       });
 
       it('should return created stock', async () => {
-        await prisma.stocks.create({
+        await prisma.stock.create({
           data: {
-            USER_ID: testUserId,
-            LABEL: 'API Stock',
-            DESCRIPTION: 'desc',
-            CATEGORY: 'alimentation',
+            userId: testUserId,
+            label: 'API Stock',
+            description: 'desc',
+            category: 'alimentation',
           },
         });
 
@@ -94,17 +94,17 @@ describe('StockRoutesV2 (integration with fake Azure auth)', () => {
   describe('GET /stocks/:id', () => {
     describe('when valid token', () => {
       it('should return stock details', async () => {
-        const stock = await prisma.stocks.create({
+        const stock = await prisma.stock.create({
           data: {
-            USER_ID: testUserId,
-            LABEL: 'Detail Stock',
-            DESCRIPTION: 'desc',
-            CATEGORY: 'alimentation',
+            userId: testUserId,
+            label: 'Detail Stock',
+            description: 'desc',
+            category: 'alimentation',
           },
         });
 
         const res = await request(server)
-          .get(`/stocks/${stock.ID}`)
+          .get(`/stocks/${stock.id}`)
           .set('Authorization', 'Bearer test-token');
 
         expect(res.status).toBe(200);
@@ -126,25 +126,25 @@ describe('StockRoutesV2 (integration with fake Azure auth)', () => {
   describe('GET /stocks/:id/items', () => {
     describe('when valid token', () => {
       it('should return stock items', async () => {
-        const stock = await prisma.stocks.create({
+        const stock = await prisma.stock.create({
           data: {
-            USER_ID: testUserId,
-            LABEL: 'Stock with items',
-            CATEGORY: 'alimentation',
+            userId: testUserId,
+            label: 'Stock with items',
+            category: 'alimentation',
           },
         });
 
-        await prisma.items.create({
+        await prisma.item.create({
           data: {
-            LABEL: 'Item1',
-            QUANTITY: 5,
-            MINIMUM_STOCK: 1,
-            STOCK_ID: stock.ID,
+            label: 'Item1',
+            quantity: 5,
+            minimumStock: 1,
+            stockId: stock.id,
           },
         });
 
         const res = await request(server)
-          .get(`/stocks/${stock.ID}/items`)
+          .get(`/stocks/${stock.id}/items`)
           .set('Authorization', 'Bearer test-token');
 
         expect(res.status).toBe(200);

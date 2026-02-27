@@ -1,5 +1,5 @@
-import { items, stocks } from '@prisma/client';
+import { Item, Stock } from '@prisma/client';
 
-export type PrismaStockWithItems = stocks & {
-  items?: items[];
+export type PrismaStockWithItems = Stock & {
+  items?: Item[];
 };
