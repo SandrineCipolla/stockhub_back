@@ -1,5 +1,52 @@
 # Changelog
 
+## [2.4.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.3.0...v2.4.0) (2026-02-27)
+
+
+### ✨ Features
+
+* implement PATCH and DELETE endpoints for stocks (Issue [#74](https://github.com/SandrineCipolla/stockhub_back/issues/74)) ([#80](https://github.com/SandrineCipolla/stockhub_back/issues/80)) ([b8b3ca0](https://github.com/SandrineCipolla/stockhub_back/commit/b8b3ca0e49e07fde8a3ed52a20ca13fe06cc2eab))
+
+
+### 🐛 Bug Fixes
+
+* **cors:** allow Vercel preview URLs via VERCEL_PREVIEW_CORS env var ([af4a6ff](https://github.com/SandrineCipolla/stockhub_back/commit/af4a6ff4217c39cad390ab4612b1cb8011b39bcd))
+* fix npm audit vulnerabilities ([9d45585](https://github.com/SandrineCipolla/stockhub_back/commit/9d45585f7db314027fe45882fdfcd31476bd0b34))
+
+
+### ♻️ Code Refactoring
+
+* improve code formatting and structure in StockControllerManipulation and StockRoutesV2 ([997a187](https://github.com/SandrineCipolla/stockhub_back/commit/997a18755dfe47db5c2ba228bd240813dc076de1))
+
+
+### 📚 Documentation
+
+* add CODEOWNERS file for repository ownership management ([0f7b442](https://github.com/SandrineCipolla/stockhub_back/commit/0f7b4426166b9247ae14884614bc35042e4293c8))
+* add guides for code review best practices and logging system ([afe04e8](https://github.com/SandrineCipolla/stockhub_back/commit/afe04e803716224e80957e832f6cca50c14243c0))
+* add milestones documentation for RNCP tracking ([7a6371f](https://github.com/SandrineCipolla/stockhub_back/commit/7a6371fd10a6aba856535e06739cc4a2977c52d7))
+* create dedicated MILESTONES-GUIDE.md ([8537d29](https://github.com/SandrineCipolla/stockhub_back/commit/8537d29548325f35a84fbeae2586acd7b5e9522a))
+* update backend URL to new Azure App Service domain ([284df7d](https://github.com/SandrineCipolla/stockhub_back/commit/284df7d9c8865a81d79fbcc35fb26cd6a81805ee))
+* update CLAUDE.md with improved structure and clarity ([eda7f0c](https://github.com/SandrineCipolla/stockhub_back/commit/eda7f0cd3c2a677b3046f0342c9bfa427ca016be))
+
+
+### 💄 Styles
+
+* format CHANGELOG.md with Prettier ([57c5af6](https://github.com/SandrineCipolla/stockhub_back/commit/57c5af67a2bfe18e078f3573501170738c7538fe))
+* improve formatting and consistency in CLAUDE.md ([e2738be](https://github.com/SandrineCipolla/stockhub_back/commit/e2738be263ae28daf7fbe87ea3f6f4bd203fd99d))
+* improve formatting and consistency in CLAUDE.md ([1c4651f](https://github.com/SandrineCipolla/stockhub_back/commit/1c4651fa88d631a98dbc4468dbc067b9fa352d42))
+
+
+### 🔧 Chores
+
+* format issue templates with prettier ([f137bfe](https://github.com/SandrineCipolla/stockhub_back/commit/f137bfe8ee3084e18b05d65fa1233cff40ea4bb9))
+* format workflows with prettier ([1e176a6](https://github.com/SandrineCipolla/stockhub_back/commit/1e176a606ee72b6621d7173428374a3b155de716))
+* update prettier formatting rules to include YAML files ([d0beaec](https://github.com/SandrineCipolla/stockhub_back/commit/d0beaec735d753bda2a7048134e361602932881a))
+
+
+### 👷 CI/CD
+
+* lower security audit level to critical only ([a91dcb6](https://github.com/SandrineCipolla/stockhub_back/commit/a91dcb644169bbfb700ee7319e91c4e9dc2518c0))
+
 ## [2.3.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.2.0...v2.3.0) (2026-01-29)
 
 ### ✨ Features
