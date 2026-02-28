@@ -114,7 +114,9 @@ jobs:
 
       - name: Show API server log
         if: always()
-        run: echo "=== API server log ===" && tail -50 /tmp/api.log || true
+        run: |
+          echo "=== API server log (first 80 lines) ===" && head -80 /tmp/api.log || true
+          echo "=== API server log (500 errors) ===" && grep -i "500\|error\|Error\|reject\|Cannot\|failed" /tmp/api.log | grep -v "authenticationMiddleware\|readUserByOID\|User ID found\|Token is valid\|Authentication successful\|msal\|MSAL" | head -30 || true
 
       - name: Upload Playwright report
         if: always()
