@@ -101,10 +101,13 @@ jobs:
         run: npm run build
 
       - name: Start API server
-        run: node dist/index.js &
+        run: node dist/index.js > /tmp/api.log 2>&1 &
 
       - name: Wait for API to be ready
-        run: npx wait-on http://localhost:3006/api-docs.json --timeout 60000
+        run: |
+          npx wait-on http://localhost:3006/api-docs.json --timeout 60000 || (
+            echo "=== API startup log ===" && cat /tmp/api.log && exit 1
+          )
 
       - name: Run E2E tests
         run: npm run test:e2e
