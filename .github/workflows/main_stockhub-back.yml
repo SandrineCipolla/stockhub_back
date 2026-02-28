@@ -70,8 +70,8 @@ jobs:
       CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_ROPC_CLIENT_ID: ${{ secrets.AZURE_ROPC_CLIENT_ID }}
       SEED_OWNER_EMAIL: ${{ secrets.AZURE_TEST_USERNAME }}
-      # Variables Playwright / helper Azure B2C
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      # Variables Playwright / helper Azure B2C (ROPC client pour acquireTokenByUsernamePassword)
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_ROPC_CLIENT_ID }}
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_B2C_DOMAIN: ${{ secrets.AZURE_B2C_DOMAIN }}
       AZURE_B2C_POLICY: ${{ secrets.AZURE_B2C_POLICY }}
