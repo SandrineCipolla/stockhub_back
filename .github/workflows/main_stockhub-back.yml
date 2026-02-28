@@ -55,7 +55,7 @@ jobs:
           --health-timeout=5s
           --health-retries=5
     env:
-      NODE_ENV: test
+      NODE_ENV: e2e
       DATABASE_URL: mysql://stockhub:stockhub@127.0.0.1:3306/stockhub_test
       DB_HOST: '127.0.0.1'
       DB_USER: stockhub
