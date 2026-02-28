@@ -27,7 +27,7 @@ export class WriteStockRepository {
     const connection = await connectToDatabase();
 
     try {
-      await connection.execute('UPDATE items SET QUANTITY = ? WHERE ID = ? AND STOCK_ID = ?', [
+      await connection.execute('UPDATE items SET quantity = ? WHERE id = ? AND stockId = ?', [
         quantity,
         itemID,
         stockID,
@@ -43,9 +43,9 @@ export class WriteStockRepository {
       rootDependency({
         name: DEPENDENCY_NAME,
         data: `UPDATE items
-                       SET QUANTITY = ${quantity}
-                       WHERE ID = ${itemID}
-                         AND STOCK_ID = ${stockID}`,
+                       SET quantity = ${quantity}
+                       WHERE id = ${itemID}
+                         AND stockId = ${stockID}`,
         duration: 0,
         success: success,
         resultCode: 0,
@@ -73,7 +73,7 @@ export class WriteStockRepository {
 
     try {
       await connection.query(
-        'INSERT INTO items(id, label, description, quantity, minimum_stock, stock_id) VALUES (?, ?, ?, ? ,?, ?)',
+        'INSERT INTO items(id, label, description, quantity, minimumStock, stockId) VALUES (?, ?, ?, ? ,?, ?)',
         [
           item.id,
           item.label,
@@ -94,7 +94,7 @@ export class WriteStockRepository {
 
       rootDependency({
         name: DEPENDENCY_NAME,
-        data: `INSERT INTO items(id, label, description, quantity, minimum_stock, stock_id)
+        data: `INSERT INTO items(id, label, description, quantity, minimumStock, stockId)
                        VALUES (${item.id}, ${item.label}, ${item.description}, ${item.quantity}, ${item.minimumStock || DEFAULT_MINIMUM_STOCK}, ${stockID})`,
         duration: 0,
         success: success,
@@ -111,7 +111,7 @@ export class WriteStockRepository {
     let success = false;
 
     try {
-      await connection.query('INSERT INTO stocks(LABEL, DESCRIPTION,USER_ID) VALUES (?, ?,?)', [
+      await connection.query('INSERT INTO stocks(label, description, userId) VALUES (?, ?,?)', [
         stock.LABEL,
         stock.DESCRIPTION,
         userID,
@@ -125,7 +125,7 @@ export class WriteStockRepository {
     } finally {
       rootDependency({
         name: DEPENDENCY_NAME,
-        data: `INSERT INTO stocks(LABEL, DESCRIPTION, USER_ID)
+        data: `INSERT INTO stocks(label, description, userId)
                        VALUES (${stock.LABEL}, ${stock.DESCRIPTION}, ${userID})`,
         duration: 0,
         success: success,
@@ -143,7 +143,7 @@ export class WriteStockRepository {
 
     try {
       const [result] = await connection.execute<ResultSetHeader>(
-        'DELETE FROM items WHERE ID = ? AND STOCK_ID = ?',
+        'DELETE FROM items WHERE id = ? AND stockId = ?',
         [itemID, stockID]
       );
       return result;
@@ -159,7 +159,7 @@ export class WriteStockRepository {
 
     try {
       const [result] = await connection.execute<ResultSetHeader>(
-        'DELETE FROM stocks WHERE ID = ? AND USER_ID = ?',
+        'DELETE FROM stocks WHERE id = ? AND userId = ?',
         [stockID, userID]
       );
       return result;
@@ -172,7 +172,7 @@ export class WriteStockRepository {
     const connection = await connectToDatabase();
 
     try {
-      await connection.execute('DELETE FROM items WHERE STOCK_ID = ?', [stockID]);
+      await connection.execute('DELETE FROM items WHERE stockId = ?', [stockID]);
     } finally {
       connection.release();
     }
