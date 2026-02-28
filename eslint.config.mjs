@@ -50,5 +50,12 @@ export default tseslint.config(
       'no-console': 'off',
     },
   },
+  // Configuration spécifique pour les scripts Prisma (seed, migrations)
+  {
+    files: ['prisma/**/*.{ts,js}'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
   prettierConfig
 );

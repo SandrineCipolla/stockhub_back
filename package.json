@@ -26,7 +26,11 @@
     "format:check": "prettier --check .",
     "knip": "knip",
     "knip:fix": "knip --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "db:seed": "ts-node -r tsconfig-paths/register prisma/seed.ts"
+  },
+  "prisma": {
+    "seed": "ts-node -r tsconfig-paths/register prisma/seed.ts"
   },
   "lint-staged": {
     "*.{ts,js}": [
@@ -91,6 +95,7 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
+    "wait-on": "^9.0.4",
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4",
     "webpack-node-externals": "^3.0.0"
