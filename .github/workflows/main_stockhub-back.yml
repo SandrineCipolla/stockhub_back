@@ -8,6 +8,7 @@ on:
     branches: ['*'] # CI s'exécute sur toutes les branches
   pull_request:
     branches: ['*']
+    types: [opened, synchronize]
   workflow_dispatch:
 
 jobs:
@@ -32,10 +33,10 @@ jobs:
       - run: npm run lint --if-present
       - run: npm run test:unit
 
-  # E2E Tests - s'exécute sur staging et main uniquement
+  # E2E Tests - s'exécute sur PR vers main et workflow_dispatch
   e2e-tests:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/main'
+    if: (github.event_name == 'pull_request' && github.base_ref == 'main') || github.event_name == 'workflow_dispatch'
     needs:
       - continuous-integration
     services:
@@ -116,10 +117,10 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-  # Deploy to Staging - branche staging uniquement, après e2e-tests
+  # Deploy to Staging - PR vers main ou workflow_dispatch, après e2e-tests
   deploy-to-staging:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
+    if: (github.event_name == 'pull_request' && github.base_ref == 'main') || github.event_name == 'workflow_dispatch'
     needs:
       - e2e-tests
     environment:
