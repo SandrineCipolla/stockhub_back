@@ -117,12 +117,10 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-  # Deploy to Staging - PR vers main ou workflow_dispatch, après e2e-tests
+  # Deploy to Staging - déclenchement manuel uniquement
   deploy-to-staging:
     runs-on: ubuntu-latest
-    if: (github.event_name == 'pull_request' && github.base_ref == 'main') || github.event_name == 'workflow_dispatch'
-    needs:
-      - e2e-tests
+    if: github.event_name == 'workflow_dispatch'
     environment:
       name: 'Staging'
       url: ${{ vars.RENDER_STAGING_URL }}
