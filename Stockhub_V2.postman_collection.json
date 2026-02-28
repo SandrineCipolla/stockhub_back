@@ -2,54 +2,239 @@
   "info": {
     "name": "Stockhub API V2",
     "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab",
-    "description": "Collection pour tester les routes de visualisation V2 (DDD)",
+    "description": "Collection complète pour tester tous les endpoints /api/v2 (lecture + manipulation). Auth OAuth 2.0 Azure AD B2C configurée au niveau de la collection.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3006",
+      "type": "string",
+      "description": "Base URL — remplacer par https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net pour Azure"
+    },
+    {
+      "key": "stockId",
+      "value": "1",
+      "type": "string",
+      "description": "ID du stock à utiliser dans les requêtes"
+    },
+    {
+      "key": "itemId",
+      "value": "1",
+      "type": "string",
+      "description": "ID de l'article à utiliser dans les requêtes"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "tokenName",
+        "value": "StockHub B2C",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://stockhubb2c.b2clogin.com/stockhubb2c.onmicrosoft.com/B2C_1_signupsignin/oauth2/v2.0/authorize",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://stockhubb2c.b2clogin.com/stockhubb2c.onmicrosoft.com/B2C_1_signupsignin/oauth2/v2.0/token",
+        "type": "string"
+      },
+      {
+        "key": "clientId",
+        "value": "dc30ef57-cdc1-4a3e-aac5-9647506a72ef",
+        "type": "string"
+      },
+      {
+        "key": "scope",
+        "value": "openid dc30ef57-cdc1-4a3e-aac5-9647506a72ef offline_access",
+        "type": "string"
+      },
+      {
+        "key": "redirect_uri",
+        "value": "https://oauth.pstmn.io/v1/callback",
+        "type": "string"
+      },
+      {
+        "key": "client_authentication",
+        "value": "header",
+        "type": "string"
+      },
+      {
+        "key": "addTokenTo",
+        "value": "header",
+        "type": "string"
+      },
+      {
+        "key": "tokenType",
+        "value": "Bearer",
+        "type": "string"
+      },
+      {
+        "key": "refreshTokenUrl",
+        "value": "https://stockhubb2c.b2clogin.com/stockhubb2c.onmicrosoft.com/B2C_1_signupsignin/oauth2/v2.0/token",
+        "type": "string"
+      }
+    ]
   },
   "item": [
     {
-      "name": "V2 - Get all stocks",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3006/api/v2/stocks",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3006",
-          "path": ["api", "v2", "stocks"]
+      "name": "Stocks",
+      "item": [
+        {
+          "name": "GET all stocks",
+          "request": {
+            "auth": { "type": "inherit" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v2", "stocks"]
+            },
+            "description": "Retourne tous les stocks de l'utilisateur connecté"
+          },
+          "response": []
+        },
+        {
+          "name": "GET stock details",
+          "request": {
+            "auth": { "type": "inherit" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v2", "stocks", "{{stockId}}"]
+            },
+            "description": "Retourne les détails d'un stock (nécessite d'être propriétaire ou collaborateur)"
+          },
+          "response": []
+        },
+        {
+          "name": "POST create stock",
+          "request": {
+            "auth": { "type": "inherit" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"label\": \"Mon stock\",\n  \"description\": \"Description du stock\",\n  \"category\": \"alimentation\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v2", "stocks"]
+            },
+            "description": "Crée un nouveau stock. Catégories valides : alimentation, hygiene, artistique"
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH update stock",
+          "request": {
+            "auth": { "type": "inherit" },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"label\": \"Nouveau label\",\n  \"description\": \"Nouvelle description\",\n  \"category\": \"hygiene\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v2", "stocks", "{{stockId}}"]
+            },
+            "description": "Met à jour un stock. Tous les champs sont optionnels."
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE stock",
+          "request": {
+            "auth": { "type": "inherit" },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v2", "stocks", "{{stockId}}"]
+            },
+            "description": "Supprime un stock et tous ses articles (cascade). Retourne 204 No Content."
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "V2 - Get stock details",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3006/api/v2/stocks/1",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3006",
-          "path": ["api", "v2", "stocks", "1"]
+      "name": "Items",
+      "item": [
+        {
+          "name": "GET stock items",
+          "request": {
+            "auth": { "type": "inherit" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v2", "stocks", "{{stockId}}", "items"]
+            },
+            "description": "Retourne tous les articles d'un stock"
+          },
+          "response": []
+        },
+        {
+          "name": "POST add item to stock",
+          "request": {
+            "auth": { "type": "inherit" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"label\": \"Nouvel article\",\n  \"quantity\": 10,\n  \"description\": \"Description de l'article\",\n  \"minimumStock\": 2\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v2", "stocks", "{{stockId}}", "items"]
+            },
+            "description": "Ajoute un article à un stock existant"
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH update item quantity",
+          "request": {
+            "auth": { "type": "inherit" },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 25\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items/{{itemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v2", "stocks", "{{stockId}}", "items", "{{itemId}}"]
+            },
+            "description": "Met à jour la quantité d'un article"
+          },
+          "response": []
         }
-      },
-      "response": []
-    },
-    {
-      "name": "V2 - Get stock items",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3006/api/v2/stocks/1/items",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3006",
-          "path": ["api", "v2", "stocks", "1", "items"]
-        }
-      },
-      "response": []
+      ]
     }
   ]
 }
