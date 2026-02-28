@@ -106,7 +106,7 @@ jobs:
       - name: Wait for API to be ready
         run: |
           npx wait-on http://localhost:3006/api-docs.json --timeout 60000 || (
-            echo "=== API startup log ===" && cat /tmp/api.log && exit 1
+            echo "=== API startup log (tail) ===" && tail -30 /tmp/api.log && exit 1
           )
 
       - name: Run E2E tests
