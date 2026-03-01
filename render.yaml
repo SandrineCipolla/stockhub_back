@@ -1,0 +1,46 @@
+services:
+  - type: web
+    name: stockhub-back-staging
+    runtime: node
+    region: frankfurt
+    nodeVersion: 20
+    buildCommand: npm ci && npm run build
+    startCommand: node dist/index.js
+    healthCheckPath: /api-docs.json
+    autoDeploy: false
+    envVars:
+      - key: NODE_ENV
+        value: staging
+      - key: DB_SSL
+        value: 'true'
+      - key: VERCEL_PREVIEW_CORS
+        value: 'true'
+      # Secrets définis dans le dashboard Render (sync: false)
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_CONNECTION_LIMIT
+        sync: false
+      - key: DB_MAX_IDLE
+        sync: false
+      - key: CLIENT_ID
+        sync: false
+      - key: CLIENT_SECRET
+        sync: false
+      - key: AZURE_USE_ROPC_POLICY
+        sync: false
+      - key: AZURE_ROPC_CLIENT_ID
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: SEED_OWNER_EMAIL
+        sync: false

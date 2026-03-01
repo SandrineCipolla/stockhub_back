@@ -36,6 +36,6 @@
   "ts-node": {
     "files": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "tests/**/*.ts", "tests/**/*.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "tests/**/*.ts", "tests/**/*.d.ts", "prisma/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

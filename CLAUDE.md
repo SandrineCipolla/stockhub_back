@@ -26,6 +26,13 @@ API Node.js/Express avec architecture DDD/CQRS pour la gestion de stocks intelli
 - **URL GitHub**: https://github.com/SandrineCipolla/stockhub_design_system
 - **Package**: `@stockhub/design-system` v1.3.1
 
+### Wiki Global du Projet
+
+- **URL**: https://github.com/SandrineCipolla/stockHub_V2_front/wiki
+- **Hébergé sur** : repo frontend (couvre les 3 repos)
+- **Pages clés** : Architecture Globale, Backend Guide, CICD et Déploiement, ADR, Qualité & Métriques
+- **À mettre à jour** quand : nouveaux environnements, changements d'infra, pipeline CI/CD modifié
+
 ### GitHub Project
 
 - **URL**: https://github.com/users/SandrineCipolla/projects/3

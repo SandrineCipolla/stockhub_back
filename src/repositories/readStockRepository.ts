@@ -2,7 +2,7 @@ import { FieldPacket, RowDataPacket } from 'mysql2/promise';
 import { rootDependency, rootException } from '@utils/cloudLogger';
 import { connectToDatabase } from '@core/dbUtils';
 
-const QUERY_ALL_STOCKS_BY_USER = 'SELECT * FROM stocks WHERE USER_ID = ?';
+const QUERY_ALL_STOCKS_BY_USER = 'SELECT * FROM stocks WHERE userId = ?';
 export class ReadStockRepository {
   async readAllStocks(userID: number) {
     const depTelemetry = this.createDepTelemetry(
@@ -42,7 +42,7 @@ export class ReadStockRepository {
     const connection = await connectToDatabase();
 
     try {
-      const [stock] = (await connection.query('SELECT * FROM stocks WHERE ID = ? AND USER_ID = ?', [
+      const [stock] = (await connection.query('SELECT * FROM stocks WHERE id = ? AND userId = ?', [
         ID,
         userID,
       ])) as [RowDataPacket[], FieldPacket[]];
@@ -57,7 +57,7 @@ export class ReadStockRepository {
     const connection = await connectToDatabase();
 
     try {
-      const [items] = (await connection.query('SELECT * FROM items WHERE STOCK_ID = ?', [ID])) as [
+      const [items] = (await connection.query('SELECT * FROM items WHERE stockId = ?', [ID])) as [
         RowDataPacket[],
         FieldPacket[],
       ];
@@ -72,7 +72,7 @@ export class ReadStockRepository {
 
     try {
       const [items] = (await connection.query(
-        'SELECT items.* FROM items JOIN stocks ON items.stock_ID = stocks.ID WHERE USER_ID = ?',
+        'SELECT items.* FROM items JOIN stocks ON items.stockId = stocks.id WHERE userId = ?',
         [userID]
       )) as [RowDataPacket[], FieldPacket[]];
       return items;
@@ -88,8 +88,8 @@ export class ReadStockRepository {
       const [items] = (await connection.query(
         'SELECT items.*, stocks.label AS stockLabel \n' +
           '         FROM items \n' +
-          '         JOIN stocks ON items.stock_id = stocks.id \n' +
-          '         WHERE items.ID = ?',
+          '         JOIN stocks ON items.stockId = stocks.id \n' +
+          '         WHERE items.id = ?',
         [itemID]
       )) as [RowDataPacket[], FieldPacket[]];
       return items;
@@ -103,7 +103,7 @@ export class ReadStockRepository {
 
     try {
       const [items] = (await connection.query(
-        'SELECT items.*, stocks.LABEL AS stockLabel FROM items JOIN stocks ON items.STOCK_ID = stocks.id WHERE items.QUANTITY <= items.MINIMUM_STOCK AND stocks.USER_ID = ?',
+        'SELECT items.*, stocks.label AS stockLabel FROM items JOIN stocks ON items.stockId = stocks.id WHERE items.quantity <= items.minimumStock AND stocks.userId = ?',
         [userId]
       )) as [RowDataPacket[], FieldPacket[]];
 

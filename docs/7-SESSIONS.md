@@ -6,13 +6,42 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 5
-**Période** : Décembre 2025 - Janvier 2026
+**Total sessions documentées** : 7
+**Période** : Décembre 2025 - Mars 2026
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
 ---
 
 ## 🗓️ Sessions Documentées
+
+### Session du 1er Mars 2026 - Mise en place des environnements (Local / Staging / Prod)
+
+**Fichier** : [sessions/2026-03-01-staging-environment-setup.md](sessions/2026-03-01-staging-environment-setup.md)
+
+**Objectif** : Mettre en place 4 environnements isolés, configurer Postman ROPC, valider staging, gérer quota Azure
+
+**Réalisations** :
+
+- ✅ **Postman** — authentification ROPC automatique + 3 environnements (Local/Staging/Prod)
+- ✅ **Staging Render + Aiven** — tous les endpoints v2 validés (8/8)
+- ✅ **Local Docker** — `compose.yaml`, `.env.docker`, seed idempotent
+- ✅ **Azure quota** — `npm run azure:start/stop` pour gérer le plan F1
+- ✅ **Issues créées** — #90 DELETE items, #86 migration lowercase en cours
+
+**Documentation créée** :
+
+- `docs/technical/environments-setup.md` — guide complet de mise en place
+- `docs/troubleshooting/docker-postman-azure-issues.md` — problèmes rencontrés
+
+---
+
+### Session du 26 Février 2026 - Azure Config CORS & Allowed Origins
+
+**Fichier** : [sessions/2026-02-26-azure-config-cors-allowed-origins.md](sessions/2026-02-26-azure-config-cors-allowed-origins.md)
+
+**Objectif** : Corriger la configuration CORS et les origines autorisées sur Azure
+
+---
 
 ### Session du 29 Janvier 2026 - Mise en place des Milestones GitHub
 

@@ -239,13 +239,16 @@ test.describe('Stock Management API E2E Workflow with Azure AD', () => {
     expect(Array.isArray(lowStockItems)).toBe(true);
     expect(lowStockItems.length).toBeGreaterThan(0);
 
-    const lowStockBanana = lowStockItems.find(
-      (item: any) => item.LABEL === 'Bananes' && item.QUANTITY < item.MINIMUM_STOCK
-    );
+    const lowStockBanana = lowStockItems.find((item: any) => {
+      const label = item.label || item.LABEL;
+      const qty = item.quantity ?? item.QUANTITY;
+      const minStock = item.minimumStock ?? item.MINIMUM_STOCK;
+      return label === 'Bananes' && qty < minStock;
+    });
 
     expect(lowStockBanana).toBeDefined();
-    expect(lowStockBanana.QUANTITY).toBe(5);
-    expect(lowStockBanana.MINIMUM_STOCK).toBe(20);
+    expect(lowStockBanana.quantity ?? lowStockBanana.QUANTITY).toBe(5);
+    expect(lowStockBanana.minimumStock ?? lowStockBanana.MINIMUM_STOCK).toBe(20);
   });
 
   test.afterAll(async ({ request }) => {

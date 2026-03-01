@@ -1,36 +1,53 @@
 services:
-  server:
-    image: backend_stockhub:latest
-    #    build:
-    #      context: .
-    environment:
-      NODE_ENV: production
-      DB_HOST: db
-      DB_USER: stockhub_user
-      DB_PASSWORD: stockhub_password
-      DB_PORT: 3306
-      DB_DATABASE: stockhub
-
-    ports:
-      - 3001:3000
   db:
-    image: mysql:latest
-    restart: always
+    image: mysql:8.0
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: stockhub
-      MYSQL_USER: stockhub_user
-      MYSQL_PASSWORD: stockhub_password
+      MYSQL_USER: stockhub
+      MYSQL_PASSWORD: stockhub
     ports:
-      - 3306:3306
+      - '3308:3306'
     volumes:
-      - stockhub-db-volume:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-proot']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  api:
+    build:
+      context: .
+      target: builder
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - '3006:3006'
+    volumes:
+      - ./src:/usr/src/app/src
+    environment:
+      NODE_ENV: development
+      PORT: 3006
+      DB_HOST: db
+      DB_USER: stockhub
+      DB_PASSWORD: stockhub
+      DB_PORT: 3306
+      DB_DATABASE: stockhub
+      DB_SSL: 'false'
+      DB_CONNECTION_LIMIT: '3'
+      DB_MAX_IDLE: '3'
+      DATABASE_URL: 'mysql://stockhub:stockhub@db:3306/stockhub'
+      ALLOWED_ORIGINS: 'http://localhost:5173,https://localhost:5173'
+      VERCEL_PREVIEW_CORS: 'false'
+    env_file:
+      - path: .env.docker
+        required: false
+    command: sh -c "npx prisma migrate deploy && npx nodemon --exec 'node -r tsconfig-paths/register -r ts-node/register ./src/index.ts' ./src/index.ts"
+
 volumes:
-  stockhub-db-volume:
-#    volumes:
-#      - ./db:/docker-entrypoint-initdb.d
-#    healthcheck:
-#      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
+  mysql_data:
