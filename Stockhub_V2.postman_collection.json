@@ -2,7 +2,7 @@
   "info": {
     "name": "Stockhub API V2",
     "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab",
-    "description": "Collection complète pour tester tous les endpoints /api/v2. Auth OAuth2 PKCE configurée au niveau collection — héritée par toutes les requêtes. Sélectionner l'environnement (Local / Staging / Prod) avant de lancer les requêtes.",
+    "description": "Collection complète pour tester tous les endpoints /api/v2.\n\nAuth : Bearer token via variable d'environnement {{accessToken}}.\n\n1. Obtenir un token Azure B2C (onglet Authorization → Get New Access Token)\n2. Copier la valeur du token dans la variable accessToken de l'environnement actif\n3. Toutes les requêtes héritent automatiquement du Bearer token\n\nCatégories valides pour les stocks : alimentation | hygiene | artistique",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -10,76 +10,21 @@
       "key": "stockId",
       "value": "1",
       "type": "string",
-      "description": "ID du stock — remplacer ou utiliser la variable d'environnement"
+      "description": "ID du stock"
     },
     {
       "key": "itemId",
       "value": "1",
       "type": "string",
-      "description": "ID de l'article — remplacer ou utiliser la variable d'environnement"
+      "description": "ID de l'article"
     }
   ],
   "auth": {
-    "type": "oauth2",
-    "oauth2": [
+    "type": "bearer",
+    "bearer": [
       {
-        "key": "tokenName",
-        "value": "StockHub B2C Token",
-        "type": "string"
-      },
-      {
-        "key": "grant_type",
-        "value": "authorization_code_with_pkce",
-        "type": "string"
-      },
-      {
-        "key": "authUrl",
-        "value": "https://stockhubb2c.b2clogin.com/stockhubb2c.onmicrosoft.com/B2C_1_signupsignin/oauth2/v2.0/authorize",
-        "type": "string"
-      },
-      {
-        "key": "accessTokenUrl",
-        "value": "https://stockhubb2c.b2clogin.com/stockhubb2c.onmicrosoft.com/B2C_1_signupsignin/oauth2/v2.0/token",
-        "type": "string"
-      },
-      {
-        "key": "clientId",
-        "value": "0dc4acfb-ecde-4f9b-81eb-9af050fb52d9",
-        "type": "string"
-      },
-      {
-        "key": "scope",
-        "value": "openid https://stockhubb2c.onmicrosoft.com/dc30ef57-cdc1-4a3e-aac5-9647506a72ef/FilesRead https://stockhubb2c.onmicrosoft.com/dc30ef57-cdc1-4a3e-aac5-9647506a72ef/FilesWrite offline_access",
-        "type": "string"
-      },
-      {
-        "key": "redirect_uri",
-        "value": "https://oauth.pstmn.io/v1/callback",
-        "type": "string"
-      },
-      {
-        "key": "useBrowser",
-        "value": false,
-        "type": "boolean"
-      },
-      {
-        "key": "client_authentication",
-        "value": "body",
-        "type": "string"
-      },
-      {
-        "key": "addTokenTo",
-        "value": "header",
-        "type": "string"
-      },
-      {
-        "key": "tokenType",
-        "value": "Bearer",
-        "type": "string"
-      },
-      {
-        "key": "refreshTokenUrl",
-        "value": "https://stockhubb2c.b2clogin.com/stockhubb2c.onmicrosoft.com/B2C_1_signupsignin/oauth2/v2.0/token",
+        "key": "token",
+        "value": "{{accessToken}}",
         "type": "string"
       }
     ]
@@ -114,7 +59,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "v2", "stocks", "{{stockId}}"]
             },
-            "description": "Retourne les détails d'un stock (nécessite d'être propriétaire ou collaborateur)"
+            "description": "Retourne les détails d'un stock"
           },
           "response": []
         },
@@ -134,7 +79,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "v2", "stocks"]
             },
-            "description": "Crée un nouveau stock.\n\nCatégories valides : alimentation | hygiene | artistique"
+            "description": "Crée un nouveau stock.\nCatégories valides : alimentation | hygiene | artistique"
           },
           "response": []
         },
