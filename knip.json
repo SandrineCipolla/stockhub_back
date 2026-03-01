@@ -10,7 +10,7 @@
     "testcontainers",
     "express-serve-static-core"
   ],
-  "ignoreBinaries": ["knip"],
+  "ignoreBinaries": ["knip", "az"],
   "ignoreExportsUsedInFile": true,
   "includeEntryExports": false,
   "jest": {
