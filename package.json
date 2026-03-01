@@ -27,7 +27,9 @@
     "knip": "knip",
     "knip:fix": "knip --fix",
     "prepare": "husky install",
-    "db:seed": "ts-node -r tsconfig-paths/register prisma/seed.ts"
+    "db:seed": "ts-node -r tsconfig-paths/register prisma/seed.ts",
+    "azure:start": "az webapp start --name stockhub-back --resource-group StockHubApp-resources",
+    "azure:stop": "az webapp stop --name stockhub-back --resource-group StockHubApp-resources"
   },
   "prisma": {
     "seed": "ts-node -r tsconfig-paths/register prisma/seed.ts"
