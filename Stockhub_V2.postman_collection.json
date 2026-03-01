@@ -2,27 +2,21 @@
   "info": {
     "name": "Stockhub API V2",
     "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab",
-    "description": "Collection complète pour tester tous les endpoints /api/v2 (lecture + manipulation). Auth OAuth 2.0 Azure AD B2C configurée au niveau de la collection.",
+    "description": "Collection complète pour tester tous les endpoints /api/v2. Auth OAuth2 PKCE configurée au niveau collection — héritée par toutes les requêtes. Sélectionner l'environnement (Local / Staging / Prod) avant de lancer les requêtes.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     {
-      "key": "baseUrl",
-      "value": "http://localhost:3006",
-      "type": "string",
-      "description": "Base URL — remplacer par https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net pour Azure"
-    },
-    {
       "key": "stockId",
       "value": "1",
       "type": "string",
-      "description": "ID du stock à utiliser dans les requêtes"
+      "description": "ID du stock — remplacer ou utiliser la variable d'environnement"
     },
     {
       "key": "itemId",
       "value": "1",
       "type": "string",
-      "description": "ID de l'article à utiliser dans les requêtes"
+      "description": "ID de l'article — remplacer ou utiliser la variable d'environnement"
     }
   ],
   "auth": {
@@ -30,12 +24,12 @@
     "oauth2": [
       {
         "key": "tokenName",
-        "value": "StockHub B2C",
+        "value": "StockHub B2C Token",
         "type": "string"
       },
       {
         "key": "grant_type",
-        "value": "authorization_code",
+        "value": "authorization_code_with_pkce",
         "type": "string"
       },
       {
@@ -50,12 +44,12 @@
       },
       {
         "key": "clientId",
-        "value": "dc30ef57-cdc1-4a3e-aac5-9647506a72ef",
+        "value": "0dc4acfb-ecde-4f9b-81eb-9af050fb52d9",
         "type": "string"
       },
       {
         "key": "scope",
-        "value": "openid dc30ef57-cdc1-4a3e-aac5-9647506a72ef offline_access",
+        "value": "openid https://stockhubb2c.onmicrosoft.com/dc30ef57-cdc1-4a3e-aac5-9647506a72ef/FilesRead https://stockhubb2c.onmicrosoft.com/dc30ef57-cdc1-4a3e-aac5-9647506a72ef/FilesWrite offline_access",
         "type": "string"
       },
       {
@@ -64,8 +58,13 @@
         "type": "string"
       },
       {
+        "key": "useBrowser",
+        "value": false,
+        "type": "boolean"
+      },
+      {
         "key": "client_authentication",
-        "value": "header",
+        "value": "body",
         "type": "string"
       },
       {
@@ -135,7 +134,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "v2", "stocks"]
             },
-            "description": "Crée un nouveau stock. Catégories valides : alimentation, hygiene, artistique"
+            "description": "Crée un nouveau stock.\n\nCatégories valides : alimentation | hygiene | artistique"
           },
           "response": []
         },
