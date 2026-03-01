@@ -1,4 +1,4 @@
-ARG NODE_VERSION=18.14.0
+ARG NODE_VERSION=20.14.0
 
 ################################################################################
 
@@ -10,6 +10,7 @@ FROM node:${NODE_VERSION}-alpine AS builder
 WORKDIR /usr/src/app
 
 COPY package*.json ./
+COPY prisma/schema.prisma ./prisma/schema.prisma
 RUN npm install
 
 COPY . .
@@ -34,4 +35,4 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -subj "/C=FR/ST=State/L=Paris/O=Sancci/OU=Main/CN=localhost"
 
 # Run the application.
-CMD  [ "node", "dist/src/index.js" ]
+CMD  [ "node", "dist/index.js" ]
