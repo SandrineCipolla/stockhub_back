@@ -6,8 +6,8 @@
 ![Node](https://img.shields.io/badge/node-20.x-brightgreen)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
 
-API REST Node.js/Express avec architecture DDD/CQRS pour la gestion de stocks familiaux.
-Authentification Azure AD B2C, déploiement multi-environnements.
+StockHub est une application web conçue pour aider les familles à gérer leurs stocks de produits (alimentaires, artistiques...).
+Elle permet aux utilisateurs de visualiser l'état des stocks et de les mettre à jour facilement.
 
 ---
 
@@ -66,7 +66,172 @@ Importer depuis le repo :
 
 ---
 
-## 📋 Scripts disponibles
+## 1. Introduction métier
+
+### Problématique
+
+Visualiser rapidement les quantités en notre possession, que l'on soit à la maison ou en plein shopping, afin d'éviter les
+ruptures ou les doublons. Mettre à jour facilement les stocks après utilisation d'un article ou des achats.
+
+### Public cible
+
+Usage personnel/familial → visibilité rapide sur les stocks, valeur ajoutée = meilleure planification, moins d'oublis.
+
+### Module choisi
+
+**Visualisation et manipulation des stocks** (liste + détail + CRUD complet). Gestion de scopes pour les utilisateurs
+(partage familial avec rôles).
+
+## 2. Périmètre fonctionnel
+
+### Inclus (V2)
+
+- `GET /api/v2/stocks` → liste des stocks de l'utilisateur
+- `GET /api/v2/stocks/{stockId}` → détail d'un stock
+- `POST /api/v2/stocks` → créer un stock
+- `PATCH /api/v2/stocks/{stockId}` → modifier un stock
+- `DELETE /api/v2/stocks/{stockId}` → supprimer un stock (cascade items)
+- `GET /api/v2/stocks/{stockId}/items` → items d'un stock
+- `POST /api/v2/stocks/{stockId}/items` → ajouter un item
+- `PATCH /api/v2/stocks/{stockId}/items/{itemId}` → modifier la quantité
+- Entités DDD (`Stock`, `StockItem`, `Quantity`) + service `StockVisualizationService`
+- Autorisation par rôles (OWNER / EDITOR / VIEWER / VIEWER_CONTRIBUTOR)
+
+## 3. Cas d'usage
+
+1. En tant qu'utilisateur, je veux pouvoir consulter mon stock d'aquarelle lorsque je suis au "Géants des beaux-arts"
+   afin de ne pas acheter une référence en double malgré la super promo de rentrée.
+
+2. En tant qu'utilisateur, je veux pouvoir consulter mes stocks alimentaires pour faire ma liste de courses avant de
+   passer ma commande drive.
+
+## 4. Choix techniques
+
+### Architecture
+
+DDD/CQRS avec séparation stricte des couches :
+
+```
+src/
+├── domain/
+│   ├── stock-management/
+│   │   ├── manipulation/      # Command side (CQRS — Write)
+│   │   └── visualization/     # Query side (CQRS — Read)
+│   └── authorization/         # Entités famille, rôles
+├── infrastructure/             # Repositories Prisma
+├── api/                        # Controllers, routes, DTOs
+├── authentication/             # Azure AD B2C (Passport Bearer)
+├── authorization/              # Middleware autorisation stocks
+└── config/
+```
+
+**Règle absolue** : domain → infrastructure → api (jamais l'inverse)
+
+### Tests
+
+TDD appliqué sur `Quantity`, `StockItem`, `Stock`, puis `StockVisualizationService`.
+
+### Sécurité
+
+- **Authentification** : Azure AD B2C avec tokens JWT Bearer (routes V1 et V2)
+- **Autorisation** : Système hybride basé sur les ressources (voir [ADR-009](./docs/adr/ADR-009-resource-based-authorization.md))
+  - Groupes familiaux + rôles par stock (OWNER/EDITOR/VIEWER/VIEWER_CONTRIBUTOR)
+  - Workflow de suggestions pour collaboration sécurisée
+
+### Base de données
+
+MySQL — Prisma ORM + migrations.
+
+### Documentation API (OpenAPI 3.0)
+
+📖 La documentation OpenAPI 3.0 couvre tous les endpoints v2 avec schémas, exemples, authentification Azure AD B2C et séparation Read/Write (CQRS).
+
+⚠️ **Maintenance** : Le fichier `docs/openapi.yaml` doit être mis à jour manuellement lors de toute modification des routes ou DTOs.
+
+### Cloud
+
+Azure App Service (prod) + Render.com (staging) + Docker Compose (local).
+
+## 📚 Documentation Architecture
+
+### Architecture Decision Records (ADRs)
+
+Les **ADRs** documentent les décisions techniques majeures du projet avec leur contexte, alternatives considérées, et conséquences.
+
+📖 **[Voir tous les ADRs](./docs/adr/INDEX.md)**
+
+| #                                                                | Décision                                    | Date     |
+| ---------------------------------------------------------------- | ------------------------------------------- | -------- |
+| [ADR-001](./docs/adr/ADR-001-migration-ddd-cqrs.md)              | Migration vers DDD/CQRS                     | Nov 2025 |
+| [ADR-002](./docs/adr/ADR-002-choix-prisma-orm.md)                | Choix de Prisma vs TypeORM                  | Déc 2025 |
+| [ADR-003](./docs/adr/ADR-003-azure-ad-b2c-authentication.md)     | Azure AD B2C pour authentification          | Déc 2025 |
+| [ADR-004](./docs/adr/ADR-004-tests-value-objects-entities.md)    | Tests sur Value Objects et Entities         | Déc 2025 |
+| [ADR-005](./docs/adr/ADR-005-api-versioning-v2.md)               | Versioning API (V2 sans V1)                 | Déc 2025 |
+| [ADR-006](./docs/adr/ADR-006-mysql-azure-cloud.md)               | MySQL Azure vs autres clouds                | Déc 2025 |
+| [ADR-007](./docs/adr/ADR-007-code-quality-enforcement.md)        | Standards de qualité de code stricts        | Déc 2024 |
+| [ADR-008](./docs/adr/ADR-008-typescript-request-type-aliases.md) | Type Aliases pour requêtes Express typées   | Déc 2025 |
+| [ADR-009](./docs/adr/ADR-009-resource-based-authorization.md)    | Système d'autorisation hybride              | Déc 2025 |
+| [ADR-010](./docs/adr/ADR-010-ci-cd-pipeline-optimization.md)     | Optimisation pipeline CI/CD (8min → 4-5min) | Déc 2025 |
+
+📚 **[Documentation complète du projet](https://github.com/SandrineCipolla/stockHub_V2_front/wiki)** — Architecture, guides techniques, métriques
+
+## 5. Base de données
+
+### Diagramme relationnel
+
+![Database Schema](src/docs/images/StockHub_V2.png)
+
+### Schéma actuel (Prisma)
+
+```
+users    → id, email
+stocks   → id, label, description, category, userId
+items    → id, label, description, quantity, minimumStock, stockId
+```
+
+### Relations
+
+- **users (1) → (N) stocks** : Un utilisateur possède plusieurs stocks
+- **stocks (1) → (N) items** : Un stock contient plusieurs items (cascade delete)
+
+### Évolutions prévues
+
+Système de scopes pour les utilisateurs (partage de stocks entre membres d'une famille).
+Les utilisateurs pourront faire des demandes de réapprovisionnement au propriétaire du stock.
+
+## 6. API V2
+
+### Endpoints
+
+```
+GET    /api/v2/stocks                         → Liste des stocks de l'utilisateur
+GET    /api/v2/stocks/:stockId                → Détail d'un stock
+POST   /api/v2/stocks                         → Créer un stock
+PATCH  /api/v2/stocks/:stockId                → Modifier un stock
+DELETE /api/v2/stocks/:stockId                → Supprimer (cascade items)
+GET    /api/v2/stocks/:stockId/items          → Items d'un stock
+POST   /api/v2/stocks/:stockId/items          → Ajouter un item
+PATCH  /api/v2/stocks/:stockId/items/:itemId  → Modifier la quantité
+```
+
+Catégories valides : `alimentation` | `hygiene` | `artistique`
+
+### Exemple de réponse
+
+```json
+{
+  "id": 1,
+  "label": "Cuisine",
+  "description": "Stock alimentaire",
+  "category": "alimentation",
+  "items": [
+    { "label": "Pâtes", "quantity": { "value": 5 }, "minimumStock": 2 },
+    { "label": "Riz", "quantity": { "value": 0 }, "minimumStock": 1 }
+  ]
+}
+```
+
+## 7. Scripts disponibles
 
 ```bash
 # Développement
@@ -80,7 +245,7 @@ docker compose down -v   # Arrêter + supprimer les données
 # Base de données
 npm run db:seed          # Seeder (dans le container Docker)
 npx prisma migrate dev   # Nouvelle migration
-npx prisma migrate deploy # Appliquer les migrations (prod)
+npx prisma migrate deploy # Appliquer les migrations
 npx prisma studio        # Interface visuelle DB
 
 # Tests
@@ -99,72 +264,136 @@ npm run azure:start      # Démarrer l'app Azure avant de tester prod
 npm run azure:stop       # Arrêter l'app Azure après les tests
 ```
 
----
+## 8. Tests
 
-## 🏗️ Architecture DDD/CQRS
+### Unitaires (TDD)
 
-```
-src/
-├── domain/
-│   ├── stock-management/
-│   │   ├── manipulation/      # Command side (CQRS — Write)
-│   │   └── visualization/     # Query side (CQRS — Read)
-│   └── authorization/         # Entités famille, rôles
-├── infrastructure/             # Repositories Prisma
-├── api/                        # Controllers, routes, DTOs
-├── authentication/             # Azure AD B2C (Passport Bearer)
-├── authorization/              # Middleware autorisation stocks
-└── config/
-```
+- `Quantity` : valeurs invalides interdites
+- `StockItem` : `isOutOfStock()`, `isLowStock()`
+- `Stock` : `getTotalItems()`, `getTotalQuantity()`
+- `StockVisualizationService` : cas vide, cas stocks présents, cas 404
 
-**Règle** : domain → infrastructure → api (jamais l'inverse)
+### Tests d'Intégration
 
----
+Tests des services et repositories avec base de données réelle (TestContainers MySQL).
 
-## 🔌 Endpoints V2
+### Tests E2E ✅
 
-Toutes les routes requièrent `Authorization: Bearer <token>`.
+Tests fonctionnels complets avec **authentification Azure AD B2C réelle** via Playwright.
 
-```
-GET    /api/v2/stocks                         → Stocks de l'utilisateur
-GET    /api/v2/stocks/:stockId                → Détail d'un stock
-POST   /api/v2/stocks                         → Créer un stock
-PATCH  /api/v2/stocks/:stockId                → Modifier un stock
-DELETE /api/v2/stocks/:stockId                → Supprimer (cascade items)
-GET    /api/v2/stocks/:stockId/items          → Items d'un stock
-POST   /api/v2/stocks/:stockId/items          → Ajouter un item
-PATCH  /api/v2/stocks/:stockId/items/:itemId  → Modifier la quantité
-```
+**Workflow testé** :
 
-Catégories valides : `alimentation` | `hygiene` | `artistique`
-
----
-
-## 🗄️ Base de données
-
-### Schéma (Prisma)
-
-```
-users    → id, email
-stocks   → id, label, description, category, userId
-items    → id, label, description, quantity, minimumStock, stockId
-```
-
-Relations : `users (1)→(N) stocks (1)→(N) items` (cascade delete)
-
----
-
-## 🧪 Tests
+1. ✅ Authentification Azure AD B2C (ROPC)
+2. ✅ Création d'un stock
+3. ✅ Ajout d'items au stock
+4. ✅ Visualisation du stock
+5. ✅ Mise à jour de quantités
+6. ✅ Détection des items en rupture
+7. ✅ Nettoyage automatique des données de test
 
 ```bash
-npm run test:unit        # 142 tests unitaires (Jest) ✅
-npm run test:integration # Tests d'intégration (TestContainers MySQL)
-npm run test:e2e         # Tests E2E (Playwright + Azure AD B2C ROPC)
+npm run test:e2e         # Tests E2E standard
+npm run test:e2e:ui      # Interface UI Playwright
+npm run test:e2e:headed  # Avec navigateur visible
 ```
 
----
+## 9. 🧪 Procédure de test utilisateur
 
-## 🚀 CI/CD
+### Objectif
+
+Valider le fonctionnement complet du module DDD depuis la création de compte jusqu'à la manipulation des stocks.
+
+### Prérequis
+
+- Navigateur web avec DevTools
+- Adresse email valide pour Azure B2C
+- Application frontend : https://stock-hub-v2-front.vercel.app/
+
+### Procédure
+
+#### 1. Créer un compte via Azure AD B2C
+
+1. Accéder à https://stock-hub-v2-front.vercel.app/
+2. Cliquer "Se connecter" → portail Azure B2C
+3. Créer un compte (email + mot de passe + vérification email)
+
+#### 2. Vérifier l'authentification
+
+- DevTools → Application → Local Storage → token JWT présent ✅
+- DevTools → Network → header `Authorization: Bearer [token]` sur les requêtes ✅
+
+#### 3. Tester l'API V2
+
+**Liste des stocks** :
+
+```bash
+GET /api/v2/stocks
+Authorization: Bearer [JWT_TOKEN]
+# → 200 OK, array de stocks
+```
+
+**Créer un stock** :
+
+```bash
+POST /api/v2/stocks
+Authorization: Bearer [JWT_TOKEN]
+Content-Type: application/json
+
+{ "label": "Stock Cuisine", "description": "Produits alimentaires", "category": "alimentation" }
+# → 201 Created
+```
+
+**Vérification Network (DevTools F12 > Network)** :
+
+- ✅ `GET /api/v2/stocks` → 200 OK, structure DDD
+- ✅ `POST /api/v2/stocks` → 201 Created
+- ✅ `PATCH /api/v2/stocks/:id` → 200 OK
+- ✅ `DELETE /api/v2/stocks/:id` → 204 No Content
+
+#### Script de validation rapide (curl)
+
+```bash
+export JWT_TOKEN="eyJ0eXAiOiJKV1Qi..."  # Token récupéré depuis DevTools
+
+# Test API V2
+curl -X GET "https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net/api/v2/stocks" \
+     -H "Authorization: Bearer $JWT_TOKEN"
+
+# Test sans token (doit retourner 401)
+curl -X GET "https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net/api/v2/stocks"
+```
+
+#### Checklist de test
+
+- [ ] Création de compte réussie + vérification email
+- [ ] Connexion fonctionnelle + token JWT présent
+- [ ] `GET /api/v2/stocks` → 200 OK
+- [ ] `POST /api/v2/stocks` → 201 Created
+- [ ] `PATCH /api/v2/stocks/:id` → 200 OK
+- [ ] `DELETE /api/v2/stocks/:id` → 204 No Content
+- [ ] Routes sans token → 401 Unauthorized
+
+## 10. Sécurité & performances
+
+### Authentification
+
+Middleware Azure Bearer appliqué sur **toutes les routes** :
+
+```typescript
+app.use('/api/v2', authenticationMiddleware, stockRoutesV2);
+app.use('/api/v1', authenticationMiddleware, stockRoutes);
+```
+
+- 🔒 `/api/v1` protégé (Bearer Token requis)
+- 🔒 `/api/v2` protégé (Bearer Token requis)
+
+### Performance
+
+- Index SQL sur `stocks.userId`, `items.stockId`
+- Prisma `include` pour éviter N+1
+- Application Insights pour monitoring et logs
+
+## 11. CI/CD
 
 | Job                      | Déclencheur                          |
 | ------------------------ | ------------------------------------ |
@@ -173,41 +402,22 @@ npm run test:e2e         # Tests E2E (Playwright + Azure AD B2C ROPC)
 | `deploy-to-staging`      | `workflow_dispatch` uniquement       |
 | `build-and-deploy`       | Push sur `main` → Azure              |
 
----
+## 12. Déploiement
 
-## 🔒 Sécurité
+| Environnement | Plateforme                     | Déclenchement           |
+| ------------- | ------------------------------ | ----------------------- |
+| Local         | Docker Compose                 | `docker compose up -d`  |
+| Staging       | Render.com (branche `staging`) | Auto sur push `staging` |
+| Production    | Azure App Service              | Auto sur push `main`    |
 
-- **Authentification** : Azure AD B2C, tokens JWT Bearer
-- **Autorisation** : Rôles par stock (OWNER / EDITOR / VIEWER / VIEWER_CONTRIBUTOR)
-- Toutes les routes `/api/v1` et `/api/v2` sont protégées
+**Infrastructure production** :
 
----
+- **Azure App Service** : Backend Node.js
+- **Azure MySQL Flexible Server** : Base de données
+- **Azure AD B2C** : Authentification OAuth2
+- **Application Insights** : Monitoring, logs, alertes
 
-## 📚 Documentation
-
-| Ressource                 | Lien                                                                                                         |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| Wiki global (3 repos)     | https://github.com/SandrineCipolla/stockHub_V2_front/wiki                                                    |
-| Guide environnements      | [docs/technical/environments-setup.md](./docs/technical/environments-setup.md)                               |
-| Troubleshooting           | [docs/troubleshooting/docker-postman-azure-issues.md](./docs/troubleshooting/docker-postman-azure-issues.md) |
-| Sessions de développement | [docs/7-SESSIONS.md](./docs/7-SESSIONS.md)                                                                   |
-| ADRs                      | [docs/adr/](./docs/adr/)                                                                                     |
-| OpenAPI spec              | [docs/openapi.yaml](./docs/openapi.yaml)                                                                     |
-
-### ADRs
-
-| #                                                                | Décision                | Date     |
-| ---------------------------------------------------------------- | ----------------------- | -------- |
-| [ADR-001](./docs/adr/ADR-001-migration-ddd-cqrs.md)              | Migration DDD/CQRS      | Nov 2025 |
-| [ADR-002](./docs/adr/ADR-002-choix-prisma-orm.md)                | Prisma vs TypeORM       | Déc 2025 |
-| [ADR-003](./docs/adr/ADR-003-azure-ad-b2c-authentication.md)     | Azure AD B2C            | Déc 2025 |
-| [ADR-004](./docs/adr/ADR-004-tests-value-objects-entities.md)    | TDD Value Objects       | Déc 2025 |
-| [ADR-005](./docs/adr/ADR-005-api-versioning-v2.md)               | Versioning API V2       | Déc 2025 |
-| [ADR-006](./docs/adr/ADR-006-mysql-azure-cloud.md)               | MySQL Azure             | Déc 2025 |
-| [ADR-007](./docs/adr/ADR-007-code-quality-enforcement.md)        | Qualité de code stricte | Déc 2024 |
-| [ADR-008](./docs/adr/ADR-008-typescript-request-type-aliases.md) | Type Aliases Express    | Déc 2025 |
-| [ADR-009](./docs/adr/ADR-009-resource-based-authorization.md)    | Autorisation hybride    | Déc 2025 |
-| [ADR-010](./docs/adr/ADR-010-ci-cd-pipeline-optimization.md)     | Optimisation CI/CD      | Déc 2025 |
+> ⚠️ **Quota Azure F1** : 60 min CPU/jour — `npm run azure:stop` après les tests, `npm run azure:start` avant.
 
 ---
 
