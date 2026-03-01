@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.5.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.4.0...v2.5.0) (2026-03-01)
+
+
+### ✨ Features
+
+* add SSL configuration to database connection options ([2a69ff6](https://github.com/SandrineCipolla/stockhub_back/commit/2a69ff6bfbf4f32e2d977c6e55dae254cba56f29))
+* **ci:** add staging environment with Docker, seed, Render and E2E pipeline ([#89](https://github.com/SandrineCipolla/stockhub_back/issues/89)) ([515bae7](https://github.com/SandrineCipolla/stockhub_back/commit/515bae73a34f8143c573907654d2b35c69525852))
+* **db:** lowercase schema + cascade items [#86](https://github.com/SandrineCipolla/stockhub_back/issues/86) [#78](https://github.com/SandrineCipolla/stockhub_back/issues/78) ([71e68ec](https://github.com/SandrineCipolla/stockhub_back/commit/71e68ecae3f01b84c9bf7f5d1e1efba25f3ef104))
+
+
+### 📚 Documentation
+
+* **readme:** restore business/technical sections + keep new env links and Docker quickstart ([f7b2e88](https://github.com/SandrineCipolla/stockhub_back/commit/f7b2e8865abd2db4b94093cad1dc1fdeeac66721))
+* **readme:** rewrite with multi-environment links, Docker quickstart, Postman envs ([a202ae0](https://github.com/SandrineCipolla/stockhub_back/commit/a202ae0a90219320c38b6befb1ca4129e640a743))
+
+
+### 🔧 Chores
+
+* update Postman collection with all endpoints and OAuth2 auth ([#88](https://github.com/SandrineCipolla/stockhub_back/issues/88)) ([d6b7834](https://github.com/SandrineCipolla/stockhub_back/commit/d6b783453528cb7b1292d3360e5378f5bf1fd2de))
+
 ## [2.4.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.3.0...v2.4.0) (2026-02-27)
 
 ### ✨ Features
