@@ -3,6 +3,7 @@ services:
     name: stockhub-back-staging
     runtime: node
     region: frankfurt
+    nodeVersion: 20
     buildCommand: npm ci && npm run build
     startCommand: node dist/index.js
     healthCheckPath: /api-docs.json
