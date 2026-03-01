@@ -8,7 +8,7 @@ services:
       MYSQL_USER: stockhub
       MYSQL_PASSWORD: stockhub
     ports:
-      - '3307:3306'
+      - '3308:3306'
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -44,12 +44,10 @@ services:
       DATABASE_URL: 'mysql://stockhub:stockhub@db:3306/stockhub'
       ALLOWED_ORIGINS: 'http://localhost:5173,https://localhost:5173'
       VERCEL_PREVIEW_CORS: 'false'
-      # Azure B2C — injectés depuis le shell (export CLIENT_ID=... avant docker-compose up)
-      CLIENT_ID: ${CLIENT_ID}
-      CLIENT_SECRET: ${CLIENT_SECRET:-}
-      AZURE_USE_ROPC_POLICY: ${AZURE_USE_ROPC_POLICY:-false}
-      AZURE_ROPC_CLIENT_ID: ${AZURE_ROPC_CLIENT_ID:-}
-    command: sh -c "npx prisma migrate deploy && npm run start:dev"
+    env_file:
+      - path: .env.docker
+        required: false
+    command: sh -c "npx prisma migrate deploy && npx nodemon --exec 'node -r tsconfig-paths/register -r ts-node/register ./src/index.ts' ./src/index.ts"
 
 volumes:
   mysql_data:
