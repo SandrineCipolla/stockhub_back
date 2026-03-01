@@ -2,7 +2,7 @@
   "info": {
     "name": "Stockhub API V2",
     "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab",
-    "description": "Collection pour tester les endpoints /api/v2.\n\nAuth : Bearer token via {{accessToken}}.\n\nComment obtenir un token :\n1. Collection → Authorization → Get New Access Token\n2. Se connecter avec Azure B2C\n3. Copier la valeur du token (sans 'Bearer')\n4. Coller dans l'environnement actif → variable accessToken\n\nCatégories valides : alimentation | hygiene | artistique",
+    "description": "Collection pour tester les endpoints /api/v2.\n\nAuth : ROPC (username/password → token automatique)\n1. Renseigner username et password dans l'environnement actif\n2. Lancer '🔑 Get Token' → le token est sauvegardé dans accessToken\n3. Toutes les requêtes utilisent automatiquement ce token\n\nCatégories valides : alimentation | hygiene | artistique",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -17,35 +17,54 @@
       "type": "string"
     }
   ],
-  "auth": {
-    "type": "oauth2",
-    "oauth2": [
-      { "key": "tokenName", "value": "StockHub B2C Token", "type": "string" },
-      { "key": "grant_type", "value": "authorization_code", "type": "string" },
-      { "key": "pkce", "value": true, "type": "boolean" },
-      {
-        "key": "authUrl",
-        "value": "https://stockhubb2c.b2clogin.com/stockhubb2c.onmicrosoft.com/B2C_1_signupsignin/oauth2/v2.0/authorize",
-        "type": "string"
-      },
-      {
-        "key": "accessTokenUrl",
-        "value": "https://stockhubb2c.b2clogin.com/stockhubb2c.onmicrosoft.com/B2C_1_signupsignin/oauth2/v2.0/token",
-        "type": "string"
-      },
-      { "key": "clientId", "value": "0dc4acfb-ecde-4f9b-81eb-9af050fb52d9", "type": "string" },
-      {
-        "key": "scope",
-        "value": "openid https://stockhubb2c.onmicrosoft.com/dc30ef57-cdc1-4a3e-aac5-9647506a72ef/FilesRead https://stockhubb2c.onmicrosoft.com/dc30ef57-cdc1-4a3e-aac5-9647506a72ef/FilesWrite offline_access",
-        "type": "string"
-      },
-      { "key": "redirect_uri", "value": "https://oauth.pstmn.io/v1/callback", "type": "string" },
-      { "key": "client_authentication", "value": "body", "type": "string" },
-      { "key": "addTokenTo", "value": "header", "type": "string" },
-      { "key": "tokenType", "value": "Bearer", "type": "string" }
-    ]
-  },
   "item": [
+    {
+      "name": "🔑 Get Token",
+      "request": {
+        "auth": { "type": "noauth" },
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/x-www-form-urlencoded" }],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "grant_type", "value": "password" },
+            { "key": "client_id", "value": "a6a645f0-32fe-42cc-b524-6a3d83bbfb43" },
+            { "key": "username", "value": "{{username}}" },
+            { "key": "password", "value": "{{password}}" },
+            {
+              "key": "scope",
+              "value": "https://stockhubb2c.onmicrosoft.com/a6a645f0-32fe-42cc-b524-6a3d83bbfb43/access_as_user"
+            },
+            { "key": "response_type", "value": "token" }
+          ]
+        },
+        "url": {
+          "raw": "https://stockhubb2c.b2clogin.com/stockhubb2c.onmicrosoft.com/B2C_1_ROPC/oauth2/v2.0/token",
+          "protocol": "https",
+          "host": ["stockhubb2c.b2clogin.com"],
+          "path": ["stockhubb2c.onmicrosoft.com", "B2C_1_ROPC", "oauth2", "v2.0", "token"]
+        },
+        "description": "Obtient un token Azure B2C via ROPC (username/password).\nLe token est automatiquement sauvegardé dans la variable d'environnement accessToken.\n\nPrérequis : renseigner username et password dans l'environnement actif."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json.access_token) {",
+              "  pm.environment.set('accessToken', json.access_token);",
+              "  console.log('✅ Token sauvegardé dans accessToken (expire dans ' + json.expires_in + 's)');",
+              "} else {",
+              "  console.error('❌ Pas de access_token dans la réponse:', JSON.stringify(json));",
+              "}"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
     {
       "name": "Stocks",
       "item": [
