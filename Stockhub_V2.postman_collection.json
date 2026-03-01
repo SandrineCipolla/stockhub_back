@@ -2,41 +2,27 @@
   "info": {
     "name": "Stockhub API V2",
     "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab",
-    "description": "Collection complète pour tester tous les endpoints /api/v2.\n\nAuth OAuth2 PKCE configurée au niveau collection :\n1. Cliquer sur la collection → onglet Authorization\n2. Cliquer Get New Access Token\n3. Se connecter → Use Token\n4. Toutes les requêtes héritent automatiquement du token\n\nCatégories valides pour les stocks : alimentation | hygiene | artistique",
+    "description": "Collection pour tester les endpoints /api/v2.\n\nAuth : Bearer token via {{accessToken}}.\n\nComment obtenir un token :\n1. Collection → Authorization → Get New Access Token\n2. Se connecter avec Azure B2C\n3. Copier la valeur du token (sans 'Bearer')\n4. Coller dans l'environnement actif → variable accessToken\n\nCatégories valides : alimentation | hygiene | artistique",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     {
       "key": "stockId",
       "value": "1",
-      "type": "string",
-      "description": "ID du stock"
+      "type": "string"
     },
     {
       "key": "itemId",
       "value": "1",
-      "type": "string",
-      "description": "ID de l'article"
+      "type": "string"
     }
   ],
   "auth": {
     "type": "oauth2",
     "oauth2": [
-      {
-        "key": "tokenName",
-        "value": "StockHub B2C Token",
-        "type": "string"
-      },
-      {
-        "key": "grant_type",
-        "value": "authorization_code",
-        "type": "string"
-      },
-      {
-        "key": "pkce",
-        "value": true,
-        "type": "boolean"
-      },
+      { "key": "tokenName", "value": "StockHub B2C Token", "type": "string" },
+      { "key": "grant_type", "value": "authorization_code", "type": "string" },
+      { "key": "pkce", "value": true, "type": "boolean" },
       {
         "key": "authUrl",
         "value": "https://stockhubb2c.b2clogin.com/stockhubb2c.onmicrosoft.com/B2C_1_signupsignin/oauth2/v2.0/authorize",
@@ -47,41 +33,16 @@
         "value": "https://stockhubb2c.b2clogin.com/stockhubb2c.onmicrosoft.com/B2C_1_signupsignin/oauth2/v2.0/token",
         "type": "string"
       },
-      {
-        "key": "clientId",
-        "value": "0dc4acfb-ecde-4f9b-81eb-9af050fb52d9",
-        "type": "string"
-      },
+      { "key": "clientId", "value": "0dc4acfb-ecde-4f9b-81eb-9af050fb52d9", "type": "string" },
       {
         "key": "scope",
         "value": "openid https://stockhubb2c.onmicrosoft.com/dc30ef57-cdc1-4a3e-aac5-9647506a72ef/FilesRead https://stockhubb2c.onmicrosoft.com/dc30ef57-cdc1-4a3e-aac5-9647506a72ef/FilesWrite offline_access",
         "type": "string"
       },
-      {
-        "key": "redirect_uri",
-        "value": "https://oauth.pstmn.io/v1/callback",
-        "type": "string"
-      },
-      {
-        "key": "client_authentication",
-        "value": "body",
-        "type": "string"
-      },
-      {
-        "key": "addTokenTo",
-        "value": "header",
-        "type": "string"
-      },
-      {
-        "key": "tokenType",
-        "value": "Bearer",
-        "type": "string"
-      },
-      {
-        "key": "refreshTokenUrl",
-        "value": "https://stockhubb2c.b2clogin.com/stockhubb2c.onmicrosoft.com/B2C_1_signupsignin/oauth2/v2.0/token",
-        "type": "string"
-      }
+      { "key": "redirect_uri", "value": "https://oauth.pstmn.io/v1/callback", "type": "string" },
+      { "key": "client_authentication", "value": "body", "type": "string" },
+      { "key": "addTokenTo", "value": "header", "type": "string" },
+      { "key": "tokenType", "value": "Bearer", "type": "string" }
     ]
   },
   "item": [
@@ -91,37 +52,44 @@
         {
           "name": "GET all stocks",
           "request": {
-            "auth": { "type": "inherit" },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+            },
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v2", "stocks"]
-            },
-            "description": "Retourne tous les stocks de l'utilisateur connecté"
+            }
           },
           "response": []
         },
         {
           "name": "GET stock details",
           "request": {
-            "auth": { "type": "inherit" },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+            },
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v2", "stocks", "{{stockId}}"]
-            },
-            "description": "Retourne les détails d'un stock"
+            }
           },
           "response": []
         },
         {
           "name": "POST create stock",
           "request": {
-            "auth": { "type": "inherit" },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+            },
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
@@ -134,14 +102,17 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "v2", "stocks"]
             },
-            "description": "Crée un nouveau stock.\nCatégories valides : alimentation | hygiene | artistique"
+            "description": "Catégories valides : alimentation | hygiene | artistique"
           },
           "response": []
         },
         {
           "name": "PATCH update stock",
           "request": {
-            "auth": { "type": "inherit" },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+            },
             "method": "PATCH",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
@@ -153,15 +124,17 @@
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v2", "stocks", "{{stockId}}"]
-            },
-            "description": "Met à jour un stock. Tous les champs sont optionnels."
+            }
           },
           "response": []
         },
         {
           "name": "DELETE stock",
           "request": {
-            "auth": { "type": "inherit" },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+            },
             "method": "DELETE",
             "header": [],
             "url": {
@@ -169,7 +142,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "v2", "stocks", "{{stockId}}"]
             },
-            "description": "Supprime un stock et tous ses articles (cascade). Retourne 204 No Content."
+            "description": "Supprime un stock et tous ses articles. Retourne 204."
           },
           "response": []
         }
@@ -181,22 +154,27 @@
         {
           "name": "GET stock items",
           "request": {
-            "auth": { "type": "inherit" },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+            },
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v2", "stocks", "{{stockId}}", "items"]
-            },
-            "description": "Retourne tous les articles d'un stock"
+            }
           },
           "response": []
         },
         {
           "name": "POST add item to stock",
           "request": {
-            "auth": { "type": "inherit" },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+            },
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
@@ -208,15 +186,17 @@
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v2", "stocks", "{{stockId}}", "items"]
-            },
-            "description": "Ajoute un article à un stock existant"
+            }
           },
           "response": []
         },
         {
           "name": "PATCH update item quantity",
           "request": {
-            "auth": { "type": "inherit" },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+            },
             "method": "PATCH",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
@@ -228,8 +208,7 @@
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items/{{itemId}}",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v2", "stocks", "{{stockId}}", "items", "{{itemId}}"]
-            },
-            "description": "Met à jour la quantité d'un article"
+            }
           },
           "response": []
         }
