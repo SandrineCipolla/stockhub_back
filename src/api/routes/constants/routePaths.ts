@@ -20,4 +20,7 @@ export const STOCK_ROUTES = {
 
   /** PATCH - Update item quantity (requires write permission) */
   UPDATE_ITEM_QUANTITY: '/stocks/:stockId/items/:itemId',
+
+  /** DELETE - Remove an item from a stock (requires write permission) */
+  DELETE_ITEM: '/stocks/:stockId/items/:itemId',
 } as const;

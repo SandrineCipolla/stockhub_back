@@ -69,3 +69,5 @@ export type UpdateItemQuantityRequest = AuthenticatedRequest<
 export type UpdateStockRequest = AuthenticatedRequest<StockParams, unknown, UpdateStockBody>;
 
 export type DeleteStockRequest = AuthenticatedRequest<StockParams, unknown, unknown>;
+
+export type DeleteItemRequest = AuthenticatedRequest<StockItemParams, unknown, unknown>;

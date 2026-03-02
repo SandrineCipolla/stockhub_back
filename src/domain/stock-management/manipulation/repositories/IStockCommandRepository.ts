@@ -22,4 +22,5 @@ export interface IStockCommandRepository {
     }
   ): Promise<Stock>;
   deleteStock(stockId: number): Promise<void>;
+  deleteItem(stockId: number, itemId: number): Promise<void>;
 }

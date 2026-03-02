@@ -5,6 +5,7 @@ import { StockControllerManipulation } from '@api/controllers/StockControllerMan
 import {
   AddItemToStockRequest,
   CreateStockRequest,
+  DeleteItemRequest,
   DeleteStockRequest,
   UpdateItemQuantityRequest,
   UpdateStockRequest,
@@ -19,6 +20,7 @@ import { AddItemToStockCommandHandler } from '@domain/stock-management/manipulat
 import { UpdateItemQuantityCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateItemQuantityCommandHandler';
 import { UpdateStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateStockCommandHandler';
 import { DeleteStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/DeleteStockCommandHandler';
+import { DeleteItemCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/DeleteItemCommandHandler';
 import { rootController } from '@utils/logger';
 import { PrismaClient } from '@prisma/client';
 import { authorizeStockRead, authorizeStockWrite } from '@authorization/authorizeMiddleware';
@@ -42,6 +44,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   const updateQuantityHandler = new UpdateItemQuantityCommandHandler(commandRepository);
   const updateStockHandler = new UpdateStockCommandHandler(commandRepository);
   const deleteStockHandler = new DeleteStockCommandHandler(commandRepository);
+  const deleteItemHandler = new DeleteItemCommandHandler(commandRepository);
 
   const manipulationController = new StockControllerManipulation(
     createStockHandler,
@@ -49,6 +52,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
     updateQuantityHandler,
     updateStockHandler,
     deleteStockHandler,
+    deleteItemHandler,
     userService
   );
 
@@ -110,6 +114,16 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   });
 
   logger.info('Routes for PATCH /stocks/:stockId configured');
+
+  router.delete(
+    STOCK_ROUTES.DELETE_ITEM,
+    authorizeStockWrite,
+    async (req, res: express.Response) => {
+      await manipulationController.deleteItem(req as DeleteItemRequest, res);
+    }
+  );
+
+  logger.info('Routes for DELETE /stocks/:stockId/items/:itemId configured (with authorization)');
 
   router.delete('/stocks/:stockId', async (req, res: express.Response) => {
     await manipulationController.deleteStock(req as DeleteStockRequest, res);

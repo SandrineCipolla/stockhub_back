@@ -3,6 +3,7 @@ import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
 import {
   AddItemToStockRequest,
   CreateStockRequest,
+  DeleteItemRequest,
   DeleteStockRequest,
   UpdateItemQuantityRequest,
   UpdateStockRequest,
@@ -18,6 +19,8 @@ import { AddItemToStockCommand } from '@domain/stock-management/manipulation/com
 import { UpdateItemQuantityCommand } from '@domain/stock-management/manipulation/commands(Request)/UpdateItemQuantityCommand';
 import { UpdateStockCommand } from '@domain/stock-management/manipulation/commands(Request)/UpdateStockCommand';
 import { DeleteStockCommand } from '@domain/stock-management/manipulation/commands(Request)/DeleteStockCommand';
+import { DeleteItemCommand } from '@domain/stock-management/manipulation/commands(Request)/DeleteItemCommand';
+import { DeleteItemCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/DeleteItemCommandHandler';
 import { HTTP_CODE_CREATED, HTTP_CODE_OK } from '@utils/httpCodes';
 import { CustomError, sendError } from '@core/errors';
 import { rootMain } from '@utils/logger';
@@ -30,6 +33,7 @@ export class StockControllerManipulation {
     private readonly updateQuantityHandler: UpdateItemQuantityCommandHandler,
     private readonly updateStockHandler: UpdateStockCommandHandler,
     private readonly deleteStockHandler: DeleteStockCommandHandler,
+    private readonly deleteItemHandler: DeleteItemCommandHandler,
     private readonly userService: UserService
   ) {}
 
@@ -142,6 +146,27 @@ export class StockControllerManipulation {
       rootMain.info(`updateStock OID=${OID} stockId=${stockId}`);
 
       res.status(HTTP_CODE_OK).json(stock);
+    } catch (err) {
+      rootException(err as Error);
+      sendError(res, err as CustomError);
+    }
+  }
+
+  public async deleteItem(req: DeleteItemRequest, res: express.Response) {
+    try {
+      const OID = this.getValidatedOID(req, res);
+      if (!OID) return;
+
+      const stockId = Number(req.params.stockId);
+      const itemId = Number(req.params.itemId);
+
+      const command = new DeleteItemCommand(stockId, itemId);
+
+      await this.deleteItemHandler.handle(command);
+
+      rootMain.info(`deleteItem OID=${OID} stockId=${stockId} itemId=${itemId}`);
+
+      res.status(204).send();
     } catch (err) {
       rootException(err as Error);
       sendError(res, err as CustomError);
