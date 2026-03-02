@@ -71,9 +71,9 @@ describe('StockVisualizationService', () => {
       it('should return the stock with 0 items and 0 quantity', async () => {
         const result = await service.getStockDetails(1, 1);
         expect(result).toEqual({
-          ID: 1,
-          LABEL: 'Stock 1',
-          DESCRIPTION: 'Description 1',
+          id: 1,
+          label: 'Stock 1',
+          description: 'Description 1',
           category: 'alimentation',
         });
       });
@@ -118,10 +118,10 @@ describe('StockVisualizationService', () => {
       it('should return an array of items', async () => {
         const result = await service.getStockItems(1, 1);
         expect(result.length).toBe(2);
-        expect(result[0].LABEL).toBe('Item 1');
-        expect(result[0].QUANTITY).toBe(5);
-        expect(result[1].LABEL).toBe('Item 2');
-        expect(result[1].QUANTITY).toBe(10);
+        expect(result[0].label).toBe('Item 1');
+        expect(result[0].quantity).toBe(5);
+        expect(result[1].label).toBe('Item 2');
+        expect(result[1].quantity).toBe(10);
       });
     });
   });

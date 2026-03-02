@@ -4,14 +4,14 @@ export class StockItem {
   private innerQuantity: Quantity;
 
   constructor(
-    public ID: number,
-    public LABEL: string,
-    public QUANTITY: number,
-    public DESCRIPTION: string,
+    public id: number,
+    public label: string,
+    public quantity: number,
+    public description: string,
     public minimumStock: number = 1,
-    public STOCK_ID: number
+    public stockId: number
   ) {
-    this.innerQuantity = new Quantity(QUANTITY);
+    this.innerQuantity = new Quantity(quantity);
   }
 
   isOutOfStock(): boolean {

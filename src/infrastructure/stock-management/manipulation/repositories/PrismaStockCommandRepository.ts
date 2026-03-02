@@ -28,9 +28,9 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
           userId: userId,
           items: {
             create: stock.items.map(item => ({
-              label: item.LABEL,
-              description: item.DESCRIPTION,
-              quantity: item.QUANTITY,
+              label: item.label,
+              description: item.description,
+              quantity: item.quantity,
               minimumStock: item.minimumStock,
             })),
           },

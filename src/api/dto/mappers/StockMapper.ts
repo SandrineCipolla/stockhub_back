@@ -71,12 +71,12 @@ export class StockMapper {
    */
   static itemToDTO(item: StockItem): StockItemDTO {
     return {
-      id: item.ID,
-      label: item.LABEL,
-      description: item.DESCRIPTION,
-      quantity: item.QUANTITY,
+      id: item.id,
+      label: item.label,
+      description: item.description,
+      quantity: item.quantity,
       minimumStock: item.minimumStock,
-      stockId: item.STOCK_ID,
+      stockId: item.stockId,
     };
   }
 

@@ -24,9 +24,9 @@ export class StockVisualizationService {
       throw new Error('Stock not found');
     }
     return {
-      ID: stock.id,
-      LABEL: stock.getLabelValue(),
-      DESCRIPTION: stock.getDescriptionValue(),
+      id: stock.id,
+      label: stock.getLabelValue(),
+      description: stock.getDescriptionValue(),
       category: stock.category,
     };
   }

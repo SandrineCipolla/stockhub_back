@@ -127,8 +127,8 @@ describe('Stock', () => {
 
         expect(stock.items).toHaveLength(1);
         expect(stock.items[0]).toBe(item);
-        expect(item.LABEL).toBe('Tomates');
-        expect(item.QUANTITY).toBe(10);
+        expect(item.label).toBe('Tomates');
+        expect(item.quantity).toBe(10);
         expect(item.minimumStock).toBe(3);
       });
     });
@@ -185,9 +185,9 @@ describe('Stock', () => {
 
         const item = stock.addItem(createTestItem());
 
-        stock.updateItemQuantity(item.ID, 25);
+        stock.updateItemQuantity(item.id, 25);
 
-        expect(item.QUANTITY).toBe(25);
+        expect(item.quantity).toBe(25);
       });
     });
 
@@ -197,7 +197,7 @@ describe('Stock', () => {
 
         const item = stock.addItem(createTestItem());
 
-        expect(() => stock.updateItemQuantity(item.ID, -5)).toThrow('Quantity cannot be negative');
+        expect(() => stock.updateItemQuantity(item.id, -5)).toThrow('Quantity cannot be negative');
       });
     });
 
@@ -235,8 +235,8 @@ describe('Stock', () => {
         const lowStockItems = stock.getLowStockItems();
 
         expect(lowStockItems).toHaveLength(2);
-        expect(lowStockItems.map(item => item.LABEL)).toContain('Tomates');
-        expect(lowStockItems.map(item => item.LABEL)).toContain('Pommes');
+        expect(lowStockItems.map(item => item.label)).toContain('Tomates');
+        expect(lowStockItems.map(item => item.label)).toContain('Pommes');
       });
     });
   });
