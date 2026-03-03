@@ -18,6 +18,7 @@ describe('UpdateItemQuantityCommandHandler', () => {
           updateItemQuantity: jest.fn().mockResolvedValue(mockStock),
           updateStock: jest.fn(),
           deleteStock: jest.fn(),
+          deleteItem: jest.fn(),
         };
 
         const handler = new UpdateItemQuantityCommandHandler(mockRepository);
@@ -42,6 +43,7 @@ describe('UpdateItemQuantityCommandHandler', () => {
           updateItemQuantity: jest.fn().mockResolvedValue(mockStock),
           updateStock: jest.fn(),
           deleteStock: jest.fn(),
+          deleteItem: jest.fn(),
         };
 
         const handler = new UpdateItemQuantityCommandHandler(mockRepository);

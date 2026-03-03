@@ -18,6 +18,7 @@ describe('AddItemToStockCommandHandler', () => {
           updateItemQuantity: jest.fn(),
           updateStock: jest.fn(),
           deleteStock: jest.fn(),
+          deleteItem: jest.fn(),
         };
 
         const handler = new AddItemToStockCommandHandler(mockRepository);

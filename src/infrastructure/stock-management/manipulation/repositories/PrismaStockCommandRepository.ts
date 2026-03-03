@@ -278,6 +278,31 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
     }
   }
 
+  async deleteItem(stockId: number, itemId: number): Promise<void> {
+    let success = false;
+
+    try {
+      await this.prisma.item.delete({
+        where: { id: itemId, stockId: stockId },
+      });
+
+      success = true;
+    } catch (error) {
+      rootException(error as Error);
+      throw error;
+    } finally {
+      rootDependency({
+        name: DEPENDENCY_NAME,
+        data: `prisma.item.delete({ where: {id: ${itemId}, stockId: ${stockId}} })`,
+        duration: 0,
+        success: success,
+        resultCode: 0,
+        target: DEPENDENCY_TARGET,
+        dependencyTypeName: DEPENDENCY_TYPE,
+      } as DependencyTelemetry);
+    }
+  }
+
   private normalizeCategory(category: string | StockCategory): StockCategory {
     const lowerCategory = category.toLowerCase();
     const categoryValues = Object.values(StockCategory);
