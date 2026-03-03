@@ -59,7 +59,7 @@ export class Stock {
   }
 
   getTotalQuantity(): number {
-    return this.items.reduce((sum, item) => sum + (item.QUANTITY ?? 0), 0);
+    return this.items.reduce((sum, item) => sum + (item.quantity ?? 0), 0);
   }
 
   addItem(params: {
@@ -77,7 +77,7 @@ export class Stock {
     }
 
     const existingItem = this.items.find(
-      item => item.LABEL.toLowerCase() === params.label.toLowerCase()
+      item => item.label.toLowerCase() === params.label.toLowerCase()
     );
 
     if (existingItem) {
@@ -104,13 +104,13 @@ export class Stock {
       throw new Error('Quantity cannot be negative');
     }
 
-    const item = this.items.find(i => i.ID === itemId);
+    const item = this.items.find(i => i.id === itemId);
 
     if (!item) {
       throw new Error(`Item with ID ${itemId} not found in this stock`);
     }
 
-    item.QUANTITY = quantity;
+    item.quantity = quantity;
   }
 
   getLowStockItems(): StockItem[] {
@@ -122,7 +122,7 @@ export class Stock {
   }
 
   removeItem(itemId: number): void {
-    const index = this.items.findIndex(i => i.ID === itemId);
+    const index = this.items.findIndex(i => i.id === itemId);
 
     if (index === -1) {
       throw new Error(`Item with ID ${itemId} not found in this stock`);
@@ -132,6 +132,6 @@ export class Stock {
   }
 
   getItemById(itemId: number): StockItem | undefined {
-    return this.items.find(i => i.ID === itemId);
+    return this.items.find(i => i.id === itemId);
   }
 }

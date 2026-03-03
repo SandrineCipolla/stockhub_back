@@ -123,9 +123,8 @@ test.describe('Stock Management API E2E Workflow with Azure AD', () => {
     });
 
     const items = await getItemsResponse.json();
-    // V2 returns lowercase field names
-    const apple = items.find((item: any) => (item.label || item.LABEL) === 'Pommes Bio');
-    itemId1 = apple.id || apple.ID;
+    const apple = items.find((item: any) => item.label === 'Pommes Bio');
+    itemId1 = apple.id;
   });
 
   test('Step 3: Add second item to stock (low stock)', async ({ request }) => {
@@ -158,8 +157,7 @@ test.describe('Stock Management API E2E Workflow with Azure AD', () => {
     });
 
     const items = await getItemsResponse.json();
-    // V2 returns lowercase field names
-    items.find((item: any) => (item.label || item.LABEL) === 'Bananes');
+    items.find((item: any) => item.label === 'Bananes');
   });
 
   test('Step 4: Visualize stock and verify items', async ({ request }) => {
@@ -177,18 +175,14 @@ test.describe('Stock Management API E2E Workflow with Azure AD', () => {
     expect(Array.isArray(items)).toBe(true);
     expect(items).toHaveLength(2);
 
-    // V2 returns lowercase field names
-    const apple = items.find((item: any) => (item.label || item.LABEL) === 'Pommes Bio');
-    const banana = items.find((item: any) => (item.label || item.LABEL) === 'Bananes');
+    const apple = items.find((item: any) => item.label === 'Pommes Bio');
+    const banana = items.find((item: any) => item.label === 'Bananes');
 
     expect(apple).toBeDefined();
     expect(banana).toBeDefined();
 
-    const appleQty = apple.quantity || apple.QUANTITY;
-    const bananaQty = banana.quantity || banana.QUANTITY;
-
-    expect(appleQty).toBe(50);
-    expect(bananaQty).toBe(5);
+    expect(apple.quantity).toBe(50);
+    expect(banana.quantity).toBe(5);
   });
 
   test('Step 5: Update item quantity', async ({ request }) => {
