@@ -21,10 +21,16 @@ const activeClientID =
     ? process.env.AZURE_ROPC_CLIENT_ID
     : authConfig.credentials.clientID;
 
+// Accept both PKCE and ROPC audiences when ROPC is enabled (staging + E2E)
+const validAudiences: string | string[] =
+  useROPC && process.env.AZURE_ROPC_CLIENT_ID && authConfig.credentials.clientID
+    ? [authConfig.credentials.clientID, process.env.AZURE_ROPC_CLIENT_ID]
+    : (activeClientID ?? '');
+
 export const authConfigoptions: AuthConfigOptions = {
   identityMetadata: `https://${authConfig.metadata.b2cDomain}/${authConfig.credentials.tenantName}/${activePolicy}/${authConfig.metadata.version}/${authConfig.metadata.discovery}`,
   clientID: activeClientID,
-  audience: activeClientID,
+  audience: validAudiences,
   policyName: activePolicy,
   passwordResetPolicy: 'B2C_1_passwordreset',
   isB2C: authConfig.settings.isB2C,
