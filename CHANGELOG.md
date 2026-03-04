@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.5.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.5.0...v2.5.1) (2026-03-04)
+
+
+### 🐛 Bug Fixes
+
+* **auth:** accept both PKCE and ROPC audiences when ROPC policy is enabled ([#95](https://github.com/SandrineCipolla/stockhub_back/issues/95)) ([da2338d](https://github.com/SandrineCipolla/stockhub_back/commit/da2338dbb8a4b36bff503e615c4584d26db983bc))
+
+
+### 📚 Documentation
+
+* add staging/Render troubleshooting guide ([#97](https://github.com/SandrineCipolla/stockhub_back/issues/97)) ([082d645](https://github.com/SandrineCipolla/stockhub_back/commit/082d64504f36b034402e3594544cb473db70056a))
+
 ## [2.5.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.4.0...v2.5.0) (2026-03-03)
 
 ### ✨ Features
