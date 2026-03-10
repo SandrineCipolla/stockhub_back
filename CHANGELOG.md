@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.5.2](https://github.com/SandrineCipolla/stockhub_back/compare/v2.5.1...v2.5.2) (2026-03-10)
+
+
+### 🐛 Bug Fixes
+
+* **docs:** update openapi version to 2.5.1 and add RGPD link in README ([b30dae5](https://github.com/SandrineCipolla/stockhub_back/commit/b30dae585b6e26bf85fce1ed1ead2af7d178c6f5))
+
+
+### 💄 Styles
+
+* format CHANGELOG and VERIFICATION_RESULTS with prettier ([fed4a33](https://github.com/SandrineCipolla/stockhub_back/commit/fed4a335dd12fa6a510d88a4cd270b9dd5e19a61))
+
 ## [2.5.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.5.0...v2.5.1) (2026-03-10)
 
 ### 🐛 Bug Fixes
