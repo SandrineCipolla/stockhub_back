@@ -136,6 +136,7 @@ TDD appliqué sur `Quantity`, `StockItem`, `Stock`, puis `StockVisualizationServ
 
 - **Authentification** : Azure AD B2C avec tokens JWT Bearer (routes V1 et V2)
 - **Autorisation** : Système hybride basé sur les ressources (voir [ADR-009](./docs/adr/ADR-009-resource-based-authorization.md))
+- **RGPD** : Politique de protection des données personnelles → [docs/rgpd.md](./docs/rgpd.md)
   - Groupes familiaux + rôles par stock (OWNER/EDITOR/VIEWER/VIEWER_CONTRIBUTOR)
   - Workflow de suggestions pour collaboration sécurisée
 
