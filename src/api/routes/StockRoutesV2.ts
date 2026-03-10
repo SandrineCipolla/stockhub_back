@@ -109,11 +109,11 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   logger.info('Routes for PATCH /stocks/:stockId/items/:itemId configured (with authorization)');
 
-  router.patch('/stocks/:stockId', async (req, res: express.Response) => {
+  router.patch('/stocks/:stockId', authorizeStockWrite, async (req, res: express.Response) => {
     await manipulationController.updateStock(req as UpdateStockRequest, res);
   });
 
-  logger.info('Routes for PATCH /stocks/:stockId configured');
+  logger.info('Routes for PATCH /stocks/:stockId configured (with authorization)');
 
   router.delete(
     STOCK_ROUTES.DELETE_ITEM,
@@ -125,11 +125,11 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   logger.info('Routes for DELETE /stocks/:stockId/items/:itemId configured (with authorization)');
 
-  router.delete('/stocks/:stockId', async (req, res: express.Response) => {
+  router.delete('/stocks/:stockId', authorizeStockWrite, async (req, res: express.Response) => {
     await manipulationController.deleteStock(req as DeleteStockRequest, res);
   });
 
-  logger.info('Routes for DELETE /stocks/:stockId configured');
+  logger.info('Routes for DELETE /stocks/:stockId configured (with authorization)');
 
   return router;
 };
