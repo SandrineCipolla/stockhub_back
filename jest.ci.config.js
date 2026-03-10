@@ -37,4 +37,12 @@ module.exports = {
     '!<rootDir>/tests/**', // Exclure les tests d'intégration
     '!<rootDir>/src/**/*.d.ts', // Exclure les fichiers de types (déclaration .d.ts)
   ],
+  coverageThreshold: {
+    global: {
+      statements: 80,
+      branches: 80,
+      functions: 80,
+      lines: 80,
+    },
+  },
 };
