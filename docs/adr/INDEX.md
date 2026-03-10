@@ -27,6 +27,8 @@ Un ADR (Architecture Decision Record) est un document qui capture une **décisio
 | [ADR-008](./ADR-008-typescript-request-type-aliases.md) | Type Aliases pour requêtes Express           | 2025-12-26 | ✅ Accepté |
 | [ADR-009](./ADR-009-resource-based-authorization.md)    | Système d'autorisation hybride (Phase 1 ✅)  | 2025-12-27 | ✅ Accepté |
 | [ADR-010](./ADR-010-ci-cd-pipeline-optimization.md)     | Optimisation pipeline CI/CD GitHub Actions   | 2025-12-27 | ✅ Accepté |
+| [ADR-011](./ADR-011-staging-render-aiven.md)            | Staging Render.com + Aiven MySQL             | 2026-01-15 | ✅ Accepté |
+| [ADR-012](./ADR-012-upgrade-node-22.md)                 | Migration vers Node.js 22 LTS                | 2026-03-10 | ✅ Accepté |
 
 ## 📖 Comment lire un ADR ?
 
@@ -122,5 +124,5 @@ Si une décision change :
 
 ---
 
-**Dernière mise à jour** : 2026-01-27
+**Dernière mise à jour** : 2026-03-10
 **Mainteneur** : Équipe StockHub Backend
