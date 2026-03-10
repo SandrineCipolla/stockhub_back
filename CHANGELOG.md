@@ -1,5 +1,33 @@
 # Changelog
 
+## [2.5.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.5.0...v2.5.1) (2026-03-10)
+
+
+### 🐛 Bug Fixes
+
+* **auth:** accept both PKCE and ROPC audiences when ROPC policy is enabled ([#95](https://github.com/SandrineCipolla/stockhub_back/issues/95)) ([da2338d](https://github.com/SandrineCipolla/stockhub_back/commit/da2338dbb8a4b36bff503e615c4584d26db983bc))
+* **security:** add authorizeStockWrite on PATCH and DELETE stock routes (OWASP A01) ([#106](https://github.com/SandrineCipolla/stockhub_back/issues/106)) ([a59de05](https://github.com/SandrineCipolla/stockhub_back/commit/a59de05c77db5104342d0521ea20e64a7ff274da))
+* **tests:** add coverageThreshold 80% to jest.ci.config.js and update README ([#107](https://github.com/SandrineCipolla/stockhub_back/issues/107)) ([9f3e77e](https://github.com/SandrineCipolla/stockhub_back/commit/9f3e77ed22ed11c272445ec5772f98c5ef87a4bd)), closes [#99](https://github.com/SandrineCipolla/stockhub_back/issues/99)
+
+
+### ♻️ Code Refactoring
+
+* **domain:** extract StockCategory enum to domain layer ([#111](https://github.com/SandrineCipolla/stockhub_back/issues/111)) ([0e6bc20](https://github.com/SandrineCipolla/stockhub_back/commit/0e6bc20740add84a0014be81e954cac4244b7521)), closes [#103](https://github.com/SandrineCipolla/stockhub_back/issues/103)
+
+
+### 📚 Documentation
+
+* add .env.example for local development setup ([#108](https://github.com/SandrineCipolla/stockhub_back/issues/108)) ([17ef5f5](https://github.com/SandrineCipolla/stockhub_back/commit/17ef5f517f49b61666c37886054e0d369a521d54)), closes [#100](https://github.com/SandrineCipolla/stockhub_back/issues/100)
+* add RGPD data protection policy document ([#110](https://github.com/SandrineCipolla/stockhub_back/issues/110)) ([2913a81](https://github.com/SandrineCipolla/stockhub_back/commit/2913a813357a63ae88f5c62e587578b83b83f4dd)), closes [#102](https://github.com/SandrineCipolla/stockhub_back/issues/102)
+* add staging/Render troubleshooting guide ([#97](https://github.com/SandrineCipolla/stockhub_back/issues/97)) ([082d645](https://github.com/SandrineCipolla/stockhub_back/commit/082d64504f36b034402e3594544cb473db70056a))
+* **adr:** add ADR-011 (Render+Aiven staging) and ADR-012 (Node.js 22) ([#112](https://github.com/SandrineCipolla/stockhub_back/issues/112)) ([40ec503](https://github.com/SandrineCipolla/stockhub_back/commit/40ec5032e8037dcaa95106628cb5e289b68224ca)), closes [#104](https://github.com/SandrineCipolla/stockhub_back/issues/104)
+* **openapi:** add 3 missing endpoints to OpenAPI spec ([#109](https://github.com/SandrineCipolla/stockhub_back/issues/109)) ([07d4ebb](https://github.com/SandrineCipolla/stockhub_back/commit/07d4ebbc23e1ad44e9e26aeb2b06baea927a2c4d)), closes [#101](https://github.com/SandrineCipolla/stockhub_back/issues/101)
+
+
+### 🔧 Chores
+
+* **ci:** upgrade to Node 22 in Dockerfile, CI workflow and add .nvmrc ([#105](https://github.com/SandrineCipolla/stockhub_back/issues/105)) ([efa49cf](https://github.com/SandrineCipolla/stockhub_back/commit/efa49cfd995526db73239265f63323e72c8c4ce2))
+
 ## [2.5.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.4.0...v2.5.0) (2026-03-03)
 
 ### ✨ Features
