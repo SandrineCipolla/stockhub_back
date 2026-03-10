@@ -2,9 +2,10 @@
 
 ![CI/CD Pipeline](https://github.com/sandrineCipolla/stockhub_back/actions/workflows/main_stockhub-back.yml/badge.svg)
 ![Security Audit](https://github.com/SandrineCipolla/stockhub_back/actions/workflows/security-audit.yml/badge.svg)
-![Version](https://img.shields.io/badge/version-2.4.0-blue)
-![Node](https://img.shields.io/badge/node-20.x-brightgreen)
+![Version](https://img.shields.io/badge/version-2.5.0-blue)
+![Node](https://img.shields.io/badge/node-22.x-brightgreen)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
+![Coverage](https://img.shields.io/badge/coverage-92%25-brightgreen)
 
 StockHub est une application web conçue pour aider les familles à gérer leurs stocks de produits (alimentaires, artistiques...).
 Elle permet aux utilisateurs de visualiser l'état des stocks et de les mettre à jour facilement.
@@ -249,7 +250,7 @@ npx prisma migrate deploy # Appliquer les migrations
 npx prisma studio        # Interface visuelle DB
 
 # Tests
-npm run test:unit        # 142 tests unitaires
+npm run test:unit        # 145 tests unitaires
 npm run test:integration # Tests d'intégration (TestContainers)
 npm run test:e2e         # Tests E2E Playwright
 npm run test:coverage    # Rapport de couverture
@@ -267,6 +268,9 @@ npm run azure:stop       # Arrêter l'app Azure après les tests
 ## 8. Tests
 
 ### Unitaires (TDD)
+
+**145 tests — couverture globale : 92% statements | 82% branches | 94% functions**
+Seuil minimum configuré : 80% sur toutes les métriques (`jest.ci.config.js`)
 
 - `Quantity` : valeurs invalides interdites
 - `StockItem` : `isOutOfStock()`, `isLowStock()`
