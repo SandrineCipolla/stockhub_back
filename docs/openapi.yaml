@@ -170,6 +170,76 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+    patch:
+      summary: Modifier un stock
+      description: Met à jour le label, la description ou la catégorie d'un stock existant
+      tags:
+        - Stock Manipulation (WRITE)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStockBody'
+            example:
+              label: Stock Aquarelle Mise à jour
+              description: Stock de peinture aquarelle pour loisirs créatifs
+              category: artistique
+      responses:
+        '200':
+          description: Stock modifié avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockDTO'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      summary: Supprimer un stock
+      description: Supprime un stock et tous ses items (cascade delete)
+      tags:
+        - Stock Manipulation (WRITE)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '204':
+          description: Stock supprimé avec succès (pas de contenu retourné)
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
   /api/v2/stocks/{stockId}/items:
     get:
       summary: Récupérer les items d'un stock
@@ -323,6 +393,40 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      summary: Supprimer un item d'un stock
+      description: Supprime un item spécifique d'un stock
+      tags:
+        - Stock Manipulation (WRITE)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+        - name: itemId
+          in: path
+          required: true
+          description: Identifiant unique de l'item
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '204':
+          description: Item supprimé avec succès (pas de contenu retourné)
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '404':
           $ref: '#/components/responses/NotFoundError'
         '500':
@@ -497,6 +601,29 @@ components:
           example: 1
           minimum: 0
 
+    UpdateStockBody:
+      type: object
+      description: Tous les champs sont optionnels — seuls les champs fournis sont mis à jour
+      properties:
+        label:
+          type: string
+          description: Nouveau nom du stock
+          example: Stock Aquarelle Mise à jour
+          minLength: 1
+        description:
+          type: string
+          description: Nouvelle description du stock
+          example: Stock de peinture aquarelle pour loisirs créatifs
+          minLength: 1
+        category:
+          type: string
+          description: Nouvelle catégorie du stock
+          enum:
+            - alimentation
+            - hygiene
+            - artistique
+          example: artistique
+
     UpdateItemQuantityBody:
       type: object
       required:
@@ -541,6 +668,16 @@ components:
           example:
             error: Not Found
             details: Stock with ID 999 does not exist
+
+    ForbiddenError:
+      description: Accès refusé - droits insuffisants sur ce stock
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: Forbidden
+            details: You do not have write access to this stock
 
     BadRequestError:
       description: Requête invalide - données manquantes ou incorrectes
