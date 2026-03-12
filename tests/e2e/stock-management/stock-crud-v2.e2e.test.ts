@@ -38,7 +38,7 @@ describe('Stock API V2', () => {
           data: {
             label: 'E2E V2 Stock',
             description: 'Stock créé par le test API V2',
-            category: 'test',
+            category: 'alimentation',
           },
         });
 
@@ -52,7 +52,7 @@ describe('Stock API V2', () => {
     describe('when not authenticated', () => {
       it('returns 401 Unauthorized', async ({ request }) => {
         const response = await request.post(`${apiV2}/stocks`, {
-          data: { label: 'No Auth Stock', category: 'test' },
+          data: { label: 'No Auth Stock', category: 'alimentation' },
         });
         expect(response.status()).toBe(401);
       });
