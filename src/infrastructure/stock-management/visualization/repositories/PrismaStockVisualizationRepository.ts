@@ -19,21 +19,55 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
   async getAllStocks(userId: number): Promise<Stock[]> {
     const stocks = await this.prisma.stock.findMany({
       where: { userId: userId },
+      include: { items: true },
     });
     return stocks.map(
-      (stock: PrismaStock) =>
-        new Stock(stock.id, stock.label, stock.description ?? '', stock.category)
+      (stock: PrismaStock & { items: PrismaItem[] }) =>
+        new Stock(
+          stock.id,
+          stock.label,
+          stock.description ?? '',
+          stock.category,
+          stock.items.map(
+            item =>
+              new StockItem(
+                item.id,
+                item.label ?? '',
+                item.quantity ?? 0,
+                item.description ?? '',
+                item.minimumStock,
+                item.stockId ?? stock.id
+              )
+          )
+        )
     );
   }
 
   async getStockDetails(stockId: number, userId: number): Promise<Stock | null> {
     const stock = await this.prisma.stock.findFirst({
       where: { id: stockId, userId: userId },
+      include: { items: true },
     });
     if (!stock) {
       return null;
     }
-    return new Stock(stock.id, stock.label, stock.description ?? '', stock.category);
+    return new Stock(
+      stock.id,
+      stock.label,
+      stock.description ?? '',
+      stock.category,
+      stock.items.map(
+        item =>
+          new StockItem(
+            item.id,
+            item.label ?? '',
+            item.quantity ?? 0,
+            item.description ?? '',
+            item.minimumStock,
+            item.stockId ?? stock.id
+          )
+      )
+    );
   }
 
   async getStockItems(stockId: number, userId: number): Promise<StockItem[]> {

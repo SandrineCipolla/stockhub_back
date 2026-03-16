@@ -1,6 +1,2 @@
-export interface StockWithoutItems {
-  id: number;
-  label: string;
-  description: string;
-  category: string;
-}
+// Deprecated: use StockSummaryDto from StockSummary.ts
+export type { StockSummaryDto as StockWithoutItems } from './StockSummary';

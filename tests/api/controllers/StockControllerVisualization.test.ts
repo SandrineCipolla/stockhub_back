@@ -59,6 +59,9 @@ describe('StockControllerVisualization', () => {
             label: 'Stock 1',
             description: 'Description 1',
             category: 'alimentation',
+            totalItems: 0,
+            totalQuantity: 0,
+            criticalItemsCount: 0,
           },
         ];
         mockStockService.getAllStocks.mockResolvedValue(mockStocks);
@@ -92,6 +95,10 @@ describe('StockControllerVisualization', () => {
           label: 'Stock 1',
           description: 'Description 1',
           category: 'alimentation',
+          totalItems: 0,
+          totalQuantity: 0,
+          criticalItemsCount: 0,
+          items: [],
         };
         mockStockService.getStockDetails.mockResolvedValue(mockStock);
 
