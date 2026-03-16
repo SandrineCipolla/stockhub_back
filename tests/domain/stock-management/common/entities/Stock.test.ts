@@ -241,6 +241,29 @@ describe('Stock', () => {
     });
   });
 
+  describe('getCriticalItemsCount()', () => {
+    describe('when all items are optimal', () => {
+      it('should return 0', () => {
+        const stock = new Stock(1, 'Stock 1', 'Description 1', 'alimentation', [
+          new StockItem(1, 'Item 1', 10, '', 3, 1),
+          new StockItem(2, 'Item 2', 20, '', 3, 1),
+        ]);
+        expect(stock.getCriticalItemsCount()).toBe(0);
+      });
+    });
+
+    describe('when some items are critical or out-of-stock', () => {
+      it('should count critical and out-of-stock items', () => {
+        const stock = new Stock(1, 'Stock 1', 'Description 1', 'alimentation', [
+          new StockItem(1, 'Item 1', 0, '', 3, 1), // out-of-stock
+          new StockItem(2, 'Item 2', 2, '', 3, 1), // critical (qty <= min)
+          new StockItem(3, 'Item 3', 10, '', 3, 1), // optimal
+        ]);
+        expect(stock.getCriticalItemsCount()).toBe(2);
+      });
+    });
+  });
+
   describe('hasLowStockItems()', () => {
     describe('when there are no low stock items', () => {
       it('should return false', () => {

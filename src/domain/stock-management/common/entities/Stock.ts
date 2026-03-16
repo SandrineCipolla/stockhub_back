@@ -62,6 +62,13 @@ export class Stock {
     return this.items.reduce((sum, item) => sum + (item.quantity ?? 0), 0);
   }
 
+  getCriticalItemsCount(): number {
+    return this.items.filter(item => {
+      const status = item.getStatus();
+      return status === 'critical' || status === 'out-of-stock';
+    }).length;
+  }
+
   addItem(params: {
     label: string;
     description?: string;

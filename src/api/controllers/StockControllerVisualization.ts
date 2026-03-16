@@ -53,7 +53,7 @@ export class StockControllerVisualization {
       const stock = await this.stockVisualizationService.getStockDetails(stockId, userID.value);
 
       rootMain.info(`getStockDetails OID=${OID} stockId=${stockId}`);
-      res.status(HTTP_CODE_OK).json([stock]);
+      res.status(HTTP_CODE_OK).json(stock);
     } catch (err: unknown) {
       rootException(err as Error);
       sendError(res, err as CustomError);
