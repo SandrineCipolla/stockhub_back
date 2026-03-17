@@ -5,17 +5,21 @@ import {
   CreateStockRequest,
   DeleteItemRequest,
   DeleteStockRequest,
+  UpdateItemBody,
   UpdateItemQuantityRequest,
+  UpdateItemRequest,
   UpdateStockRequest,
 } from '@api/types/StockRequestTypes';
 import { UserService } from '@services/userService';
 import { CreateStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/CreateStockCommandHandler';
 import { AddItemToStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/AddItemToStockCommandHandler';
+import { UpdateItemCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateItemCommandHandler';
 import { UpdateItemQuantityCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateItemQuantityCommandHandler';
 import { UpdateStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateStockCommandHandler';
 import { DeleteStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/DeleteStockCommandHandler';
 import { CreateStockCommand } from '@domain/stock-management/manipulation/commands(Request)/CreateStockCommand';
 import { AddItemToStockCommand } from '@domain/stock-management/manipulation/commands(Request)/AddItemToStockCommand';
+import { UpdateItemCommand } from '@domain/stock-management/manipulation/commands(Request)/UpdateItemCommand';
 import { UpdateItemQuantityCommand } from '@domain/stock-management/manipulation/commands(Request)/UpdateItemQuantityCommand';
 import { UpdateStockCommand } from '@domain/stock-management/manipulation/commands(Request)/UpdateStockCommand';
 import { DeleteStockCommand } from '@domain/stock-management/manipulation/commands(Request)/DeleteStockCommand';
@@ -31,6 +35,7 @@ export class StockControllerManipulation {
     private readonly createStockHandler: CreateStockCommandHandler,
     private readonly addItemHandler: AddItemToStockCommandHandler,
     private readonly updateQuantityHandler: UpdateItemQuantityCommandHandler,
+    private readonly updateItemHandler: UpdateItemCommandHandler,
     private readonly updateStockHandler: UpdateStockCommandHandler,
     private readonly deleteStockHandler: DeleteStockCommandHandler,
     private readonly deleteItemHandler: DeleteItemCommandHandler,
@@ -123,6 +128,35 @@ export class StockControllerManipulation {
       rootMain.info(
         `updateItemQuantity OID=${OID} stockId=${stockId} itemId=${itemId} newQuantity=${quantity}`
       );
+
+      res.status(HTTP_CODE_OK).json(stock);
+    } catch (err) {
+      rootException(err as Error);
+      sendError(res, err as CustomError);
+    }
+  }
+
+  public async updateItem(req: UpdateItemRequest, res: express.Response) {
+    try {
+      const OID = this.getValidatedOID(req, res);
+      if (!OID) return;
+
+      const stockId = Number(req.params.stockId);
+      const itemId = Number(req.params.itemId);
+      const { label, description, minimumStock, quantity } = req.body as UpdateItemBody;
+
+      const command = new UpdateItemCommand(
+        stockId,
+        itemId,
+        label,
+        description,
+        minimumStock,
+        quantity
+      );
+
+      const stock = await this.updateItemHandler.handle(command);
+
+      rootMain.info(`updateItem OID=${OID} stockId=${stockId} itemId=${itemId}`);
 
       res.status(HTTP_CODE_OK).json(stock);
     } catch (err) {

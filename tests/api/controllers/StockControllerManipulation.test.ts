@@ -47,6 +47,10 @@ describe('StockControllerManipulation', () => {
       handle: jest.fn(),
     };
 
+    const mockUpdateItemHandler: any = {
+      handle: jest.fn(),
+    };
+
     const mockDeleteItemHandler: any = {
       handle: jest.fn(),
     };
@@ -55,6 +59,7 @@ describe('StockControllerManipulation', () => {
       mockCreateStockHandler,
       mockAddItemHandler,
       mockUpdateQuantityHandler,
+      mockUpdateItemHandler,
       mockUpdateStockHandler,
       mockDeleteStockHandler,
       mockDeleteItemHandler,

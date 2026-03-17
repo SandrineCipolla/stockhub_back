@@ -22,6 +22,13 @@ export interface UpdateItemQuantityBody {
   quantity: number;
 }
 
+export interface UpdateItemBody {
+  label?: string;
+  description?: string;
+  minimumStock?: number;
+  quantity?: number;
+}
+
 export interface UpdateStockBody {
   label?: string;
   description?: string;
@@ -65,6 +72,8 @@ export type UpdateItemQuantityRequest = AuthenticatedRequest<
   unknown,
   UpdateItemQuantityBody
 >;
+
+export type UpdateItemRequest = AuthenticatedRequest<StockItemParams, unknown, UpdateItemBody>;
 
 export type UpdateStockRequest = AuthenticatedRequest<StockParams, unknown, UpdateStockBody>;
 
