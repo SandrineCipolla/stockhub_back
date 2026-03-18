@@ -1,8 +1,9 @@
-import { Item as PrismaItem, PrismaClient, StockCategory } from '@prisma/client';
+import { Item as PrismaItem, Prisma, PrismaClient, StockCategory } from '@prisma/client';
 import { IStockCommandRepository } from '@domain/stock-management/manipulation/repositories/IStockCommandRepository';
 import { Stock } from '@domain/stock-management/common/entities/Stock';
 import { StockItem } from '@domain/stock-management/common/entities/StockItem';
 import { DependencyTelemetry, rootDependency, rootException } from '@utils/cloudLogger';
+import { ErrorMessages, NotFoundError } from '@core/errors';
 import { PrismaStockWithItems } from '../types/prisma';
 
 const DEPENDENCY_NAME = process.env.DB_DATABASE;
@@ -210,10 +211,20 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
       if (data.quantity !== undefined) updateData.quantity = data.quantity;
 
       if (Object.keys(updateData).length > 0) {
-        await this.prisma.item.update({
-          where: { id: itemId },
-          data: updateData,
-        });
+        try {
+          await this.prisma.item.update({
+            where: { id: itemId },
+            data: updateData,
+          });
+        } catch (prismaError) {
+          if (
+            prismaError instanceof Prisma.PrismaClientKnownRequestError &&
+            prismaError.code === 'P2025'
+          ) {
+            throw new NotFoundError(`Item with ID ${itemId} not found`, ErrorMessages.UpdateItem);
+          }
+          throw prismaError;
+        }
       }
 
       success = true;
