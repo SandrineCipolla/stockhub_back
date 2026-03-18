@@ -16,6 +16,7 @@ describe('AddItemToStockCommandHandler', () => {
           findById: jest.fn(),
           addItemToStock: jest.fn().mockResolvedValue(mockStock),
           updateItemQuantity: jest.fn(),
+          updateItem: jest.fn(),
           updateStock: jest.fn(),
           deleteStock: jest.fn(),
           deleteItem: jest.fn(),

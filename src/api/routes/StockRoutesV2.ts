@@ -7,7 +7,7 @@ import {
   CreateStockRequest,
   DeleteItemRequest,
   DeleteStockRequest,
-  UpdateItemQuantityRequest,
+  UpdateItemRequest,
   UpdateStockRequest,
 } from '@api/types/StockRequestTypes';
 import express, { Router } from 'express';
@@ -17,6 +17,7 @@ import { PrismaStockVisualizationRepository } from '@infrastructure/stock-manage
 import { PrismaStockCommandRepository } from '@infrastructure/stock-management/manipulation/repositories/PrismaStockCommandRepository';
 import { CreateStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/CreateStockCommandHandler';
 import { AddItemToStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/AddItemToStockCommandHandler';
+import { UpdateItemCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateItemCommandHandler';
 import { UpdateItemQuantityCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateItemQuantityCommandHandler';
 import { UpdateStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateStockCommandHandler';
 import { DeleteStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/DeleteStockCommandHandler';
@@ -42,6 +43,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   const createStockHandler = new CreateStockCommandHandler(commandRepository);
   const addItemHandler = new AddItemToStockCommandHandler(commandRepository);
   const updateQuantityHandler = new UpdateItemQuantityCommandHandler(commandRepository);
+  const updateItemHandler = new UpdateItemCommandHandler(commandRepository);
   const updateStockHandler = new UpdateStockCommandHandler(commandRepository);
   const deleteStockHandler = new DeleteStockCommandHandler(commandRepository);
   const deleteItemHandler = new DeleteItemCommandHandler(commandRepository);
@@ -50,6 +52,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
     createStockHandler,
     addItemHandler,
     updateQuantityHandler,
+    updateItemHandler,
     updateStockHandler,
     deleteStockHandler,
     deleteItemHandler,
@@ -103,7 +106,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
     STOCK_ROUTES.UPDATE_ITEM_QUANTITY,
     authorizeStockWrite,
     async (req, res: express.Response) => {
-      await manipulationController.updateItemQuantity(req as UpdateItemQuantityRequest, res);
+      await manipulationController.updateItem(req as UpdateItemRequest, res);
     }
   );
 

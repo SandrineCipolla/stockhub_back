@@ -1,8 +1,9 @@
-import { Item as PrismaItem, PrismaClient, StockCategory } from '@prisma/client';
+import { Item as PrismaItem, Prisma, PrismaClient, StockCategory } from '@prisma/client';
 import { IStockCommandRepository } from '@domain/stock-management/manipulation/repositories/IStockCommandRepository';
 import { Stock } from '@domain/stock-management/common/entities/Stock';
 import { StockItem } from '@domain/stock-management/common/entities/StockItem';
 import { DependencyTelemetry, rootDependency, rootException } from '@utils/cloudLogger';
+import { ErrorMessages, NotFoundError } from '@core/errors';
 import { PrismaStockWithItems } from '../types/prisma';
 
 const DEPENDENCY_NAME = process.env.DB_DATABASE;
@@ -176,6 +177,70 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
       rootDependency({
         name: DEPENDENCY_NAME,
         data: `prisma.item.update({ where: {id: ${itemId}}, data: {quantity: ${newQuantity}} })`,
+        duration: 0,
+        success: success,
+        resultCode: 0,
+        target: DEPENDENCY_TARGET,
+        dependencyTypeName: DEPENDENCY_TYPE,
+      } as DependencyTelemetry);
+    }
+  }
+
+  async updateItem(
+    stockId: number,
+    itemId: number,
+    data: { label?: string; description?: string; minimumStock?: number; quantity?: number }
+  ): Promise<Stock> {
+    let success = false;
+
+    try {
+      const stock = await this.findById(stockId);
+      if (!stock) {
+        throw new Error(`Stock with ID ${stockId} not found`);
+      }
+
+      const updateData: {
+        label?: string;
+        description?: string;
+        minimumStock?: number;
+        quantity?: number;
+      } = {};
+      if (data.label !== undefined) updateData.label = data.label;
+      if (data.description !== undefined) updateData.description = data.description;
+      if (data.minimumStock !== undefined) updateData.minimumStock = data.minimumStock;
+      if (data.quantity !== undefined) updateData.quantity = data.quantity;
+
+      if (Object.keys(updateData).length > 0) {
+        try {
+          await this.prisma.item.update({
+            where: { id: itemId },
+            data: updateData,
+          });
+        } catch (prismaError) {
+          if (
+            prismaError instanceof Prisma.PrismaClientKnownRequestError &&
+            prismaError.code === 'P2025'
+          ) {
+            throw new NotFoundError(`Item with ID ${itemId} not found`, ErrorMessages.UpdateItem);
+          }
+          throw prismaError;
+        }
+      }
+
+      success = true;
+
+      const updatedStock = await this.findById(stockId);
+      if (!updatedStock) {
+        throw new Error(`Failed to retrieve updated stock with ID ${stockId}`);
+      }
+      return updatedStock;
+    } catch (error) {
+      rootException(error as Error);
+      throw error;
+    } finally {
+      rootDependency({
+        name: DEPENDENCY_NAME,
+        data: `prisma.item.update({ where: {id: ${itemId}}, data: ${JSON.stringify(data)} })`,
         duration: 0,
         success: success,
         resultCode: 0,

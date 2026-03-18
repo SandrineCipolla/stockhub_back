@@ -230,6 +230,72 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "PATCH update item — label + description + minimumStock",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+            },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"label\": \"Tomates bio\",\n  \"description\": \"Tomates bio du marché\",\n  \"minimumStock\": 5\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items/{{itemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v2", "stocks", "{{stockId}}", "items", "{{itemId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH update item — all fields",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+            },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"label\": \"Tomates bio\",\n  \"description\": \"Tomates bio du marché\",\n  \"minimumStock\": 5,\n  \"quantity\": 20\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items/{{itemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v2", "stocks", "{{stockId}}", "items", "{{itemId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH update item — empty body (no change)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+            },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items/{{itemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v2", "stocks", "{{stockId}}", "items", "{{itemId}}"]
+            }
+          },
+          "response": []
         }
       ]
     }
