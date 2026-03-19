@@ -32,3 +32,7 @@ Thumbs.db
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+
+# Postman collections (large JSON files not suited for Prettier formatting)
+*.postman_collection.json
+postman/

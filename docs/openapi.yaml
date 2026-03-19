@@ -339,8 +339,8 @@ paths:
 
   /api/v2/stocks/{stockId}/items/{itemId}:
     patch:
-      summary: Modifier la quantité d'un item
-      description: Met à jour la quantité d'un item spécifique dans un stock
+      summary: Modifier un item
+      description: Met à jour un ou plusieurs champs d'un item (label, description, minimumStock, quantity). Tous les champs sont optionnels — seuls les champs fournis sont modifiés.
       tags:
         - Stock Manipulation (WRITE)
       security:
@@ -365,29 +365,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateItemQuantityBody'
+              $ref: '#/components/schemas/UpdateItemBody'
             examples:
-              increase:
-                summary: Augmentation de quantité
+              quantityOnly:
+                summary: Mise à jour de la quantité uniquement
                 value:
                   quantity: 5
-              decrease:
-                summary: Diminution de quantité
+              labelAndDescription:
+                summary: Mise à jour du label, description et stock minimum
                 value:
-                  quantity: 1
+                  label: Tomates bio
+                  description: Tomates bio du marché
+                  minimumStock: 5
+              allFields:
+                summary: Mise à jour de tous les champs
+                value:
+                  label: Tomates bio
+                  description: Tomates bio du marché
+                  minimumStock: 5
+                  quantity: 20
       responses:
         '200':
-          description: Quantité modifiée avec succès
+          description: Item modifié avec succès
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/StockItemDTO'
               example:
                 id: 1
-                label: Aquarelle Rouge Vermillon
-                description: Tube 12ml
-                quantity: 5
-                minimumStock: 1
+                label: Tomates bio
+                description: Tomates bio du marché
+                quantity: 20
+                minimumStock: 5
                 stockId: 1
         '400':
           $ref: '#/components/responses/BadRequestError'
@@ -623,6 +632,29 @@ components:
             - hygiene
             - artistique
           example: artistique
+
+    UpdateItemBody:
+      type: object
+      description: Tous les champs sont optionnels — seuls les champs fournis sont modifiés.
+      properties:
+        label:
+          type: string
+          description: Nouveau libellé de l'item
+          example: Tomates bio
+        description:
+          type: string
+          description: Nouvelle description de l'item
+          example: Tomates bio du marché
+        minimumStock:
+          type: integer
+          description: Nouveau stock minimum
+          example: 5
+          minimum: 0
+        quantity:
+          type: integer
+          description: Nouvelle quantité
+          example: 20
+          minimum: 0
 
     UpdateItemQuantityBody:
       type: object
