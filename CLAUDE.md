@@ -121,10 +121,91 @@ Créer un ADR pour toute décision architecturale importante.
 
 ## Conventions Git
 
-**Branches** : `feat-issue-62-description`, `fix-issue-71-description`  
-**Commits** : Conventional Commits (`feat(scope): message`) — vérifié par commitlint  
-**PRs** : Utiliser `.github/PULL_REQUEST_TEMPLATE.md`  
-**Releases** : Automatiques via Release Please (semver)
+### Branches — format strict
+
+```
+type/issue-number-short-description
+```
+
+| Type        | Usage                                       |
+| ----------- | ------------------------------------------- |
+| `feat/`     | Nouvelle fonctionnalité                     |
+| `fix/`      | Correction de bug                           |
+| `chore/`    | Tâche technique sans valeur métier          |
+| `docs/`     | Documentation uniquement                    |
+| `test/`     | Tests uniquement                            |
+| `refactor/` | Refactoring sans changement de comportement |
+
+**Exemples corrects** : `feat/118-update-item-command`, `fix/86-stockitem-lowercase`, `docs/101-openapi-endpoints`
+**Jamais** : `feature/...`, `feat-issue-62-...`, `feat/issue-44-...` — le format `type/number-description` est la seule convention.
+
+### Commits — Conventional Commits
+
+```
+type(scope): message concis — closes #numero
+```
+
+- Vérifiés automatiquement par **commitlint** au pre-commit
+- Message en minuscules, verbe à l'infinitif, sans majuscule en fin
+- Inclure `closes #numero` si le commit clôt une issue
+- Pas de mention d'outils ou d'IA dans le message
+
+**Exemples** : `feat(items): add UpdateItem command and handler — closes #118`, `fix(items): return 404 when itemId not found`
+
+### PRs
+
+- Utiliser `.github/PULL_REQUEST_TEMPLATE.md`
+- Indiquer les couches DDD impactées, le test plan, et `Closes #numero`
+
+### Releases
+
+Automatiques via **Release Please** (semver) sur push `main`.
+
+## Workflow par ticket
+
+Suivre cet ordre pour chaque issue, sans exception :
+
+### 1. Avant de commencer
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b type/numero-description   # ex: feat/118-update-item-command
+```
+
+### 2. Développement
+
+- Travailler sur la branche dédiée
+- Commits fréquents, ciblés, au format Conventional Commits
+- Respecter la checklist avant commit (ci-dessous)
+
+### 3. Ouvrir la PR
+
+- Titre : `type(scope): description — closes #numero`
+- Body : couches impactées, test plan, `Closes #numero`
+- Vérifier que le CI passe avant de merger
+
+### 4. Après le merge
+
+Mettre à jour dans cet ordre :
+
+| Action                                              | Quand                           |
+| --------------------------------------------------- | ------------------------------- |
+| **Wiki** — `Backend-Guide` : endpoints, nb de tests | Nouvel endpoint ou modification |
+| **Wiki** — `Architecture-Globale` ou `ADR`          | Décision architecturale         |
+| **Wiki** — `CICD-et-Deploiement`                    | Changement d'infra ou pipeline  |
+| **`docs/openapi.yaml`**                             | Modification d'un endpoint      |
+| **GitHub Project** — issue → Done                   | Systématiquement après merge    |
+
+**Comment mettre à jour le wiki** :
+
+```bash
+git clone https://github.com/SandrineCipolla/stockHub_V2_front.wiki.git /tmp/wiki
+# modifier les fichiers .md
+cd /tmp/wiki && git add . && git commit -m "docs: ..." && git push
+```
+
+**Releases** : Automatiques via Release Please (semver) sur push `main`.
 
 ## Intégration Frontend
 
