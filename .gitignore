@@ -160,3 +160,6 @@ doccs/architecture/ddd-cqrs-stock-manipulation.md
 # Playwright
 playwright-report/
 test-results/
+
+# Claude working files (prompts, audits, implementation notes)
+.claude/
