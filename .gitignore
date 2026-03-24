@@ -163,3 +163,6 @@ test-results/
 
 # Claude working files (prompts, audits, implementation notes)
 .claude/
+
+# POC / scripts standalone
+AppelIA.ts

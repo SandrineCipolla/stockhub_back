@@ -103,8 +103,9 @@ export const sendError = (res: express.Response, err: CustomError) => {
     }
 
     default:
-      return res
-        .status(HTTP_CODE_INTERNAL_SERVER_ERROR)
-        .json({ error: 'An unexpected error occurred. Please try again later.' });
+      return res.status(HTTP_CODE_INTERNAL_SERVER_ERROR).json({
+        error: 'An unexpected error occurred. Please try again later.',
+        ...(process.env.NODE_ENV !== 'production' && { details: (err as Error).message }),
+      });
   }
 };
