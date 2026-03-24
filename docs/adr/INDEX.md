@@ -15,20 +15,21 @@ Un ADR (Architecture Decision Record) est un document qui capture une **décisio
 
 ## 📋 Liste des ADRs
 
-| #                                                       | Titre                                        | Date       | Statut     |
-| ------------------------------------------------------- | -------------------------------------------- | ---------- | ---------- |
-| [ADR-001](./ADR-001-migration-ddd-cqrs.md)              | Migration vers DDD/CQRS                      | 2025-11-25 | ✅ Accepté |
-| [ADR-002](./ADR-002-choix-prisma-orm.md)                | Choix de Prisma comme ORM                    | 2025-11-28 | ✅ Accepté |
-| [ADR-003](./ADR-003-azure-ad-b2c-authentication.md)     | Azure AD B2C pour l'authentification         | 2025-11-30 | ✅ Accepté |
-| [ADR-004](./ADR-004-tests-value-objects-entities.md)    | Tests sur Value Objects et Entities          | 2025-12-02 | ✅ Accepté |
-| [ADR-005](./ADR-005-api-versioning-v2.md)               | Versioning API (commencer en V2)             | 2025-12-05 | ✅ Accepté |
-| [ADR-006](./ADR-006-mysql-azure-cloud.md)               | MySQL sur Azure Cloud                        | 2025-12-08 | ✅ Accepté |
-| [ADR-007](./ADR-007-code-quality-enforcement.md)        | Application stricte des standards de qualité | 2024-12-19 | ✅ Accepté |
-| [ADR-008](./ADR-008-typescript-request-type-aliases.md) | Type Aliases pour requêtes Express           | 2025-12-26 | ✅ Accepté |
-| [ADR-009](./ADR-009-resource-based-authorization.md)    | Système d'autorisation hybride (Phase 1 ✅)  | 2025-12-27 | ✅ Accepté |
-| [ADR-010](./ADR-010-ci-cd-pipeline-optimization.md)     | Optimisation pipeline CI/CD GitHub Actions   | 2025-12-27 | ✅ Accepté |
-| [ADR-011](./ADR-011-staging-render-aiven.md)            | Staging Render.com + Aiven MySQL             | 2026-01-15 | ✅ Accepté |
-| [ADR-012](./ADR-012-upgrade-node-22.md)                 | Migration vers Node.js 22 LTS                | 2026-03-10 | ✅ Accepté |
+| #                                                       | Titre                                               | Date       | Statut     |
+| ------------------------------------------------------- | --------------------------------------------------- | ---------- | ---------- |
+| [ADR-001](./ADR-001-migration-ddd-cqrs.md)              | Migration vers DDD/CQRS                             | 2025-11-25 | ✅ Accepté |
+| [ADR-002](./ADR-002-choix-prisma-orm.md)                | Choix de Prisma comme ORM                           | 2025-11-28 | ✅ Accepté |
+| [ADR-003](./ADR-003-azure-ad-b2c-authentication.md)     | Azure AD B2C pour l'authentification                | 2025-11-30 | ✅ Accepté |
+| [ADR-004](./ADR-004-tests-value-objects-entities.md)    | Tests sur Value Objects et Entities                 | 2025-12-02 | ✅ Accepté |
+| [ADR-005](./ADR-005-api-versioning-v2.md)               | Versioning API (commencer en V2)                    | 2025-12-05 | ✅ Accepté |
+| [ADR-006](./ADR-006-mysql-azure-cloud.md)               | MySQL sur Azure Cloud                               | 2025-12-08 | ✅ Accepté |
+| [ADR-007](./ADR-007-code-quality-enforcement.md)        | Application stricte des standards de qualité        | 2024-12-19 | ✅ Accepté |
+| [ADR-008](./ADR-008-typescript-request-type-aliases.md) | Type Aliases pour requêtes Express                  | 2025-12-26 | ✅ Accepté |
+| [ADR-009](./ADR-009-resource-based-authorization.md)    | Système d'autorisation hybride (Phase 1 ✅)         | 2025-12-27 | ✅ Accepté |
+| [ADR-010](./ADR-010-ci-cd-pipeline-optimization.md)     | Optimisation pipeline CI/CD GitHub Actions          | 2025-12-27 | ✅ Accepté |
+| [ADR-011](./ADR-011-staging-render-aiven.md)            | Staging Render.com + Aiven MySQL                    | 2026-01-15 | ✅ Accepté |
+| [ADR-012](./ADR-012-upgrade-node-22.md)                 | Migration vers Node.js 22 LTS                       | 2026-03-10 | ✅ Accepté |
+| [ADR-013](./ADR-013-llm-provider-local-vs-cloud.md)     | Provider LLM : local (Ollama) vs cloud (OpenRouter) | 2026-03-24 | ✅ Accepté |
 
 ## 📖 Comment lire un ADR ?
 
@@ -124,5 +125,5 @@ Si une décision change :
 
 ---
 
-**Dernière mise à jour** : 2026-03-10
+**Dernière mise à jour** : 2026-03-24
 **Mainteneur** : Équipe StockHub Backend
