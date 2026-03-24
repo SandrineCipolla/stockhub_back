@@ -24,3 +24,8 @@ export const STOCK_ROUTES = {
   /** DELETE - Remove an item from a stock (requires write permission) */
   DELETE_ITEM: '/stocks/:stockId/items/:itemId',
 } as const;
+
+export const IA_ROUTES = {
+  /** GET - Generate AI consumer profile from user stocks */
+  CONSUMER_PROFILE: '/ai/consumer-profile',
+} as const;

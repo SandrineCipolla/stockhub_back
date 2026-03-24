@@ -10,6 +10,7 @@ import { authConfigbearerStrategy } from '@authentication/authBearerStrategy';
 import { authenticationMiddleware } from '@authentication/authenticateMiddleware';
 import { setupHttpServer } from '@serverSetup/setupHttpServer';
 import configureStockRoutesV2 from '@api/routes/StockRoutesV2';
+import configureIARoutesV2 from '@api/routes/IARoutesV2';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec, openApiYamlContent } from '@config/openapi.config';
 
@@ -121,13 +122,15 @@ export async function initializeApp() {
   });
 
   const stockRoutesV2 = await configureStockRoutesV2();
+  const iaRoutesV2 = configureIARoutesV2();
 
   app.use(
     '/api/v2',
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
       authenticationMiddleware(req, res, next);
     },
-    stockRoutesV2
+    stockRoutesV2,
+    iaRoutesV2
   );
   rootMain.info('api/v2 routes (auth required) configured');
   // Middleware d'authentification appliqué seulement après les routes V2
