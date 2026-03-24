@@ -41,6 +41,8 @@ export const rootDependency = (depTelemetry: DependencyTelemetry) => {
 };
 
 export const rootException = (error: Error) => {
+  rootMain.error('Exception: {message} {stack}', { message: error.message, stack: error.stack });
+
   if (!isTestEnvironment && client) {
     client.trackException({ exception: error });
   }
