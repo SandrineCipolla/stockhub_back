@@ -15,6 +15,7 @@ export default tseslint.config(
       '*.config.ts',
       'webpack.config.js',
       'jest.*.js',
+      'AppelIA.ts',
     ],
   },
   {
