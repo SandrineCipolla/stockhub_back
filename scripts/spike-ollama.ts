@@ -22,8 +22,8 @@ const mockStocks = [
 ];
 
 async function main() {
-  console.log(`Model: ${MODEL}`);
-  console.log('Sending prompt to Ollama...\n');
+  console.info(`Model: ${MODEL}`);
+  console.info('Sending prompt to Ollama...\n');
 
   const start = Date.now();
 
@@ -54,16 +54,16 @@ Réponds uniquement avec du JSON valide, sans texte autour.`,
   const data = (await response.json()) as { message: { content: string } };
   const content = data.message.content;
 
-  console.log(`Latency: ${latency}ms`);
-  console.log('\n--- Response ---');
-  console.log(content);
+  console.info(`Latency: ${latency}ms`);
+  console.info('\n--- Response ---');
+  console.info(content);
 
   try {
     const parsed = JSON.parse(content) as unknown;
-    console.log('\n--- Parsed JSON ---');
-    console.log(JSON.stringify(parsed, null, 2));
+    console.info('\n--- Parsed JSON ---');
+    console.info(JSON.stringify(parsed, null, 2));
   } catch {
-    console.log('\n⚠️  Response is not valid JSON');
+    console.info('\n⚠️  Response is not valid JSON');
   }
 }
 
