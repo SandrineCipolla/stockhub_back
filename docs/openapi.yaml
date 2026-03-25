@@ -407,6 +407,119 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+  /api/v2/stocks/{stockId}/items/{itemId}/history:
+    get:
+      summary: Historique de consommation d'un item
+      description: Retourne l'historique des changements de quantité (CONSUMPTION, RESTOCK, ADJUSTMENT) pour un item sur une période donnée.
+      tags:
+        - Stock Prediction (READ)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+        - name: itemId
+          in: path
+          required: true
+          description: Identifiant unique de l'item
+          schema:
+            type: integer
+            example: 1
+        - name: days
+          in: query
+          required: false
+          description: Nombre de jours d'historique à retourner (défaut 90)
+          schema:
+            type: integer
+            example: 90
+      responses:
+        '200':
+          description: Historique de consommation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemHistoryRecord'
+              example:
+                - id: 1
+                  itemId: 1
+                  oldQuantity: 10
+                  newQuantity: 8
+                  changeType: CONSUMPTION
+                  changedBy: null
+                  changedAt: '2026-03-24T08:00:00.000Z'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/v2/stocks/{stockId}/items/{itemId}/prediction:
+    get:
+      summary: Prédiction de stock pour un item
+      description: |
+        Retourne la dernière prédiction calculée pour un item (cache). Si aucune prédiction n'existe, en calcule une à la volée.
+
+        Les prédictions sont recalculées automatiquement chaque matin (cron job).
+        Si l'historique est insuffisant (< 7 jours de consommation), `simulatedFallback=true` est retourné.
+      tags:
+        - Stock Prediction (READ)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+        - name: itemId
+          in: path
+          required: true
+          description: Identifiant unique de l'item
+          schema:
+            type: integer
+            example: 1
+        - name: quantity
+          in: query
+          required: false
+          description: Quantité actuelle de l'item (utilisée pour le calcul si recalcul nécessaire)
+          schema:
+            type: integer
+            example: 15
+        - name: minimumStock
+          in: query
+          required: false
+          description: Stock minimum (utilisé pour le calcul du réassort recommandé)
+          schema:
+            type: integer
+            example: 2
+      responses:
+        '200':
+          description: Prédiction de stock
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictionResult'
+              example:
+                itemId: 1
+                daysUntilEmpty: 15
+                avgDailyConsumption: 1.0
+                trend: STABLE
+                recommendedRestock: 32
+                simulatedFallback: false
+                generatedAt: '2026-03-25T08:00:00.000Z'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
     delete:
       summary: Supprimer un item d'un stock
       description: Supprime un item spécifique d'un stock
@@ -458,6 +571,51 @@ components:
         3. Inclusion dans le header: `Authorization: Bearer {token}`
 
   schemas:
+    # Prédiction IA
+    ItemHistoryRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+        itemId:
+          type: integer
+        oldQuantity:
+          type: integer
+        newQuantity:
+          type: integer
+        changeType:
+          type: string
+          enum: [CONSUMPTION, RESTOCK, ADJUSTMENT]
+        changedBy:
+          type: string
+          nullable: true
+        changedAt:
+          type: string
+          format: date-time
+
+    PredictionResult:
+      type: object
+      properties:
+        itemId:
+          type: integer
+        daysUntilEmpty:
+          type: integer
+          nullable: true
+        avgDailyConsumption:
+          type: number
+          nullable: true
+        trend:
+          type: string
+          enum: [STABLE, INCREASING, DECREASING]
+        recommendedRestock:
+          type: integer
+          nullable: true
+        simulatedFallback:
+          type: boolean
+        generatedAt:
+          type: string
+          format: date-time
+
     # DTOs de réponse (Response)
     StockDTO:
       type: object
