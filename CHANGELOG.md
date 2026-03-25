@@ -1,5 +1,30 @@
 # Changelog
 
+## [2.6.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.5.2...v2.6.0) (2026-03-25)
+
+
+### ✨ Features
+
+* **items:** add UpdateItem command and handler ([#119](https://github.com/SandrineCipolla/stockhub_back/issues/119)) ([4f28305](https://github.com/SandrineCipolla/stockhub_back/commit/4f28305c21a55645992f85c71bf81efcef964f4d))
+* **stocks:** align API response shape with frontend — closes [#75](https://github.com/SandrineCipolla/stockhub_back/issues/75) [#93](https://github.com/SandrineCipolla/stockhub_back/issues/93) ([#116](https://github.com/SandrineCipolla/stockhub_back/issues/116)) ([d000222](https://github.com/SandrineCipolla/stockhub_back/commit/d00022227e4e5e8cea17f2790ca9f6873df26fc9))
+
+
+### 🐛 Bug Fixes
+
+* **logger:** log exceptions in local dev and expose error details — closes [#127](https://github.com/SandrineCipolla/stockhub_back/issues/127) ([#128](https://github.com/SandrineCipolla/stockhub_back/issues/128)) ([4ac2685](https://github.com/SandrineCipolla/stockhub_back/commit/4ac2685f8486817db8ec13739a7509f6c0c8cd26))
+
+
+### 📚 Documentation
+
+* **adr:** add ADR-013 LLM provider decision with two-phase spike results — closes [#122](https://github.com/SandrineCipolla/stockhub_back/issues/122) ([#129](https://github.com/SandrineCipolla/stockhub_back/issues/129)) ([1d24050](https://github.com/SandrineCipolla/stockhub_back/commit/1d240504af273e56f320b13636d75c6f515c78c1))
+* **claude:** add ticket workflow, branch naming convention and wiki update guide ([7f0c36d](https://github.com/SandrineCipolla/stockhub_back/commit/7f0c36db63bc4fd20cc731d6c0598a36cb95149d))
+* **openapi:** update PATCH items to reflect full UpdateItem command ([#121](https://github.com/SandrineCipolla/stockhub_back/issues/121)) ([f3169bf](https://github.com/SandrineCipolla/stockhub_back/commit/f3169bfad8ecd505cb0793b8209e399f563542eb))
+
+
+### 🔧 Chores
+
+* move Claude working files to .claude/ and add to gitignore ([#120](https://github.com/SandrineCipolla/stockhub_back/issues/120)) ([509b135](https://github.com/SandrineCipolla/stockhub_back/commit/509b135f63af25aa710e1f8d738b51c228fc1510))
+
 ## [2.5.2](https://github.com/SandrineCipolla/stockhub_back/compare/v2.5.1...v2.5.2) (2026-03-16)
 
 ### 🐛 Bug Fixes
