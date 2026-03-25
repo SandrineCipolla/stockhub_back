@@ -5,6 +5,7 @@ export class UpdateItemCommand {
     public readonly label?: string,
     public readonly description?: string,
     public readonly minimumStock?: number,
-    public readonly quantity?: number
+    public readonly quantity?: number,
+    public readonly userId?: string
   ) {}
 }

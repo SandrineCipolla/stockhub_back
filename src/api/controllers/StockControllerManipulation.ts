@@ -98,7 +98,8 @@ export class StockControllerManipulation {
         label,
         quantity,
         description,
-        minimumStock
+        minimumStock,
+        OID
       );
 
       const stock = await this.addItemHandler.handle(command);
@@ -121,7 +122,7 @@ export class StockControllerManipulation {
       const itemId = Number(req.params.itemId);
       const { quantity } = req.body;
 
-      const command = new UpdateItemQuantityCommand(stockId, itemId, quantity);
+      const command = new UpdateItemQuantityCommand(stockId, itemId, quantity, OID);
 
       const stock = await this.updateQuantityHandler.handle(command);
 
@@ -151,7 +152,8 @@ export class StockControllerManipulation {
         label,
         description,
         minimumStock,
-        quantity
+        quantity,
+        OID
       );
 
       const stock = await this.updateItemHandler.handle(command);
