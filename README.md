@@ -2,7 +2,7 @@
 
 ![CI/CD Pipeline](https://github.com/sandrineCipolla/stockhub_back/actions/workflows/main_stockhub-back.yml/badge.svg)
 ![Security Audit](https://github.com/SandrineCipolla/stockhub_back/actions/workflows/security-audit.yml/badge.svg)
-![Version](https://img.shields.io/badge/version-2.5.0-blue)
+![Version](https://img.shields.io/badge/version-2.6.0-blue)
 ![Node](https://img.shields.io/badge/node-22.x-brightgreen)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
 ![Coverage](https://img.shields.io/badge/coverage-92%25-brightgreen)
@@ -94,7 +94,7 @@ Usage personnel/familial → visibilité rapide sur les stocks, valeur ajoutée 
 - `DELETE /api/v2/stocks/{stockId}` → supprimer un stock (cascade items)
 - `GET /api/v2/stocks/{stockId}/items` → items d'un stock
 - `POST /api/v2/stocks/{stockId}/items` → ajouter un item
-- `PATCH /api/v2/stocks/{stockId}/items/{itemId}` → modifier la quantité
+- `PATCH /api/v2/stocks/{stockId}/items/{itemId}` → modifier un item (label, description, quantité, stock minimum)
 - Entités DDD (`Stock`, `StockItem`, `Quantity`) + service `StockVisualizationService`
 - Autorisation par rôles (OWNER / EDITOR / VIEWER / VIEWER_CONTRIBUTOR)
 
@@ -174,6 +174,9 @@ Les **ADRs** documentent les décisions techniques majeures du projet avec leur 
 | [ADR-008](./docs/adr/ADR-008-typescript-request-type-aliases.md) | Type Aliases pour requêtes Express typées   | Déc 2025 |
 | [ADR-009](./docs/adr/ADR-009-resource-based-authorization.md)    | Système d'autorisation hybride              | Déc 2025 |
 | [ADR-010](./docs/adr/ADR-010-ci-cd-pipeline-optimization.md)     | Optimisation pipeline CI/CD (8min → 4-5min) | Déc 2025 |
+| [ADR-011](./docs/adr/ADR-011-staging-render-aiven.md)            | Staging Render.com + Aiven MySQL            | Jan 2026 |
+| [ADR-012](./docs/adr/ADR-012-upgrade-node-22.md)                 | Migration vers Node.js 22 LTS               | Mar 2026 |
+| [ADR-013](./docs/adr/ADR-013-llm-provider-local-vs-cloud.md)     | Provider LLM — Ollama local vs OpenRouter   | Mar 2026 |
 
 📚 **[Documentation complète du projet](https://github.com/SandrineCipolla/stockHub_V2_front/wiki)** — Architecture, guides techniques, métriques
 
@@ -213,7 +216,7 @@ PATCH  /api/v2/stocks/:stockId                → Modifier un stock
 DELETE /api/v2/stocks/:stockId                → Supprimer (cascade items)
 GET    /api/v2/stocks/:stockId/items          → Items d'un stock
 POST   /api/v2/stocks/:stockId/items          → Ajouter un item
-PATCH  /api/v2/stocks/:stockId/items/:itemId  → Modifier la quantité
+PATCH  /api/v2/stocks/:stockId/items/:itemId  → Modifier un item (label, description, quantité, stock minimum)
 ```
 
 Catégories valides : `alimentation` | `hygiene` | `artistique`
@@ -251,7 +254,7 @@ npx prisma migrate deploy # Appliquer les migrations
 npx prisma studio        # Interface visuelle DB
 
 # Tests
-npm run test:unit        # 145 tests unitaires
+npm run test:unit        # 159 tests unitaires
 npm run test:integration # Tests d'intégration (TestContainers)
 npm run test:e2e         # Tests E2E Playwright
 npm run test:coverage    # Rapport de couverture
@@ -270,7 +273,7 @@ npm run azure:stop       # Arrêter l'app Azure après les tests
 
 ### Unitaires (TDD)
 
-**145 tests — couverture globale : 92% statements | 82% branches | 94% functions**
+**159 tests — couverture globale : 92% statements | 82% branches | 94% functions**
 Seuil minimum configuré : 80% sur toutes les métriques (`jest.ci.config.js`)
 
 - `Quantity` : valeurs invalides interdites
