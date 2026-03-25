@@ -166,3 +166,4 @@ test-results/
 
 # POC / scripts standalone
 AppelIA.ts
+scripts/synthetic-data.json

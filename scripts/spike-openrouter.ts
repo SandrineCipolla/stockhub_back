@@ -2,8 +2,8 @@ import 'dotenv/config';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const OLLAMA_URL = 'http://localhost:11434/api/chat';
-const MODEL = 'mistral';
+const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const MODEL = 'openrouter/free';
 
 interface SyntheticData {
   generatedAt: string;
@@ -20,21 +20,28 @@ function loadSyntheticData(): SyntheticData {
 }
 
 async function main() {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) {
+    throw new Error('OPENROUTER_API_KEY is not set in .env');
+  }
+
   const syntheticData = loadSyntheticData();
   console.info(`Model: ${MODEL}`);
   console.info(
     `Data: ${syntheticData.periodDays}-day history generated on ${syntheticData.generatedAt}`
   );
-  console.info('Sending prompt to Ollama...\n');
+  console.info('Sending prompt to OpenRouter...\n');
 
   const start = Date.now();
 
-  const response = await fetch(OLLAMA_URL, {
+  const response = await fetch(OPENROUTER_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
     body: JSON.stringify({
       model: MODEL,
-      stream: false,
       messages: [
         {
           role: 'user',
@@ -55,11 +62,12 @@ Réponds uniquement avec du JSON valide, sans texte autour.`,
   const latency = Date.now() - start;
 
   if (!response.ok) {
-    throw new Error(`Ollama error: ${response.status} ${response.statusText}`);
+    const errorText = await response.text();
+    throw new Error(`OpenRouter error: ${response.status} ${response.statusText} — ${errorText}`);
   }
 
-  const data = (await response.json()) as { message: { content: string } };
-  const content = data.message.content;
+  const data = (await response.json()) as { choices: [{ message: { content: string } }] };
+  const content = data.choices[0].message.content;
 
   console.info(`Latency: ${latency}ms`);
   console.info('\n--- Response ---');
