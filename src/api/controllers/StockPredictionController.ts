@@ -2,6 +2,7 @@ import express from 'express';
 import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
 import { StockPredictionService } from '@domain/prediction/services/StockPredictionService';
 import { IItemHistoryRepository } from '@domain/prediction/repositories/IItemHistoryRepository';
+import { IPredictionRepository } from '@domain/prediction/repositories/IPredictionRepository';
 import { HTTP_CODE_OK } from '@utils/httpCodes';
 import { CustomError, sendError } from '@core/errors';
 import { rootController } from '@utils/logger';
@@ -12,7 +13,8 @@ const logger = rootController.getChildCategory('predictionController');
 export class StockPredictionController {
   constructor(
     private readonly predictionService: StockPredictionService,
-    private readonly historyRepository: IItemHistoryRepository
+    private readonly historyRepository: IItemHistoryRepository,
+    private readonly predictionRepository: IPredictionRepository
   ) {}
 
   public async getItemHistory(req: AuthenticatedRequest, res: express.Response): Promise<void> {
@@ -37,14 +39,13 @@ export class StockPredictionController {
       const currentQuantity = Number(req.query['quantity'] ?? 0);
       const minimumStock = Number(req.query['minimumStock'] ?? 1);
 
-      const prediction = await this.predictionService.computeAndSave(
-        itemId,
-        currentQuantity,
-        minimumStock
-      );
+      const existing = await this.predictionRepository.getLatest(itemId);
+      const prediction =
+        existing ??
+        (await this.predictionService.computeAndSave(itemId, currentQuantity, minimumStock));
 
       logger.info(
-        `getItemPrediction itemId=${itemId} simulatedFallback=${prediction.simulatedFallback}`
+        `getItemPrediction itemId=${itemId} simulatedFallback=${prediction.simulatedFallback} cached=${existing !== null}`
       );
 
       res.status(HTTP_CODE_OK).json(prediction);

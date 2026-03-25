@@ -60,7 +60,11 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   const deleteItemHandler = new DeleteItemCommandHandler(commandRepository);
 
   const predictionService = new StockPredictionService(historyRepository, predictionRepository);
-  const predictionController = new StockPredictionController(predictionService, historyRepository);
+  const predictionController = new StockPredictionController(
+    predictionService,
+    historyRepository,
+    predictionRepository
+  );
 
   const manipulationController = new StockControllerManipulation(
     createStockHandler,

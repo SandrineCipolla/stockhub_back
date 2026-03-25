@@ -24,6 +24,10 @@ function gaussianRandom(mean: number, stdDev: number): number {
 const prisma = new PrismaClient();
 
 async function main(): Promise<void> {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('Seed interdit en production. Utilisez NODE_ENV=development ou staging.');
+  }
+
   const ownerEmail = process.env.SEED_OWNER_EMAIL ?? 'owner@stockhub.local';
   const aliceEmail = 'alice@stockhub.local';
   const bobEmail = 'bob@stockhub.local';
