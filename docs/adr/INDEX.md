@@ -29,6 +29,7 @@ Un ADR (Architecture Decision Record) est un document qui capture une **décisio
 | [ADR-010](./ADR-010-ci-cd-pipeline-optimization.md)     | Optimisation pipeline CI/CD GitHub Actions   | 2025-12-27 | ✅ Accepté |
 | [ADR-011](./ADR-011-staging-render-aiven.md)            | Staging Render.com + Aiven MySQL             | 2026-01-15 | ✅ Accepté |
 | [ADR-012](./ADR-012-upgrade-node-22.md)                 | Migration vers Node.js 22 LTS                | 2026-03-10 | ✅ Accepté |
+| [ADR-013](./ADR-013-llm-provider-local-vs-cloud.md)     | Provider LLM — Ollama local vs OpenRouter    | 2026-03-25 | ✅ Accepté |
 
 ## 📖 Comment lire un ADR ?
 
