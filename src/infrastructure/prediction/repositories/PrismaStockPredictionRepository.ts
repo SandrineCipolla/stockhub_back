@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import {
+  CachedAISuggestions,
   IPredictionRepository,
   PredictionResult,
 } from '@domain/prediction/repositories/IPredictionRepository';
@@ -46,6 +47,34 @@ export class PrismaStockPredictionRepository implements IPredictionRepository {
       recommendedRestock: record.recommendedRestock,
       simulatedFallback: record.simulatedFallback,
       generatedAt: record.generatedAt,
+    };
+  }
+
+  async saveAISuggestions(itemId: number, suggestions: object[]): Promise<void> {
+    const latest = await this.prisma.stockPrediction.findFirst({
+      where: { itemId },
+      orderBy: { generatedAt: 'desc' },
+    });
+
+    if (!latest) return;
+
+    await this.prisma.stockPrediction.update({
+      where: { id: latest.id },
+      data: { aiSuggestions: suggestions, aiGeneratedAt: new Date() },
+    });
+  }
+
+  async getCachedAISuggestions(itemId: number): Promise<CachedAISuggestions | null> {
+    const record = await this.prisma.stockPrediction.findFirst({
+      where: { itemId, aiGeneratedAt: { not: null } },
+      orderBy: { generatedAt: 'desc' },
+    });
+
+    if (!record?.aiSuggestions || !record.aiGeneratedAt) return null;
+
+    return {
+      data: record.aiSuggestions as object[],
+      generatedAt: record.aiGeneratedAt,
     };
   }
 }

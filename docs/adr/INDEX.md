@@ -31,6 +31,7 @@ Un ADR (Architecture Decision Record) est un document qui capture une **décisio
 | [ADR-012](./ADR-012-upgrade-node-22.md)                 | Migration vers Node.js 22 LTS                 | 2026-03-10 | ✅ Accepté |
 | [ADR-013](./ADR-013-llm-provider-local-vs-cloud.md)     | Provider LLM — Ollama local vs OpenRouter     | 2026-03-25 | ✅ Accepté |
 | [ADR-014](./ADR-014-stock-prediction-deterministic.md)  | Prédictions stock — algorithmes déterministes | 2026-03-25 | ✅ Accepté |
+| [ADR-015](./ADR-015-openrouter-mistral-ai-service.md)   | OpenRouter + Mistral comme provider LLM       | 2026-03-27 | ✅ Accepté |
 
 ## 📖 Comment lire un ADR ?
 
