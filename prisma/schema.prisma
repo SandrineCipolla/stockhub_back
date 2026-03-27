@@ -9,16 +9,48 @@ datasource db {
 }
 
 model Item {
-  id           Int       @id @default(autoincrement())
-  label        String?   @db.VarChar(255)
-  description  String?   @db.VarChar(255)
+  id           Int               @id @default(autoincrement())
+  label        String?           @db.VarChar(255)
+  description  String?           @db.VarChar(255)
   quantity     Int?
-  minimumStock Int       @default(1)
+  minimumStock Int               @default(1)
+  expiresAt    DateTime?
   stockId      Int?
-  stock        Stock?    @relation(fields: [stockId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  stock        Stock?            @relation(fields: [stockId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  history      ItemHistory[]
+  predictions  StockPrediction[]
 
   @@index([stockId])
   @@map("items")
+}
+
+model ItemHistory {
+  id          Int      @id @default(autoincrement())
+  itemId      Int
+  oldQuantity Int
+  newQuantity Int
+  changeType  String   @db.VarChar(20) // CONSUMPTION | RESTOCK | ADJUSTMENT
+  changedBy   String?  @db.VarChar(255)
+  changedAt   DateTime @default(now())
+  item        Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([itemId, changedAt])
+  @@map("item_history")
+}
+
+model StockPrediction {
+  id                   Int      @id @default(autoincrement())
+  itemId               Int
+  daysUntilEmpty       Int?
+  avgDailyConsumption  Float?
+  trend                String   @db.VarChar(20) // STABLE | INCREASING | DECREASING
+  recommendedRestock   Int?
+  simulatedFallback    Boolean  @default(false)
+  generatedAt          DateTime @default(now())
+  item                 Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([itemId, generatedAt])
+  @@map("stock_predictions")
 }
 
 model Stock {

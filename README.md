@@ -162,21 +162,22 @@ Les **ADRs** documentent les décisions techniques majeures du projet avec leur 
 
 📖 **[Voir tous les ADRs](./docs/adr/INDEX.md)**
 
-| #                                                                | Décision                                    | Date     |
-| ---------------------------------------------------------------- | ------------------------------------------- | -------- |
-| [ADR-001](./docs/adr/ADR-001-migration-ddd-cqrs.md)              | Migration vers DDD/CQRS                     | Nov 2025 |
-| [ADR-002](./docs/adr/ADR-002-choix-prisma-orm.md)                | Choix de Prisma vs TypeORM                  | Déc 2025 |
-| [ADR-003](./docs/adr/ADR-003-azure-ad-b2c-authentication.md)     | Azure AD B2C pour authentification          | Déc 2025 |
-| [ADR-004](./docs/adr/ADR-004-tests-value-objects-entities.md)    | Tests sur Value Objects et Entities         | Déc 2025 |
-| [ADR-005](./docs/adr/ADR-005-api-versioning-v2.md)               | Versioning API (V2 sans V1)                 | Déc 2025 |
-| [ADR-006](./docs/adr/ADR-006-mysql-azure-cloud.md)               | MySQL Azure vs autres clouds                | Déc 2025 |
-| [ADR-007](./docs/adr/ADR-007-code-quality-enforcement.md)        | Standards de qualité de code stricts        | Déc 2024 |
-| [ADR-008](./docs/adr/ADR-008-typescript-request-type-aliases.md) | Type Aliases pour requêtes Express typées   | Déc 2025 |
-| [ADR-009](./docs/adr/ADR-009-resource-based-authorization.md)    | Système d'autorisation hybride              | Déc 2025 |
-| [ADR-010](./docs/adr/ADR-010-ci-cd-pipeline-optimization.md)     | Optimisation pipeline CI/CD (8min → 4-5min) | Déc 2025 |
-| [ADR-011](./docs/adr/ADR-011-staging-render-aiven.md)            | Staging Render.com + Aiven MySQL            | Jan 2026 |
-| [ADR-012](./docs/adr/ADR-012-upgrade-node-22.md)                 | Migration vers Node.js 22 LTS               | Mar 2026 |
-| [ADR-013](./docs/adr/ADR-013-llm-provider-local-vs-cloud.md)     | Provider LLM — Ollama local vs OpenRouter   | Mar 2026 |
+| #                                                                | Décision                                      | Date     |
+| ---------------------------------------------------------------- | --------------------------------------------- | -------- |
+| [ADR-001](./docs/adr/ADR-001-migration-ddd-cqrs.md)              | Migration vers DDD/CQRS                       | Nov 2025 |
+| [ADR-002](./docs/adr/ADR-002-choix-prisma-orm.md)                | Choix de Prisma vs TypeORM                    | Déc 2025 |
+| [ADR-003](./docs/adr/ADR-003-azure-ad-b2c-authentication.md)     | Azure AD B2C pour authentification            | Déc 2025 |
+| [ADR-004](./docs/adr/ADR-004-tests-value-objects-entities.md)    | Tests sur Value Objects et Entities           | Déc 2025 |
+| [ADR-005](./docs/adr/ADR-005-api-versioning-v2.md)               | Versioning API (V2 sans V1)                   | Déc 2025 |
+| [ADR-006](./docs/adr/ADR-006-mysql-azure-cloud.md)               | MySQL Azure vs autres clouds                  | Déc 2025 |
+| [ADR-007](./docs/adr/ADR-007-code-quality-enforcement.md)        | Standards de qualité de code stricts          | Déc 2024 |
+| [ADR-008](./docs/adr/ADR-008-typescript-request-type-aliases.md) | Type Aliases pour requêtes Express typées     | Déc 2025 |
+| [ADR-009](./docs/adr/ADR-009-resource-based-authorization.md)    | Système d'autorisation hybride                | Déc 2025 |
+| [ADR-010](./docs/adr/ADR-010-ci-cd-pipeline-optimization.md)     | Optimisation pipeline CI/CD (8min → 4-5min)   | Déc 2025 |
+| [ADR-011](./docs/adr/ADR-011-staging-render-aiven.md)            | Staging Render.com + Aiven MySQL              | Jan 2026 |
+| [ADR-012](./docs/adr/ADR-012-upgrade-node-22.md)                 | Migration vers Node.js 22 LTS                 | Mar 2026 |
+| [ADR-013](./docs/adr/ADR-013-llm-provider-local-vs-cloud.md)     | Provider LLM — Ollama local vs OpenRouter     | Mar 2026 |
+| [ADR-014](./docs/adr/ADR-014-stock-prediction-deterministic.md)  | Prédictions stock — algorithmes déterministes | Mar 2026 |
 
 📚 **[Documentation complète du projet](https://github.com/SandrineCipolla/stockHub_V2_front/wiki)** — Architecture, guides techniques, métriques
 
@@ -254,7 +255,7 @@ npx prisma migrate deploy # Appliquer les migrations
 npx prisma studio        # Interface visuelle DB
 
 # Tests
-npm run test:unit        # 159 tests unitaires
+npm run test:unit        # 170 tests unitaires
 npm run test:integration # Tests d'intégration (TestContainers)
 npm run test:e2e         # Tests E2E Playwright
 npm run test:coverage    # Rapport de couverture
@@ -273,7 +274,7 @@ npm run azure:stop       # Arrêter l'app Azure après les tests
 
 ### Unitaires (TDD)
 
-**159 tests — couverture globale : 92% statements | 82% branches | 94% functions**
+**170 tests — couverture globale : 92% statements | 82% branches | 94% functions**
 Seuil minimum configuré : 80% sur toutes les métriques (`jest.ci.config.js`)
 
 - `Quantity` : valeurs invalides interdites

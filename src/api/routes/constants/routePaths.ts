@@ -23,4 +23,10 @@ export const STOCK_ROUTES = {
 
   /** DELETE - Remove an item from a stock (requires write permission) */
   DELETE_ITEM: '/stocks/:stockId/items/:itemId',
+
+  /** GET - Get item history (requires read permission) */
+  ITEM_HISTORY: '/stocks/:stockId/items/:itemId/history',
+
+  /** GET - Get item prediction (requires read permission) */
+  ITEM_PREDICTION: '/stocks/:stockId/items/:itemId/prediction',
 } as const;

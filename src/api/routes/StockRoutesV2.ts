@@ -26,6 +26,11 @@ import { rootController } from '@utils/logger';
 import { PrismaClient } from '@prisma/client';
 import { authorizeStockRead, authorizeStockWrite } from '@authorization/authorizeMiddleware';
 import { STOCK_ROUTES } from './constants/routePaths';
+import { PrismaItemHistoryRepository } from '@infrastructure/prediction/repositories/PrismaItemHistoryRepository';
+import { PrismaStockPredictionRepository } from '@infrastructure/prediction/repositories/PrismaStockPredictionRepository';
+import { StockPredictionService } from '@domain/prediction/services/StockPredictionService';
+import { StockPredictionController } from '@api/controllers/StockPredictionController';
+import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
 
 const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Router> => {
   const prismaRepository = new PrismaStockVisualizationRepository(prismaClient);
@@ -40,13 +45,26 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   // Manipulation setup
   const commandRepository = new PrismaStockCommandRepository(prismaClient);
+  const historyRepository = new PrismaItemHistoryRepository(prismaClient);
+  const predictionRepository = new PrismaStockPredictionRepository(prismaClient);
+
   const createStockHandler = new CreateStockCommandHandler(commandRepository);
-  const addItemHandler = new AddItemToStockCommandHandler(commandRepository);
-  const updateQuantityHandler = new UpdateItemQuantityCommandHandler(commandRepository);
-  const updateItemHandler = new UpdateItemCommandHandler(commandRepository);
+  const addItemHandler = new AddItemToStockCommandHandler(commandRepository, historyRepository);
+  const updateQuantityHandler = new UpdateItemQuantityCommandHandler(
+    commandRepository,
+    historyRepository
+  );
+  const updateItemHandler = new UpdateItemCommandHandler(commandRepository, historyRepository);
   const updateStockHandler = new UpdateStockCommandHandler(commandRepository);
   const deleteStockHandler = new DeleteStockCommandHandler(commandRepository);
   const deleteItemHandler = new DeleteItemCommandHandler(commandRepository);
+
+  const predictionService = new StockPredictionService(historyRepository, predictionRepository);
+  const predictionController = new StockPredictionController(
+    predictionService,
+    historyRepository,
+    predictionRepository
+  );
 
   const manipulationController = new StockControllerManipulation(
     createStockHandler,
@@ -133,6 +151,22 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   });
 
   logger.info('Routes for DELETE /stocks/:stockId configured (with authorization)');
+
+  router.get(STOCK_ROUTES.ITEM_HISTORY, authorizeStockRead, async (req, res: express.Response) => {
+    await predictionController.getItemHistory(req as AuthenticatedRequest, res);
+  });
+
+  logger.info('Routes for GET /stocks/:stockId/items/:itemId/history configured');
+
+  router.get(
+    STOCK_ROUTES.ITEM_PREDICTION,
+    authorizeStockRead,
+    async (req, res: express.Response) => {
+      await predictionController.getItemPrediction(req as AuthenticatedRequest, res);
+    }
+  );
+
+  logger.info('Routes for GET /stocks/:stockId/items/:itemId/prediction configured');
 
   return router;
 };

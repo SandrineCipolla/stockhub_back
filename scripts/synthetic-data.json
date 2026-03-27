@@ -1,0 +1,832 @@
+{
+  "generatedAt": "2026-03-25",
+  "periodDays": 90,
+  "stocks": [
+    {
+      "stockName": "Garde-manger",
+      "items": [
+        {
+          "label": "Farine",
+          "unit": "g",
+          "currentStock": 213,
+          "minimumStock": 200,
+          "status": "ok",
+          "avgDailyConsumption": 62,
+          "trend": "stable",
+          "restockCount": 5,
+          "lastRestockDaysAgo": 15,
+          "estimatedDaysUntilStockout": 3,
+          "weeklyPattern": {
+            "weekday": 53,
+            "weekend": 85
+          },
+          "recentHistory": [
+            {
+              "date": "2026-03-11",
+              "consumed": 46,
+              "restocked": 0,
+              "stockLevel": 1148
+            },
+            {
+              "date": "2026-03-12",
+              "consumed": 81,
+              "restocked": 0,
+              "stockLevel": 1067
+            },
+            {
+              "date": "2026-03-13",
+              "consumed": 65,
+              "restocked": 0,
+              "stockLevel": 1002
+            },
+            {
+              "date": "2026-03-14",
+              "consumed": 119,
+              "restocked": 0,
+              "stockLevel": 883
+            },
+            {
+              "date": "2026-03-15",
+              "consumed": 66,
+              "restocked": 0,
+              "stockLevel": 817
+            },
+            {
+              "date": "2026-03-16",
+              "consumed": 76,
+              "restocked": 0,
+              "stockLevel": 741
+            },
+            {
+              "date": "2026-03-17",
+              "consumed": 39,
+              "restocked": 0,
+              "stockLevel": 702
+            },
+            {
+              "date": "2026-03-18",
+              "consumed": 70,
+              "restocked": 0,
+              "stockLevel": 632
+            },
+            {
+              "date": "2026-03-19",
+              "consumed": 48,
+              "restocked": 0,
+              "stockLevel": 584
+            },
+            {
+              "date": "2026-03-20",
+              "consumed": 63,
+              "restocked": 0,
+              "stockLevel": 521
+            },
+            {
+              "date": "2026-03-21",
+              "consumed": 91,
+              "restocked": 0,
+              "stockLevel": 430
+            },
+            {
+              "date": "2026-03-22",
+              "consumed": 62,
+              "restocked": 0,
+              "stockLevel": 368
+            },
+            {
+              "date": "2026-03-23",
+              "consumed": 66,
+              "restocked": 0,
+              "stockLevel": 302
+            },
+            {
+              "date": "2026-03-24",
+              "consumed": 89,
+              "restocked": 0,
+              "stockLevel": 213
+            }
+          ]
+        },
+        {
+          "label": "Pâtes",
+          "unit": "g",
+          "currentStock": 375,
+          "minimumStock": 100,
+          "status": "ok",
+          "avgDailyConsumption": 61,
+          "trend": "decreasing",
+          "restockCount": 11,
+          "lastRestockDaysAgo": 4,
+          "estimatedDaysUntilStockout": 6,
+          "weeklyPattern": {
+            "weekday": 58,
+            "weekend": 69
+          },
+          "recentHistory": [
+            {
+              "date": "2026-03-11",
+              "consumed": 68,
+              "restocked": 0,
+              "stockLevel": 179
+            },
+            {
+              "date": "2026-03-12",
+              "consumed": 43,
+              "restocked": 0,
+              "stockLevel": 136
+            },
+            {
+              "date": "2026-03-13",
+              "consumed": 77,
+              "restocked": 500,
+              "stockLevel": 559
+            },
+            {
+              "date": "2026-03-14",
+              "consumed": 53,
+              "restocked": 0,
+              "stockLevel": 506
+            },
+            {
+              "date": "2026-03-15",
+              "consumed": 53,
+              "restocked": 0,
+              "stockLevel": 453
+            },
+            {
+              "date": "2026-03-16",
+              "consumed": 52,
+              "restocked": 0,
+              "stockLevel": 401
+            },
+            {
+              "date": "2026-03-17",
+              "consumed": 55,
+              "restocked": 0,
+              "stockLevel": 346
+            },
+            {
+              "date": "2026-03-18",
+              "consumed": 72,
+              "restocked": 0,
+              "stockLevel": 274
+            },
+            {
+              "date": "2026-03-19",
+              "consumed": 85,
+              "restocked": 0,
+              "stockLevel": 189
+            },
+            {
+              "date": "2026-03-20",
+              "consumed": 38,
+              "restocked": 0,
+              "stockLevel": 151
+            },
+            {
+              "date": "2026-03-21",
+              "consumed": 54,
+              "restocked": 500,
+              "stockLevel": 597
+            },
+            {
+              "date": "2026-03-22",
+              "consumed": 82,
+              "restocked": 0,
+              "stockLevel": 515
+            },
+            {
+              "date": "2026-03-23",
+              "consumed": 74,
+              "restocked": 0,
+              "stockLevel": 441
+            },
+            {
+              "date": "2026-03-24",
+              "consumed": 66,
+              "restocked": 0,
+              "stockLevel": 375
+            }
+          ]
+        },
+        {
+          "label": "Huile",
+          "unit": "mL",
+          "currentStock": 309,
+          "minimumStock": 100,
+          "status": "ok",
+          "avgDailyConsumption": 17,
+          "trend": "stable",
+          "restockCount": 3,
+          "lastRestockDaysAgo": 18,
+          "estimatedDaysUntilStockout": 18,
+          "weeklyPattern": {
+            "weekday": 16,
+            "weekend": 18
+          },
+          "recentHistory": [
+            {
+              "date": "2026-03-11",
+              "consumed": 11,
+              "restocked": 0,
+              "stockLevel": 537
+            },
+            {
+              "date": "2026-03-12",
+              "consumed": 15,
+              "restocked": 0,
+              "stockLevel": 522
+            },
+            {
+              "date": "2026-03-13",
+              "consumed": 20,
+              "restocked": 0,
+              "stockLevel": 502
+            },
+            {
+              "date": "2026-03-14",
+              "consumed": 24,
+              "restocked": 0,
+              "stockLevel": 478
+            },
+            {
+              "date": "2026-03-15",
+              "consumed": 15,
+              "restocked": 0,
+              "stockLevel": 463
+            },
+            {
+              "date": "2026-03-16",
+              "consumed": 22,
+              "restocked": 0,
+              "stockLevel": 441
+            },
+            {
+              "date": "2026-03-17",
+              "consumed": 20,
+              "restocked": 0,
+              "stockLevel": 421
+            },
+            {
+              "date": "2026-03-18",
+              "consumed": 13,
+              "restocked": 0,
+              "stockLevel": 408
+            },
+            {
+              "date": "2026-03-19",
+              "consumed": 16,
+              "restocked": 0,
+              "stockLevel": 392
+            },
+            {
+              "date": "2026-03-20",
+              "consumed": 22,
+              "restocked": 0,
+              "stockLevel": 370
+            },
+            {
+              "date": "2026-03-21",
+              "consumed": 17,
+              "restocked": 0,
+              "stockLevel": 353
+            },
+            {
+              "date": "2026-03-22",
+              "consumed": 22,
+              "restocked": 0,
+              "stockLevel": 331
+            },
+            {
+              "date": "2026-03-23",
+              "consumed": 16,
+              "restocked": 0,
+              "stockLevel": 315
+            },
+            {
+              "date": "2026-03-24",
+              "consumed": 6,
+              "restocked": 0,
+              "stockLevel": 309
+            }
+          ]
+        },
+        {
+          "label": "Café",
+          "unit": "g",
+          "currentStock": 145,
+          "minimumStock": 50,
+          "status": "ok",
+          "avgDailyConsumption": 20,
+          "trend": "stable",
+          "restockCount": 7,
+          "lastRestockDaysAgo": 8,
+          "estimatedDaysUntilStockout": 7,
+          "weeklyPattern": {
+            "weekday": 20,
+            "weekend": 21
+          },
+          "recentHistory": [
+            {
+              "date": "2026-03-11",
+              "consumed": 17,
+              "restocked": 0,
+              "stockLevel": 161
+            },
+            {
+              "date": "2026-03-12",
+              "consumed": 23,
+              "restocked": 0,
+              "stockLevel": 138
+            },
+            {
+              "date": "2026-03-13",
+              "consumed": 19,
+              "restocked": 0,
+              "stockLevel": 119
+            },
+            {
+              "date": "2026-03-14",
+              "consumed": 21,
+              "restocked": 0,
+              "stockLevel": 98
+            },
+            {
+              "date": "2026-03-15",
+              "consumed": 18,
+              "restocked": 0,
+              "stockLevel": 80
+            },
+            {
+              "date": "2026-03-16",
+              "consumed": 17,
+              "restocked": 0,
+              "stockLevel": 63
+            },
+            {
+              "date": "2026-03-17",
+              "consumed": 19,
+              "restocked": 250,
+              "stockLevel": 294
+            },
+            {
+              "date": "2026-03-18",
+              "consumed": 19,
+              "restocked": 0,
+              "stockLevel": 275
+            },
+            {
+              "date": "2026-03-19",
+              "consumed": 25,
+              "restocked": 0,
+              "stockLevel": 250
+            },
+            {
+              "date": "2026-03-20",
+              "consumed": 22,
+              "restocked": 0,
+              "stockLevel": 228
+            },
+            {
+              "date": "2026-03-21",
+              "consumed": 23,
+              "restocked": 0,
+              "stockLevel": 205
+            },
+            {
+              "date": "2026-03-22",
+              "consumed": 15,
+              "restocked": 0,
+              "stockLevel": 190
+            },
+            {
+              "date": "2026-03-23",
+              "consumed": 22,
+              "restocked": 0,
+              "stockLevel": 168
+            },
+            {
+              "date": "2026-03-24",
+              "consumed": 23,
+              "restocked": 0,
+              "stockLevel": 145
+            }
+          ]
+        },
+        {
+          "label": "Lait",
+          "unit": "mL",
+          "currentStock": 2281,
+          "minimumStock": 500,
+          "status": "overstocked",
+          "avgDailyConsumption": 369,
+          "trend": "stable",
+          "restockCount": 17,
+          "lastRestockDaysAgo": 1,
+          "estimatedDaysUntilStockout": 6,
+          "weeklyPattern": {
+            "weekday": 358,
+            "weekend": 397
+          },
+          "recentHistory": [
+            {
+              "date": "2026-03-11",
+              "consumed": 408,
+              "restocked": 0,
+              "stockLevel": 878
+            },
+            {
+              "date": "2026-03-12",
+              "consumed": 367,
+              "restocked": 0,
+              "stockLevel": 511
+            },
+            {
+              "date": "2026-03-13",
+              "consumed": 441,
+              "restocked": 2000,
+              "stockLevel": 2070
+            },
+            {
+              "date": "2026-03-14",
+              "consumed": 468,
+              "restocked": 0,
+              "stockLevel": 1602
+            },
+            {
+              "date": "2026-03-15",
+              "consumed": 257,
+              "restocked": 0,
+              "stockLevel": 1345
+            },
+            {
+              "date": "2026-03-16",
+              "consumed": 438,
+              "restocked": 0,
+              "stockLevel": 907
+            },
+            {
+              "date": "2026-03-17",
+              "consumed": 298,
+              "restocked": 0,
+              "stockLevel": 609
+            },
+            {
+              "date": "2026-03-18",
+              "consumed": 468,
+              "restocked": 2000,
+              "stockLevel": 2141
+            },
+            {
+              "date": "2026-03-19",
+              "consumed": 296,
+              "restocked": 0,
+              "stockLevel": 1845
+            },
+            {
+              "date": "2026-03-20",
+              "consumed": 366,
+              "restocked": 0,
+              "stockLevel": 1479
+            },
+            {
+              "date": "2026-03-21",
+              "consumed": 358,
+              "restocked": 0,
+              "stockLevel": 1121
+            },
+            {
+              "date": "2026-03-22",
+              "consumed": 306,
+              "restocked": 0,
+              "stockLevel": 815
+            },
+            {
+              "date": "2026-03-23",
+              "consumed": 230,
+              "restocked": 0,
+              "stockLevel": 585
+            },
+            {
+              "date": "2026-03-24",
+              "consumed": 304,
+              "restocked": 2000,
+              "stockLevel": 2281
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stockName": "Hygiène",
+      "items": [
+        {
+          "label": "Dentifrice",
+          "unit": "g",
+          "currentStock": 30,
+          "minimumStock": 15,
+          "status": "ok",
+          "avgDailyConsumption": 3,
+          "trend": "stable",
+          "restockCount": 3,
+          "lastRestockDaysAgo": 22,
+          "estimatedDaysUntilStockout": 10,
+          "weeklyPattern": {
+            "weekday": 3,
+            "weekend": 3
+          },
+          "recentHistory": [
+            {
+              "date": "2026-03-11",
+              "consumed": 3,
+              "restocked": 0,
+              "stockLevel": 66
+            },
+            {
+              "date": "2026-03-12",
+              "consumed": 2,
+              "restocked": 0,
+              "stockLevel": 64
+            },
+            {
+              "date": "2026-03-13",
+              "consumed": 3,
+              "restocked": 0,
+              "stockLevel": 61
+            },
+            {
+              "date": "2026-03-14",
+              "consumed": 3,
+              "restocked": 0,
+              "stockLevel": 58
+            },
+            {
+              "date": "2026-03-15",
+              "consumed": 3,
+              "restocked": 0,
+              "stockLevel": 55
+            },
+            {
+              "date": "2026-03-16",
+              "consumed": 3,
+              "restocked": 0,
+              "stockLevel": 52
+            },
+            {
+              "date": "2026-03-17",
+              "consumed": 3,
+              "restocked": 0,
+              "stockLevel": 49
+            },
+            {
+              "date": "2026-03-18",
+              "consumed": 3,
+              "restocked": 0,
+              "stockLevel": 46
+            },
+            {
+              "date": "2026-03-19",
+              "consumed": 3,
+              "restocked": 0,
+              "stockLevel": 43
+            },
+            {
+              "date": "2026-03-20",
+              "consumed": 3,
+              "restocked": 0,
+              "stockLevel": 40
+            },
+            {
+              "date": "2026-03-21",
+              "consumed": 2,
+              "restocked": 0,
+              "stockLevel": 38
+            },
+            {
+              "date": "2026-03-22",
+              "consumed": 2,
+              "restocked": 0,
+              "stockLevel": 36
+            },
+            {
+              "date": "2026-03-23",
+              "consumed": 3,
+              "restocked": 0,
+              "stockLevel": 33
+            },
+            {
+              "date": "2026-03-24",
+              "consumed": 3,
+              "restocked": 0,
+              "stockLevel": 30
+            }
+          ]
+        },
+        {
+          "label": "Savon",
+          "unit": "mL",
+          "currentStock": 224,
+          "minimumStock": 50,
+          "status": "overstocked",
+          "avgDailyConsumption": 10,
+          "trend": "stable",
+          "restockCount": 3,
+          "lastRestockDaysAgo": 13,
+          "estimatedDaysUntilStockout": 22,
+          "weeklyPattern": {
+            "weekday": 10,
+            "weekend": 12
+          },
+          "recentHistory": [
+            {
+              "date": "2026-03-11",
+              "consumed": 9,
+              "restocked": 0,
+              "stockLevel": 60
+            },
+            {
+              "date": "2026-03-12",
+              "consumed": 15,
+              "restocked": 300,
+              "stockLevel": 345
+            },
+            {
+              "date": "2026-03-13",
+              "consumed": 10,
+              "restocked": 0,
+              "stockLevel": 335
+            },
+            {
+              "date": "2026-03-14",
+              "consumed": 9,
+              "restocked": 0,
+              "stockLevel": 326
+            },
+            {
+              "date": "2026-03-15",
+              "consumed": 9,
+              "restocked": 0,
+              "stockLevel": 317
+            },
+            {
+              "date": "2026-03-16",
+              "consumed": 9,
+              "restocked": 0,
+              "stockLevel": 308
+            },
+            {
+              "date": "2026-03-17",
+              "consumed": 12,
+              "restocked": 0,
+              "stockLevel": 296
+            },
+            {
+              "date": "2026-03-18",
+              "consumed": 7,
+              "restocked": 0,
+              "stockLevel": 289
+            },
+            {
+              "date": "2026-03-19",
+              "consumed": 12,
+              "restocked": 0,
+              "stockLevel": 277
+            },
+            {
+              "date": "2026-03-20",
+              "consumed": 9,
+              "restocked": 0,
+              "stockLevel": 268
+            },
+            {
+              "date": "2026-03-21",
+              "consumed": 12,
+              "restocked": 0,
+              "stockLevel": 256
+            },
+            {
+              "date": "2026-03-22",
+              "consumed": 14,
+              "restocked": 0,
+              "stockLevel": 242
+            },
+            {
+              "date": "2026-03-23",
+              "consumed": 11,
+              "restocked": 0,
+              "stockLevel": 231
+            },
+            {
+              "date": "2026-03-24",
+              "consumed": 7,
+              "restocked": 0,
+              "stockLevel": 224
+            }
+          ]
+        },
+        {
+          "label": "Shampooing",
+          "unit": "mL",
+          "currentStock": 279,
+          "minimumStock": 60,
+          "status": "overstocked",
+          "avgDailyConsumption": 9,
+          "trend": "stable",
+          "restockCount": 2,
+          "lastRestockDaysAgo": 20,
+          "estimatedDaysUntilStockout": 31,
+          "weeklyPattern": {
+            "weekday": 9,
+            "weekend": 10
+          },
+          "recentHistory": [
+            {
+              "date": "2026-03-11",
+              "consumed": 10,
+              "restocked": 0,
+              "stockLevel": 399
+            },
+            {
+              "date": "2026-03-12",
+              "consumed": 9,
+              "restocked": 0,
+              "stockLevel": 390
+            },
+            {
+              "date": "2026-03-13",
+              "consumed": 11,
+              "restocked": 0,
+              "stockLevel": 379
+            },
+            {
+              "date": "2026-03-14",
+              "consumed": 6,
+              "restocked": 0,
+              "stockLevel": 373
+            },
+            {
+              "date": "2026-03-15",
+              "consumed": 15,
+              "restocked": 0,
+              "stockLevel": 358
+            },
+            {
+              "date": "2026-03-16",
+              "consumed": 9,
+              "restocked": 0,
+              "stockLevel": 349
+            },
+            {
+              "date": "2026-03-17",
+              "consumed": 8,
+              "restocked": 0,
+              "stockLevel": 341
+            },
+            {
+              "date": "2026-03-18",
+              "consumed": 8,
+              "restocked": 0,
+              "stockLevel": 333
+            },
+            {
+              "date": "2026-03-19",
+              "consumed": 8,
+              "restocked": 0,
+              "stockLevel": 325
+            },
+            {
+              "date": "2026-03-20",
+              "consumed": 7,
+              "restocked": 0,
+              "stockLevel": 318
+            },
+            {
+              "date": "2026-03-21",
+              "consumed": 10,
+              "restocked": 0,
+              "stockLevel": 308
+            },
+            {
+              "date": "2026-03-22",
+              "consumed": 11,
+              "restocked": 0,
+              "stockLevel": 297
+            },
+            {
+              "date": "2026-03-23",
+              "consumed": 8,
+              "restocked": 0,
+              "stockLevel": 289
+            },
+            {
+              "date": "2026-03-24",
+              "consumed": 10,
+              "restocked": 0,
+              "stockLevel": 279
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

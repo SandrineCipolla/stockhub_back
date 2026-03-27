@@ -8,13 +8,26 @@
  *  - 3 stocks (owner) : alimentation, hygiene, artistique
  *  - 3 items par stock (dont 1 en sous-stock intentionnel)
  *  - alice → EDITOR sur le stock Café
+t *  - 90 jours d'historique de consommation par item (pour les prédictions IA)
  */
 
 import { PrismaClient, StockCategory, StockRole, FamilyRole } from '@prisma/client';
 
+// --- Gaussian (Box-Muller) ---
+function gaussianRandom(mean: number, stdDev: number): number {
+  const u1 = Math.random();
+  const u2 = Math.random();
+  const z = Math.sqrt(-2 * Math.log(u1 + 1e-10)) * Math.cos(2 * Math.PI * u2);
+  return Math.max(0, mean + z * stdDev);
+}
+
 const prisma = new PrismaClient();
 
 async function main(): Promise<void> {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('Seed interdit en production. Utilisez NODE_ENV=development ou staging.');
+  }
+
   const ownerEmail = process.env.SEED_OWNER_EMAIL ?? 'owner@stockhub.local';
   const aliceEmail = 'alice@stockhub.local';
   const bobEmail = 'bob@stockhub.local';
@@ -107,6 +120,36 @@ async function main(): Promise<void> {
     },
   });
 
+  // --- Historique 90 jours pour les prédictions IA ---
+  const allItems = await prisma.item.findMany({
+    where: { stockId: { in: [stockCafe.id, stockHygiene.id, stockArt.id] } },
+  });
+
+  const itemProfiles: Record<
+    string,
+    { avgConsumption: number; stdDev: number; weekendMultiplier: number }
+  > = {
+    'Café Arabica 250g': { avgConsumption: 2, stdDev: 0.5, weekendMultiplier: 1.3 },
+    'Thé Vert': { avgConsumption: 1, stdDev: 0.3, weekendMultiplier: 1.0 },
+    'Café Soluble': { avgConsumption: 0.5, stdDev: 0.2, weekendMultiplier: 1.1 },
+    'Savon Liquide 500ml': { avgConsumption: 3, stdDev: 1, weekendMultiplier: 1.2 },
+    'Gel Douche': { avgConsumption: 2, stdDev: 0.5, weekendMultiplier: 1.3 },
+    Shampoing: { avgConsumption: 2, stdDev: 0.5, weekendMultiplier: 1.4 },
+    'Peinture Acrylique Rouge': { avgConsumption: 1, stdDev: 0.5, weekendMultiplier: 2.0 },
+    'Pinceaux Set': { avgConsumption: 0, stdDev: 0, weekendMultiplier: 1.0 },
+    'Toile 30x40cm': { avgConsumption: 0.3, stdDev: 0.2, weekendMultiplier: 2.5 },
+  };
+
+  for (const item of allItems) {
+    const existing = await prisma.itemHistory.count({ where: { itemId: item.id } });
+    if (existing > 0) continue;
+
+    const profile = itemProfiles[item.label ?? ''];
+    if (!profile || profile.avgConsumption === 0) continue;
+
+    await seedItemHistory(item.id, item.quantity ?? 0, item.minimumStock, profile, ownerEmail);
+  }
+
   console.log('✅ Seed terminé avec succès');
   console.log(`   Owner : ${ownerEmail} (id=${owner.id})`);
   console.log(`   Alice : ${aliceEmail} (id=${alice.id})`);
@@ -130,6 +173,70 @@ async function upsertStock(
     data: { label, description, category, userId },
     select: { id: true, label: true },
   });
+}
+
+async function seedItemHistory(
+  itemId: number,
+  currentQuantity: number,
+  minimumStock: number,
+  profile: { avgConsumption: number; stdDev: number; weekendMultiplier: number },
+  changedBy: string
+): Promise<void> {
+  const DAYS = 90;
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - DAYS);
+
+  let stock = currentQuantity + Math.ceil(profile.avgConsumption * DAYS * 0.8); // stock de départ simulé
+
+  const entries: {
+    itemId: number;
+    oldQuantity: number;
+    newQuantity: number;
+    changeType: string;
+    changedBy: string;
+    changedAt: Date;
+  }[] = [];
+
+  for (let i = 0; i < DAYS; i++) {
+    const date = new Date(startDate);
+    date.setDate(startDate.getDate() + i);
+
+    const dayOfWeek = date.getDay();
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+    const multiplier = isWeekend ? profile.weekendMultiplier : 1.0;
+
+    const consumed = Math.round(
+      gaussianRandom(profile.avgConsumption * multiplier, profile.stdDev * multiplier)
+    );
+
+    if (consumed > 0 && stock > 0) {
+      const oldQty = stock;
+      stock = Math.max(0, stock - consumed);
+      entries.push({
+        itemId,
+        oldQuantity: oldQty,
+        newQuantity: stock,
+        changeType: 'CONSUMPTION',
+        changedBy,
+        changedAt: date,
+      });
+    }
+
+    if (stock < minimumStock) {
+      const oldQty = stock;
+      stock = stock + Math.ceil(profile.avgConsumption * 30);
+      entries.push({
+        itemId,
+        oldQuantity: oldQty,
+        newQuantity: stock,
+        changeType: 'RESTOCK',
+        changedBy,
+        changedAt: new Date(date.getTime() + 3600000),
+      });
+    }
+  }
+
+  await prisma.itemHistory.createMany({ data: entries });
 }
 
 async function upsertItem(
