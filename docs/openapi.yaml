@@ -650,7 +650,7 @@ components:
         description:
           type: string
           description: Description actionnable de la suggestion (max 200 caractères)
-          example: Le stock de l'item 1 sera épuisé dans moins de 7 jours. Réassort recommandé : 55 unités.
+          example: "Le stock de l'item 1 sera épuisé dans moins de 7 jours. Réassort recommandé : 55 unités."
         source:
           type: string
           enum: [llm, deterministic]
