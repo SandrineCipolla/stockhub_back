@@ -87,6 +87,12 @@ export async function initializeApp() {
 
   rootSecurity.info('initialization of authentication DONE!');
 
+  // ----------- Health check -----------
+
+  app.get('/health', (_req: express.Request, res: express.Response) => {
+    res.status(200).json({ status: 'ok' });
+  });
+
   // ----------- Swagger/OpenAPI Documentation -----------
 
   if (process.env.SWAGGER_ENABLED === 'true') {
