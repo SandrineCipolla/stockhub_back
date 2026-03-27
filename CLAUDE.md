@@ -8,7 +8,8 @@ API Node.js/Express avec architecture DDD/CQRS pour la gestion de stocks intelli
 
 - **Chemin local**: `C:\Users\sandr\Dev\Perso\Projets\stockhub\stockhub_back`
 - **URL GitHub**: https://github.com/SandrineCipolla/stockhub_back
-- **Démo live**: https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net/
+- **Prod (Azure App Service)**: https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net/
+- **Staging (Render.com)**: déployé automatiquement depuis la branche `staging`, DB Aiven MySQL
 - **Description**: API REST StockHub avec architecture DDD/CQRS et authentification Azure AD B2C
 - **Tech**: Node.js, Express 4.20.0, TypeScript 5.8.3, Prisma 6.16.0, MySQL, Azure AD B2C
 - **Version**: v2.1.1

@@ -407,6 +407,40 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+    delete:
+      summary: Supprimer un item d'un stock
+      description: Supprime un item spécifique d'un stock.
+      tags:
+        - Stock Manipulation (WRITE)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+        - name: itemId
+          in: path
+          required: true
+          description: Identifiant unique de l'item
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '204':
+          description: Item supprimé avec succès (pas de contenu retourné)
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
   /api/v2/stocks/{stockId}/items/{itemId}/history:
     get:
       summary: Historique de consommation d'un item
@@ -517,40 +551,6 @@ paths:
                 generatedAt: '2026-03-25T08:00:00.000Z'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-    delete:
-      summary: Supprimer un item d'un stock
-      description: Supprime un item spécifique d'un stock
-      tags:
-        - Stock Manipulation (WRITE)
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: stockId
-          in: path
-          required: true
-          description: Identifiant unique du stock
-          schema:
-            type: integer
-            example: 1
-        - name: itemId
-          in: path
-          required: true
-          description: Identifiant unique de l'item
-          schema:
-            type: integer
-            example: 1
-      responses:
-        '204':
-          description: Item supprimé avec succès (pas de contenu retourné)
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/InternalServerError'
 

@@ -30,6 +30,8 @@ services:
       - '3006:3006'
     volumes:
       - ./src:/usr/src/app/src
+      - ./prisma:/usr/src/app/prisma
+      - ./docs:/usr/src/app/docs
     environment:
       NODE_ENV: development
       PORT: 3006
@@ -44,10 +46,11 @@ services:
       DATABASE_URL: 'mysql://stockhub:stockhub@db:3306/stockhub'
       ALLOWED_ORIGINS: 'http://localhost:5173,https://localhost:5173'
       VERCEL_PREVIEW_CORS: 'false'
+      SWAGGER_ENABLED: 'true'
     env_file:
       - path: .env.docker
         required: false
-    command: sh -c "npx prisma migrate deploy && npx nodemon --exec 'node -r tsconfig-paths/register -r ts-node/register ./src/index.ts' ./src/index.ts"
+    command: sh -c "npx prisma migrate deploy && npx prisma generate && npx nodemon --exec 'node -r tsconfig-paths/register -r ts-node/register ./src/index.ts' ./src/index.ts"
 
 volumes:
   mysql_data:

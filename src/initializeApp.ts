@@ -89,28 +89,32 @@ export async function initializeApp() {
 
   // ----------- Swagger/OpenAPI Documentation -----------
 
-  app.use(
-    '/api-docs',
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerSpec, {
-      customCss: '.swagger-ui .topbar { display: none }',
-      customSiteTitle: 'StockHub API Documentation',
-    })
-  );
+  if (process.env.SWAGGER_ENABLED === 'true') {
+    app.use(
+      '/api-docs',
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerSpec, {
+        customCss: '.swagger-ui .topbar { display: none }',
+        customSiteTitle: 'StockHub API Documentation',
+      })
+    );
 
-  app.get('/api-docs.json', (_req: express.Request, res: express.Response) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(swaggerSpec);
-  });
+    app.get('/api-docs.json', (_req: express.Request, res: express.Response) => {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(swaggerSpec);
+    });
 
-  app.get('/api-docs.yaml', (_req: express.Request, res: express.Response) => {
-    res.setHeader('Content-Type', 'text/yaml');
-    res.send(openApiYamlContent);
-  });
+    app.get('/api-docs.yaml', (_req: express.Request, res: express.Response) => {
+      res.setHeader('Content-Type', 'text/yaml');
+      res.send(openApiYamlContent);
+    });
 
-  rootMain.info('Swagger UI available at /api-docs');
-  rootMain.info('OpenAPI JSON spec available at /api-docs.json');
-  rootMain.info('OpenAPI YAML spec available at /api-docs.yaml');
+    rootMain.info('Swagger UI available at /api-docs');
+    rootMain.info('OpenAPI JSON spec available at /api-docs.json');
+    rootMain.info('OpenAPI YAML spec available at /api-docs.yaml');
+  } else {
+    rootMain.info('Swagger UI disabled (SWAGGER_ENABLED != true)');
+  }
 
   // ----------- Routes setup -----------
 
