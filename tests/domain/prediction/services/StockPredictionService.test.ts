@@ -30,6 +30,8 @@ const makeHistory = (
 const makePredictionRepo = (): IPredictionRepository => ({
   save: jest.fn().mockImplementation(p => Promise.resolve({ ...p, generatedAt: new Date() })),
   getLatest: jest.fn().mockResolvedValue(null),
+  saveAISuggestions: jest.fn().mockResolvedValue(undefined),
+  getCachedAISuggestions: jest.fn().mockResolvedValue(null),
 });
 
 describe('StockPredictionService', () => {

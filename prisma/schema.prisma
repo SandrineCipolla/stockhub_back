@@ -39,15 +39,17 @@ model ItemHistory {
 }
 
 model StockPrediction {
-  id                   Int      @id @default(autoincrement())
+  id                   Int       @id @default(autoincrement())
   itemId               Int
   daysUntilEmpty       Int?
   avgDailyConsumption  Float?
-  trend                String   @db.VarChar(20) // STABLE | INCREASING | DECREASING
+  trend                String    @db.VarChar(20) // STABLE | INCREASING | DECREASING
   recommendedRestock   Int?
-  simulatedFallback    Boolean  @default(false)
-  generatedAt          DateTime @default(now())
-  item                 Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  simulatedFallback    Boolean   @default(false)
+  generatedAt          DateTime  @default(now())
+  aiSuggestions        Json?     // cache des suggestions LLM
+  aiGeneratedAt        DateTime? // timestamp du dernier appel LLM
+  item                 Item      @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
   @@index([itemId, generatedAt])
   @@map("stock_predictions")

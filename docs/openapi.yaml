@@ -441,6 +441,53 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+  /api/v2/stocks/{stockId}/suggestions:
+    get:
+      summary: Suggestions IA pour un stock
+      description: |
+        Retourne des suggestions textuelles générées par un LLM (Mistral via OpenRouter) ou de manière
+        déterministe si la clé API est absente. Les suggestions sont basées sur les prédictions de stock
+        existantes (daysUntilEmpty, trend, avgDailyConsumption).
+
+        Aucune donnée personnelle (nom, email, OID) n'est transmise au LLM.
+
+        Si `OPENROUTER_API_KEY` est absent ou si l'appel échoue, un fallback déterministe est retourné
+        avec `source: "deterministic"`.
+      tags:
+        - Stock Prediction (READ)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Liste de suggestions IA pour ce stock
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AISuggestion'
+              example:
+                - itemId: 1
+                  type: RESTOCK
+                  priority: high
+                  title: Stock critique — réassort urgent
+                  description: Le stock de l'item 1 sera épuisé dans moins de 7 jours. Réassort recommandé : 55 unités.
+                  source: deterministic
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
   /api/v2/stocks/{stockId}/items/{itemId}/history:
     get:
       summary: Historique de consommation d'un item
@@ -571,6 +618,45 @@ components:
         3. Inclusion dans le header: `Authorization: Bearer {token}`
 
   schemas:
+    # Suggestions IA
+    AISuggestion:
+      type: object
+      required:
+        - itemId
+        - type
+        - priority
+        - title
+        - description
+        - source
+      properties:
+        itemId:
+          type: integer
+          description: Identifiant de l'item concerné
+          example: 1
+        type:
+          type: string
+          enum: [RESTOCK, OVERSTOCK, TREND_ALERT, EXPIRY_ALERT, OPTIMIZATION]
+          description: Type de suggestion
+          example: RESTOCK
+        priority:
+          type: string
+          enum: [high, medium, low]
+          description: Niveau de priorité
+          example: high
+        title:
+          type: string
+          description: Titre court de la suggestion (max 80 caractères)
+          example: Stock critique — réassort urgent
+        description:
+          type: string
+          description: Description actionnable de la suggestion (max 200 caractères)
+          example: Le stock de l'item 1 sera épuisé dans moins de 7 jours. Réassort recommandé : 55 unités.
+        source:
+          type: string
+          enum: [llm, deterministic]
+          description: Source de la suggestion — "llm" si générée par le modèle IA, "deterministic" si générée par règles métier
+          example: llm
+
     # Prédiction IA
     ItemHistoryRecord:
       type: object

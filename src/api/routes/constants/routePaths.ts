@@ -29,4 +29,7 @@ export const STOCK_ROUTES = {
 
   /** GET - Get item prediction (requires read permission) */
   ITEM_PREDICTION: '/stocks/:stockId/items/:itemId/prediction',
+
+  /** GET - Get AI-generated stock suggestions for a stock (requires read permission) */
+  STOCK_SUGGESTIONS: '/stocks/:stockId/suggestions',
 } as const;

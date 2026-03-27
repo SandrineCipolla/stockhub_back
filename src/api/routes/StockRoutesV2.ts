@@ -30,7 +30,9 @@ import { PrismaItemHistoryRepository } from '@infrastructure/prediction/reposito
 import { PrismaStockPredictionRepository } from '@infrastructure/prediction/repositories/PrismaStockPredictionRepository';
 import { StockPredictionService } from '@domain/prediction/services/StockPredictionService';
 import { StockPredictionController } from '@api/controllers/StockPredictionController';
+import { StockSuggestionsController } from '@api/controllers/StockSuggestionsController';
 import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
+import { OpenRouterAIService } from '@infrastructure/ai/OpenRouterAIService';
 
 const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Router> => {
   const prismaRepository = new PrismaStockVisualizationRepository(prismaClient);
@@ -64,6 +66,14 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
     predictionService,
     historyRepository,
     predictionRepository
+  );
+
+  const aiService = new OpenRouterAIService();
+  const suggestionsController = new StockSuggestionsController(
+    prismaRepository,
+    predictionRepository,
+    aiService,
+    userService
   );
 
   const manipulationController = new StockControllerManipulation(
@@ -167,6 +177,16 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   );
 
   logger.info('Routes for GET /stocks/:stockId/items/:itemId/prediction configured');
+
+  router.get(
+    STOCK_ROUTES.STOCK_SUGGESTIONS,
+    authorizeStockRead,
+    async (req, res: express.Response) => {
+      await suggestionsController.getStockSuggestions(req as AuthenticatedRequest, res);
+    }
+  );
+
+  logger.info('Routes for GET /stocks/:stockId/suggestions configured');
 
   return router;
 };
