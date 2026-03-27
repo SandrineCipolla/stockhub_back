@@ -1,3 +1,6 @@
+# Internal audit docs
+audit-results/
+
 # Logs
 logs
 *.log
