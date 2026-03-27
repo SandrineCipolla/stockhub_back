@@ -479,7 +479,7 @@ paths:
                   type: RESTOCK
                   priority: high
                   title: Stock critique — réassort urgent
-                  description: Le stock de l'item 1 sera épuisé dans moins de 7 jours. Réassort recommandé : 55 unités.
+                  description: "Le stock de l'item 1 sera épuisé dans moins de 7 jours. Réassort recommandé : 55 unités."
                   source: deterministic
         '401':
           $ref: '#/components/responses/UnauthorizedError'
