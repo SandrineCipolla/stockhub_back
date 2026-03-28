@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.7.0...v2.7.1) (2026-03-28)
+
+
+### 🐛 Bug Fixes
+
+* **ia:** switch prompt to French and update Postman collection ([#139](https://github.com/SandrineCipolla/stockhub_back/issues/139)) ([03eade8](https://github.com/SandrineCipolla/stockhub_back/commit/03eade8700f8862e3354300ac8e793e7011cc957))
+
 ## [2.7.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.6.0...v2.7.0) (2026-03-27)
 
 ### ✨ Features
