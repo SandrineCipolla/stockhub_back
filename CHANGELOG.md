@@ -2,16 +2,14 @@
 
 ## [2.7.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.6.0...v2.7.0) (2026-03-27)
 
-
 ### ✨ Features
 
-* **ia:** add AIService with OpenRouter/Mistral and 24h DB cache — closes [#124](https://github.com/SandrineCipolla/stockhub_back/issues/124) ([#137](https://github.com/SandrineCipolla/stockhub_back/issues/137)) ([8469dc9](https://github.com/SandrineCipolla/stockhub_back/commit/8469dc95f21897869a4eb0cffbfa205705ad237f))
-* **ia:** add ItemHistory, StockPredictionService and 90-day seed — closes [#123](https://github.com/SandrineCipolla/stockhub_back/issues/123) ([#134](https://github.com/SandrineCipolla/stockhub_back/issues/134)) ([a5aed8f](https://github.com/SandrineCipolla/stockhub_back/commit/a5aed8faeae25a50ec78c4b059bd29219538eea1))
-
+- **ia:** add AIService with OpenRouter/Mistral and 24h DB cache — closes [#124](https://github.com/SandrineCipolla/stockhub_back/issues/124) ([#137](https://github.com/SandrineCipolla/stockhub_back/issues/137)) ([8469dc9](https://github.com/SandrineCipolla/stockhub_back/commit/8469dc95f21897869a4eb0cffbfa205705ad237f))
+- **ia:** add ItemHistory, StockPredictionService and 90-day seed — closes [#123](https://github.com/SandrineCipolla/stockhub_back/issues/123) ([#134](https://github.com/SandrineCipolla/stockhub_back/issues/134)) ([a5aed8f](https://github.com/SandrineCipolla/stockhub_back/commit/a5aed8faeae25a50ec78c4b059bd29219538eea1))
 
 ### 📚 Documentation
 
-* post-release v2.6.0 — update README and ADR index ([#130](https://github.com/SandrineCipolla/stockhub_back/issues/130)) ([c7067a2](https://github.com/SandrineCipolla/stockhub_back/commit/c7067a22dee02da762b3364dbc3dc31aaac085f2))
+- post-release v2.6.0 — update README and ADR index ([#130](https://github.com/SandrineCipolla/stockhub_back/issues/130)) ([c7067a2](https://github.com/SandrineCipolla/stockhub_back/commit/c7067a22dee02da762b3364dbc3dc31aaac085f2))
 
 ## [2.6.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.5.2...v2.6.0) (2026-03-25)
 
