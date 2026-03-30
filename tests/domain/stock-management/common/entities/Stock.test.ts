@@ -285,4 +285,60 @@ describe('Stock', () => {
       });
     });
   });
+
+  describe('getAggregatedStatus()', () => {
+    describe('when stock has no items', () => {
+      it('should return optimal', () => {
+        const stock = new Stock(1, 'S', '', 'alimentation', []);
+        expect(stock.getAggregatedStatus()).toBe('optimal');
+      });
+    });
+
+    describe('when all items are optimal', () => {
+      it('should return optimal', () => {
+        const stock = new Stock(1, 'S', '', 'alimentation', [new StockItem(1, 'A', 10, '', 5, 1)]);
+        expect(stock.getAggregatedStatus()).toBe('optimal');
+      });
+    });
+
+    describe('when at least one item is low', () => {
+      it('should return low', () => {
+        const stock = new Stock(1, 'S', '', 'alimentation', [
+          new StockItem(1, 'A', 10, '', 5, 1),
+          new StockItem(2, 'B', 6, '', 5, 1),
+        ]);
+        expect(stock.getAggregatedStatus()).toBe('low');
+      });
+    });
+
+    describe('when at least one item is critical', () => {
+      it('should return critical', () => {
+        const stock = new Stock(1, 'S', '', 'alimentation', [
+          new StockItem(1, 'A', 10, '', 5, 1),
+          new StockItem(2, 'B', 1, '', 5, 1),
+        ]);
+        expect(stock.getAggregatedStatus()).toBe('critical');
+      });
+    });
+
+    describe('when at least one item is out-of-stock', () => {
+      it('should return out-of-stock', () => {
+        const stock = new Stock(1, 'S', '', 'alimentation', [
+          new StockItem(1, 'A', 10, '', 5, 1),
+          new StockItem(2, 'B', 0, '', 5, 1),
+        ]);
+        expect(stock.getAggregatedStatus()).toBe('out-of-stock');
+      });
+    });
+
+    describe('priority: out-of-stock > critical > low', () => {
+      it('should return out-of-stock when mix of statuses', () => {
+        const stock = new Stock(1, 'S', '', 'alimentation', [
+          new StockItem(1, 'A', 0, '', 5, 1),
+          new StockItem(2, 'B', 1, '', 5, 1),
+        ]);
+        expect(stock.getAggregatedStatus()).toBe('out-of-stock');
+      });
+    });
+  });
 });

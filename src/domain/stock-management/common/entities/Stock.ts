@@ -69,6 +69,16 @@ export class Stock {
     }).length;
   }
 
+  getAggregatedStatus(): 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked' {
+    if (this.items.length === 0) return 'optimal';
+    const statuses = this.items.map(item => item.getStatus());
+    if (statuses.some(s => s === 'out-of-stock')) return 'out-of-stock';
+    if (statuses.some(s => s === 'critical')) return 'critical';
+    if (statuses.some(s => s === 'low')) return 'low';
+    if (statuses.every(s => s === 'overstocked')) return 'overstocked';
+    return 'optimal';
+  }
+
   addItem(params: {
     label: string;
     description?: string;

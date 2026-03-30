@@ -17,6 +17,7 @@ export interface StockSummaryDto {
   totalItems: number;
   totalQuantity: number;
   criticalItemsCount: number;
+  status: 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked';
 }
 
 export interface StockDetailDto extends StockSummaryDto {
@@ -32,6 +33,7 @@ export function toStockSummaryDto(stock: Stock): StockSummaryDto {
     totalItems: stock.getTotalItems(),
     totalQuantity: stock.getTotalQuantity(),
     criticalItemsCount: stock.getCriticalItemsCount(),
+    status: stock.getAggregatedStatus(),
   };
 }
 

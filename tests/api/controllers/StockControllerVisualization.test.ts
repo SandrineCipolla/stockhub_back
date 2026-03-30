@@ -1,6 +1,10 @@
 import { StockControllerVisualization } from '@api/controllers/StockControllerVisualization';
 import { CustomError, sendError } from '@core/errors';
 import { StockVisualizationService } from '@domain/stock-management/visualization/services/StockVisualizationService';
+import {
+  StockSummaryDto,
+  StockDetailDto,
+} from '@domain/stock-management/visualization/models/StockSummary';
 import { UserService } from '@services/userService';
 import { HTTP_CODE_OK } from '@utils/httpCodes';
 import { ReadUserRepository } from '@services/readUserRepository';
@@ -53,7 +57,7 @@ describe('StockControllerVisualization', () => {
     describe('when the service call is successful', () => {
       it('should return 200 and the list of stocks', async () => {
         mockUserService.convertOIDtoUserID = jest.fn().mockResolvedValue({ value: 42 });
-        const mockStocks = [
+        const mockStocks: StockSummaryDto[] = [
           {
             id: 1,
             label: 'Stock 1',
@@ -62,6 +66,7 @@ describe('StockControllerVisualization', () => {
             totalItems: 0,
             totalQuantity: 0,
             criticalItemsCount: 0,
+            status: 'optimal',
           },
         ];
         mockStockService.getAllStocks.mockResolvedValue(mockStocks);
@@ -90,7 +95,7 @@ describe('StockControllerVisualization', () => {
       it('should return 200 and the stock details', async () => {
         req = { params: { stockId: '1' } };
         mockUserService.convertOIDtoUserID = jest.fn().mockResolvedValue({ value: 42 });
-        const mockStock = {
+        const mockStock: StockDetailDto = {
           id: 1,
           label: 'Stock 1',
           description: 'Description 1',
@@ -98,6 +103,7 @@ describe('StockControllerVisualization', () => {
           totalItems: 0,
           totalQuantity: 0,
           criticalItemsCount: 0,
+          status: 'optimal',
           items: [],
         };
         mockStockService.getStockDetails.mockResolvedValue(mockStock);
