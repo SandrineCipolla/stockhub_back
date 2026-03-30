@@ -139,7 +139,7 @@ export class OpenRouterAIService implements IAIService {
       return buildDeterministicSuggestions(context);
     }
 
-    const model = process.env.AI_MODEL ?? 'mistralai/mistral-small-3.1';
+    const model = process.env.AI_MODEL ?? 'mistralai/mistral-small-3.1-24b-instruct';
     const userMessage = JSON.stringify(context);
 
     try {
@@ -160,8 +160,9 @@ export class OpenRouterAIService implements IAIService {
       });
 
       if (!response.ok) {
+        const errorBody = await response.text();
         logger.error(
-          `OpenRouter request failed — status=${response.status} — using deterministic suggestions`
+          `OpenRouter request failed — status=${response.status} — body=${errorBody} — using deterministic suggestions`
         );
         return buildDeterministicSuggestions(context);
       }

@@ -218,6 +218,22 @@ Endpoints : `GET/POST /stocks`, `GET /stocks/:id/items`, `POST/PATCH /stocks/:id
 
 ## Gestion des Issues GitHub
 
+### Labels obligatoires
+
+Toute issue doit avoir **au minimum** ces deux labels :
+
+| Label | Valeur                                                         |
+| ----- | -------------------------------------------------------------- |
+| Scope | `back` (toujours sur ce repo)                                  |
+| Type  | `bug`, `enhancement`, `documentation`, `tech`, `clean code`... |
+
+Sans ces labels, les issues n'apparaissent pas correctement dans le GitHub Project board.
+
+```bash
+gh issue create --label "back,bug" ...
+gh issue edit <numero> --repo SandrineCipolla/stockhub_back --add-label "back,bug"
+```
+
 ### ⚠️ AVANT de créer une issue GitHub
 
 **Format User Story** :
