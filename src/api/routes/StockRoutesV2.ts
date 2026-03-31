@@ -73,7 +73,8 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
     prismaRepository,
     predictionRepository,
     aiService,
-    userService
+    userService,
+    predictionService
   );
 
   const manipulationController = new StockControllerManipulation(
