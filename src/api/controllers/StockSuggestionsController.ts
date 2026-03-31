@@ -57,8 +57,15 @@ export class StockSuggestionsController {
         return;
       }
 
+      const atRiskItems = items.filter(item => item.getStatus() !== 'optimal');
+
+      if (atRiskItems.length === 0) {
+        res.status(HTTP_CODE_OK).json([]);
+        return;
+      }
+
       const predictions = await Promise.all(
-        items.map(async item => {
+        atRiskItems.map(async item => {
           const existing = await this.predictionRepository.getLatest(item.id);
           const prediction =
             existing ??
@@ -91,6 +98,7 @@ export class StockSuggestionsController {
 
       const contextItems = predictions.map(({ item, prediction }) => ({
         itemId: item.id,
+        label: item.label,
         quantity: item.quantity,
         minimumStock: item.minimumStock,
         daysUntilEmpty: prediction?.daysUntilEmpty ?? 0,
@@ -102,14 +110,14 @@ export class StockSuggestionsController {
       const suggestions = await this.aiService.generateSuggestions({ items: contextItems });
 
       await Promise.all(
-        items.map(async item => {
+        atRiskItems.map(async item => {
           const itemSuggestions = suggestions.filter(s => s.itemId === item.id);
           await this.predictionRepository.saveAISuggestions(item.id, itemSuggestions);
         })
       );
 
       logger.info(
-        `getStockSuggestions stockId=${stockId} items=${items.length} suggestions=${suggestions.length}`
+        `getStockSuggestions stockId=${stockId} atRisk=${atRiskItems.length} suggestions=${suggestions.length}`
       );
 
       res.status(HTTP_CODE_OK).json(suggestions);

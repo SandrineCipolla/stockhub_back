@@ -64,7 +64,7 @@ function buildDeterministicSuggestions(context: StockContext): AISuggestion[] {
         type: 'RESTOCK',
         priority: 'high',
         title: 'Stock critique — réassort urgent',
-        description: `Le stock de l'item ${item.itemId} sera épuisé dans moins de 7 jours. Réassort recommandé : ${item.recommendedRestock} unités.`,
+        description: `"${item.label}" sera épuisé dans moins de 7 jours. Réassort recommandé : ${item.recommendedRestock} unités.`,
         source: 'deterministic',
       });
     } else if (item.daysUntilEmpty < 14) {
@@ -73,7 +73,7 @@ function buildDeterministicSuggestions(context: StockContext): AISuggestion[] {
         type: 'RESTOCK',
         priority: 'medium',
         title: 'Stock faible — prévoir un réassort',
-        description: `Le stock de l'item ${item.itemId} sera épuisé dans moins de 14 jours. Réassort recommandé : ${item.recommendedRestock} unités.`,
+        description: `"${item.label}" sera épuisé dans moins de 14 jours. Réassort recommandé : ${item.recommendedRestock} unités.`,
         source: 'deterministic',
       });
     } else if (item.trend === 'INCREASING') {
@@ -82,7 +82,7 @@ function buildDeterministicSuggestions(context: StockContext): AISuggestion[] {
         type: 'OVERSTOCK',
         priority: 'medium',
         title: 'Tendance à la hausse détectée',
-        description: `La consommation de l'item ${item.itemId} est en augmentation. Surveiller l'évolution et ajuster le stock minimum si nécessaire.`,
+        description: `La consommation de "${item.label}" est en augmentation. Surveiller l'évolution et ajuster le stock minimum si nécessaire.`,
         source: 'deterministic',
       });
     }
