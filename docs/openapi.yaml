@@ -707,19 +707,19 @@ components:
       type: object
       required:
         - id
-        - name
+        - label
         - description
         - category
-        - quantity
-        - unit
-        - minimumStock
+        - totalItems
+        - totalQuantity
+        - criticalItemsCount
         - status
       properties:
         id:
           type: integer
           description: Identifiant unique du stock
           example: 1
-        name:
+        label:
           type: string
           description: Nom du stock
           example: Stock Aquarelle
@@ -735,19 +735,18 @@ components:
             - hygiene
             - artistique
           example: artistique
-        quantity:
-          type: number
-          description: Quantité totale (somme de tous les items)
-          example: 15
-        unit:
-          type: string
-          description: Unité de mesure
-          example: unités
-          default: unités
-        minimumStock:
-          type: number
-          description: Stock minimum requis (somme des minimums de tous les items)
-          example: 5
+        totalItems:
+          type: integer
+          description: Nombre total d'items dans le stock
+          example: 3
+        totalQuantity:
+          type: integer
+          description: Somme des quantités de tous les items
+          example: 24
+        criticalItemsCount:
+          type: integer
+          description: Nombre d'items en statut critique ou en rupture
+          example: 1
         status:
           type: string
           enum:
@@ -755,13 +754,15 @@ components:
             - low
             - critical
             - out-of-stock
+            - overstocked
           description: |
-            Statut calculé automatiquement :
-            - `out-of-stock`: quantity === 0
-            - `critical`: quantity < 10% minimumStock
-            - `low`: quantity < 30% minimumStock
-            - `optimal`: quantity >= 30% minimumStock
-          example: optimal
+            Statut agrégé calculé à partir des items (priorité : out-of-stock > critical > low > optimal) :
+            - `out-of-stock`: au moins un item avec quantity === 0
+            - `critical`: au moins un item avec quantity <= minimumStock
+            - `low`: au moins un item avec quantity <= minimumStock * 1.5
+            - `overstocked`: tous les items avec quantity > minimumStock * 3
+            - `optimal`: tous les items dans la plage normale
+          example: critical
 
     StockItemDTO:
       type: object

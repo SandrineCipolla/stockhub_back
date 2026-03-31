@@ -47,7 +47,7 @@ npm run start:dev        # Serveur dev avec hot reload
 npm run start:prod       # Serveur de production
 
 # Tests
-npm run test:unit        # Tests unitaires (142 tests)
+npm run test:unit        # Tests unitaires (201 tests)
 npm run test:integration # Tests d'intégration (TestContainers)
 npm run test:e2e         # Tests E2E (Playwright)
 npm run test:coverage    # Rapport de couverture
