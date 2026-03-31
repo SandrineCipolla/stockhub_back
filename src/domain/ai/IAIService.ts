@@ -9,6 +9,7 @@ export interface AISuggestion {
 
 export interface StockContextItem {
   itemId: number;
+  label: string;
   quantity: number;
   minimumStock: number;
   daysUntilEmpty: number;

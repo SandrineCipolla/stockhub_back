@@ -5,6 +5,7 @@ const makeContext = (overrides: Partial<StockContext['items'][0]> = {}): StockCo
   items: [
     {
       itemId: 1,
+      label: 'Item test',
       quantity: 5,
       minimumStock: 10,
       daysUntilEmpty: 3,

@@ -16,11 +16,13 @@ jest.mock('@utils/logger', () => ({
 }));
 jest.mock('@utils/cloudLogger', () => ({ rootException: jest.fn() }));
 
-const makeItem = (id: number) => ({
+const makeItem = (id: number, quantity = 1, minimumStock = 5) => ({
   id,
   label: `Item ${id}`,
-  quantity: 10,
-  minimumStock: 5,
+  quantity,
+  minimumStock,
+  getStatus: (): 'optimal' | 'critical' | 'out-of-stock' =>
+    quantity === 0 ? 'out-of-stock' : quantity <= minimumStock ? 'critical' : 'optimal',
 });
 
 const makePrediction = (itemId: number) => ({
@@ -134,9 +136,23 @@ describe('StockSuggestionsController', () => {
 
         await controller.getStockSuggestions(req as any, res);
 
-        expect(mockPredictionService.computeAndSave).toHaveBeenCalledWith(1, 10, 5);
+        expect(mockPredictionService.computeAndSave).toHaveBeenCalledWith(1, 1, 5);
         expect(mockAIService.generateSuggestions).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(HTTP_CODE_OK);
+      });
+    });
+
+    describe('when all items are optimal', () => {
+      it('should return empty suggestions without calling AI', async () => {
+        const item = makeItem(1, 10, 2); // qty=10, min=2 → optimal
+
+        mockVisualizationRepo.getStockItems.mockResolvedValue([item] as any);
+
+        await controller.getStockSuggestions(req as any, res);
+
+        expect(mockAIService.generateSuggestions).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(HTTP_CODE_OK);
+        expect(res.json).toHaveBeenCalledWith([]);
       });
     });
 

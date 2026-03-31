@@ -10,6 +10,7 @@ Tu es un assistant de gestion de stocks. Analyse le contexte de stock fourni et 
 Règles :
 - Réponds UNIQUEMENT avec un tableau JSON valide. Pas d'explication, pas de markdown, pas de bloc de code.
 - Toutes les valeurs "title" et "description" doivent être rédigées en français.
+- Utilise le champ "label" de chaque item pour nommer l'article dans les descriptions (ex : "Café moulu sera épuisé dans 3 jours").
 - Chaque élément doit suivre exactement cette structure :
   {
     "itemId": <number>,
