@@ -28,7 +28,7 @@ module.exports = {
   },
   setupFilesAfterEnv: ['<rootDir>/tests/setupTests.ts'],
   setupFiles: ['dotenv/config'],
-  testMatch: ['**/tests/domain/**/*.test.ts'],
+  testMatch: ['**/tests/domain/**/*.test.ts', '**/tests/api/controllers/**/*.test.ts'],
   testPathIgnorePatterns: [
     '/node_modules/',
     '/tests/integration/',

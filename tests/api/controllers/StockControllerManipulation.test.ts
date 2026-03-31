@@ -164,7 +164,7 @@ describe('StockControllerManipulation', () => {
           },
         };
         const error = new Error('fail to add item');
-        mockUserService.convertOIDtoUserID = jest.fn().mockRejectedValue(error);
+        mockAddItemHandler.handle = jest.fn().mockRejectedValue(error);
 
         await controller.addItemToStock(req as AddItemToStockRequest, res);
 
@@ -209,7 +209,7 @@ describe('StockControllerManipulation', () => {
           },
         };
         const error = new Error('fail to update quantity');
-        mockUserService.convertOIDtoUserID = jest.fn().mockRejectedValue(error);
+        mockUpdateQuantityHandler.handle = jest.fn().mockRejectedValue(error);
 
         await controller.updateItemQuantity(req as UpdateItemQuantityRequest, res);
 

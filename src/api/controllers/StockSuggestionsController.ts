@@ -2,6 +2,7 @@ import express from 'express';
 import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
 import { AISuggestion, IAIService } from '@domain/ai/IAIService';
 import { IPredictionRepository } from '@domain/prediction/repositories/IPredictionRepository';
+import { StockPredictionService } from '@domain/prediction/services/StockPredictionService';
 import { IStockVisualizationRepository } from '@domain/stock-management/visualization/queries/IStockVisualizationRepository';
 import { UserService } from '@services/userService';
 import { HTTP_CODE_OK } from '@utils/httpCodes';
@@ -18,7 +19,8 @@ export class StockSuggestionsController {
     private readonly visualizationRepository: IStockVisualizationRepository,
     private readonly predictionRepository: IPredictionRepository,
     private readonly aiService: IAIService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly predictionService: StockPredictionService
   ) {}
 
   private validateOID(OID: string, res: express.Response): boolean {
@@ -56,11 +58,21 @@ export class StockSuggestionsController {
       }
 
       const predictions = await Promise.all(
-        items.map(async item => ({
-          item,
-          prediction: await this.predictionRepository.getLatest(item.id),
-          cached: await this.predictionRepository.getCachedAISuggestions(item.id),
-        }))
+        items.map(async item => {
+          const existing = await this.predictionRepository.getLatest(item.id);
+          const prediction =
+            existing ??
+            (await this.predictionService.computeAndSave(
+              item.id,
+              item.quantity,
+              item.minimumStock ?? 1
+            ));
+          return {
+            item,
+            prediction,
+            cached: await this.predictionRepository.getCachedAISuggestions(item.id),
+          };
+        })
       );
 
       const now = Date.now();

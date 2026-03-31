@@ -44,7 +44,7 @@ describe('StockControllerVisualization', () => {
     ) as jest.Mocked<UserService>;
     controller = new StockControllerVisualization(mockStockService, mockUserService);
 
-    req = {};
+    req = { userID: 'test-oid' };
     res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -93,7 +93,7 @@ describe('StockControllerVisualization', () => {
   describe('getStockDetails', () => {
     describe('when the service call is successful', () => {
       it('should return 200 and the stock details', async () => {
-        req = { params: { stockId: '1' } };
+        req = { userID: 'test-oid', params: { stockId: '1' } };
         mockUserService.convertOIDtoUserID = jest.fn().mockResolvedValue({ value: 42 });
         const mockStock: StockDetailDto = {
           id: 1,
@@ -117,7 +117,7 @@ describe('StockControllerVisualization', () => {
 
     describe('when the service call fails', () => {
       it('should call sendError', async () => {
-        req = { params: { stockId: '1' } };
+        req = { userID: 'test-oid', params: { stockId: '1' } };
         const error = new Error('not found');
         mockUserService.convertOIDtoUserID = jest.fn().mockRejectedValue(error);
 
@@ -131,7 +131,7 @@ describe('StockControllerVisualization', () => {
   describe('getStockItems', () => {
     describe('when the service call is successful', () => {
       it('should return 200 and the items of the stock', async () => {
-        req = { params: { stockId: '1' } };
+        req = { userID: 'test-oid', params: { stockId: '1' } };
         mockUserService.convertOIDtoUserID = jest.fn().mockResolvedValue({ value: 42 });
         const mockItems = [
           { id: 1, label: 'Item 1', description: 'desc', category: 'alimentation' },
@@ -147,7 +147,7 @@ describe('StockControllerVisualization', () => {
 
     describe('when the service call fails', () => {
       it('should call sendError', async () => {
-        req = { params: { stockId: '1' } };
+        req = { userID: 'test-oid', params: { stockId: '1' } };
         const error = new Error('fail items');
         mockUserService.convertOIDtoUserID = jest.fn().mockRejectedValue(error);
 
