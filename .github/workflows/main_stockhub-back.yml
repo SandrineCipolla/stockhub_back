@@ -33,6 +33,9 @@ jobs:
       - run: npm run lint --if-present
       - run: npm run test:unit
 
+      - name: Check outdated dependencies (informational)
+        run: npm outdated || true
+
   # E2E Tests - s'exécute sur PR vers main et workflow_dispatch
   e2e-tests:
     runs-on: ubuntu-latest
