@@ -6,6 +6,21 @@
 
 ---
 
+## Besoin métier
+
+La valeur de StockHub est dans la gestion intelligente des stocks — prédictions de réassort, alertes de péremption, suggestions IA. L'authentification est une **contrainte**, pas une fonctionnalité différenciante. Chaque heure passée à implémenter et sécuriser un système d'auth maison est une heure de moins sur ce qui compte réellement pour les utilisateurs.
+
+**Le risque concret d'une auth maison :**
+Implémenter soi-même la gestion des mots de passe (hashing, salage, reset, expiration des sessions, protection brute-force) expose à l'ensemble des vulnérabilités OWASP A07 (Identification and Authentication Failures). Sur un projet évalué par un encadrant RNCP et potentiellement démontré à un jury, une faille d'authentification serait rédhibitoire.
+
+**Pourquoi un provider externe est le bon choix ici ?**
+StockHub a moins de 50 utilisateurs actifs. Le besoin est simple : que l'utilisateur prouve son identité pour accéder à ses stocks. Un provider comme Azure AD B2C couvre ce besoin en quelques heures de configuration, avec une sécurité enterprise-grade (MFA, protection brute-force, rotation automatique des clés) que plusieurs mois de développement maison n'atteindraient pas.
+
+**Pourquoi Azure AD B2C spécifiquement ?**
+Le backend est déjà sur Azure (App Service, MySQL, Application Insights). Choisir un provider hors Azure aurait signifié gérer deux portails, deux facturations, deux ecosystèmes de logs. La cohérence de l'infrastructure réduit la charge opérationnelle — critique sur un projet solo.
+
+---
+
 ## Contexte
 
 Le projet StockHub nécessite un système d'authentification et d'autorisation sécurisé pour gérer les utilisateurs et protéger les ressources. Les exigences incluaient :
