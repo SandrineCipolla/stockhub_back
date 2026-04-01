@@ -2,23 +2,20 @@
 
 ## [2.8.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.7.0...v2.8.0) (2026-03-31)
 
-
 ### ✨ Features
 
-* **stocks:** add aggregated status to GET /stocks response — closes [#142](https://github.com/SandrineCipolla/stockhub_back/issues/142) ([#143](https://github.com/SandrineCipolla/stockhub_back/issues/143)) ([0782acb](https://github.com/SandrineCipolla/stockhub_back/commit/0782acb9c84553443711acc3548fb3b3c9d8f9f8))
-
+- **stocks:** add aggregated status to GET /stocks response — closes [#142](https://github.com/SandrineCipolla/stockhub_back/issues/142) ([#143](https://github.com/SandrineCipolla/stockhub_back/issues/143)) ([0782acb](https://github.com/SandrineCipolla/stockhub_back/commit/0782acb9c84553443711acc3548fb3b3c9d8f9f8))
 
 ### 🐛 Bug Fixes
 
-* **ai:** update default model to mistral-small-3.1-24b-instruct and add labels convention ([98b1b9c](https://github.com/SandrineCipolla/stockhub_back/commit/98b1b9cb890113693ee230ccf290d96581cefb35))
-* **ia:** switch prompt to French and update Postman collection ([#139](https://github.com/SandrineCipolla/stockhub_back/issues/139)) ([03eade8](https://github.com/SandrineCipolla/stockhub_back/commit/03eade8700f8862e3354300ac8e793e7011cc957))
-* **suggestions:** compute predictions for all items before LLM cache — closes [#141](https://github.com/SandrineCipolla/stockhub_back/issues/141) ([#144](https://github.com/SandrineCipolla/stockhub_back/issues/144)) ([1517fad](https://github.com/SandrineCipolla/stockhub_back/commit/1517fad19258f4fb8fb996f9569016962f6cc2be))
-* **suggestions:** use item label in AI suggestion descriptions — closes [#145](https://github.com/SandrineCipolla/stockhub_back/issues/145) ([#146](https://github.com/SandrineCipolla/stockhub_back/issues/146)) ([62f5201](https://github.com/SandrineCipolla/stockhub_back/commit/62f52014f756c0ed2bb4d4fc0095ae45272511a0))
-
+- **ai:** update default model to mistral-small-3.1-24b-instruct and add labels convention ([98b1b9c](https://github.com/SandrineCipolla/stockhub_back/commit/98b1b9cb890113693ee230ccf290d96581cefb35))
+- **ia:** switch prompt to French and update Postman collection ([#139](https://github.com/SandrineCipolla/stockhub_back/issues/139)) ([03eade8](https://github.com/SandrineCipolla/stockhub_back/commit/03eade8700f8862e3354300ac8e793e7011cc957))
+- **suggestions:** compute predictions for all items before LLM cache — closes [#141](https://github.com/SandrineCipolla/stockhub_back/issues/141) ([#144](https://github.com/SandrineCipolla/stockhub_back/issues/144)) ([1517fad](https://github.com/SandrineCipolla/stockhub_back/commit/1517fad19258f4fb8fb996f9569016962f6cc2be))
+- **suggestions:** use item label in AI suggestion descriptions — closes [#145](https://github.com/SandrineCipolla/stockhub_back/issues/145) ([#146](https://github.com/SandrineCipolla/stockhub_back/issues/146)) ([62f5201](https://github.com/SandrineCipolla/stockhub_back/commit/62f52014f756c0ed2bb4d4fc0095ae45272511a0))
 
 ### 📚 Documentation
 
-* update README, CLAUDE.md and openapi.yaml for v2.7.1 features ([bc3a911](https://github.com/SandrineCipolla/stockhub_back/commit/bc3a9114c831b242527c2e735fbddfa62268a7fd))
+- update README, CLAUDE.md and openapi.yaml for v2.7.1 features ([bc3a911](https://github.com/SandrineCipolla/stockhub_back/commit/bc3a9114c831b242527c2e735fbddfa62268a7fd))
 
 ## [2.7.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.6.0...v2.7.0) (2026-03-27)
 

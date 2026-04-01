@@ -47,7 +47,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^6.16.0",
+    "@prisma/client": "6.19.3",
     "applicationinsights": "^3.3.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -57,7 +57,7 @@
     "mysql2": "^3.9.4",
     "passport": "^0.7.0",
     "passport-azure-ad": "^4.3.5",
-    "prisma": "^6.16.0",
+    "prisma": "6.19.3",
     "swagger-ui-express": "^5.0.1",
     "typescript-logging": "^2.2.0",
     "typescript-logging-category-style": "^2.2.0"
@@ -78,7 +78,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/supertest": "^6.0.3",
     "@types/swagger-ui-express": "^4.1.8",
-    "copy-webpack-plugin": "^13.0.1",
+    "copy-webpack-plugin": "^14.0.0",
     "dotenv-cli": "^10.0.0",
     "eslint": "^9.25.0",
     "eslint-config-prettier": "^10.1.8",
