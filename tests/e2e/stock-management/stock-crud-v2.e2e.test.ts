@@ -191,8 +191,14 @@ describe('Stock API V2', () => {
         });
 
         expect(response.status()).toBe(200);
-        const body = await response.json();
-        const updatedItem = body.items?.find((i: any) => i.id === itemId);
+
+        // PATCH returns domain entity (no computed status) — verify via GET
+        const getResponse = await request.get(`${apiV2}/stocks/${stockId}/items`, {
+          headers: { Authorization: authToken },
+        });
+        expect(getResponse.status()).toBe(200);
+        const items = await getResponse.json();
+        const updatedItem = items.find((i: any) => i.id === itemId);
         if (updatedItem) {
           expect(updatedItem.quantity).toBe(99);
           // quantity:99 > minimumStock*3 (15) → overstocked
@@ -212,7 +218,11 @@ describe('Stock API V2', () => {
     it.beforeAll(async ({ request }) => {
       const stockRes = await request.post(`${apiV2}/stocks`, {
         headers: { Authorization: authToken },
-        data: { label: 'E2E Status Stock', category: 'alimentation' },
+        data: {
+          label: 'E2E Status Stock',
+          description: 'Stock for status lifecycle tests',
+          category: 'alimentation',
+        },
       });
       statusStockId = (await stockRes.json()).id;
 
@@ -236,8 +246,12 @@ describe('Stock API V2', () => {
         data: { quantity },
       });
       expect(res.status()).toBe(200);
-      const body = await res.json();
-      return body.items?.find((i: any) => i.id === statusItemId);
+      // PATCH returns domain entity (no computed status) — verify via GET
+      const getRes = await request.get(`${apiV2}/stocks/${statusStockId}/items`, {
+        headers: { Authorization: authToken },
+      });
+      const items = await getRes.json();
+      return items.find((i: any) => i.id === statusItemId);
     };
 
     it('quantity:3 ≤ min:10 → critical', async ({ request }) => {
