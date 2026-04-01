@@ -6,6 +6,21 @@
 
 ---
 
+## Besoin métier
+
+StockHub est une application personnelle à usage familial. Elle n'a pas vocation à servir des milliers d'utilisateurs simultanés ni à garantir une disponibilité contractuelle 24/7. Dans ce contexte, les décisions d'infrastructure doivent répondre à deux contraintes principales : **coût nul ou minimal** et **simplicité opérationnelle** (pas d'équipe Ops dédiée).
+
+**Pourquoi une base relationnelle (SQL) plutôt que NoSQL ?**
+Le modèle de données de StockHub est intrinsèquement relationnel : un stock contient des items, chaque item a un historique de consommation, les prédictions sont liées aux items, les collaborateurs sont liés aux stocks via des rôles. Ces relations fortes avec contraintes d'intégrité (clés étrangères, cascade delete) sont naturellement exprimées en SQL. Une base documentaire (MongoDB) aurait nécessité de gérer manuellement cette cohérence en applicatif — complexité inutile pour ce cas d'usage.
+
+**Pourquoi pas de haute disponibilité zone-redundant ?**
+L'option Zone-redundant HA (SLA 99.99%) coûte ~$50/mois sur Azure. Pour une application personnelle utilisée par une famille, un downtime de 44 min/mois maximum (SLA 99.9% du tier Burstable) est tout à fait acceptable. Payer pour une redondance multi-zone serait un sur-dimensionnement manifeste — comme utiliser un camion pour aller chercher le pain. Les backups automatiques quotidiens (7 jours de rétention, restauration PITR) suffisent largement pour le niveau de criticité réel des données.
+
+**Pourquoi Azure et pas un autre provider ?**
+L'ensemble de l'infrastructure StockHub est sur Azure (App Service, B2C, Application Insights). Ajouter la base de données sur le même provider élimine la complexité de gestion multi-cloud : une seule facture, un seul portail, des logs centralisés, un réseau unifié. Ce choix de cohérence est une décision d'ingénierie délibérée — pas un choix par défaut.
+
+---
+
 ## Contexte
 
 Le projet StockHub nécessite une base de données relationnelle hébergée dans le cloud. Les critères de sélection incluaient :
@@ -334,6 +349,41 @@ const connectionString = `mysql://user:pass@stockhub-db.mysql.database.azure.com
 - **Connection string :** `.env` (DB_HOST, DB_DATABASE, DB_USERNAME)
 - **Monitoring :** Azure Application Insights (dependency tracking)
 - **ADR lié :** [ADR-002 (Choix Prisma ORM)](./ADR-002-choix-prisma-orm.md)
+
+---
+
+## Stratégie de disponibilité et redondance
+
+### Niveau de disponibilité retenu
+
+**Azure MySQL Flexible Server tier Burstable** — SLA **99.9%**, sans Zone-redundant HA.
+
+Ce choix est délibéré et proportionné au contexte de StockHub :
+
+| Critère             | Valeur retenue                             | Justification                                                      |
+| ------------------- | ------------------------------------------ | ------------------------------------------------------------------ |
+| SLA base de données | 99.9% (~44 min downtime/mois max)          | Application personnelle, pas de SLA contractuel envers des clients |
+| SLA application     | 99.95% (Azure App Service Standard)        | Suffisant pour usage familial                                      |
+| Redondance zone     | Non activée                                | Coût ~$50/mois non justifié pour < 50 utilisateurs                 |
+| Backups             | Quotidiens automatiques, 7 jours rétention | Protège contre la perte de données accidentelle                    |
+| Restauration        | Point-in-time recovery (PITR) disponible   | Permet de revenir à n'importe quel état des 7 derniers jours       |
+
+### Pourquoi pas de haute disponibilité zone-redundant ?
+
+La Zone-redundant HA (SLA 99.99%) protège contre la défaillance d'une zone de datacenter Azure. Elle coûte environ 3× le prix du tier standard.
+
+Pour StockHub, perdre l'accès à l'application pendant 44 minutes dans un mois est un inconvénient mineur — les données de stocks ne sont pas critiques au sens médical ou financier. L'activer serait un sur-dimensionnement identique à souscrire une assurance tous risques pour un vélo de ville.
+
+**Si la criticité augmentait** (ex : usage professionnel, SLA client), l'upgrade vers Zone-redundant HA est disponible sans migration — uniquement un changement de tier dans le portail Azure.
+
+### Protection des données
+
+La vraie menace sur une application de cette taille n'est pas la panne de zone, c'est la **perte de données accidentelle** (suppression par erreur, bug applicatif). Elle est couverte par :
+
+- ✅ Backups automatiques quotidiens (Azure gérés, 7 jours)
+- ✅ Restauration point-in-time (granularité à la minute)
+- ✅ `onDelete: Cascade` maîtrisé dans le schéma Prisma (pas de données orphelines)
+- ✅ SSL/TLS forcé en transit, AES-256 au repos
 
 ---
 

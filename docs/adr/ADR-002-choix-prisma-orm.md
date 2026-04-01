@@ -6,6 +6,20 @@
 
 ---
 
+## Besoin métier
+
+StockHub est développé en solo, sans DBA ni équipe dédiée à la qualité des données. Dans ce contexte, chaque bug lié à un mauvais type ou une requête mal construite coûte du temps de debug — temps qui devrait aller sur la valeur métier (gestion des stocks, prédictions, autorisation).
+
+**Le problème concret sans ORM type-safe :** accéder à `stock.LABEL` alors que la colonne s'appelle `label` en minuscules, ou oublier un champ obligatoire lors d'une insertion, sont des erreurs qui ne se détectent qu'à l'exécution. Sur un projet solo sans revue de code systématique, elles atteignent la prod.
+
+**Pourquoi un ORM plutôt que du SQL brut ?**
+Le schéma de StockHub évolue fréquemment (nouvelles tables pour l'autorisation, l'historique de consommation, les prédictions). Gérer des migrations SQL à la main sans outil dédié crée une dette immédiate : aucun historique versionné, pas de rollback fiable, documentation implicite. Un ORM avec système de migrations versionné résout ce problème directement.
+
+**Pourquoi ce choix est pertinent pour StockHub spécifiquement ?**
+L'application utilise TypeScript strict. Choisir un ORM qui génère automatiquement des types à partir du schéma (Prisma) aligne l'ORM avec le reste de la stack : une modification du schéma se propage immédiatement comme une erreur de compilation, pas comme un bug en production. Pour un dev solo sur un projet évalué, c'est un filet de sécurité essentiel.
+
+---
+
 ## Contexte
 
 Le projet StockHub nécessite un ORM (Object-Relational Mapping) TypeScript pour interagir avec la base de données MySQL Azure. Les critères de sélection incluaient :

@@ -10,6 +10,24 @@
 
 ---
 
+## Besoin métier
+
+StockHub est une application de gestion de stocks personnelle destinée à des individus ou des familles. Le domaine est volontairement restreint — l'encadrant RNCP l'a lui-même noté : _"ton domaine reste très restreint en termes de complexité"_. Alors pourquoi DDD/CQRS sur un périmètre aussi limité ?
+
+**1. Les invariants métier existent, même sur un domaine simple.**
+Même restreint, le domaine porte des règles réelles : un item ne peut pas avoir un label vide, la quantité ne peut pas être négative, deux items du même stock ne peuvent pas avoir le même label. Sans DDD, ces règles se dispersent entre controllers, services et repositories — et finissent par être dupliquées ou oubliées. Le DDD impose de les centraliser dans le domaine, là où elles ne peuvent pas être contournées.
+
+**2. Le projet RNCP exige la démonstration de maîtrise architecturale.**
+Ce projet est un support de soutenance professionnelle. Choisir une architecture Transaction Script aurait été plus rapide mais n'aurait pas permis de démontrer la capacité à structurer une application selon les standards de l'industrie. Le DDD/CQRS est un choix délibéré d'apprentissage et de démonstration — pas un sur-engineering aveugle.
+
+**3. La complexité augmente avec les features.**
+Le domaine initial (stocks + items) est simple, mais le projet intègre ensuite un module d'autorisation par rôles familiaux et des prédictions IA. Sans séparation claire des couches, chaque ajout de feature risque de dégrader l'ensemble. La base DDD permet d'absorber cette complexité sans réécriture.
+
+**Pourquoi CQRS en complément ?**
+Les besoins de lecture (liste de stocks, détail d'un stock) et d'écriture (ajouter un item, modifier une quantité) ont des profiles très différents. La lecture doit être rapide et retourner des DTOs plats ; l'écriture doit passer par la validation du domaine. Séparer les deux chemin (Query / Command) permet d'optimiser chaque côté indépendamment.
+
+---
+
 ## Contexte et problème
 
 ### Situation actuelle (Legacy)

@@ -178,6 +178,7 @@ Les **ADRs** documentent les décisions techniques majeures du projet avec leur 
 | [ADR-012](./docs/adr/ADR-012-upgrade-node-22.md)                 | Migration vers Node.js 22 LTS                 | Mar 2026 |
 | [ADR-013](./docs/adr/ADR-013-llm-provider-local-vs-cloud.md)     | Provider LLM — Ollama local vs OpenRouter     | Mar 2026 |
 | [ADR-014](./docs/adr/ADR-014-stock-prediction-deterministic.md)  | Prédictions stock — algorithmes déterministes | Mar 2026 |
+| [ADR-015](./docs/adr/ADR-015-openrouter-mistral-ai-service.md)   | OpenRouter + Mistral provider LLM             | Mar 2026 |
 
 📚 **[Documentation complète du projet](https://github.com/SandrineCipolla/stockHub_V2_front/wiki)** — Architecture, guides techniques, métriques
 
@@ -185,25 +186,30 @@ Les **ADRs** documentent les décisions techniques majeures du projet avec leur 
 
 ### Diagramme relationnel
 
-![Database Schema](src/docs/images/StockHub_V2.png)
+📖 **[Schéma ERD complet](./docs/database-schema.md)** — Diagramme Mermaid avec toutes les tables, relations et décisions de modélisation
 
 ### Schéma actuel (Prisma)
 
 ```
-users    → id, email
-stocks   → id, label, description, category, userId
-items    → id, label, description, quantity, minimumStock, stockId
+users               → id, email
+stocks              → id, label, description, category, userId
+items               → id, label, description, quantity, minimumStock, expiresAt, stockId
+item_history        → id, itemId, oldQuantity, newQuantity, changeType, changedBy, changedAt
+stock_prediction    → id, itemId, daysUntilEmpty, avgDailyConsumption, trend, recommendedRestock,
+                       simulatedFallback, generatedAt, aiSuggestions (JSON), aiGeneratedAt
+families            → id, name, createdAt
+family_members      → id, familyId, userId, role, joinedAt
+stock_collaborators → id, stockId, userId, role, grantedAt, grantedBy
 ```
 
 ### Relations
 
 - **users (1) → (N) stocks** : Un utilisateur possède plusieurs stocks
 - **stocks (1) → (N) items** : Un stock contient plusieurs items (cascade delete)
-
-### Évolutions prévues
-
-Système de scopes pour les utilisateurs (partage de stocks entre membres d'une famille).
-Les utilisateurs pourront faire des demandes de réapprovisionnement au propriétaire du stock.
+- **items (1) → (N) item_history** : Chaque modification de quantité est tracée
+- **items (1) → (1) stock_prediction** : Cache des prédictions déterministes + suggestions IA
+- **users ↔ families** : Via `family_members` (rôles ADMIN / MEMBER)
+- **users ↔ stocks** : Via `stock_collaborators` (rôles OWNER / EDITOR / VIEWER / VIEWER_CONTRIBUTOR)
 
 ## 6. API V2
 
@@ -255,7 +261,7 @@ npx prisma migrate deploy # Appliquer les migrations
 npx prisma studio        # Interface visuelle DB
 
 # Tests
-npm run test:unit        # 201 tests unitaires
+npm run test:unit        # 202 tests unitaires
 npm run test:integration # Tests d'intégration (TestContainers)
 npm run test:e2e         # Tests E2E Playwright
 npm run test:coverage    # Rapport de couverture
@@ -274,7 +280,7 @@ npm run azure:stop       # Arrêter l'app Azure après les tests
 
 ### Unitaires (TDD)
 
-**201 tests — couverture globale : 92% statements | 82% branches | 94% functions**
+**202 tests — couverture globale : 92% statements | 82% branches | 94% functions**
 Seuil minimum configuré : 80% sur toutes les métriques (`jest.ci.config.js`)
 
 - `Quantity` : valeurs invalides interdites

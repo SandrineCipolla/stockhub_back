@@ -36,18 +36,23 @@
 > **Décisions architecturales importantes**
 > Localisation : [adr/](adr/)
 
-| #      | Fichier                                                                                      | Description                        | Statut  |
-| ------ | -------------------------------------------------------------------------------------------- | ---------------------------------- | ------- |
-| **01** | [ADR-001-migration-ddd-cqrs.md](adr/ADR-001-migration-ddd-cqrs.md)                           | Migration architecture DDD/CQRS    | Accepté |
-| **02** | [ADR-002-choix-prisma-orm.md](adr/ADR-002-choix-prisma-orm.md)                               | Choix de Prisma comme ORM          | Accepté |
-| **03** | [ADR-003-azure-ad-b2c-authentication.md](adr/ADR-003-azure-ad-b2c-authentication.md)         | Azure AD B2C pour authentification | Accepté |
-| **04** | [ADR-004-tests-value-objects-entities.md](adr/ADR-004-tests-value-objects-entities.md)       | Tests Value Objects & Entities     | Accepté |
-| **05** | [ADR-005-api-versioning-v2.md](adr/ADR-005-api-versioning-v2.md)                             | Versioning API (V2)                | Accepté |
-| **06** | [ADR-006-mysql-azure-cloud.md](adr/ADR-006-mysql-azure-cloud.md)                             | MySQL Azure Database               | Accepté |
-| **07** | [ADR-007-code-quality-enforcement.md](adr/ADR-007-code-quality-enforcement.md)               | Standards qualité de code          | Accepté |
-| **08** | [ADR-008-typescript-request-type-aliases.md](adr/ADR-008-typescript-request-type-aliases.md) | Type aliases pour requêtes         | Accepté |
-| **09** | [ADR-009-resource-based-authorization.md](adr/ADR-009-resource-based-authorization.md)       | Autorisation Phase 1 (ressources)  | Accepté |
-| **10** | [ADR-010-ci-cd-pipeline-optimization.md](adr/ADR-010-ci-cd-pipeline-optimization.md)         | Optimisation pipeline CI/CD        | Accepté |
+| #      | Fichier                                                                                      | Description                             | Statut  |
+| ------ | -------------------------------------------------------------------------------------------- | --------------------------------------- | ------- |
+| **01** | [ADR-001-migration-ddd-cqrs.md](adr/ADR-001-migration-ddd-cqrs.md)                           | Migration architecture DDD/CQRS         | Accepté |
+| **02** | [ADR-002-choix-prisma-orm.md](adr/ADR-002-choix-prisma-orm.md)                               | Choix de Prisma comme ORM               | Accepté |
+| **03** | [ADR-003-azure-ad-b2c-authentication.md](adr/ADR-003-azure-ad-b2c-authentication.md)         | Azure AD B2C pour authentification      | Accepté |
+| **04** | [ADR-004-tests-value-objects-entities.md](adr/ADR-004-tests-value-objects-entities.md)       | Tests Value Objects & Entities          | Accepté |
+| **05** | [ADR-005-api-versioning-v2.md](adr/ADR-005-api-versioning-v2.md)                             | Versioning API (V2)                     | Accepté |
+| **06** | [ADR-006-mysql-azure-cloud.md](adr/ADR-006-mysql-azure-cloud.md)                             | MySQL Azure Database                    | Accepté |
+| **07** | [ADR-007-code-quality-enforcement.md](adr/ADR-007-code-quality-enforcement.md)               | Standards qualité de code               | Accepté |
+| **08** | [ADR-008-typescript-request-type-aliases.md](adr/ADR-008-typescript-request-type-aliases.md) | Type aliases pour requêtes              | Accepté |
+| **09** | [ADR-009-resource-based-authorization.md](adr/ADR-009-resource-based-authorization.md)       | Autorisation Phase 1 (ressources)       | Accepté |
+| **10** | [ADR-010-ci-cd-pipeline-optimization.md](adr/ADR-010-ci-cd-pipeline-optimization.md)         | Optimisation pipeline CI/CD             | Accepté |
+| **11** | [ADR-011-staging-render-aiven.md](adr/ADR-011-staging-render-aiven.md)                       | Staging Render.com + Aiven MySQL        | Accepté |
+| **12** | [ADR-012-upgrade-node-22.md](adr/ADR-012-upgrade-node-22.md)                                 | Migration Node.js 22 LTS                | Accepté |
+| **13** | [ADR-013-llm-provider-local-vs-cloud.md](adr/ADR-013-llm-provider-local-vs-cloud.md)         | Provider LLM — local vs OpenRouter      | Accepté |
+| **14** | [ADR-014-stock-prediction-deterministic.md](adr/ADR-014-stock-prediction-deterministic.md)   | Prédictions — algorithmes déterministes | Accepté |
+| **15** | [ADR-015-openrouter-mistral-ai-service.md](adr/ADR-015-openrouter-mistral-ai-service.md)     | OpenRouter + Mistral provider LLM       | Accepté |
 
 **Index complet** : [adr/INDEX.md](adr/INDEX.md) | **Template** : [adr/TEMPLATE.md](adr/TEMPLATE.md)
 
@@ -58,14 +63,15 @@
 > **Documentation détaillée sur des sujets spécifiques**
 > Localisation : [technical/](technical/)
 
-| Catégorie        | Fichier                                                                      | Description                             |
-| ---------------- | ---------------------------------------------------------------------------- | --------------------------------------- |
-| **Architecture** | [technical/dependency-injection.md](technical/dependency-injection.md)       | Dependency Injection - Best Practices   |
-| **Frontend**     | [technical/frontend-v2-integration.md](technical/frontend-v2-integration.md) | Intégration Frontend V2 avec Backend    |
-| **Tests**        | [technical/e2e-testing.md](technical/e2e-testing.md)                         | Tests E2E avec Playwright               |
-| **Tests**        | [technical/testcontainers.md](technical/testcontainers.md)                   | Tests d'intégration avec TestContainers |
-| **Auth**         | [technical/azure-b2c-setup.md](technical/azure-b2c-setup.md)                 | Setup Azure AD B2C (ROPC)               |
-| **Database**     | [technical/prisma-mapping.md](technical/prisma-mapping.md)                   | Prisma - Mapping TypeScript ↔ MySQL     |
+| Catégorie        | Fichier                                                                      | Description                                               |
+| ---------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------- |
+| **Architecture** | [technical/dependency-injection.md](technical/dependency-injection.md)       | Dependency Injection - Best Practices                     |
+| **Frontend**     | [technical/frontend-v2-integration.md](technical/frontend-v2-integration.md) | Intégration Frontend V2 avec Backend                      |
+| **Tests**        | [technical/e2e-testing.md](technical/e2e-testing.md)                         | Tests E2E avec Playwright                                 |
+| **Tests**        | [technical/testcontainers.md](technical/testcontainers.md)                   | Tests d'intégration avec TestContainers                   |
+| **Auth**         | [technical/azure-b2c-setup.md](technical/azure-b2c-setup.md)                 | Setup Azure AD B2C (ROPC)                                 |
+| **Database**     | [technical/prisma-mapping.md](technical/prisma-mapping.md)                   | Prisma - Mapping TypeScript ↔ MySQL                       |
+| **Database**     | [database-schema.md](database-schema.md)                                     | Schéma ERD — tables, relations, décisions de modélisation |
 
 ---
 
