@@ -155,7 +155,7 @@ describe('Stock API V2', () => {
 
   describe('GET /stocks/:id/items', () => {
     describe('when authenticated and stock exists', () => {
-      it('returns the items list with correct quantities', async ({ request }) => {
+      it('returns the items list with correct DTO shape and status', async ({ request }) => {
         const response = await request.get(`${apiV2}/stocks/${stockId}/items`, {
           headers: { Authorization: authToken },
         });
@@ -166,6 +166,9 @@ describe('Stock API V2', () => {
         const found = items.find((i: any) => i.id === itemId);
         expect(found).toBeDefined();
         expect(found.quantity).toBe(42);
+        expect(found.minimumStock).toBe(5);
+        // quantity:42 > minimumStock*3 (15) → overstocked
+        expect(found.status).toBe('overstocked');
       });
     });
 
@@ -192,8 +195,74 @@ describe('Stock API V2', () => {
         const updatedItem = body.items?.find((i: any) => i.id === itemId);
         if (updatedItem) {
           expect(updatedItem.quantity).toBe(99);
+          // quantity:99 > minimumStock*3 (15) → overstocked
+          expect(updatedItem.status).toBe('overstocked');
         }
       });
+    });
+  });
+
+  // ─── STATUS LIFECYCLE ──────────────────────────────────────────────────────
+
+  describe('Item status lifecycle', () => {
+    let statusStockId: number;
+    let statusItemId: number;
+    const MIN = 10;
+
+    it.beforeAll(async ({ request }) => {
+      const stockRes = await request.post(`${apiV2}/stocks`, {
+        headers: { Authorization: authToken },
+        data: { label: 'E2E Status Stock', category: 'alimentation' },
+      });
+      statusStockId = (await stockRes.json()).id;
+
+      const itemRes = await request.post(`${apiV2}/stocks/${statusStockId}/items`, {
+        headers: { Authorization: authToken },
+        data: { label: 'E2E Status Item', quantity: 3, minimumStock: MIN },
+      });
+      const body = await itemRes.json();
+      statusItemId = body.items.find((i: any) => i.label === 'E2E Status Item').id;
+    });
+
+    it.afterAll(async ({ request }) => {
+      await request.delete(`${apiV2}/stocks/${statusStockId}`, {
+        headers: { Authorization: authToken },
+      });
+    });
+
+    const patchQuantity = async (request: any, quantity: number) => {
+      const res = await request.patch(`${apiV2}/stocks/${statusStockId}/items/${statusItemId}`, {
+        headers: { Authorization: authToken },
+        data: { quantity },
+      });
+      expect(res.status()).toBe(200);
+      const body = await res.json();
+      return body.items?.find((i: any) => i.id === statusItemId);
+    };
+
+    it('quantity:3 ≤ min:10 → critical', async ({ request }) => {
+      const item = await patchQuantity(request, 3);
+      expect(item?.status).toBe('critical');
+    });
+
+    it('quantity:14 ≤ min*1.5 (15) → low', async ({ request }) => {
+      const item = await patchQuantity(request, 14);
+      expect(item?.status).toBe('low');
+    });
+
+    it('quantity:20 in (15, 30] → optimal', async ({ request }) => {
+      const item = await patchQuantity(request, 20);
+      expect(item?.status).toBe('optimal');
+    });
+
+    it('quantity:31 > min*3 (30) → overstocked', async ({ request }) => {
+      const item = await patchQuantity(request, 31);
+      expect(item?.status).toBe('overstocked');
+    });
+
+    it('quantity:0 → out-of-stock', async ({ request }) => {
+      const item = await patchQuantity(request, 0);
+      expect(item?.status).toBe('out-of-stock');
     });
   });
 
