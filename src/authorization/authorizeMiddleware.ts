@@ -21,7 +21,7 @@ export interface AuthorizedRequest extends express.Request {
  * Middleware to authorize access to stock resources
  * Must be used AFTER authenticationMiddleware
  *
- * @param requiredPermission - Permission level required (read, write, suggest)
+ * @param requiredPermission - Permission level required (read, write, contribute)
  * @param prismaClient - Optional PrismaClient for dependency injection (testing)
  */
 export function authorizeStockAccess(
@@ -112,6 +112,6 @@ export const authorizeStockRead = authorizeStockAccess(PERMISSIONS.READ);
 export const authorizeStockWrite = authorizeStockAccess(PERMISSIONS.WRITE);
 
 /**
- * Shorthand middleware for suggest access
+ * Shorthand middleware for contribute access (VIEWER_CONTRIBUTOR and above)
  */
-export const authorizeStockSuggest = authorizeStockAccess(PERMISSIONS.SUGGEST);
+export const authorizeStockContribute = authorizeStockAccess(PERMISSIONS.CONTRIBUTE);

@@ -41,7 +41,7 @@ export class StockRole {
     return true; // All roles can read
   }
 
-  public canSuggest(): boolean {
+  public canContribute(): boolean {
     return (
       this.value === StockRoleEnum.VIEWER_CONTRIBUTOR ||
       this.value === StockRoleEnum.OWNER ||
@@ -51,17 +51,17 @@ export class StockRole {
 
   /**
    * Check if the role has the required permission
-   * @param permission - Required permission (read, write, suggest)
+   * @param permission - Required permission (read, write, contribute)
    * @returns true if the role has the required permission
    */
-  public hasRequiredPermission(permission: 'read' | 'write' | 'suggest'): boolean {
+  public hasRequiredPermission(permission: 'read' | 'write' | 'contribute'): boolean {
     switch (permission) {
       case 'read':
         return this.canRead();
       case 'write':
         return this.canWrite();
-      case 'suggest':
-        return this.canSuggest();
+      case 'contribute':
+        return this.canContribute();
       default:
         return false;
     }

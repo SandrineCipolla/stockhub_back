@@ -50,9 +50,9 @@ describe('StockRole', () => {
       expect(role.canWrite()).toBe(true);
     });
 
-    it('should return true for canSuggest', () => {
+    it('should return true for canContribute', () => {
       const role = new StockRole(StockRoleEnum.OWNER);
-      expect(role.canSuggest()).toBe(true);
+      expect(role.canContribute()).toBe(true);
     });
   });
 
@@ -92,9 +92,9 @@ describe('StockRole', () => {
       expect(role.canWrite()).toBe(true);
     });
 
-    it('should return true for canSuggest', () => {
+    it('should return true for canContribute', () => {
       const role = new StockRole(StockRoleEnum.EDITOR);
-      expect(role.canSuggest()).toBe(true);
+      expect(role.canContribute()).toBe(true);
     });
   });
 
@@ -134,9 +134,9 @@ describe('StockRole', () => {
       expect(role.canWrite()).toBe(false);
     });
 
-    it('should return false for canSuggest', () => {
+    it('should return false for canContribute', () => {
       const role = new StockRole(StockRoleEnum.VIEWER);
-      expect(role.canSuggest()).toBe(false);
+      expect(role.canContribute()).toBe(false);
     });
   });
 
@@ -176,9 +176,9 @@ describe('StockRole', () => {
       expect(role.canWrite()).toBe(false);
     });
 
-    it('should return true for canSuggest', () => {
+    it('should return true for canContribute', () => {
       const role = new StockRole(StockRoleEnum.VIEWER_CONTRIBUTOR);
-      expect(role.canSuggest()).toBe(true);
+      expect(role.canContribute()).toBe(true);
     });
   });
 

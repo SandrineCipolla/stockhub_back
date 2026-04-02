@@ -108,3 +108,28 @@ export type UpdateCollaboratorRequest = AuthenticatedRequest<
 >;
 
 export type RemoveCollaboratorRequest = AuthenticatedRequest<CollaboratorParams, unknown, unknown>;
+
+export interface ContributionParams extends ParamsDictionary {
+  stockId: string;
+  contributionId: string;
+}
+
+export interface CreateContributionBody {
+  suggestedQuantity: number;
+}
+
+export interface ReviewContributionBody {
+  action: 'approve' | 'reject';
+}
+
+export type CreateContributionRequest = AuthenticatedRequest<
+  StockItemParams,
+  unknown,
+  CreateContributionBody
+>;
+
+export type ReviewContributionRequest = AuthenticatedRequest<
+  ContributionParams,
+  unknown,
+  ReviewContributionBody
+>;

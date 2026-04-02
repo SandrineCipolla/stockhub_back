@@ -44,4 +44,13 @@ export const STOCK_ROUTES = {
 
   /** DELETE - Remove a collaborator from a stock (requires write permission) */
   REMOVE_COLLABORATOR: '/stocks/:stockId/collaborators/:collaboratorId',
+
+  /** POST - Submit a contribution (quantity update proposal) — requires suggest permission */
+  CREATE_CONTRIBUTION: '/stocks/:stockId/items/:itemId/contributions',
+
+  /** GET - List pending contributions on a stock — requires read permission */
+  LIST_CONTRIBUTIONS: '/stocks/:stockId/contributions',
+
+  /** PATCH - Approve or reject a contribution — requires write permission (OWNER) */
+  REVIEW_CONTRIBUTION: '/stocks/:stockId/contributions/:contributionId',
 } as const;

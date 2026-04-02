@@ -27,6 +27,7 @@ import { PrismaClient } from '@prisma/client';
 import {
   authorizeStockRead,
   authorizeStockWrite,
+  authorizeStockContribute,
   AuthorizedRequest,
 } from '@authorization/authorizeMiddleware';
 import { PrismaCollaboratorRepository } from '@infrastructure/authorization/repositories/PrismaCollaboratorRepository';
@@ -38,6 +39,8 @@ import {
   AddCollaboratorRequest,
   UpdateCollaboratorRequest,
   RemoveCollaboratorRequest,
+  CreateContributionRequest,
+  ReviewContributionRequest,
 } from '@api/types/StockRequestTypes';
 import { STOCK_ROUTES } from './constants/routePaths';
 import { PrismaItemHistoryRepository } from '@infrastructure/prediction/repositories/PrismaItemHistoryRepository';
@@ -47,6 +50,10 @@ import { StockPredictionController } from '@api/controllers/StockPredictionContr
 import { StockSuggestionsController } from '@api/controllers/StockSuggestionsController';
 import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
 import { OpenRouterAIService } from '@infrastructure/ai/OpenRouterAIService';
+import { PrismaContributionRepository } from '@infrastructure/stock-management/manipulation/repositories/PrismaContributionRepository';
+import { CreateContributionCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/CreateContributionCommandHandler';
+import { ReviewContributionCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/ReviewContributionCommandHandler';
+import { StockContributionController } from '@api/controllers/StockContributionController';
 
 const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Router> => {
   const prismaRepository = new PrismaStockVisualizationRepository(prismaClient);
@@ -93,6 +100,19 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
     addCollaboratorHandler,
     updateCollaboratorHandler,
     removeCollaboratorHandler
+  );
+
+  const contributionRepository = new PrismaContributionRepository(prismaClient);
+  const createContributionHandler = new CreateContributionCommandHandler(contributionRepository);
+  const reviewContributionHandler = new ReviewContributionCommandHandler(
+    contributionRepository,
+    commandRepository
+  );
+  const contributionController = new StockContributionController(
+    createContributionHandler,
+    reviewContributionHandler,
+    contributionRepository,
+    userService
   );
 
   const aiService = new OpenRouterAIService();
@@ -264,6 +284,36 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   );
 
   logger.info('Routes for DELETE /stocks/:stockId/collaborators/:collaboratorId configured');
+
+  router.post(
+    STOCK_ROUTES.CREATE_CONTRIBUTION,
+    authorizeStockContribute,
+    async (req, res: express.Response) => {
+      await contributionController.createContribution(req as CreateContributionRequest, res);
+    }
+  );
+
+  logger.info('Routes for POST /stocks/:stockId/items/:itemId/contributions configured');
+
+  router.get(
+    STOCK_ROUTES.LIST_CONTRIBUTIONS,
+    authorizeStockRead,
+    async (req, res: express.Response) => {
+      await contributionController.listContributions(req as AuthenticatedRequest, res);
+    }
+  );
+
+  logger.info('Routes for GET /stocks/:stockId/contributions configured');
+
+  router.patch(
+    STOCK_ROUTES.REVIEW_CONTRIBUTION,
+    authorizeStockWrite,
+    async (req, res: express.Response) => {
+      await contributionController.reviewContribution(req as ReviewContributionRequest, res);
+    }
+  );
+
+  logger.info('Routes for PATCH /stocks/:stockId/contributions/:contributionId configured');
 
   return router;
 };

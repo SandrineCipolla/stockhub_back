@@ -20,6 +20,11 @@
       "key": "collaboratorId",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "contributionId",
+      "value": "",
+      "type": "string"
     }
   ],
   "item": [
@@ -737,6 +742,201 @@
               ]
             },
             "description": "Crée un utilisateur en base (nécessaire avant de l'ajouter comme collaborateur).\nRetourne 201 si créé, 409 si l'email existe déjà."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Contributions (VIEWER_CONTRIBUTOR workflow)",
+      "description": "Workflow de contributions : un VIEWER_CONTRIBUTOR propose une mise à jour de quantité, l'OWNER approuve ou rejette.\n\nPrérequis : avoir un collaborateur VIEWER_CONTRIBUTOR sur le stock (à insérer via Prisma Studio si besoin).",
+      "item": [
+        {
+          "name": "POST submit contribution",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"suggestedQuantity\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items/{{itemId}}/contributions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "items",
+                "{{itemId}}",
+                "contributions"
+              ]
+            },
+            "description": "Soumet une proposition de mise à jour de quantité.\nRôle requis : VIEWER_CONTRIBUTOR (ou supérieur).\nRetourne 201 avec la contribution en statut PENDING.\n\nNote : l'id retourné peut être copié dans la variable contributionId pour les requêtes approve/reject."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.id) {",
+                  "  pm.collectionVariables.set('contributionId', json.id);",
+                  "  console.log('✅ contributionId sauvegardé :', json.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "GET pending contributions",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/contributions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "contributions"
+              ]
+            },
+            "description": "Liste les contributions PENDING sur un stock.\nAccessible par tous les collaborateurs (READ)."
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH approve contribution",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"approve\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/contributions/{{contributionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "contributions",
+                "{{contributionId}}"
+              ]
+            },
+            "description": "Approuve une contribution PENDING.\nRôle requis : OWNER ou EDITOR.\nLa quantité de l'item est mise à jour avec suggestedQuantity.\nRetourne 200 avec la contribution en statut APPROVED."
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH reject contribution",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"reject\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/contributions/{{contributionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "contributions",
+                "{{contributionId}}"
+              ]
+            },
+            "description": "Rejette une contribution PENDING.\nRôle requis : OWNER ou EDITOR.\nL'item n'est pas modifié.\nRetourne 200 avec la contribution en statut REJECTED."
           },
           "response": []
         }
