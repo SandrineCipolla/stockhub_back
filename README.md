@@ -232,6 +232,17 @@ GET    /api/v2/stocks/:stockId/collaborators                       → Lister le
 POST   /api/v2/stocks/:stockId/collaborators                       → Ajouter un collaborateur (OWNER/EDITOR, règle hiérarchique)
 PATCH  /api/v2/stocks/:stockId/collaborators/:collaboratorId       → Modifier le rôle d'un collaborateur
 DELETE /api/v2/stocks/:stockId/collaborators/:collaboratorId       → Retirer un collaborateur
+DELETE /api/v2/stocks/:stockId/items/:itemId                       → Supprimer un item
+
+# Prédictions & Suggestions IA
+GET    /api/v2/stocks/:stockId/items/:itemId/history     → Historique de consommation
+GET    /api/v2/stocks/:stockId/items/:itemId/prediction  → Prédiction (daysUntilEmpty, trend, recommendedRestock)
+GET    /api/v2/stocks/:stockId/suggestions               → Suggestions IA (cache 24h, LLM Mistral)
+
+# Contributions (VIEWER_CONTRIBUTOR workflow)
+POST   /api/v2/stocks/:stockId/items/:itemId/contributions    → Soumettre une contribution (quantité proposée)
+GET    /api/v2/stocks/:stockId/contributions                  → Lister les contributions PENDING
+PATCH  /api/v2/stocks/:stockId/contributions/:contributionId  → Approuver ou rejeter une contribution (OWNER)
 ```
 
 Catégories valides : `alimentation` | `hygiene` | `artistique`
@@ -269,7 +280,7 @@ npx prisma migrate deploy # Appliquer les migrations
 npx prisma studio        # Interface visuelle DB
 
 # Tests
-npm run test:unit        # 226 tests unitaires
+npm run test:unit        # 253 tests unitaires
 npm run test:integration # Tests d'intégration (TestContainers)
 npm run test:e2e         # Tests E2E Playwright
 npm run test:coverage    # Rapport de couverture
@@ -288,7 +299,7 @@ npm run azure:stop       # Arrêter l'app Azure après les tests
 
 ### Unitaires (TDD)
 
-**226 tests — couverture globale : 92% statements | 82% branches | 94% functions**
+**253 tests — couverture globale : 92% statements | 82% branches | 94% functions**
 Seuil minimum configuré : 80% sur toutes les métriques (`jest.ci.config.js`)
 
 - `Quantity` : valeurs invalides interdites

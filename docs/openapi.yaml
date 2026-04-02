@@ -8,7 +8,7 @@ openapi: 3.0.0
 
 info:
   title: StockHub Backend API
-  version: 2.6.0
+  version: 2.9.0
   description: |
     API REST pour la gestion de stocks (alimentation, hygiène, artistique)
 
@@ -35,6 +35,8 @@ tags:
     description: Endpoints de consultation des stocks (CQRS Read Side)
   - name: Stock Manipulation (WRITE)
     description: Endpoints de création et modification des stocks (CQRS Write Side)
+  - name: Stock Contributions (WRITE)
+    description: Workflow de contributions — VIEWER_CONTRIBUTOR soumet, OWNER approuve/rejette
 
 security:
   - BearerAuth: []
@@ -601,14 +603,57 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /api/v2/stocks/{stockId}/collaborators:
-    get:
-      summary: Lister les collaborateurs d'un stock
+  /api/v2/stocks/{stockId}/items/{itemId}/contributions:
+    post:
+      summary: Soumettre une contribution (modification de quantité)
       description: |
-        Retourne la liste de tous les collaborateurs d'un stock avec leur rôle.
-        Accessible à tous les rôles (OWNER, EDITOR, VIEWER, VIEWER_CONTRIBUTOR).
+        Permet à un VIEWER_CONTRIBUTOR de proposer une mise à jour de quantité sur un item.
+        La contribution est créée avec le statut PENDING et attend l'approbation du propriétaire.
       tags:
-        - Stock Collaborators (READ)
+        - Stock Contributions (WRITE)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 5
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContributionBody'
+            example:
+              suggestedQuantity: 0
+      responses:
+        '201':
+          description: Contribution créée avec statut PENDING
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemContributionDTO'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /api/v2/stocks/{stockId}/contributions:
+    get:
+      summary: Lister les contributions en attente sur un stock
+      description: Retourne les contributions PENDING sur un stock. Accessible par tous les collaborateurs (READ).
+      tags:
+        - Stock Contributions (WRITE)
       security:
         - BearerAuth: []
       parameters:
@@ -621,7 +666,7 @@ paths:
             example: 1
       responses:
         '200':
-          description: Liste des collaborateurs
+          description: Liste des contributions en attente
           content:
             application/json:
               schema:
@@ -1152,6 +1197,71 @@ components:
           description: Nouvelle quantité
           example: 5
           minimum: 0
+
+    ItemContributionDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+        itemId:
+          type: integer
+          example: 5
+        stockId:
+          type: integer
+          example: 1
+        contributedBy:
+          type: integer
+          description: userId de l'auteur de la contribution
+          example: 42
+        suggestedQuantity:
+          type: integer
+          minimum: 0
+          example: 0
+        status:
+          type: string
+          enum:
+            - PENDING
+            - APPROVED
+            - REJECTED
+          example: PENDING
+        reviewedBy:
+          type: integer
+          nullable: true
+          example: 7
+        reviewedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: '2026-04-02T10:30:00.000Z'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2026-04-02T09:00:00.000Z'
+
+    CreateContributionBody:
+      type: object
+      required:
+        - suggestedQuantity
+      properties:
+        suggestedQuantity:
+          type: integer
+          minimum: 0
+          description: Quantité proposée par le VIEWER_CONTRIBUTOR
+          example: 0
+
+    ReviewContributionBody:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum:
+            - approve
+            - reject
+          description: Action de l'OWNER — approve applique la quantité, reject l'ignore
+          example: approve
 
     # Réponses d'erreur
     ErrorResponse:

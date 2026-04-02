@@ -230,7 +230,7 @@ Requête → Authentification (JWT) → Autorisation (check ownership/role) → 
 
 **Note:** Tests d'intégration fonctionnels (9/9 PASS) - Issue #71 résolue via AuthorizationRepository
 
-### Phase 2: Workflow de contributions ✅ COMPLÉTÉ (partiellement)
+### Phase 2: Workflow de contributions ✅ COMPLÉTÉ
 
 **Objectif:** Permettre contribution sécurisée
 
