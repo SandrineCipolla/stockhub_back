@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.8.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.8.0...v2.8.1) (2026-04-01)
+
+
+### 🐛 Bug Fixes
+
+* **deps:** upgrade prisma to 6.19.3 and copy-webpack-plugin to 14.0.0 — closes [#83](https://github.com/SandrineCipolla/stockhub_back/issues/83) ([#164](https://github.com/SandrineCipolla/stockhub_back/issues/164)) ([e870bd5](https://github.com/SandrineCipolla/stockhub_back/commit/e870bd57e888d4e3abbe42a66cc033b61a967898))
+
+
+### 📚 Documentation
+
+* **adr:** add business context to ADRs and complete schema documentation — closes [#160](https://github.com/SandrineCipolla/stockhub_back/issues/160) [#161](https://github.com/SandrineCipolla/stockhub_back/issues/161) [#162](https://github.com/SandrineCipolla/stockhub_back/issues/162) ([#167](https://github.com/SandrineCipolla/stockhub_back/issues/167)) ([6906cee](https://github.com/SandrineCipolla/stockhub_back/commit/6906cee062f664bb8c960512616dd5d545b8fe43))
+
+
+### 🧪 Tests
+
+* **e2e:** add status field assertions and status lifecycle scenario — closes [#43](https://github.com/SandrineCipolla/stockhub_back/issues/43) ([#166](https://github.com/SandrineCipolla/stockhub_back/issues/166)) ([da25beb](https://github.com/SandrineCipolla/stockhub_back/commit/da25beb1c5794a8a13d9a257eff411899155faaa))
+
+
+### 🔧 Chores
+
+* **ci:** add npm outdated check to CI pipeline — closes [#163](https://github.com/SandrineCipolla/stockhub_back/issues/163) ([#168](https://github.com/SandrineCipolla/stockhub_back/issues/168)) ([0674607](https://github.com/SandrineCipolla/stockhub_back/commit/0674607cdb555765bd8b220461bec52a1610c195))
+
 ## [2.8.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.7.0...v2.8.0) (2026-03-31)
 
 ### ✨ Features
