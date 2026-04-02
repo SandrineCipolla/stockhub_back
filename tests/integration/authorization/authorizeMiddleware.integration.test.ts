@@ -8,7 +8,7 @@ import {
 } from '@helpers/testContainerSetup';
 import {
   authorizeStockRead,
-  authorizeStockSuggest,
+  authorizeStockContribute,
   authorizeStockWrite,
 } from '@authorization/authorizeMiddleware';
 import { StockRole, StockCategory } from '@prisma/client';
@@ -143,7 +143,7 @@ describe.skip('Authorization Middleware Integration Tests', () => {
       app.post('/stocks/:stockId/items', authorizeStockWrite, (_req, res) =>
         res.json({ success: true })
       );
-      app.post('/stocks/:stockId/suggest', authorizeStockSuggest, (_req, res) =>
+      app.post('/stocks/:stockId/suggest', authorizeStockContribute, (_req, res) =>
         res.json({ success: true })
       );
 
@@ -190,7 +190,7 @@ describe.skip('Authorization Middleware Integration Tests', () => {
       app.post('/stocks/:stockId/items', authorizeStockWrite, (_req, res) =>
         res.json({ success: true })
       );
-      app.post('/stocks/:stockId/suggest', authorizeStockSuggest, (_req, res) =>
+      app.post('/stocks/:stockId/suggest', authorizeStockContribute, (_req, res) =>
         res.json({ success: true })
       );
 
@@ -220,7 +220,7 @@ describe.skip('Authorization Middleware Integration Tests', () => {
       app.post('/stocks/:stockId/items', authorizeStockWrite, (_req, res) =>
         res.json({ success: true })
       );
-      app.post('/stocks/:stockId/suggest', authorizeStockSuggest, (_req, res) =>
+      app.post('/stocks/:stockId/suggest', authorizeStockContribute, (_req, res) =>
         res.json({ success: true })
       );
 
@@ -257,7 +257,7 @@ describe.skip('Authorization Middleware Integration Tests', () => {
       app.post('/stocks/:stockId/items', authorizeStockWrite, (_req, res) =>
         res.json({ success: true })
       );
-      app.post('/stocks/:stockId/suggest', authorizeStockSuggest, (_req, res) =>
+      app.post('/stocks/:stockId/suggest', authorizeStockContribute, (_req, res) =>
         res.json({ success: true })
       );
 

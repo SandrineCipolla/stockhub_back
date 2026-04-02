@@ -4,7 +4,7 @@
 export const PERMISSIONS = {
   READ: 'read' as const,
   WRITE: 'write' as const,
-  SUGGEST: 'suggest' as const,
+  CONTRIBUTE: 'contribute' as const,
 } as const;
 
 /**
