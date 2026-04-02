@@ -737,6 +737,97 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+  /api/v2/stocks/{stockId}/collaborators:
+    get:
+      summary: Lister les collaborateurs d'un stock
+      description: |
+        Retourne la liste de tous les collaborateurs d'un stock avec leur rôle.
+        Accessible à tous les rôles (OWNER, EDITOR, VIEWER, VIEWER_CONTRIBUTOR).
+      tags:
+        - Stock Collaborators (READ)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Liste des collaborateurs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CollaboratorDTO'
+              example:
+                - id: 1
+                  stockId: 1
+                  userId: 2
+                  userEmail: editor@example.com
+                  role: EDITOR
+                  grantedAt: '2026-04-01T10:00:00.000Z'
+                  grantedBy: 1
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      summary: Ajouter un collaborateur à un stock
+      description: |
+        Ajoute un utilisateur comme collaborateur avec un rôle donné.
+
+        **Règle hiérarchique :**
+        - OWNER peut ajouter : EDITOR, VIEWER, VIEWER_CONTRIBUTOR
+        - EDITOR peut ajouter : VIEWER, VIEWER_CONTRIBUTOR uniquement
+
+        Requiert le rôle OWNER ou EDITOR.
+      tags:
+        - Stock Collaborators (WRITE)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddCollaboratorBody'
+            example:
+              email: viewer@example.com
+              role: VIEWER
+      responses:
+        '201':
+          description: Collaborateur ajouté
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollaboratorDTO'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
   /api/v2/stocks/{stockId}/collaborators/{collaboratorId}:
     patch:
       summary: Modifier le rôle d'un collaborateur
