@@ -694,6 +694,55 @@
       ]
     },
     {
+      "name": "Users (V1)",
+      "item": [
+        {
+          "name": "POST create user",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"collaborator@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users"
+              ]
+            },
+            "description": "Crée un utilisateur en base (nécessaire avant de l'ajouter comme collaborateur).\nRetourne 201 si créé, 409 si l'email existe déjà."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Collaborateurs",
       "item": [
         {
