@@ -32,4 +32,16 @@ export const STOCK_ROUTES = {
 
   /** GET - Get AI-generated stock suggestions for a stock (requires read permission) */
   STOCK_SUGGESTIONS: '/stocks/:stockId/suggestions',
+
+  /** GET - List collaborators for a stock (requires read permission) */
+  LIST_COLLABORATORS: '/stocks/:stockId/collaborators',
+
+  /** POST - Add a collaborator to a stock (requires write permission) */
+  ADD_COLLABORATOR: '/stocks/:stockId/collaborators',
+
+  /** PATCH - Update a collaborator's role (requires write permission) */
+  UPDATE_COLLABORATOR: '/stocks/:stockId/collaborators/:collaboratorId',
+
+  /** DELETE - Remove a collaborator from a stock (requires write permission) */
+  REMOVE_COLLABORATOR: '/stocks/:stockId/collaborators/:collaboratorId',
 } as const;

@@ -80,3 +80,31 @@ export type UpdateStockRequest = AuthenticatedRequest<StockParams, unknown, Upda
 export type DeleteStockRequest = AuthenticatedRequest<StockParams, unknown, unknown>;
 
 export type DeleteItemRequest = AuthenticatedRequest<StockItemParams, unknown, unknown>;
+
+export interface CollaboratorParams extends ParamsDictionary {
+  stockId: string;
+  collaboratorId: string;
+}
+
+export interface AddCollaboratorBody {
+  email: string;
+  role: string;
+}
+
+export interface UpdateCollaboratorRoleBody {
+  role: string;
+}
+
+export type AddCollaboratorRequest = AuthenticatedRequest<
+  StockParams,
+  unknown,
+  AddCollaboratorBody
+>;
+
+export type UpdateCollaboratorRequest = AuthenticatedRequest<
+  CollaboratorParams,
+  unknown,
+  UpdateCollaboratorRoleBody
+>;
+
+export type RemoveCollaboratorRequest = AuthenticatedRequest<CollaboratorParams, unknown, unknown>;

@@ -8,7 +8,7 @@ openapi: 3.0.0
 
 info:
   title: StockHub Backend API
-  version: 2.5.1
+  version: 2.6.0
   description: |
     API REST pour la gestion de stocks (alimentation, hygiène, artistique)
 
@@ -601,6 +601,185 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+  /api/v2/stocks/{stockId}/collaborators:
+    get:
+      summary: Lister les collaborateurs d'un stock
+      description: |
+        Retourne la liste de tous les collaborateurs d'un stock avec leur rôle.
+        Accessible à tous les rôles (OWNER, EDITOR, VIEWER, VIEWER_CONTRIBUTOR).
+      tags:
+        - Stock Collaborators (READ)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Liste des collaborateurs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CollaboratorDTO'
+              example:
+                - id: 1
+                  stockId: 1
+                  userId: 2
+                  userEmail: editor@example.com
+                  role: EDITOR
+                  grantedAt: '2026-04-01T10:00:00.000Z'
+                  grantedBy: 1
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      summary: Ajouter un collaborateur à un stock
+      description: |
+        Ajoute un utilisateur comme collaborateur avec un rôle donné.
+
+        **Règle hiérarchique :**
+        - OWNER peut ajouter : EDITOR, VIEWER, VIEWER_CONTRIBUTOR
+        - EDITOR peut ajouter : VIEWER, VIEWER_CONTRIBUTOR uniquement
+
+        Requiert le rôle OWNER ou EDITOR.
+      tags:
+        - Stock Collaborators (WRITE)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: Identifiant unique du stock
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddCollaboratorBody'
+            example:
+              email: viewer@example.com
+              role: VIEWER
+      responses:
+        '201':
+          description: Collaborateur ajouté
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollaboratorDTO'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/v2/stocks/{stockId}/collaborators/{collaboratorId}:
+    patch:
+      summary: Modifier le rôle d'un collaborateur
+      description: |
+        Met à jour le rôle d'un collaborateur existant.
+
+        **Règle hiérarchique :** impossible de modifier un collaborateur de rang supérieur ou égal.
+        Requiert le rôle OWNER ou EDITOR.
+      tags:
+        - Stock Collaborators (WRITE)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: collaboratorId
+          in: path
+          required: true
+          description: ID de la relation StockCollaborator
+          schema:
+            type: integer
+            example: 5
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCollaboratorRoleBody'
+            example:
+              role: VIEWER_CONTRIBUTOR
+      responses:
+        '200':
+          description: Rôle mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollaboratorDTO'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      summary: Supprimer un collaborateur d'un stock
+      description: |
+        Retire un utilisateur des collaborateurs du stock.
+
+        **Règle hiérarchique :** impossible de supprimer un collaborateur de rang supérieur ou égal.
+        Requiert le rôle OWNER ou EDITOR.
+      tags:
+        - Stock Collaborators (WRITE)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: collaboratorId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 5
+      responses:
+        '204':
+          description: Collaborateur supprimé
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -618,6 +797,68 @@ components:
         3. Inclusion dans le header: `Authorization: Bearer {token}`
 
   schemas:
+    # Collaborateurs
+    CollaboratorDTO:
+      type: object
+      required:
+        - id
+        - stockId
+        - userId
+        - userEmail
+        - role
+        - grantedAt
+      properties:
+        id:
+          type: integer
+          example: 1
+        stockId:
+          type: integer
+          example: 1
+        userId:
+          type: integer
+          example: 2
+        userEmail:
+          type: string
+          format: email
+          example: viewer@example.com
+        role:
+          type: string
+          enum: [EDITOR, VIEWER, VIEWER_CONTRIBUTOR]
+          example: VIEWER
+        grantedAt:
+          type: string
+          format: date-time
+          example: '2026-04-01T10:00:00.000Z'
+        grantedBy:
+          type: integer
+          nullable: true
+          example: 1
+
+    AddCollaboratorBody:
+      type: object
+      required:
+        - email
+        - role
+      properties:
+        email:
+          type: string
+          format: email
+          example: viewer@example.com
+        role:
+          type: string
+          enum: [EDITOR, VIEWER, VIEWER_CONTRIBUTOR]
+          example: VIEWER
+
+    UpdateCollaboratorRoleBody:
+      type: object
+      required:
+        - role
+      properties:
+        role:
+          type: string
+          enum: [EDITOR, VIEWER, VIEWER_CONTRIBUTOR]
+          example: VIEWER_CONTRIBUTOR
+
     # Suggestions IA
     AISuggestion:
       type: object

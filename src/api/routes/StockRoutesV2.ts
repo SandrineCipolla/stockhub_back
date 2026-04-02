@@ -24,7 +24,21 @@ import { DeleteStockCommandHandler } from '@domain/stock-management/manipulation
 import { DeleteItemCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/DeleteItemCommandHandler';
 import { rootController } from '@utils/logger';
 import { PrismaClient } from '@prisma/client';
-import { authorizeStockRead, authorizeStockWrite } from '@authorization/authorizeMiddleware';
+import {
+  authorizeStockRead,
+  authorizeStockWrite,
+  AuthorizedRequest,
+} from '@authorization/authorizeMiddleware';
+import { PrismaCollaboratorRepository } from '@infrastructure/authorization/repositories/PrismaCollaboratorRepository';
+import { AddCollaboratorCommandHandler } from '@domain/authorization/collaboration/command-handlers/AddCollaboratorCommandHandler';
+import { UpdateCollaboratorRoleCommandHandler } from '@domain/authorization/collaboration/command-handlers/UpdateCollaboratorRoleCommandHandler';
+import { RemoveCollaboratorCommandHandler } from '@domain/authorization/collaboration/command-handlers/RemoveCollaboratorCommandHandler';
+import { StockCollaboratorController } from '@api/controllers/StockCollaboratorController';
+import {
+  AddCollaboratorRequest,
+  UpdateCollaboratorRequest,
+  RemoveCollaboratorRequest,
+} from '@api/types/StockRequestTypes';
 import { STOCK_ROUTES } from './constants/routePaths';
 import { PrismaItemHistoryRepository } from '@infrastructure/prediction/repositories/PrismaItemHistoryRepository';
 import { PrismaStockPredictionRepository } from '@infrastructure/prediction/repositories/PrismaStockPredictionRepository';
@@ -66,6 +80,19 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
     predictionService,
     historyRepository,
     predictionRepository
+  );
+
+  const collaboratorRepository = new PrismaCollaboratorRepository(prismaClient);
+  const addCollaboratorHandler = new AddCollaboratorCommandHandler(collaboratorRepository);
+  const updateCollaboratorHandler = new UpdateCollaboratorRoleCommandHandler(
+    collaboratorRepository
+  );
+  const removeCollaboratorHandler = new RemoveCollaboratorCommandHandler(collaboratorRepository);
+  const collaboratorController = new StockCollaboratorController(
+    collaboratorRepository,
+    addCollaboratorHandler,
+    updateCollaboratorHandler,
+    removeCollaboratorHandler
   );
 
   const aiService = new OpenRouterAIService();
@@ -188,6 +215,55 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   );
 
   logger.info('Routes for GET /stocks/:stockId/suggestions configured');
+
+  router.get(
+    STOCK_ROUTES.LIST_COLLABORATORS,
+    authorizeStockRead,
+    async (req, res: express.Response) => {
+      await collaboratorController.listCollaborators(req as AuthorizedRequest, res);
+    }
+  );
+
+  logger.info('Routes for GET /stocks/:stockId/collaborators configured');
+
+  router.post(
+    STOCK_ROUTES.ADD_COLLABORATOR,
+    authorizeStockWrite,
+    async (req, res: express.Response) => {
+      await collaboratorController.addCollaborator(
+        req as AddCollaboratorRequest & AuthorizedRequest,
+        res
+      );
+    }
+  );
+
+  logger.info('Routes for POST /stocks/:stockId/collaborators configured');
+
+  router.patch(
+    STOCK_ROUTES.UPDATE_COLLABORATOR,
+    authorizeStockWrite,
+    async (req, res: express.Response) => {
+      await collaboratorController.updateCollaboratorRole(
+        req as UpdateCollaboratorRequest & AuthorizedRequest,
+        res
+      );
+    }
+  );
+
+  logger.info('Routes for PATCH /stocks/:stockId/collaborators/:collaboratorId configured');
+
+  router.delete(
+    STOCK_ROUTES.REMOVE_COLLABORATOR,
+    authorizeStockWrite,
+    async (req, res: express.Response) => {
+      await collaboratorController.removeCollaborator(
+        req as RemoveCollaboratorRequest & AuthorizedRequest,
+        res
+      );
+    }
+  );
+
+  logger.info('Routes for DELETE /stocks/:stockId/collaborators/:collaboratorId configured');
 
   return router;
 };
