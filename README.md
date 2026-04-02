@@ -95,10 +95,17 @@ Usage personnel/familial → visibilité rapide sur les stocks, valeur ajoutée 
 - `GET /api/v2/stocks/{stockId}/items` → items d'un stock
 - `POST /api/v2/stocks/{stockId}/items` → ajouter un item
 - `PATCH /api/v2/stocks/{stockId}/items/{itemId}` → modifier un item (label, description, quantité, stock minimum)
+- `DELETE /api/v2/stocks/{stockId}/items/{itemId}` → supprimer un item
+- `GET /api/v2/stocks/{stockId}/items/{itemId}/history` → historique des quantités d'un item
+- `GET /api/v2/stocks/{stockId}/items/{itemId}/prediction` → prédiction de rupture de stock
+- `GET /api/v2/stocks/{stockId}/suggestions` → suggestions IA de réapprovisionnement
 - `GET /api/v2/stocks/{stockId}/collaborators` → lister les collaborateurs d'un stock
 - `POST /api/v2/stocks/{stockId}/collaborators` → ajouter un collaborateur (OWNER/EDITOR, règle hiérarchique)
 - `PATCH /api/v2/stocks/{stockId}/collaborators/{collaboratorId}` → modifier le rôle d'un collaborateur
 - `DELETE /api/v2/stocks/{stockId}/collaborators/{collaboratorId}` → retirer un collaborateur
+- `POST /api/v2/stocks/{stockId}/items/{itemId}/contributions` → soumettre une contribution (VIEWER_CONTRIBUTOR)
+- `GET /api/v2/stocks/{stockId}/contributions` → lister les contributions en attente
+- `PATCH /api/v2/stocks/{stockId}/contributions/{contributionId}` → approuver ou rejeter une contribution (OWNER/EDITOR)
 - Entités DDD (`Stock`, `StockItem`, `Quantity`) + service `StockVisualizationService`
 - Autorisation par rôles (OWNER / EDITOR / VIEWER / VIEWER_CONTRIBUTOR)
 
