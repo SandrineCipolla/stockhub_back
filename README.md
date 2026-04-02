@@ -95,6 +95,10 @@ Usage personnel/familial → visibilité rapide sur les stocks, valeur ajoutée 
 - `GET /api/v2/stocks/{stockId}/items` → items d'un stock
 - `POST /api/v2/stocks/{stockId}/items` → ajouter un item
 - `PATCH /api/v2/stocks/{stockId}/items/{itemId}` → modifier un item (label, description, quantité, stock minimum)
+- `GET /api/v2/stocks/{stockId}/collaborators` → lister les collaborateurs d'un stock
+- `POST /api/v2/stocks/{stockId}/collaborators` → ajouter un collaborateur (OWNER/EDITOR, règle hiérarchique)
+- `PATCH /api/v2/stocks/{stockId}/collaborators/{collaboratorId}` → modifier le rôle d'un collaborateur
+- `DELETE /api/v2/stocks/{stockId}/collaborators/{collaboratorId}` → retirer un collaborateur
 - Entités DDD (`Stock`, `StockItem`, `Quantity`) + service `StockVisualizationService`
 - Autorisation par rôles (OWNER / EDITOR / VIEWER / VIEWER_CONTRIBUTOR)
 
@@ -216,14 +220,18 @@ stock_collaborators → id, stockId, userId, role, grantedAt, grantedBy
 ### Endpoints
 
 ```
-GET    /api/v2/stocks                         → Liste des stocks de l'utilisateur
-GET    /api/v2/stocks/:stockId                → Détail d'un stock
-POST   /api/v2/stocks                         → Créer un stock
-PATCH  /api/v2/stocks/:stockId                → Modifier un stock
-DELETE /api/v2/stocks/:stockId                → Supprimer (cascade items)
-GET    /api/v2/stocks/:stockId/items          → Items d'un stock
-POST   /api/v2/stocks/:stockId/items          → Ajouter un item
-PATCH  /api/v2/stocks/:stockId/items/:itemId  → Modifier un item (label, description, quantité, stock minimum)
+GET    /api/v2/stocks                                              → Liste des stocks de l'utilisateur
+GET    /api/v2/stocks/:stockId                                     → Détail d'un stock
+POST   /api/v2/stocks                                              → Créer un stock
+PATCH  /api/v2/stocks/:stockId                                     → Modifier un stock
+DELETE /api/v2/stocks/:stockId                                     → Supprimer (cascade items)
+GET    /api/v2/stocks/:stockId/items                               → Items d'un stock
+POST   /api/v2/stocks/:stockId/items                               → Ajouter un item
+PATCH  /api/v2/stocks/:stockId/items/:itemId                       → Modifier un item (label, description, quantité, stock minimum)
+GET    /api/v2/stocks/:stockId/collaborators                       → Lister les collaborateurs
+POST   /api/v2/stocks/:stockId/collaborators                       → Ajouter un collaborateur (OWNER/EDITOR, règle hiérarchique)
+PATCH  /api/v2/stocks/:stockId/collaborators/:collaboratorId       → Modifier le rôle d'un collaborateur
+DELETE /api/v2/stocks/:stockId/collaborators/:collaboratorId       → Retirer un collaborateur
 ```
 
 Catégories valides : `alimentation` | `hygiene` | `artistique`
@@ -261,7 +269,7 @@ npx prisma migrate deploy # Appliquer les migrations
 npx prisma studio        # Interface visuelle DB
 
 # Tests
-npm run test:unit        # 202 tests unitaires
+npm run test:unit        # 226 tests unitaires
 npm run test:integration # Tests d'intégration (TestContainers)
 npm run test:e2e         # Tests E2E Playwright
 npm run test:coverage    # Rapport de couverture
@@ -280,7 +288,7 @@ npm run azure:stop       # Arrêter l'app Azure après les tests
 
 ### Unitaires (TDD)
 
-**202 tests — couverture globale : 92% statements | 82% branches | 94% functions**
+**226 tests — couverture globale : 92% statements | 82% branches | 94% functions**
 Seuil minimum configuré : 80% sur toutes les métriques (`jest.ci.config.js`)
 
 - `Quantity` : valeurs invalides interdites

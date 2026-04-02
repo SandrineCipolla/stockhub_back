@@ -230,24 +230,33 @@ Requête → Authentification (JWT) → Autorisation (check ownership/role) → 
 
 **Note:** Tests d'intégration fonctionnels (9/9 PASS) - Issue #71 résolue via AuthorizationRepository
 
-### Phase 2: Workflow de suggestions (4-6 semaines)
+### Phase 2: Workflow de contributions ✅ COMPLÉTÉ (partiellement)
 
 **Objectif:** Permettre contribution sécurisée
 
 **Livrables:**
 
-- [ ] Rôle VIEWER_CONTRIBUTOR
-- [ ] Entity `StockSuggestion` (DDD)
-- [ ] Routes `/api/v2/stocks/:id/suggestions` (POST, GET)
-- [ ] Command handlers: `CreateSuggestion`, `ApproveSuggestion`, `RejectSuggestion`
-- [ ] Tests workflow complet
+- [x] ✅ Gestion des collaborateurs (issue #172)
+  - [x] ✅ Routes `GET/POST /api/v2/stocks/:id/collaborators`
+  - [x] ✅ Routes `PATCH/DELETE /api/v2/stocks/:id/collaborators/:collaboratorId`
+  - [x] ✅ Hiérarchie des permissions (OWNER > EDITOR > VIEWER/VIEWER_CONTRIBUTOR)
+  - [x] ✅ Domain: `AddCollaboratorCommand`, `UpdateCollaboratorRoleCommand`, `RemoveCollaboratorCommand`
+  - [x] ✅ 24 tests unitaires (permissions + handlers)
+- [x] ✅ Workflow de contributions VIEWER_CONTRIBUTOR (issue #63)
+  - [x] ✅ Entity `ItemContribution` (DDD, immutable)
+  - [x] ✅ Routes `POST/GET /api/v2/stocks/:id/contributions`
+  - [x] ✅ Route `PATCH /api/v2/stocks/:id/contributions/:id/review`
+  - [x] ✅ Command handlers: `CreateContribution`, `ReviewContribution`
+  - [x] ✅ Tests workflow complet
+
+**Note de nommage:** "suggestions" → renommé "contributions" pour éviter la collision avec l'endpoint IA `/suggestions`
 
 **Critères de succès:**
 
-- Un VIEWER_CONTRIBUTOR peut créer suggestion
-- OWNER reçoit notification (email pour MVP)
-- OWNER peut approve/reject
-- Suggestion approved → appliquée au stock
+- ✅ Un OWNER/EDITOR peut gérer les collaborateurs (hiérarchie respectée)
+- ✅ Un VIEWER_CONTRIBUTOR peut créer une contribution de quantité
+- ✅ OWNER/EDITOR peut approuver/rejeter une contribution
+- ✅ Contribution approuvée → quantité de l'item mise à jour
 
 ### Phase 3: Notifications temps réel (2-3 semaines)
 
