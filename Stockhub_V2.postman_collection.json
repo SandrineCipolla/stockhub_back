@@ -15,34 +15,69 @@
       "key": "itemId",
       "value": "1",
       "type": "string"
+    },
+    {
+      "key": "collaboratorId",
+      "value": "",
+      "type": "string"
     }
   ],
   "item": [
     {
       "name": "🔑 Get Token",
       "request": {
-        "auth": { "type": "noauth" },
+        "auth": {
+          "type": "noauth"
+        },
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/x-www-form-urlencoded" }],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
         "body": {
           "mode": "urlencoded",
           "urlencoded": [
-            { "key": "grant_type", "value": "password" },
-            { "key": "client_id", "value": "a6a645f0-32fe-42cc-b524-6a3d83bbfb43" },
-            { "key": "username", "value": "{{username}}" },
-            { "key": "password", "value": "{{password}}" },
+            {
+              "key": "grant_type",
+              "value": "password"
+            },
+            {
+              "key": "client_id",
+              "value": "a6a645f0-32fe-42cc-b524-6a3d83bbfb43"
+            },
+            {
+              "key": "username",
+              "value": "{{username}}"
+            },
+            {
+              "key": "password",
+              "value": "{{password}}"
+            },
             {
               "key": "scope",
               "value": "https://stockhubb2c.onmicrosoft.com/a6a645f0-32fe-42cc-b524-6a3d83bbfb43/access_as_user"
             },
-            { "key": "response_type", "value": "token" }
+            {
+              "key": "response_type",
+              "value": "token"
+            }
           ]
         },
         "url": {
           "raw": "https://stockhubb2c.b2clogin.com/stockhubb2c.onmicrosoft.com/B2C_1_ROPC/oauth2/v2.0/token",
           "protocol": "https",
-          "host": ["stockhubb2c.b2clogin.com"],
-          "path": ["stockhubb2c.onmicrosoft.com", "B2C_1_ROPC", "oauth2", "v2.0", "token"]
+          "host": [
+            "stockhubb2c.b2clogin.com"
+          ],
+          "path": [
+            "stockhubb2c.onmicrosoft.com",
+            "B2C_1_ROPC",
+            "oauth2",
+            "v2.0",
+            "token"
+          ]
         },
         "description": "Obtient un token Azure B2C via ROPC (username/password).\nLe token est automatiquement sauvegardé dans la variable d'environnement accessToken.\n\nPrérequis : renseigner username et password dans l'environnement actif."
       },
@@ -73,14 +108,26 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks"
+              ]
             }
           },
           "response": []
@@ -90,14 +137,27 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks", "{{stockId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}"
+              ]
             }
           },
           "response": []
@@ -107,19 +167,40 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"label\": \"Mon stock\",\n  \"description\": \"Description du stock\",\n  \"category\": \"alimentation\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks"
+              ]
             },
             "description": "Catégories valides : alimentation | hygiene | artistique"
           },
@@ -130,19 +211,41 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "PATCH",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"label\": \"Nouveau label\",\n  \"description\": \"Nouvelle description\",\n  \"category\": \"hygiene\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks", "{{stockId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}"
+              ]
             }
           },
           "response": []
@@ -152,14 +255,27 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "DELETE",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks", "{{stockId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}"
+              ]
             },
             "description": "Supprime un stock et tous ses articles. Retourne 204."
           },
@@ -175,14 +291,28 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks", "{{stockId}}", "items"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "items"
+              ]
             }
           },
           "response": []
@@ -192,19 +322,42 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"label\": \"Nouvel article\",\n  \"quantity\": 10,\n  \"description\": \"Description de l'article\",\n  \"minimumStock\": 2\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks", "{{stockId}}", "items"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "items"
+              ]
             }
           },
           "response": []
@@ -214,19 +367,43 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "PATCH",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"quantity\": 25\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items/{{itemId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks", "{{stockId}}", "items", "{{itemId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "items",
+                "{{itemId}}"
+              ]
             }
           },
           "response": []
@@ -236,19 +413,43 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "PATCH",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"label\": \"Tomates bio\",\n  \"description\": \"Tomates bio du marché\",\n  \"minimumStock\": 5\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items/{{itemId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks", "{{stockId}}", "items", "{{itemId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "items",
+                "{{itemId}}"
+              ]
             }
           },
           "response": []
@@ -258,19 +459,43 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "PATCH",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"label\": \"Tomates bio\",\n  \"description\": \"Tomates bio du marché\",\n  \"minimumStock\": 5,\n  \"quantity\": 20\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items/{{itemId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks", "{{stockId}}", "items", "{{itemId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "items",
+                "{{itemId}}"
+              ]
             }
           },
           "response": []
@@ -280,19 +505,43 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "PATCH",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items/{{itemId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks", "{{stockId}}", "items", "{{itemId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "items",
+                "{{itemId}}"
+              ]
             }
           },
           "response": []
@@ -302,14 +551,29 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "DELETE",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items/{{itemId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks", "{{stockId}}", "items", "{{itemId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "items",
+                "{{itemId}}"
+              ]
             },
             "description": "Supprime un item d'un stock. Retourne 204."
           },
@@ -325,15 +589,37 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items/{{itemId}}/history?days=90",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks", "{{stockId}}", "items", "{{itemId}}", "history"],
-              "query": [{ "key": "days", "value": "90", "description": "Nombre de jours d'historique (défaut: 90)" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "items",
+                "{{itemId}}",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "90",
+                  "description": "Nombre de jours d'historique (défaut: 90)"
+                }
+              ]
             },
             "description": "Retourne l'historique des changements de quantité (CONSUMPTION, RESTOCK, ADJUSTMENT) pour un item."
           },
@@ -344,14 +630,30 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/items/{{itemId}}/prediction",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks", "{{stockId}}", "items", "{{itemId}}", "prediction"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "items",
+                "{{itemId}}",
+                "prediction"
+              ]
             },
             "description": "Retourne la prédiction de stock (daysUntilEmpty, trend, recommendedRestock). Utilise le cache ou recalcule à la volée."
           },
@@ -362,16 +664,208 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/suggestions",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v2", "stocks", "{{stockId}}", "suggestions"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "suggestions"
+              ]
             },
             "description": "Retourne des suggestions textuelles générées par Mistral via OpenRouter (source: llm) ou de manière déterministe si la clé API est absente (source: deterministic). Cache 24h en DB."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Collaborateurs",
+      "item": [
+        {
+          "name": "GET list collaborators",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/collaborators",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "collaborators"
+              ]
+            },
+            "description": "Liste les collaborateurs d'un stock.\nRequiert : rôle READ (tous rôles)."
+          },
+          "response": []
+        },
+        {
+          "name": "POST add collaborator",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.id) {",
+                  "    pm.collectionVariables.set('collaboratorId', res.id);",
+                  "    console.log('collaboratorId saved:', res.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"viewer@example.com\",\n  \"role\": \"VIEWER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/collaborators",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "collaborators"
+              ]
+            },
+            "description": "Ajoute un collaborateur au stock.\nRôles disponibles : EDITOR | VIEWER | VIEWER_CONTRIBUTOR\nHiérarchie : OWNER peut tout ajouter, EDITOR peut ajouter VIEWER/VIEWER_CONTRIBUTOR uniquement.\n\nL'id du collaborateur est auto-sauvegardé dans {{collaboratorId}}."
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH update collaborator role",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"VIEWER_CONTRIBUTOR\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/collaborators/{{collaboratorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "collaborators",
+                "{{collaboratorId}}"
+              ]
+            },
+            "description": "Modifie le rôle d'un collaborateur existant.\nMême règle hiérarchique qu'à la création."
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE remove collaborator",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/stocks/{{stockId}}/collaborators/{{collaboratorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stocks",
+                "{{stockId}}",
+                "collaborators",
+                "{{collaboratorId}}"
+              ]
+            },
+            "description": "Retire un collaborateur du stock.\nRetourne 204 No Content."
           },
           "response": []
         }
