@@ -21,10 +21,13 @@ describe('StockVisualizationService', () => {
     describe('when user has a stock with items', () => {
       const fakeRepository: IStockVisualizationRepository = {
         getAllStocks: async () => [
-          new Stock(1, 'Stock 1', 'Description 1', 'alimentation', [
-            new StockItem(1, 'Item 1', 5, 'description item1', 1, 1),
-            new StockItem(2, 'Item 2', 0, 'description item2', 1, 1),
-          ]),
+          {
+            stock: new Stock(1, 'Stock 1', 'Description 1', 'alimentation', [
+              new StockItem(1, 'Item 1', 5, 'description item1', 1, 1),
+              new StockItem(2, 'Item 2', 0, 'description item2', 1, 1),
+            ]),
+            viewerRole: 'OWNER',
+          },
         ],
         getStockDetails: async () => null,
         getStockItems: async () => [],
@@ -43,12 +46,18 @@ describe('StockVisualizationService', () => {
     describe('when user has multiple stocks', () => {
       const fakeRepository: IStockVisualizationRepository = {
         getAllStocks: async () => [
-          new Stock(1, 'Stock 1', 'Description 1', 'alimentation', [
-            new StockItem(1, 'Item 1', 5, 'description item1', 1, 1),
-          ]),
-          new Stock(2, 'Stock 2', 'Description 2', 'alimentation', [
-            new StockItem(2, 'Item 2', 3, 'description item2', 2, 2),
-          ]),
+          {
+            stock: new Stock(1, 'Stock 1', 'Description 1', 'alimentation', [
+              new StockItem(1, 'Item 1', 5, 'description item1', 1, 1),
+            ]),
+            viewerRole: 'OWNER',
+          },
+          {
+            stock: new Stock(2, 'Stock 2', 'Description 2', 'alimentation', [
+              new StockItem(2, 'Item 2', 3, 'description item2', 2, 2),
+            ]),
+            viewerRole: 'EDITOR',
+          },
         ],
         getStockDetails: async () => null,
         getStockItems: async () => [],

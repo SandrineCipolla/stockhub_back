@@ -1,6 +1,9 @@
 import { Stock } from '@domain/stock-management/common/entities/Stock';
 import { StockItem } from '@domain/stock-management/common/entities/StockItem';
-import { IStockVisualizationRepository } from '@domain/stock-management/visualization/queries/IStockVisualizationRepository';
+import {
+  IStockVisualizationRepository,
+  StockWithRole,
+} from '@domain/stock-management/visualization/queries/IStockVisualizationRepository';
 
 import { Item as PrismaItem, PrismaClient, Stock as PrismaStock } from '@prisma/client';
 import { DependencyTelemetry, rootDependency, rootException } from '@utils/cloudLogger';
@@ -16,31 +19,56 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
     this.prisma = prismaClient ?? new PrismaClient();
   }
 
-  async getAllStocks(userId: number): Promise<Stock[]> {
-    const stocks = await this.prisma.stock.findMany({
-      where: { userId: userId },
-      include: { items: true },
-    });
-    return stocks.map(
-      (stock: PrismaStock & { items: PrismaItem[] }) =>
-        new Stock(
-          stock.id,
-          stock.label,
-          stock.description ?? '',
-          stock.category,
-          stock.items.map(
-            item =>
-              new StockItem(
-                item.id,
-                item.label ?? '',
-                item.quantity ?? 0,
-                item.description ?? '',
-                item.minimumStock,
-                item.stockId ?? stock.id
-              )
-          )
+  async getAllStocks(userId: number): Promise<StockWithRole[]> {
+    const [ownedStocks, collaboratedStocks] = await Promise.all([
+      this.prisma.stock.findMany({
+        where: { userId },
+        include: { items: true },
+      }),
+      this.prisma.stock.findMany({
+        where: { collaborators: { some: { userId } } },
+        include: {
+          items: true,
+          collaborators: { where: { userId } },
+        },
+      }),
+    ]);
+
+    const toStockEntity = (stock: PrismaStock & { items: PrismaItem[] }): Stock =>
+      new Stock(
+        stock.id,
+        stock.label,
+        stock.description ?? '',
+        stock.category,
+        stock.items.map(
+          item =>
+            new StockItem(
+              item.id,
+              item.label ?? '',
+              item.quantity ?? 0,
+              item.description ?? '',
+              item.minimumStock,
+              item.stockId ?? stock.id
+            )
         )
-    );
+      );
+
+    const owned: StockWithRole[] = ownedStocks.map(stock => ({
+      stock: toStockEntity(stock),
+      viewerRole: 'OWNER',
+    }));
+
+    type CollaboratedStock = PrismaStock & {
+      items: PrismaItem[];
+      collaborators: { role: string }[];
+    };
+
+    const collaborated: StockWithRole[] = collaboratedStocks.map((stock: CollaboratedStock) => ({
+      stock: toStockEntity(stock),
+      viewerRole: stock.collaborators[0]?.role ?? 'VIEWER',
+    }));
+
+    return [...owned, ...collaborated];
   }
 
   async getStockDetails(stockId: number, userId: number): Promise<Stock | null> {

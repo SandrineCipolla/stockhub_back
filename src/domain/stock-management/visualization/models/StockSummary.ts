@@ -18,13 +18,14 @@ export interface StockSummaryDto {
   totalQuantity: number;
   criticalItemsCount: number;
   status: 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked';
+  viewerRole?: string;
 }
 
 export interface StockDetailDto extends StockSummaryDto {
   items: StockItemDto[];
 }
 
-export function toStockSummaryDto(stock: Stock): StockSummaryDto {
+export function toStockSummaryDto(stock: Stock, viewerRole?: string): StockSummaryDto {
   return {
     id: stock.id,
     label: stock.getLabelValue(),
@@ -34,6 +35,7 @@ export function toStockSummaryDto(stock: Stock): StockSummaryDto {
     totalQuantity: stock.getTotalQuantity(),
     criticalItemsCount: stock.getCriticalItemsCount(),
     status: stock.getAggregatedStatus(),
+    viewerRole,
   };
 }
 
