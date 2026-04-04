@@ -12,7 +12,7 @@ export class StockVisualizationService {
 
   async getAllStocks(userId: number): Promise<StockSummaryDto[]> {
     const stocks = await this.repository.getAllStocks(userId);
-    return stocks.map(toStockSummaryDto);
+    return stocks.map(({ stock, viewerRole }) => toStockSummaryDto(stock, viewerRole));
   }
 
   async getStockDetails(stockId: number, userId: number): Promise<StockDetailDto> {
