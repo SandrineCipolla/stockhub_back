@@ -48,7 +48,8 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
               item.quantity ?? 0,
               item.description ?? '',
               item.minimumStock,
-              item.stockId ?? stock.id
+              item.stockId ?? stock.id,
+              item.updatedAt
             )
         )
       );
@@ -95,7 +96,8 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
             item.quantity ?? 0,
             item.description ?? '',
             item.minimumStock,
-            item.stockId ?? stock.id
+            item.stockId ?? stock.id,
+            item.updatedAt
           )
       )
     );

@@ -2,17 +2,15 @@
 
 ## [2.9.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.8.1...v2.9.0) (2026-04-05)
 
-
 ### ✨ Features
 
-* **authorization:** add collaborator management endpoints — closes [#172](https://github.com/SandrineCipolla/stockhub_back/issues/172) ([#173](https://github.com/SandrineCipolla/stockhub_back/issues/173)) ([cd928b4](https://github.com/SandrineCipolla/stockhub_back/commit/cd928b4ce0689cbbf957a912b755f112d739cee3))
-* **contributions:** VIEWER_CONTRIBUTOR contribution workflow — closes [#63](https://github.com/SandrineCipolla/stockhub_back/issues/63) ([#171](https://github.com/SandrineCipolla/stockhub_back/issues/171)) ([cb1aa5c](https://github.com/SandrineCipolla/stockhub_back/commit/cb1aa5c9212ad4d03bf5e8347848695c99823ca1))
-* **stocks:** include collaborated stocks in GET /stocks with viewerRole — closes [#175](https://github.com/SandrineCipolla/stockhub_back/issues/175) ([#176](https://github.com/SandrineCipolla/stockhub_back/issues/176)) ([9cdd38f](https://github.com/SandrineCipolla/stockhub_back/commit/9cdd38fe9448e7ed890af31e5d03d1942dea26f6))
-
+- **authorization:** add collaborator management endpoints — closes [#172](https://github.com/SandrineCipolla/stockhub_back/issues/172) ([#173](https://github.com/SandrineCipolla/stockhub_back/issues/173)) ([cd928b4](https://github.com/SandrineCipolla/stockhub_back/commit/cd928b4ce0689cbbf957a912b755f112d739cee3))
+- **contributions:** VIEWER_CONTRIBUTOR contribution workflow — closes [#63](https://github.com/SandrineCipolla/stockhub_back/issues/63) ([#171](https://github.com/SandrineCipolla/stockhub_back/issues/171)) ([cb1aa5c](https://github.com/SandrineCipolla/stockhub_back/commit/cb1aa5c9212ad4d03bf5e8347848695c99823ca1))
+- **stocks:** include collaborated stocks in GET /stocks with viewerRole — closes [#175](https://github.com/SandrineCipolla/stockhub_back/issues/175) ([#176](https://github.com/SandrineCipolla/stockhub_back/issues/176)) ([9cdd38f](https://github.com/SandrineCipolla/stockhub_back/commit/9cdd38fe9448e7ed890af31e5d03d1942dea26f6))
 
 ### 🐛 Bug Fixes
 
-* **visualization:** allow collaborators to access shared stock details — closes [#154](https://github.com/SandrineCipolla/stockhub_back/issues/154) ([#177](https://github.com/SandrineCipolla/stockhub_back/issues/177)) ([8a068e1](https://github.com/SandrineCipolla/stockhub_back/commit/8a068e16c7b74baba012c9aa63cd5c4e7b15a272))
+- **visualization:** allow collaborators to access shared stock details — closes [#154](https://github.com/SandrineCipolla/stockhub_back/issues/154) ([#177](https://github.com/SandrineCipolla/stockhub_back/issues/177)) ([8a068e1](https://github.com/SandrineCipolla/stockhub_back/commit/8a068e16c7b74baba012c9aa63cd5c4e7b15a272))
 
 ## [2.8.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.8.0...v2.8.1) (2026-04-01)
 
