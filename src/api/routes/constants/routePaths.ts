@@ -53,4 +53,7 @@ export const STOCK_ROUTES = {
 
   /** PATCH - Approve or reject a contribution — requires write permission (OWNER) */
   REVIEW_CONTRIBUTION: '/stocks/:stockId/contributions/:contributionId',
+
+  /** GET - Count pending contributions across all owned stocks */
+  PENDING_CONTRIBUTIONS_COUNT: '/contributions/pending-count',
 } as const;

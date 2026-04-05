@@ -5,4 +5,5 @@ export interface IContributionRepository {
   findById(id: number): Promise<ItemContribution | null>;
   findPendingByStockId(stockId: number): Promise<ItemContribution[]>;
   update(contribution: ItemContribution): Promise<ItemContribution>;
+  countPendingForUser(userId: number): Promise<number>;
 }

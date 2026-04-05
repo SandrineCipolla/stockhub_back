@@ -59,6 +59,20 @@ export class StockContributionController {
     }
   }
 
+  public async getPendingCount(req: AuthenticatedRequest, res: express.Response) {
+    try {
+      const OID = this.getValidatedOID(req, res);
+      if (!OID) return;
+      const userId = await this.userService.convertOIDtoUserID(OID);
+      const count = await this.contributionRepository.countPendingForUser(userId.value);
+      rootMain.info(`getPendingCount OID=${OID} count=${count}`);
+      res.status(HTTP_CODE_OK).json({ count });
+    } catch (err) {
+      rootException(err as Error);
+      sendError(res, err as CustomError);
+    }
+  }
+
   public async listContributions(req: AuthenticatedRequest, res: express.Response) {
     try {
       const OID = this.getValidatedOID(req, res);
