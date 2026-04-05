@@ -315,6 +315,12 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   logger.info('Routes for PATCH /stocks/:stockId/contributions/:contributionId configured');
 
+  router.get(STOCK_ROUTES.PENDING_CONTRIBUTIONS_COUNT, async (req, res: express.Response) => {
+    await contributionController.getPendingCount(req as AuthenticatedRequest, res);
+  });
+
+  logger.info('Routes for GET /contributions/pending-count configured');
+
   return router;
 };
 

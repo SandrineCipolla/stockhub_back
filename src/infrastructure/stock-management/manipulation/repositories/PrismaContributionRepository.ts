@@ -125,6 +125,15 @@ export class PrismaContributionRepository implements IContributionRepository {
     }
   }
 
+  async countPendingByOwner(ownerUserId: number): Promise<number> {
+    return this.prisma.itemContribution.count({
+      where: {
+        status: 'PENDING',
+        stock: { userId: ownerUserId },
+      },
+    });
+  }
+
   private toDomain(row: PrismaItemContribution): ItemContribution {
     return new ItemContribution(
       row.id,

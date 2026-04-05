@@ -31,6 +31,7 @@ describe('ReviewContributionCommandHandler', () => {
         save: jest.fn(),
         findById: jest.fn().mockResolvedValue(pending),
         findPendingByStockId: jest.fn(),
+        countPendingByOwner: jest.fn().mockResolvedValue(0),
         update: jest.fn().mockResolvedValue(approved),
       };
       const mockStockRepo = makeStockRepository();
@@ -55,6 +56,7 @@ describe('ReviewContributionCommandHandler', () => {
         save: jest.fn(),
         findById: jest.fn().mockResolvedValue(pending),
         findPendingByStockId: jest.fn(),
+        countPendingByOwner: jest.fn().mockResolvedValue(0),
         update: jest.fn().mockResolvedValue(rejected),
       };
       const mockStockRepo = makeStockRepository();
@@ -76,6 +78,7 @@ describe('ReviewContributionCommandHandler', () => {
         save: jest.fn(),
         findById: jest.fn().mockResolvedValue(null),
         findPendingByStockId: jest.fn(),
+        countPendingByOwner: jest.fn().mockResolvedValue(0),
         update: jest.fn(),
       };
 
@@ -95,6 +98,7 @@ describe('ReviewContributionCommandHandler', () => {
         save: jest.fn(),
         findById: jest.fn().mockResolvedValue(pending),
         findPendingByStockId: jest.fn(),
+        countPendingByOwner: jest.fn().mockResolvedValue(0),
         update: jest.fn(),
       };
 
