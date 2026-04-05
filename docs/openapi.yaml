@@ -916,6 +916,38 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+  /api/v2/contributions/pending-count:
+    get:
+      summary: Nombre de contributions en attente pour l'utilisateur connecté
+      description: |
+        Retourne le nombre total de contributions PENDING concernant l'utilisateur :
+        - Contributions en attente sur les stocks dont il est OWNER
+        - Contributions qu'il a lui-même soumises et qui sont encore PENDING
+
+        Utilisé pour afficher le compteur de notifications sur la cloche.
+      tags:
+        - Stock Contributions (WRITE)
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Nombre de contributions en attente
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - count
+                properties:
+                  count:
+                    type: integer
+                    description: Nombre de contributions PENDING concernant l'utilisateur
+                    example: 3
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -1175,6 +1207,12 @@ components:
           type: integer
           description: ID du stock parent
           example: 1
+        updatedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date et heure de la dernière modification de l'item (null si jamais modifié)
+          example: '2026-04-05T14:32:00.000Z'
 
     # DTOs de requête (Request Bodies)
     CreateStockBody:
