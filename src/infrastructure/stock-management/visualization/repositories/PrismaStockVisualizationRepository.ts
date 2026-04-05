@@ -73,7 +73,10 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
 
   async getStockDetails(stockId: number, userId: number): Promise<Stock | null> {
     const stock = await this.prisma.stock.findFirst({
-      where: { id: stockId, userId: userId },
+      where: {
+        id: stockId,
+        OR: [{ userId }, { collaborators: { some: { userId } } }],
+      },
       include: { items: true },
     });
     if (!stock) {
@@ -103,7 +106,10 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
 
     try {
       const stock = await this.prisma.stock.findFirst({
-        where: { id: stockId, userId: userId },
+        where: {
+          id: stockId,
+          OR: [{ userId }, { collaborators: { some: { userId } } }],
+        },
       });
       if (!stock) {
         throw new Error('Stock not found or access denied');
