@@ -204,7 +204,7 @@ Les **ADRs** documentent les décisions techniques majeures du projet avec leur 
 ```
 users               → id, email
 stocks              → id, label, description, category, userId
-items               → id, label, description, quantity, minimumStock, expiresAt, stockId
+items               → id, label, description, quantity, minimumStock, expiresAt, updatedAt, stockId
 item_history        → id, itemId, oldQuantity, newQuantity, changeType, changedBy, changedAt
 stock_prediction    → id, itemId, daysUntilEmpty, avgDailyConsumption, trend, recommendedRestock,
                        simulatedFallback, generatedAt, aiSuggestions (JSON), aiGeneratedAt
@@ -250,6 +250,7 @@ GET    /api/v2/stocks/:stockId/suggestions               → Suggestions IA (cac
 POST   /api/v2/stocks/:stockId/items/:itemId/contributions    → Soumettre une contribution (quantité proposée)
 GET    /api/v2/stocks/:stockId/contributions                  → Lister les contributions PENDING
 PATCH  /api/v2/stocks/:stockId/contributions/:contributionId  → Approuver ou rejeter une contribution (OWNER)
+GET    /api/v2/contributions/pending-count                    → Nombre de contributions PENDING concernant l'utilisateur connecté
 ```
 
 Catégories valides : `alimentation` | `hygiene` | `artistique`
