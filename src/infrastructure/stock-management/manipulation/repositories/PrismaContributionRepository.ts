@@ -125,11 +125,14 @@ export class PrismaContributionRepository implements IContributionRepository {
     }
   }
 
-  async countPendingByOwner(ownerUserId: number): Promise<number> {
+  async countPendingForUser(userId: number): Promise<number> {
     return this.prisma.itemContribution.count({
       where: {
         status: 'PENDING',
-        stock: { userId: ownerUserId },
+        OR: [
+          { stock: { userId } }, // contributions sur mes stocks (à revoir en tant qu'owner)
+          { contributedBy: userId }, // contributions que j'ai soumises (en attente de réponse)
+        ],
       },
     });
   }

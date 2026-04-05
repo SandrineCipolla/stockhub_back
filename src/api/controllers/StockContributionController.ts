@@ -64,7 +64,7 @@ export class StockContributionController {
       const OID = this.getValidatedOID(req, res);
       if (!OID) return;
       const userId = await this.userService.convertOIDtoUserID(OID);
-      const count = await this.contributionRepository.countPendingByOwner(userId.value);
+      const count = await this.contributionRepository.countPendingForUser(userId.value);
       rootMain.info(`getPendingCount OID=${OID} count=${count}`);
       res.status(HTTP_CODE_OK).json({ count });
     } catch (err) {

@@ -17,7 +17,7 @@ describe('CreateContributionCommandHandler', () => {
         save: jest.fn().mockResolvedValue(savedContribution),
         findById: jest.fn(),
         findPendingByStockId: jest.fn(),
-        countPendingByOwner: jest.fn().mockResolvedValue(0),
+        countPendingForUser: jest.fn().mockResolvedValue(0),
         update: jest.fn(),
       };
 
