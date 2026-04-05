@@ -7,6 +7,7 @@ export interface StockItemDto {
   quantity: number;
   minimumStock?: number;
   status: 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked';
+  updatedAt?: string | null;
 }
 
 export interface StockSummaryDto {
@@ -49,6 +50,7 @@ export function toStockDetailDto(stock: Stock): StockDetailDto {
       quantity: item.quantity,
       minimumStock: item.minimumStock,
       status: item.getStatus(),
+      updatedAt: item.updatedAt ? item.updatedAt.toISOString() : null,
     })),
   };
 }
