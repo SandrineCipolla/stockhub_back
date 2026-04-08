@@ -32,6 +32,9 @@ Un ADR (Architecture Decision Record) est un document qui capture une **décisio
 | [ADR-013](./ADR-013-llm-provider-local-vs-cloud.md)     | Provider LLM — Ollama local vs OpenRouter     | 2026-03-25 | ✅ Accepté |
 | [ADR-014](./ADR-014-stock-prediction-deterministic.md)  | Prédictions stock — algorithmes déterministes | 2026-03-25 | ✅ Accepté |
 | [ADR-015](./ADR-015-openrouter-mistral-ai-service.md)   | OpenRouter + Mistral comme provider LLM       | 2026-03-27 | ✅ Accepté |
+| [ADR-016](./ADR-016-rest-api-style.md)                  | Choix du style d'API — REST                   | 2026-04-08 | ✅ Accepté |
+| [ADR-017](./ADR-017-express-framework.md)               | Choix du framework HTTP — Express             | 2026-04-08 | ✅ Accepté |
+| [ADR-018](./ADR-018-github-flow.md)                     | Stratégie de branches — GitHub Flow           | 2026-04-08 | ✅ Accepté |
 
 ## 📖 Comment lire un ADR ?
 
@@ -127,5 +130,5 @@ Si une décision change :
 
 ---
 
-**Dernière mise à jour** : 2026-03-10
+**Dernière mise à jour** : 2026-04-08
 **Mainteneur** : Équipe StockHub Backend
