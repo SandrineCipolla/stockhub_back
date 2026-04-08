@@ -254,6 +254,57 @@ it('should call repository.addItemToStock()', async () => {
 
 ---
 
+## Critère de valeur : quand un test mérite d'exister
+
+Tous les tests unitaires ne se valent pas. La question n'est pas "est-ce qu'on peut écrire un test ?" mais "est-ce que ce test vérifie quelque chose qui peut casser ?".
+
+On distingue trois niveaux :
+
+| Niveau                        | Exemple                                                           | Valeur                                                              |
+| ----------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------- |
+| **Construction (happy path)** | `new StockLabel('Cuisine')` → pas d'exception                     | Faible — documente l'existence du VO, peu de risque de régression   |
+| **Invariant**                 | `new StockLabel('')` → exception                                  | Élevée — chaque invariant peut casser si la validation est modifiée |
+| **Comportement métier**       | `stock.addItem('TOMATES')` après `addItem('Tomates')` → exception | Très élevée — documente une règle métier explicite                  |
+
+### Application concrète dans StockHub
+
+**Ce qu'on garde :**
+
+```typescript
+// ✅ Invariant — si on modifie la validation de StockLabel, ce test casse immédiatement
+it('should throw when label is empty', () => {
+  expect(() => new StockLabel('')).toThrow('Stock label must be at least 3 characters.');
+});
+
+// ✅ Comportement — règle métier "pas de duplicate case-insensitive"
+it('should throw when adding a duplicate item', () => {
+  stock.addItem({ label: 'Tomates', quantity: 10 });
+  expect(() => stock.addItem({ label: 'TOMATES', quantity: 5 })).toThrow('already exists');
+});
+```
+
+**Ce qu'on supprime :**
+
+```typescript
+// ❌ Redondant — ce test vérifie que getValue() retourne ce qu'on vient de passer.
+// Ce comportement est déjà couvert par le test happy path du constructeur,
+// et ne teste aucune règle métier.
+describe('getValue()', () => {
+  it('should return the stored value', () => {
+    const label = new StockLabel('Test Stock');
+    expect(label.getValue()).toBe('Test Stock');
+  });
+});
+```
+
+**Règle pratique :** Un test est utile s'il peut échouer suite à un changement de règle métier ou de validation. Tester qu'un getter retourne ce qu'on vient de lui passer revient à tester JavaScript lui-même — pas la logique du domaine.
+
+### Lien avec la revue encadrant
+
+L'encadrant a questionné la pertinence des tests d'entités et VO. La réponse n'est pas d'en supprimer en masse, mais de s'assurer que chaque test garde uniquement ce qui a une valeur de régression réelle. Les tests de construction "happy path" redondants ont été nettoyés (issue #187). Les invariants et comportements métier restent intégralement.
+
+---
+
 ## Conséquences
 
 ### Positives ✅
@@ -337,6 +388,7 @@ it('should call repository.addItemToStock()', async () => {
 - **TDD :** [Kent Beck - Test-Driven Development](https://www.amazon.com/Test-Driven-Development-Kent-Beck/dp/0321146530)
 - **ADR lié :** [ADR-001 (Migration DDD/CQRS)](./ADR-001-migration-ddd-cqrs.md)
 - **Issue GitHub :** #37 (Implémentation DDD/CQRS)
+- **Issue GitHub :** #187 (Nettoyage tests VO redondants)
 
 ---
 
