@@ -2,11 +2,10 @@
 
 ## [2.10.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.9.0...v2.10.0) (2026-04-05)
 
-
 ### ✨ Features
 
-* **contributions:** add GET /contributions/pending-count endpoint — closes [#155](https://github.com/SandrineCipolla/stockhub_back/issues/155) ([#178](https://github.com/SandrineCipolla/stockhub_back/issues/178)) ([8825902](https://github.com/SandrineCipolla/stockhub_back/commit/8825902776ef2bc24ac556c963b95af19e6365ef))
-* **items:** expose updatedAt on stock items — closes [#157](https://github.com/SandrineCipolla/stockhub_back/issues/157) ([#180](https://github.com/SandrineCipolla/stockhub_back/issues/180)) ([55b4cb7](https://github.com/SandrineCipolla/stockhub_back/commit/55b4cb7d71be9b59034bb8490796f3531d9ff86e))
+- **contributions:** add GET /contributions/pending-count endpoint — closes [#155](https://github.com/SandrineCipolla/stockhub_back/issues/155) ([#178](https://github.com/SandrineCipolla/stockhub_back/issues/178)) ([8825902](https://github.com/SandrineCipolla/stockhub_back/commit/8825902776ef2bc24ac556c963b95af19e6365ef))
+- **items:** expose updatedAt on stock items — closes [#157](https://github.com/SandrineCipolla/stockhub_back/issues/157) ([#180](https://github.com/SandrineCipolla/stockhub_back/issues/180)) ([55b4cb7](https://github.com/SandrineCipolla/stockhub_back/commit/55b4cb7d71be9b59034bb8490796f3531d9ff86e))
 
 ## [2.9.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.8.1...v2.9.0) (2026-04-05)
 
