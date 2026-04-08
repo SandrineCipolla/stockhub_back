@@ -43,38 +43,44 @@ Le projet StockHub a démarré avec :
 
 ## Raisons
 
-### 1. V1 n'a jamais été en production
+### 1. V1 a été déployée pour évaluation, mais sans utilisateurs réels
 
 **Faits :**
 
-- ❌ V1 n'a jamais été déployée en production
-- ❌ V1 n'a jamais eu d'utilisateurs réels
-- ❌ V1 était un prototype pour apprentissage
+- ✅ V1 a été déployée dans le cadre de la certification RNCP niveau 6
+- ❌ V1 n'a jamais eu d'utilisateurs réels ni de consommateurs externes
+- ❌ V1 n'a pas été maintenue après la soutenance RNCP 6
 
-**Conséquence :** Il n'y a **pas de breaking change** pour d'éventuels clients, car ils n'existent pas.
+**Conséquence :** Même si V1 a existé en production, il n'y a **pas de breaking change** pour d'éventuels clients, car
+aucun consommateur externe ne dépendait de ses routes. Le versioning API a du sens quand des tiers ont intégré l'API et
+ne peuvent pas migrer du jour au lendemain — ce cas ne s'est jamais produit.
 
 ```
 Chronologie du projet :
 │
-├─ Phase 1 (Sept-Oct 2024): Prototype V1
-│   └─ Code: Transaction Script, couplage fort Prisma
-│   └─ Statut: Jamais déployé, code legacy
+├─ Phase 1 (2024): V1 — architecture Transaction Script
+│   └─ Code: couplage fort Prisma, pas de DDD
+│   └─ Statut: déployée pour RNCP 6, aucun utilisateur réel
 │
-├─ Phase 2 (Nov-Déc 2024): Refonte DDD/CQRS → V2
-│   └─ Code: Architecture propre, séparation READ/WRITE
-│   └─ Statut: Production-ready
+├─ Phase 2 (Nov-Déc 2024): Refonte complète DDD/CQRS → V2
+│   └─ Code: architecture propre, séparation READ/WRITE
+│   └─ Statut: production-ready, frontend React connecté
 │
-└─ Aujourd'hui: V2 est la première version viable
+└─ Aujourd'hui: V2 est la seule version active et maintenue
 ```
 
-### 2. V1 ≠ Production, V1 = Spike technique
+### 2. V1 = première version d'évaluation, pas une version consommateur
 
-En méthodologie Agile, un **spike** est un prototype jetable pour explorer une solution. V1 était un spike :
+Le versioning d'API (V1, V2…) sert à **protéger les consommateurs externes** d'une rupture de contrat. Si une entreprise
+tierce a intégré `/api/v1/stocks` dans son système, elle ne peut pas migrer du jour au lendemain — on maintient V1 le
+temps qu'elle s'adapte.
 
-- 🔬 **Objectif :** Apprendre Prisma, Express, TypeScript
-- 🗑️ **Destin :** Code jeté/refactoré, pas maintenu
+Dans le cas de StockHub, V1 a été déployée pour une évaluation académique (RNCP 6), pas pour des intégrations tierces.
+Il n'y avait aucun consommateur externe à protéger lors du passage en V2. Le préfixe `/v2` reflète donc une rupture
+architecturale (Transaction Script → DDD/CQRS), pas une rupture de contrat avec des clients existants.
 
-**Analogie :** On ne version pas les prototypes Figma "Maquette V1", "Maquette V2". Le premier livrable s'appelle "Version 1.0".
+**Analogie :** On ne maintient pas la V1 d'un prototype présenté en soutenance comme on maintiendrait la V1 d'une API
+publique consommée par des milliers de clients.
 
 ###3. Éviter une migration V1 → V2 inutile
 
@@ -89,7 +95,7 @@ GET / api / v1 / stocks;
 
 ```typescript
 // Breaking changes nécessaires
-GET /api/v2/stocks?include=predictions  // Nouveau champ
+GET / api / v2 / stocks ? include = predictions  // Nouveau champ
 ```
 
 **Problème :** On devrait maintenir V1 ET V2 en parallèle, alors qu'il n'y a **aucun client V1** à supporter.
@@ -98,10 +104,10 @@ GET /api/v2/stocks?include=predictions  // Nouveau champ
 
 ```typescript
 // Aujourd'hui : /api/v2/stocks (actuel)
-GET /api/v2/stocks
+GET / api / v2 / stocks
 
 // Dans 6 mois : /api/v3/stocks (si breaking changes)
-GET /api/v3/stocks?include=predictions
+GET / api / v3 / stocks ? include = predictions
 
 // Pas de V1 à maintenir !
 ```
@@ -125,8 +131,12 @@ Le projet StockHub a des **évolutions planifiées** qui nécessiteront des brea
   "id": 1,
   "label": "Stock Cuisine",
   "itemCount": 5,
-  "predictions": {  // ← Nouveau champ
-    "lowStockAlert": ["Tomates", "Carottes"],
+  "predictions": {
+    // ← Nouveau champ
+    "lowStockAlert": [
+      "Tomates",
+      "Carottes"
+    ],
     "suggestedOrder": 15
   }
 }
@@ -134,17 +144,18 @@ Le projet StockHub a des **évolutions planifiées** qui nécessiteront des brea
 
 **Breaking change :** Ajout de champs, changement de structure.
 
-En appelant l'API actuelle "V2", on a la **marge de manœuvre** pour créer V3 sans devoir supporter V1 (qui n'a jamais existé en production).
+En appelant l'API actuelle "V2", on a la **marge de manœuvre** pour créer V3 sans devoir supporter V1 (qui n'a jamais
+existé en production).
 
 ### 5. Convention de nommage claire
 
 **Principe :** Le numéro de version reflète l'**architecture**, pas la chronologie de développement.
 
-| Version | Architecture                | Statut                    |
-| ------- | --------------------------- | ------------------------- |
-| ❌ V1   | Transaction Script (legacy) | Prototype, jamais en prod |
-| ✅ V2   | DDD/CQRS (propre)           | Production-ready          |
-| 🔮 V3   | DDD/CQRS + ML (futur)       | Planifié 2025             |
+| Version | Architecture                | Statut                                       |
+| ------- | --------------------------- | -------------------------------------------- |
+| ❌ V1   | Transaction Script (legacy) | Déployée RNCP 6, sans consommateurs externes |
+| ✅ V2   | DDD/CQRS (propre)           | Production-ready                             |
+| 🔮 V3   | DDD/CQRS + ML (futur)       | Planifié 2025                                |
 
 **Message envoyé :** "V2 = architecture mûre, stable, production-ready".
 
@@ -202,10 +213,11 @@ GET / api / stocks; // Stable, pas de breaking changes
 
 ```typescript
 // ❌ Code pollué par compatibilité rétroactive
-GET /api/stocks?legacy_format=true  // Flag pour ancien format
+GET / api / stocks ? legacy_format = true  // Flag pour ancien format
 ```
 
-**Pourquoi rejeté :** Le projet a des évolutions ML planifiées qui **nécessiteront** des breaking changes. Il faut un mécanisme de versioning.
+**Pourquoi rejeté :** Le projet a des évolutions ML planifiées qui **nécessiteront** des breaking changes. Il faut un
+mécanisme de versioning.
 
 ---
 
@@ -246,8 +258,8 @@ Accept: application/vnd.stockhub.v2+json
    - Breaking changes sans culpabilité
 
 3. **Honnêteté technique**
-   - V1 n'a jamais été viable → V2 est la vraie première version
-   - Pas de prétention d'avoir "déjà une V1 en production"
+   - V1 a existé mais sans consommateurs externes → pas d'obligation de maintien
+   - V2 est la première version avec un frontend réel connecté
 
 4. **Maintenance simplifiée**
    - Une seule version à maintenir (V2)
@@ -263,7 +275,8 @@ Accept: application/vnd.stockhub.v2+json
 
 2. **Perception de gaspillage**
    - Impression de "sauter" une version
-   - **Mitigation :** V1 était un prototype, pas une version production
+   - **Mitigation :** V1 a existé pour RNCP 6, sans consommateurs externes — le `/v2` documente la rupture
+     architecturale, pas un saut de version arbitraire
 
 3. **Pas de standard universel**
    - Débat : "Première version = V1 ou peut commencer à V2 ?"
@@ -318,6 +331,10 @@ Accept: application/vnd.stockhub.v2+json
 
 **Réponse à l'encadrant :**
 
-> "Nous avons une API V2 sans V1 en production car V1 était un **prototype architectural** (Transaction Script legacy) qui n'a jamais été déployé. V2 représente la **première version production-ready** avec architecture DDD/CQRS. Appeler cette version 'V1' aurait créé une obligation de maintenir V1+V2 lors de futures évolutions (ML, containers), alors qu'aucun client V1 n'existe. Le numéro de version reflète l'**architecture** (V2 = refonte complète), pas la chronologie."
-
-**Note :** Cette pratique est courante dans l'industrie (ex: certaines APIs démarrent en V2 après refonte interne).
+> "V1 a effectivement existé et a été déployée dans le cadre de la certification RNCP 6. En revanche, elle n'a jamais eu
+> de consommateurs externes — aucune application tierce n'a intégré ses routes. Le passage en V2 correspond à une
+> refonte
+> architecturale complète (Transaction Script → DDD/CQRS) sans rupture de contrat avec des clients réels, puisqu'il n'y
+> en
+> avait pas. Le versioning d'API a pour but de protéger des intégrations tierces existantes — cette contrainte ne
+> s'appliquait pas ici. Le préfixe `/v2` documente la rupture architecturale, pas une migration consommateur."
