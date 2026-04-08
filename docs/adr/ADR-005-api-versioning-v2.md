@@ -331,10 +331,75 @@ Accept: application/vnd.stockhub.v2+json
 
 **Réponse à l'encadrant :**
 
-> "V1 a effectivement existé et a été déployée dans le cadre de la certification RNCP 6. En revanche, elle n'a jamais eu
-> de consommateurs externes — aucune application tierce n'a intégré ses routes. Le passage en V2 correspond à une
-> refonte
-> architecturale complète (Transaction Script → DDD/CQRS) sans rupture de contrat avec des clients réels, puisqu'il n'y
-> en
-> avait pas. Le versioning d'API a pour but de protéger des intégrations tierces existantes — cette contrainte ne
-> s'appliquait pas ici. Le préfixe `/v2` documente la rupture architecturale, pas une migration consommateur."
+> "V1 a effectivement existé et a été déployée dans le cadre de la certification RNCP 6. En revanche, elle n'a jamais eu de consommateurs externes — aucune application tierce n'a intégré ses routes. Le passage en V2 correspond à une refonte architecturale complète (Transaction Script → DDD/CQRS) sans rupture de contrat avec des clients réels, puisqu'il n'y en avait pas. Le versioning d'API a pour but de protéger des intégrations tierces existantes — cette contrainte ne s'appliquait pas ici. Le préfixe `/v2` documente la rupture architecturale, pas une migration consommateur."
+
+**Note :** À strictement parler, la convention industrie voudrait qu'on ne change pas de version si le contrat API (URLs, payloads) reste compatible — même en cas de refonte interne majeure. Le choix de `/v2` est défendable ici précisément parce qu'il n'y avait aucun consommateur externe à protéger, et que la refonte était une rupture réelle (architecture, modèle de données). Ce n'est pas une règle universelle, c'est un choix conscient adapté au contexte.
+
+---
+
+## Bonnes pratiques de versioning — comment le faire avec de vrais consommateurs
+
+Cette section documente comment la gestion de version aurait dû être conduite si StockHub avait eu des consommateurs externes à protéger. L'objectif est de montrer que le choix de `/v2` est conscient, pas par défaut.
+
+### Quand créer une nouvelle version ?
+
+On crée une V2 uniquement quand on introduit des **breaking changes** sur le contrat API — c'est-à-dire des modifications qui cassent ce que les consommateurs existants attendent :
+
+| Breaking change ✅ → nouvelle version            | Non-breaking ❌ → pas de nouvelle version           |
+| ------------------------------------------------ | --------------------------------------------------- |
+| Supprimer un champ du payload de réponse         | Ajouter un champ optionnel en réponse               |
+| Renommer une route                               | Ajouter un nouvel endpoint                          |
+| Changer le type d'un champ (`string` → `number`) | Modifier la logique interne sans changer le contrat |
+| Supprimer un endpoint                            | Corriger un bug dans une réponse                    |
+
+Une refonte interne (architecture, ORM, base de données) **ne justifie pas** de changer de version si les routes et les payloads restent identiques côté consommateur.
+
+### Comment déprécier une route proprement ?
+
+Quand on veut retirer une route V1 après le passage en V2, on ne la coupe pas brutalement. On la déprécie d'abord, avec une période de transition explicite :
+
+**1. Ajouter des headers de dépréciation dans les réponses V1 :**
+
+```typescript
+// Middleware appliqué sur toutes les routes V1
+router.use((req, res, next) => {
+  res.set('Deprecation', 'true');
+  res.set('Sunset', 'Sat, 31 Dec 2026 23:59:59 GMT'); // date de coupure annoncée
+  res.set('Link', '</api/v2/stocks>; rel="successor-version"');
+  next();
+});
+```
+
+- `Deprecation` : signale que la route est en fin de vie
+- `Sunset` : indique la date exacte à laquelle elle sera coupée — les consommateurs peuvent s'y préparer
+- `Link` : pointe vers l'équivalent V2
+
+**2. Documenter la migration dans l'OpenAPI :**
+
+```yaml
+/api/v1/stocks:
+  get:
+    deprecated: true
+    summary: '[DEPRECATED] Voir /api/v2/stocks'
+    description: 'Cette route sera supprimée le 31/12/2026. Migrer vers /api/v2/stocks.'
+```
+
+**3. Communiquer aux consommateurs :**
+
+- Publier un changelog avec la date de coupure
+- Notifier les équipes qui consomment l'API (email, Slack, page de statut)
+- Laisser V1 et V2 coexister pendant la période de transition (typiquement 3 à 6 mois)
+
+**4. Supprimer la route après la date Sunset :**
+
+Une fois la date passée et tous les consommateurs migrés, on retire le code V1 proprement.
+
+### Ce que StockHub ferait si une V3 devenait nécessaire
+
+Si les évolutions futures (module IA, recettes, listes de courses) introduisent de vraies ruptures de contrat avec le frontend React :
+
+1. Créer les routes `/api/v3/...` en parallèle de `/api/v2/...`
+2. Ajouter les headers `Deprecation` et `Sunset` sur les routes V2 concernées
+3. Mettre à jour le frontend pour consommer V3
+4. Maintenir V2 le temps de la transition (même si le seul consommateur est le frontend interne)
+5. Supprimer V2 après migration confirmée
