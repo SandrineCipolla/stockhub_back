@@ -34,14 +34,4 @@ describe('StockLabel', () => {
       });
     });
   });
-
-  describe('getValue()', () => {
-    describe('when getting the value', () => {
-      it('should return the stored value', () => {
-        const label = new StockLabel('Test Stock');
-
-        expect(label.getValue()).toBe('Test Stock');
-      });
-    });
-  });
 });

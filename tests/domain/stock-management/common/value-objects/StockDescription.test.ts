@@ -39,11 +39,9 @@ describe('StockDescription', () => {
         );
       });
     });
-  });
 
-  describe('getValue()', () => {
-    describe('when getting the value', () => {
-      it('should return the stored value', () => {
+    describe('when description is valid', () => {
+      it('should create with the provided value', () => {
         const desc = new StockDescription('Test description');
 
         expect(desc.getValue()).toBe('Test description');
