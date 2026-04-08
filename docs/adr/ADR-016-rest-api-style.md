@@ -80,19 +80,18 @@ Un endpoint REST se teste directement depuis un navigateur, curl ou Postman sans
 
 ### gRPC
 
-**Principe :** Appels de méthodes distantes via Protobuf (format binaire), HTTP/2.
+**Principe :** Communication binaire ultra-rapide entre services, conçu pour la communication serveur-à-serveur.
 
 **Avantages :**
 
-- ✅ Performances excellentes (sérialisation binaire)
-- ✅ Contrat fort typé (fichiers `.proto`)
-- ✅ Streaming natif bidirectionnel
+- ✅ Très performant (données compressées en binaire, pas de JSON texte)
+- ✅ Contrat typé strict (fichiers `.proto`)
+- ✅ Streaming natif
 
 **Pourquoi rejeté :**
 
-- ❌ **Non natif dans le navigateur** : nécessite grpc-web + un proxy (Envoy) entre le client et le serveur — infrastructure disproportionnée pour une SPA
-- ❌ Pas adapté à des APIs consommées directement par un frontend
-- ❌ Les gains de performance (sérialisation binaire) n'ont aucune justification à l'échelle de StockHub (~10 utilisateurs familiaux)
+- ❌ **Les navigateurs ne savent pas parler gRPC nativement.** Pour qu'une SPA React puisse l'utiliser, il faudrait ajouter une librairie cliente spéciale (grpc-web) et un serveur proxy de traduction (Envoy) entre le frontend et l'API — infrastructure sans rapport avec les besoins de StockHub
+- ❌ Adapté à de la communication microservices, pas à des APIs consommées par un navigateur
 
 ---
 
