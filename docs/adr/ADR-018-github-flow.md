@@ -51,16 +51,15 @@ GitFlow a été conçu pour des équipes qui doivent maintenir plusieurs version
 
 StockHub n'a qu'une seule version active en production. Ajouter tous ces types de branches serait de la complexité sans utilité réelle.
 
-### 4. La branche `staging` s'intègre naturellement
+### 4. L'environnement staging s'intègre dans ce workflow
 
-StockHub ajoute une branche `staging` (déployée automatiquement sur Render avec une base Aiven MySQL) pour tester avant la production. Cette branche s'intègre bien dans GitHub Flow — c'est simplement une branche stable supplémentaire, pas une remise en cause du modèle.
+StockHub dispose d'un environnement de staging sur Render (base Aiven MySQL) pour tester une fonctionnalité avant de la merger sur `main`. Quand on veut tester une branche en cours, on pointe manuellement Render vers cette branche — ce qui déclenche un déploiement de pré-prod. Ce n'est pas un déploiement entièrement automatisé, mais c'est une étape légère qui s'intègre naturellement dans GitHub Flow sans nécessiter de branche dédiée permanente.
 
 ```
-main     ──────────────────── (Azure prod, Release Please automatique)
-              ↑ merge PR
-feat/xxx  ────────
+main      ──────────────────── (Azure prod, Release Please automatique)
+               ↑ merge PR après validation
+feat/xxx  ──────────────────── (pointée manuellement sur Render pour test)
 fix/yyy   ────────
-staging   ──────────────────── (Render, tests de pré-prod)
 ```
 
 ---
