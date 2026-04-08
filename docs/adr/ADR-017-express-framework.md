@@ -9,9 +9,9 @@
 
 ## Besoin métier
 
-StockHub est une API Node.js/TypeScript dont l'architecture (DDD/CQRS) est déjà définie et maîtrisée. Le framework HTTP est une couche technique au service de cette architecture — il ne doit pas l'imposer ni interférer avec elle.
+Un framework HTTP, c'est la couche qui reçoit les requêtes du frontend, les route vers le bon code, et renvoie une réponse. Ce n'est pas lui qui contient la logique métier — c'est l'architecture DDD/CQRS qui s'en charge. Le framework est juste un "tuyau".
 
-Le critère principal n'est pas la performance brute ni la richesse de l'outillage, mais la **compatibilité avec une architecture DDD/CQRS déjà structurée**, dans un contexte de développement solo.
+Le critère principal ici n'est pas la performance ou la richesse de l'outillage, mais la **compatibilité avec l'architecture DDD/CQRS déjà en place**, dans un contexte de développement solo.
 
 ---
 
@@ -23,40 +23,56 @@ Le critère principal n'est pas la performance brute ni la richesse de l'outilla
 
 ## Raisons
 
-### 1. Express est minimal par conception — l'architecture vient du domaine, pas du framework
+### 1. Express est minimaliste par conception — et c'est exactement ce qu'il faut ici
 
-Express n'impose aucune structure applicative : il gère les routes, les middlewares, et la réponse HTTP. Toute la logique de structuration (commandes, handlers, repositories, value objects) est portée par l'architecture DDD/CQRS.
+Express fait une chose : recevoir une requête HTTP, la passer aux middlewares et aux routes, retourner une réponse. Il n'impose aucune structure sur la façon d'organiser le code applicatif.
 
-Cette séparation est délibérée. Le framework gère le transport ; le domaine gère la logique. Un framework qui impose sa propre structure (NestJS) crée un conflit de responsabilités avec cette approche.
+C'est un choix délibéré : toute la structure de StockHub (commandes, handlers, repositories, value objects) est portée par l'architecture DDD/CQRS. On n'a pas besoin qu'un framework vienne en imposer une deuxième par-dessus.
 
-### 2. NestJS aurait créé une superposition architecturale contre-productive
+```
+Requête HTTP
+    → Express (routing + middlewares)
+    → Controller (couche API)
+    → Command Handler (couche domaine)
+    → Repository (couche infrastructure)
+    → Réponse HTTP
+```
 
-NestJS est un framework "opinionated" qui apporte son propre système de modules, de DI, de décorateurs, et de controllers. Ces concepts sont proches de DDD/CQRS mais pas équivalents — et mélanger les deux crée de la confusion :
+Express intervient au début et à la fin. Le reste appartient au domaine.
+
+### 2. NestJS aurait créé une confusion architecturale
+
+NestJS est un framework qui apporte sa propre façon d'organiser le code : ses propres "modules", son propre système d'injection de dépendances, ses propres décorateurs (`@Controller`, `@Injectable`, `@Module`...).
+
+Ces concepts ressemblent à du DDD/CQRS mais ne sont pas la même chose. Mélanger les deux aurait créé de la confusion : où s'arrête le "module NestJS" et où commence le "bounded context DDD" ?
+
+**Exemple concret du problème :**
 
 ```typescript
-// ❌ Conflit NestJS + DDD : où s'arrête le module NestJS, où commence le bounded context ?
+// ❌ Avec NestJS : deux systèmes d'organisation du code en parallèle
 @Module({
-  providers: [AddItemToStockCommandHandler], // DI NestJS
+  providers: [AddItemToStockCommandHandler], // Structure NestJS
 })
 export class StockModule {} // Module NestJS ≠ domaine DDD
 
-// ✅ Express + DDD : chaque couche a une responsabilité claire
-router.post('/stocks/:id/items', authenticateMiddleware, async (req, res) => {
+// ✅ Avec Express : une seule responsabilité par couche
+router.post('/stocks/:id/items', async (req, res) => {
   const handler = new AddItemToStockCommandHandler(repository);
   const result = await handler.handle(command);
   res.status(201).json(result);
 });
+// Express gère le HTTP. Le handler gère la logique. Chacun son rôle.
 ```
 
-Avec Express, la DI est implémentée via le pattern `prismaClient ?? new PrismaClient()` — simple, testable, sans décorateurs. L'ajouter via NestJS aurait été un doublon de complexité.
+De plus, NestJS gère l'injection de dépendances avec ses décorateurs. Dans StockHub, l'injection de dépendances est déjà gérée simplement avec le pattern `prismaClient ?? new PrismaClient()`. Ajouter le système NestJS par-dessus aurait été une duplication inutile.
 
 ### 3. Écosystème mature et documentation abondante
 
-Express est le framework Node.js le plus utilisé depuis plus de 10 ans. Sur un projet RNCP développé en solo, la capacité à trouver rapidement une réponse à un problème de middleware, de gestion d'erreurs ou de routing est un critère opérationnel concret.
+Express existe depuis 2010 et est le framework Node.js le plus utilisé. Sur un projet solo, la capacité à trouver rapidement une réponse à un problème (middleware, gestion d'erreurs, routing) est un critère concret. Les réponses existent sur Stack Overflow, GitHub, la doc officielle.
 
-### 4. Faible surface d'apprentissage pour les middlewares existants
+### 4. Les middlewares existants sont déjà écrits pour Express
 
-L'authentification (Passport Bearer), la gestion des erreurs, les middlewares d'autorisation, tous sont implémentés avec les patterns Express standard. Migrer vers Fastify ou NestJS aurait nécessité de réécrire ces intégrations.
+L'authentification (Passport Bearer), la gestion des erreurs, les middlewares d'autorisation — tout est déjà implémenté avec les patterns Express. Changer de framework aurait nécessité de tout réécrire sans rien gagner en fonctionnalité.
 
 ---
 
@@ -64,37 +80,37 @@ L'authentification (Passport Bearer), la gestion des erreurs, les middlewares d'
 
 ### NestJS
 
-**Principe :** Framework "batteries included" avec DI, modules, décorateurs, et CLI intégrés.
+**Principe :** Framework complet et "opinionated" — il impose une façon précise d'organiser le code, avec des modules, de l'injection de dépendances automatique, des décorateurs partout, et une CLI pour générer les fichiers.
 
 **Avantages :**
 
-- ✅ Architecture structurée imposée (idéal pour onboarder une équipe)
-- ✅ DI native, Swagger auto-généré, support TypeScript first-class
-- ✅ Modules = bounded contexts naturels en théorie
+- ✅ Très structuré — utile dans une grande équipe pour que tout le monde travaille de la même façon
+- ✅ Injection de dépendances automatique, Swagger auto-généré, support TypeScript natif
+- ✅ En théorie, ses "modules" pourraient correspondre aux bounded contexts DDD
 
 **Pourquoi rejeté :**
 
-- ❌ L'architecture DDD/CQRS est déjà définie et implémentée — NestJS l'aurait dupliquée sans valeur ajoutée
-- ❌ Les décorateurs NestJS (`@Injectable`, `@Controller`, `@Module`) superposent une couche d'abstraction sur une architecture déjà abstraite
-- ❌ Courbe d'apprentissage significative pour un projet solo avec délai RNCP
-- ❌ Sur-engineering documenté : NestJS répond à des problèmes d'organisation à grande échelle que StockHub n'a pas
+- ❌ L'architecture DDD/CQRS est déjà définie et implémentée dans StockHub — NestJS aurait ajouté une deuxième couche d'organisation au-dessus sans rien apporter de plus
+- ❌ Les décorateurs NestJS (`@Injectable`, `@Controller`, `@Module`) s'ajoutent sur du code qui a déjà sa propre structure — plus de complexité, pas plus de clarté
+- ❌ NestJS est pensé pour de grandes équipes sur de grands projets. Sur un projet solo de taille moyenne, c'est du sur-dimensionnement
+- ❌ Courbe d'apprentissage significative (il faut comprendre le système de modules NestJS en plus du DDD/CQRS) pour un projet avec un délai RNCP
 
 ### Fastify
 
-**Principe :** Framework HTTP plus rapide qu'Express, avec plugin system et schema validation intégrée.
+**Principe :** Framework HTTP alternatif à Express, conçu pour être plus rapide. Il gère aussi la validation automatique des données entrantes via des schémas JSON.
 
 **Avantages :**
 
-- ✅ Performances ~2x supérieures à Express (benchmarks officiels)
-- ✅ Validation JSON Schema native
-- ✅ Logging structuré (Pino) intégré
+- ✅ Environ 2 fois plus rapide qu'Express sur des benchmarks (temps de traitement des requêtes)
+- ✅ Validation des données d'entrée intégrée (plus besoin de valider manuellement les champs du body)
+- ✅ Logging structuré intégré (via Pino)
 
 **Pourquoi rejeté :**
 
-- ❌ Les gains de performance sont sans impact mesurable pour StockHub (~10 utilisateurs, faible charge)
-- ❌ La validation des données est déjà assurée par les Value Objects du domaine — la validation JSON Schema serait redondante
-- ❌ Le logging structuré est déjà implémenté via `winston` et Application Insights
-- ❌ Migration des middlewares Passport existants vers l'écosystème Fastify sans bénéfice justifié
+- ❌ Le gain de performance (~2x) n'a aucun impact réel pour StockHub qui a environ 10 utilisateurs. Ce n'est pertinent qu'à grande échelle
+- ❌ La validation des données est déjà assurée par les Value Objects du domaine (ex : `StockLabel` valide que le label fait entre 3 et 50 caractères). Ajouter une validation côté framework serait une duplication
+- ❌ Le logging structuré est déjà en place via `winston` et Application Insights
+- ❌ Migrer les middlewares Passport existants vers l'écosystème Fastify demanderait du travail sans bénéfice justifié
 
 ---
 
@@ -102,15 +118,15 @@ L'authentification (Passport Bearer), la gestion des erreurs, les middlewares d'
 
 ### Positives ✅
 
-- Séparation claire : Express gère le transport, DDD/CQRS gère la logique
+- Séparation claire des responsabilités : Express gère le transport HTTP, DDD/CQRS gère la logique
 - Middlewares standard (Passport, CORS, body-parser) intégrés sans friction
-- Aucun conflit entre la DI Express et la DI DDD (`prismaClient ?? new PrismaClient()`)
+- Injection de dépendances simple et lisible (`prismaClient ?? new PrismaClient()`) sans système externe
 - Documentation abondante pour chaque problème rencontré
 
 ### Négatives ⚠️
 
-- Pas de validation de schéma HTTP automatique (gérée manuellement via les Value Objects)
-- Pas de génération automatique de Swagger (compensé par `docs/openapi.yaml` maintenu manuellement)
+- Pas de validation automatique des données HTTP entrantes (gérée manuellement via les Value Objects du domaine)
+- Pas de génération automatique de la documentation Swagger (compensé par `docs/openapi.yaml` maintenu manuellement)
 
 ---
 

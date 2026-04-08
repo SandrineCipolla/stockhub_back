@@ -9,7 +9,9 @@
 
 ## Besoin métier
 
-StockHub est développé en solo avec un pipeline CI/CD automatisé (GitHub Actions, Release Please, déploiement Render + Azure). La stratégie de branches doit être simple à maintenir seule, compatible avec le déploiement continu, et ne pas créer de charge de gestion de branches parallèles inutile.
+Quand on travaille avec Git, il faut décider comment organiser les branches : où vit le code stable ? comment intègre-t-on une nouvelle fonctionnalité ? comment gère-t-on les releases ?
+
+StockHub est développé en solo, avec un pipeline CI/CD automatisé (GitHub Actions, Release Please, déploiement Render + Azure). La stratégie de branches doit être simple à maintenir seule et compatible avec ce déploiement continu.
 
 ---
 
@@ -21,40 +23,44 @@ StockHub est développé en solo avec un pipeline CI/CD automatisé (GitHub Acti
 
 ## Raisons
 
-### 1. GitHub Flow correspond au mode de travail réel
+### 1. GitHub Flow correspond exactement au mode de travail réel
 
-GitHub Flow repose sur trois éléments :
+GitHub Flow repose sur trois règles simples :
 
-1. `main` est toujours déployable
-2. Chaque feature/fix/docs part d'une branche dédiée (`type/numero-description`)
-3. La branche est mergée via PR après review
+1. La branche `main` est toujours dans un état stable et déployable
+2. Chaque nouvelle fonctionnalité ou correction démarre sur une branche dédiée
+3. Quand le travail est prêt, on ouvre une Pull Request vers `main`, la CI vérifie tout, et on merge
 
-Ce workflow correspond exactement à la façon dont StockHub est développé :
+C'est exactement ce qui se passe sur StockHub :
 
-- Chaque ticket GitHub ouvre une branche (`feat/157-item-updated-at`, `fix/86-stockitem-lowercase`)
-- La PR ferme le ticket et déclenche le CI
-- Le merge sur `main` déclenche Release Please et le déploiement Azure
+- On ouvre un ticket GitHub → on crée une branche (`feat/157-item-updated-at`, `fix/86-stockitem-lowercase`)
+- On travaille, on commit, la CI tourne à chaque push
+- La PR ferme le ticket, le merge déclenche Release Please et le déploiement Azure
 
-### 2. Release Please remplace la gestion manuelle des branches de release
+Aucune étape manuelle, aucune branche intermédiaire inutile.
 
-GitFlow nécessite des branches `release/x.y.z` pour préparer les releases. Dans StockHub, cette responsabilité est déléguée à **Release Please** : l'outil lit les commits Conventional Commits depuis le dernier tag, calcule le prochain numéro de version sémantique, et ouvre automatiquement une PR de release.
+### 2. Release Please remplace les branches de release de GitFlow
 
-La branche `release/*` de GitFlow n'apporte rien dans ce contexte — elle serait une étape manuelle remplacée par un outil.
+Dans GitFlow (l'alternative classique), on crée des branches `release/x.y.z` pour préparer chaque release manuellement — calculer le numéro de version, tagger, générer le changelog...
 
-### 3. Pas de maintenance de versions parallèles
+Dans StockHub, tout ça est automatisé par **Release Please** : l'outil lit l'historique des commits (qui suivent la convention Conventional Commits), calcule automatiquement le prochain numéro de version, et ouvre lui-même une PR de release. Pas besoin de branches supplémentaires.
 
-GitFlow est conçu pour des projets qui maintiennent plusieurs versions en production simultanément (v1.x en maintenance + v2.x en développement actif). StockHub n'a qu'une seule version active (`main` → Azure prod). Maintenir des branches `develop`, `release/*`, `hotfix/*` sans ce besoin serait de la complexité sans valeur.
+### 3. Pas besoin de gérer plusieurs versions en parallèle
 
-### 4. La branche `staging` est une extension du modèle, pas une exception
+GitFlow a été conçu pour des équipes qui doivent maintenir plusieurs versions en production en même temps — par exemple, corriger un bug sur la v1.x pendant que la v2.x est en développement. Dans ce cas, avoir des branches `develop`, `release/*`, `hotfix/*` a du sens.
 
-StockHub ajoute une branche `staging` (déployée sur Render + Aiven MySQL) au modèle GitHub Flow de base. Cette branche est stable et ne reçoit que des merges contrôlés — elle ne remet pas en cause la simplicité du workflow.
+StockHub n'a qu'une seule version active en production. Ajouter tous ces types de branches serait de la complexité sans utilité réelle.
+
+### 4. La branche `staging` s'intègre naturellement
+
+StockHub ajoute une branche `staging` (déployée automatiquement sur Render avec une base Aiven MySQL) pour tester avant la production. Cette branche s'intègre bien dans GitHub Flow — c'est simplement une branche stable supplémentaire, pas une remise en cause du modèle.
 
 ```
-main     ──────────────────────────────── (Azure prod, Release Please)
+main     ──────────────────── (Azure prod, Release Please automatique)
               ↑ merge PR
-feat/xxx  ─────────────
-fix/yyy   ─────────────
-staging   ──────────────── (Render, tests de pré-prod)
+feat/xxx  ────────
+fix/yyy   ────────
+staging   ──────────────────── (Render, tests de pré-prod)
 ```
 
 ---
@@ -63,35 +69,41 @@ staging   ──────────────── (Render, tests de pr�
 
 ### GitFlow
 
-**Principe :** `main` (prod) + `develop` (intégration) + `feature/*` + `release/*` + `hotfix/*`.
+**Principe :** GitFlow est une stratégie plus complexe avec plusieurs types de branches : `main` (production), `develop` (intégration en cours), `feature/*` (nouvelles fonctionnalités), `release/*` (préparation d'une release), `hotfix/*` (correction urgente en prod).
+
+**Exemple de workflow GitFlow :**
+
+```
+feature/ma-feature → develop → release/1.2.0 → main (+ tag v1.2.0)
+```
 
 **Avantages :**
 
-- ✅ Structuré pour des équipes qui maintiennent plusieurs versions
-- ✅ Séparation claire développement / stabilisation / production
-- ✅ Standard dans les grandes organisations
+- ✅ Très structuré pour des équipes qui livrent à intervalles réguliers (ex : une release par mois)
+- ✅ Permet de maintenir plusieurs versions en production en même temps
+- ✅ Standard dans certaines grandes organisations
 
 **Pourquoi rejeté :**
 
-- ❌ Conçu pour des **équipes** avec des cycles de release planifiés — inadapté au développement solo en flux continu
-- ❌ La branche `develop` crée un niveau d'indirection sans valeur : `feature → develop → main` vs `feature → main`
-- ❌ Les branches `release/*` et `hotfix/*` sont gérées par Release Please et les hooks pre-push, pas manuellement
-- ❌ Charge cognitive inutile sur un projet solo : 5 types de branches pour un seul développeur
+- ❌ Conçu pour des équipes avec des cycles de release planifiés — inadapté au développement solo en flux continu
+- ❌ La branche `develop` crée une étape intermédiaire inutile : au lieu de `feature → main`, on doit faire `feature → develop → main`
+- ❌ Les branches `release/*` sont rendues inutiles par Release Please qui automatise tout ça
+- ❌ Gérer 5 types de branches à la fois seul est une charge cognitive disproportionnée
 
 ### Trunk-Based Development
 
-**Principe :** Tout le monde commit directement sur `main` (ou via des branches très courtes < 1 jour).
+**Principe :** Tout le monde intègre son code directement sur `main` très fréquemment (plusieurs fois par jour), via des branches de très courte durée (moins d'un jour). L'objectif est d'éviter les divergences longues entre branches.
 
 **Avantages :**
 
-- ✅ Intégration continue maximale (pas de divergence longue)
-- ✅ Utilisé par Google, Facebook à grande échelle
+- ✅ Intégration continue maximale — les conflits sont détectés très tôt
+- ✅ Utilisé par de grandes entreprises tech (Google, Facebook) sur de très grandes équipes
 
 **Pourquoi rejeté :**
 
-- ❌ Requiert des feature flags pour déployer du code non terminé — complexité applicative supplémentaire
-- ❌ Difficile à combiner avec des PRs de qualité (review, CI complète) sur des branches courtes
-- ❌ Les hooks pre-push (tests, knip) prennent quelques minutes — le modèle trunk suppose des pipelines très rapides
+- ❌ Pour déployer du code non terminé sur `main` sans casser la prod, il faut utiliser des "feature flags" (des interrupteurs dans le code qui activent ou désactivent une feature). C'est une complexité applicative supplémentaire
+- ❌ Les hooks pre-push de StockHub (tests unitaires, lint, knip) prennent quelques minutes — ce modèle suppose des pipelines quasi-instantanés pour ne pas freiner le rythme d'intégration
+- ❌ Difficile de maintenir des Pull Requests de qualité (review, CI complète) si les branches ne durent qu'une heure
 
 ---
 
@@ -99,15 +111,15 @@ staging   ──────────────── (Render, tests de pr�
 
 ### Positives ✅
 
-- Workflow simple : une branche par ticket, une PR, un merge
-- `main` toujours en état de déploiement
-- Compatibilité totale avec Release Please, GitHub Actions, les hooks pre-push
-- Pas de gestion de branches parallèles ou de backports
+- Workflow simple et cohérent : une branche par ticket, une PR, un merge
+- `main` toujours stable et déployable
+- Compatible avec Release Please, GitHub Actions, les hooks pre-push et le déploiement continu
+- Pas de gestion de branches parallèles, pas de backports manuels
 
 ### Négatives ⚠️
 
-- Si plusieurs features sont développées en parallèle, le rebase sur `main` peut créer des conflits
-  → **Mitigation :** Branches courtes, tickets bien découpés, rebase fréquent
+- Si plusieurs fonctionnalités sont développées en parallèle sur des branches longues, des conflits peuvent apparaître au moment du merge
+  → **Mitigation :** Tickets bien découpés, branches courtes, rebase régulier sur `main`
 
 ---
 
@@ -115,5 +127,5 @@ staging   ──────────────── (Render, tests de pr�
 
 - [ADR-010](./ADR-010-ci-cd-pipeline-optimization.md) — pipeline CI/CD
 - [ADR-011](./ADR-011-staging-render-aiven.md) — environnement staging
-- [GitHub Flow — officiel](https://docs.github.com/en/get-started/using-github/github-flow)
+- [GitHub Flow — documentation officielle](https://docs.github.com/en/get-started/using-github/github-flow)
 - Issue : [#183](https://github.com/SandrineCipolla/stockhub_back/issues/183)
