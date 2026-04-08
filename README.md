@@ -190,6 +190,9 @@ Les **ADRs** documentent les décisions techniques majeures du projet avec leur 
 | [ADR-013](./docs/adr/ADR-013-llm-provider-local-vs-cloud.md)     | Provider LLM — Ollama local vs OpenRouter     | Mar 2026 |
 | [ADR-014](./docs/adr/ADR-014-stock-prediction-deterministic.md)  | Prédictions stock — algorithmes déterministes | Mar 2026 |
 | [ADR-015](./docs/adr/ADR-015-openrouter-mistral-ai-service.md)   | OpenRouter + Mistral provider LLM             | Mar 2026 |
+| [ADR-016](./docs/adr/ADR-016-rest-api-style.md)                  | Choix du style d'API — REST vs GraphQL/gRPC   | Avr 2026 |
+| [ADR-017](./docs/adr/ADR-017-express-framework.md)               | Choix du framework HTTP — Express             | Avr 2026 |
+| [ADR-018](./docs/adr/ADR-018-github-flow.md)                     | Stratégie de branches — GitHub Flow           | Avr 2026 |
 
 📚 **[Documentation complète du projet](https://github.com/SandrineCipolla/stockHub_V2_front/wiki)** — Architecture, guides techniques, métriques
 
