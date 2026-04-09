@@ -40,6 +40,7 @@ test.describe('Stock Authorization E2E Tests', () => {
       data: {
         label: 'E2E Test Stock - Authorization',
         description: 'E2E test for authorization features',
+        category: 'alimentation',
       },
     });
 

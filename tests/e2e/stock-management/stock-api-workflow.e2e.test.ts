@@ -58,6 +58,7 @@ test.describe('Stock Management API E2E Workflow with Azure AD', () => {
       data: {
         label: 'E2E Test Stock with Azure AD',
         description: 'Stock created via E2E test with real Azure AD authentication',
+        category: 'alimentation',
       },
     });
 
