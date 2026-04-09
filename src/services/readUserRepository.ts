@@ -1,33 +1,27 @@
-import { FieldPacket, RowDataPacket } from 'mysql2/promise';
+import { PrismaClient } from '@prisma/client';
 import { rootReadUserRepository } from '@utils/logger';
-import { connectToDatabase } from '@core/dbUtils';
 
 export class ReadUserRepository {
-  async readUserByOID(oid: string) {
+  private prisma: PrismaClient;
+
+  constructor(prismaClient?: PrismaClient) {
+    this.prisma = prismaClient ?? new PrismaClient();
+  }
+
+  async readUserByOID(oid: string): Promise<number | undefined> {
     rootReadUserRepository.info('readUserByOID {oid}', { oid });
 
-    const query = 'SELECT ID FROM users WHERE EMAIL = ?';
+    const user = await this.prisma.user.findUnique({
+      where: { email: oid },
+      select: { id: true },
+    });
 
-    const connection = await connectToDatabase();
-
-    try {
-      const [rows]: [RowDataPacket[], FieldPacket[]] = await connection.execute(query, [oid]);
-
-      if (!rows || rows.length === 0) {
-        rootReadUserRepository.error(`User not found for OID: ${oid}`);
-        return undefined;
-      }
-
-      const user = rows[0];
-      if (!user || !user.ID) {
-        rootReadUserRepository.error(`User ID not found for OID: ${oid}`);
-        return undefined;
-      }
-
-      rootReadUserRepository.info(`User ID found: ${user.ID} for OID: ${oid}`);
-      return user.ID;
-    } finally {
-      connection.release();
+    if (!user) {
+      rootReadUserRepository.error(`User not found for OID: ${oid}`);
+      return undefined;
     }
+
+    rootReadUserRepository.info(`User ID found: ${user.id} for OID: ${oid}`);
+    return user.id;
   }
 }

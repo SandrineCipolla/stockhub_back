@@ -3,7 +3,7 @@ import { IStockCommandRepository } from '@domain/stock-management/manipulation/r
 import { Stock } from '@domain/stock-management/common/entities/Stock';
 import { StockItem } from '@domain/stock-management/common/entities/StockItem';
 import { DependencyTelemetry, rootDependency, rootException } from '@utils/cloudLogger';
-import { ErrorMessages, NotFoundError } from '@core/errors';
+import { ErrorMessages, NotFoundError } from '@api/errors';
 import { PrismaStockWithItems } from '../types/prisma';
 
 const DEPENDENCY_NAME = process.env.DB_DATABASE;

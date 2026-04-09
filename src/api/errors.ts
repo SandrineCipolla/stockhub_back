@@ -64,16 +64,6 @@ export class ConflictError extends Error implements CustomError {
 }
 
 export enum ErrorMessages {
-  ValidationError = 'Validation error occurred:',
-  UpdateStockItemQuantity = 'Error while updating the stock item quantity:',
-  AddStockItem = 'Error while adding a new stock item:',
-  DeleteStockItem = 'Error while deleting the stock item from the database:',
-  GetAllStocks = 'Error while retrieving all stocks:',
-  CreateStock = 'Error while creating a new stock:',
-  GetStockDetails = 'Error while retrieving the stock details:',
-  GetStockItems = 'Error while retrieving the items of the stock:',
-  GetItemDetails = 'Error while retrieving the item details:',
-  AddUser = 'Error while adding user to DB',
   UpdateItem = 'Error while updating the stock item:',
 }
 

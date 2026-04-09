@@ -1,7 +1,7 @@
 import { StockVisualizationService } from '@domain/stock-management/visualization/services/StockVisualizationService';
 import { UserService } from '@services/userService';
 import { HTTP_CODE_OK } from '@utils/httpCodes';
-import { CustomError, sendError } from '@core/errors';
+import { CustomError, sendError } from '@api/errors';
 import express from 'express';
 import { rootMain } from '@utils/logger';
 import { rootException } from '@utils/cloudLogger';

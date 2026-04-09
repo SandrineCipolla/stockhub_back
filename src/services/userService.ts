@@ -6,9 +6,9 @@ class UserIdentifier {
   public readonly empty: boolean;
   public readonly value: number;
 
-  constructor(oid: string) {
-    this.empty = !oid;
-    this.value = parseInt(oid);
+  constructor(id: number) {
+    this.empty = !id;
+    this.value = id;
   }
 }
 
