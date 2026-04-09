@@ -89,10 +89,15 @@ test.describe('Stock Management API E2E Workflow with Azure AD', () => {
     });
 
     expect(response.status()).toBe(201);
-    const result = await response.json();
 
-    expect(result).toHaveProperty('id');
-    itemId1 = result.id;
+    // addItemToStock returns the full Stock object — fetch items to get the item's id
+    const getItemsResponse = await request.get(`${apiV2}/stocks/${stockId}/items`, {
+      headers: { Authorization: authToken },
+    });
+    const items = await getItemsResponse.json();
+    const apple = items.find((item: any) => item.label === 'Pommes Bio');
+    expect(apple).toBeDefined();
+    itemId1 = apple.id;
   });
 
   test('Step 3: Add second item to stock (low stock)', async ({ request }) => {
@@ -110,9 +115,6 @@ test.describe('Stock Management API E2E Workflow with Azure AD', () => {
     });
 
     expect(response.status()).toBe(201);
-    const result = await response.json();
-
-    expect(result).toHaveProperty('id');
   });
 
   test('Step 4: Visualize stock and verify items', async ({ request }) => {
