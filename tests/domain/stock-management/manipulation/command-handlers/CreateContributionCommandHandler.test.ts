@@ -1,5 +1,5 @@
-import { CreateContributionCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/CreateContributionCommandHandler';
-import { CreateContributionCommand } from '@domain/stock-management/manipulation/commands(Request)/CreateContributionCommand';
+import { CreateContributionCommandHandler } from '@domain/stock-management/manipulation/use-cases/CreateContributionCommandHandler';
+import { CreateContributionCommand } from '@domain/stock-management/manipulation/commands/CreateContributionCommand';
 import { IContributionRepository } from '@domain/stock-management/manipulation/repositories/IContributionRepository';
 import { ItemContribution } from '@domain/stock-management/common/entities/ItemContribution';
 

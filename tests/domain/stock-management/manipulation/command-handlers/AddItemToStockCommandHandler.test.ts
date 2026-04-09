@@ -1,5 +1,5 @@
-import { AddItemToStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/AddItemToStockCommandHandler';
-import { AddItemToStockCommand } from '@domain/stock-management/manipulation/commands(Request)/AddItemToStockCommand';
+import { AddItemToStockCommandHandler } from '@domain/stock-management/manipulation/use-cases/AddItemToStockCommandHandler';
+import { AddItemToStockCommand } from '@domain/stock-management/manipulation/commands/AddItemToStockCommand';
 import { IStockCommandRepository } from '@domain/stock-management/manipulation/repositories/IStockCommandRepository';
 import { Stock } from '@domain/stock-management/common/entities/Stock';
 import { StockItem } from '@domain/stock-management/common/entities/StockItem';

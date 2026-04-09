@@ -1,4 +1,4 @@
-import { AddItemToStockCommand } from '@domain/stock-management/manipulation/commands(Request)/AddItemToStockCommand';
+import { AddItemToStockCommand } from '@domain/stock-management/manipulation/commands/AddItemToStockCommand';
 import { IStockCommandRepository } from '@domain/stock-management/manipulation/repositories/IStockCommandRepository';
 import { IItemHistoryRepository } from '@domain/prediction/repositories/IItemHistoryRepository';
 import { Stock } from '@domain/stock-management/common/entities/Stock';

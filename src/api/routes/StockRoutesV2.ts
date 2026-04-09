@@ -15,13 +15,13 @@ import { ReadUserRepository } from '@services/readUserRepository';
 import { WriteUserRepository } from '@services/writeUserRepository';
 import { PrismaStockVisualizationRepository } from '@infrastructure/stock-management/visualization/repositories/PrismaStockVisualizationRepository';
 import { PrismaStockCommandRepository } from '@infrastructure/stock-management/manipulation/repositories/PrismaStockCommandRepository';
-import { CreateStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/CreateStockCommandHandler';
-import { AddItemToStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/AddItemToStockCommandHandler';
-import { UpdateItemCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateItemCommandHandler';
-import { UpdateItemQuantityCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateItemQuantityCommandHandler';
-import { UpdateStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/UpdateStockCommandHandler';
-import { DeleteStockCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/DeleteStockCommandHandler';
-import { DeleteItemCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/DeleteItemCommandHandler';
+import { CreateStockCommandHandler } from '@domain/stock-management/manipulation/use-cases/CreateStockCommandHandler';
+import { AddItemToStockCommandHandler } from '@domain/stock-management/manipulation/use-cases/AddItemToStockCommandHandler';
+import { UpdateItemCommandHandler } from '@domain/stock-management/manipulation/use-cases/UpdateItemCommandHandler';
+import { UpdateItemQuantityCommandHandler } from '@domain/stock-management/manipulation/use-cases/UpdateItemQuantityCommandHandler';
+import { UpdateStockCommandHandler } from '@domain/stock-management/manipulation/use-cases/UpdateStockCommandHandler';
+import { DeleteStockCommandHandler } from '@domain/stock-management/manipulation/use-cases/DeleteStockCommandHandler';
+import { DeleteItemCommandHandler } from '@domain/stock-management/manipulation/use-cases/DeleteItemCommandHandler';
 import { rootController } from '@utils/logger';
 import { PrismaClient } from '@prisma/client';
 import {
@@ -51,8 +51,8 @@ import { StockSuggestionsController } from '@api/controllers/StockSuggestionsCon
 import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
 import { OpenRouterAIService } from '@infrastructure/ai/OpenRouterAIService';
 import { PrismaContributionRepository } from '@infrastructure/stock-management/manipulation/repositories/PrismaContributionRepository';
-import { CreateContributionCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/CreateContributionCommandHandler';
-import { ReviewContributionCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/ReviewContributionCommandHandler';
+import { CreateContributionCommandHandler } from '@domain/stock-management/manipulation/use-cases/CreateContributionCommandHandler';
+import { ReviewContributionCommandHandler } from '@domain/stock-management/manipulation/use-cases/ReviewContributionCommandHandler';
 import { StockContributionController } from '@api/controllers/StockContributionController';
 
 const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Router> => {

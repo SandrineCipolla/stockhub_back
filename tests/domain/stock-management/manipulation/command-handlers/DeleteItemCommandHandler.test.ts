@@ -1,5 +1,5 @@
-import { DeleteItemCommandHandler } from '@domain/stock-management/manipulation/command-handlers(UseCase)/DeleteItemCommandHandler';
-import { DeleteItemCommand } from '@domain/stock-management/manipulation/commands(Request)/DeleteItemCommand';
+import { DeleteItemCommandHandler } from '@domain/stock-management/manipulation/use-cases/DeleteItemCommandHandler';
+import { DeleteItemCommand } from '@domain/stock-management/manipulation/commands/DeleteItemCommand';
 import { IStockCommandRepository } from '@domain/stock-management/manipulation/repositories/IStockCommandRepository';
 import { Stock } from '@domain/stock-management/common/entities/Stock';
 import { StockItem } from '@domain/stock-management/common/entities/StockItem';

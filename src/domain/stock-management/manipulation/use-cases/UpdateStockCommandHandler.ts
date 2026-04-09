@@ -1,4 +1,4 @@
-import { UpdateStockCommand } from '@domain/stock-management/manipulation/commands(Request)/UpdateStockCommand';
+import { UpdateStockCommand } from '@domain/stock-management/manipulation/commands/UpdateStockCommand';
 import { IStockCommandRepository } from '@domain/stock-management/manipulation/repositories/IStockCommandRepository';
 import { Stock } from '@domain/stock-management/common/entities/Stock';
 
