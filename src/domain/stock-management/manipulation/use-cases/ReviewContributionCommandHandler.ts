@@ -1,4 +1,4 @@
-import { ReviewContributionCommand } from '@domain/stock-management/manipulation/commands(Request)/ReviewContributionCommand';
+import { ReviewContributionCommand } from '@domain/stock-management/manipulation/commands/ReviewContributionCommand';
 import { IContributionRepository } from '@domain/stock-management/manipulation/repositories/IContributionRepository';
 import { IStockCommandRepository } from '@domain/stock-management/manipulation/repositories/IStockCommandRepository';
 import { ItemContribution } from '@domain/stock-management/common/entities/ItemContribution';

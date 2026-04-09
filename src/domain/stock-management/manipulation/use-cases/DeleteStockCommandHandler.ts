@@ -1,4 +1,4 @@
-import { DeleteStockCommand } from '@domain/stock-management/manipulation/commands(Request)/DeleteStockCommand';
+import { DeleteStockCommand } from '@domain/stock-management/manipulation/commands/DeleteStockCommand';
 import { IStockCommandRepository } from '@domain/stock-management/manipulation/repositories/IStockCommandRepository';
 
 export class DeleteStockCommandHandler {
