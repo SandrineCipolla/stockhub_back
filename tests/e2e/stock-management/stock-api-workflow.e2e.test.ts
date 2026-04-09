@@ -186,13 +186,12 @@ test.describe('Stock Management API E2E Workflow with Azure AD', () => {
 
     expect(Array.isArray(items)).toBe(true);
 
-    const lowStockBanana = items.find(
-      (item: any) => item.label === 'Bananes' && item.status === 'low'
-    );
-
-    expect(lowStockBanana).toBeDefined();
-    expect(lowStockBanana.quantity).toBe(5);
-    expect(lowStockBanana.minimumStock).toBe(20);
+    // Items DTO does not include a `status` field — check low stock by comparing quantities
+    const banana = items.find((item: any) => item.label === 'Bananes');
+    expect(banana).toBeDefined();
+    expect(banana.quantity).toBe(5);
+    expect(banana.minimumStock).toBe(20);
+    expect(banana.quantity).toBeLessThan(banana.minimumStock);
   });
 
   test.afterAll(async ({ request }) => {
