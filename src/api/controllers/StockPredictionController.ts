@@ -4,7 +4,7 @@ import { StockPredictionService } from '@domain/prediction/services/StockPredict
 import { IItemHistoryRepository } from '@domain/prediction/repositories/IItemHistoryRepository';
 import { IPredictionRepository } from '@domain/prediction/repositories/IPredictionRepository';
 import { HTTP_CODE_OK } from '@utils/httpCodes';
-import { CustomError, sendError } from '@core/errors';
+import { CustomError, sendError } from '@api/errors';
 import { rootController } from '@utils/logger';
 import { rootException } from '@utils/cloudLogger';
 

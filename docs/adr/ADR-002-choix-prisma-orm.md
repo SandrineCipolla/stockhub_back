@@ -257,12 +257,34 @@ const stock = await stockRepository
 
 ---
 
+## Application progressive — migration complète vers Prisma (2026)
+
+Au démarrage du projet V2 (nov. 2024), la couche domaine et infrastructure a été migrée vers Prisma. Cependant, le service `UserService` (conversion OID Azure → ID utilisateur en base) utilisait encore des requêtes MySQL directes via un pool de connexions `mysql2` hérité de V1.
+
+En avril 2026, dans le cadre du nettoyage du code V1 (#192), `UserService` a été complètement migré vers Prisma :
+
+```typescript
+// Avant (V1 — MySQL direct)
+const connection = await connectToDatabase();
+const [rows] = await connection.execute('SELECT ID FROM users WHERE EMAIL = ?', [oid]);
+
+// Après (Prisma)
+const user = await this.prisma.user.findUnique({
+  where: { email: oid },
+  select: { id: true },
+});
+```
+
+Cette migration supprime la dernière dépendance à `mysql2` dans le code applicatif. Prisma est désormais le seul point d'accès à la base de données dans tout le projet.
+
+---
+
 ## Liens
 
 - **Documentation Prisma :** https://www.prisma.io/docs
-- **Code concerné :** `src/infrastructure/stock-management/**/*Repository.ts`
+- **Code concerné :** `src/infrastructure/stock-management/**/*Repository.ts`, `src/services/userService.ts`
 - **Schéma Prisma :** `prisma/schema.prisma`
-- **Issue GitHub :** Choix initial ORM (projet setup)
+- **Issue GitHub :** Choix initial ORM (projet setup), #192 (nettoyage V1 + migration UserService)
 - **ADR lié :** [ADR-001 (Migration DDD/CQRS)](./ADR-001-migration-ddd-cqrs.md)
 
 ---

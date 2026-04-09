@@ -1,5 +1,5 @@
 import { StockControllerManipulation } from '@api/controllers/StockControllerManipulation';
-import { sendError } from '@core/errors';
+import { sendError } from '@api/errors';
 import { HTTP_CODE_CREATED, HTTP_CODE_OK } from '@utils/httpCodes';
 import {
   CreateStockRequest,
@@ -7,7 +7,7 @@ import {
   UpdateItemQuantityRequest,
 } from '@api/types/StockRequestTypes';
 
-jest.mock('@core/errors', () => ({
+jest.mock('@api/errors', () => ({
   sendError: jest.fn(),
 }));
 

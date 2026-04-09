@@ -1,5 +1,5 @@
 import { StockSuggestionsController } from '@api/controllers/StockSuggestionsController';
-import '@core/errors';
+import '@api/errors';
 import { IAIService } from '@domain/ai/IAIService';
 import { IPredictionRepository } from '@domain/prediction/repositories/IPredictionRepository';
 import { StockPredictionService } from '@domain/prediction/services/StockPredictionService';
@@ -8,7 +8,7 @@ import { UserService } from '@services/userService';
 import { HTTP_CODE_OK } from '@utils/httpCodes';
 import { Request, Response } from 'express';
 
-jest.mock('@core/errors', () => ({ sendError: jest.fn() }));
+jest.mock('@api/errors', () => ({ sendError: jest.fn() }));
 jest.mock('@utils/logger', () => ({
   rootController: {
     getChildCategory: () => ({ info: jest.fn(), error: jest.fn(), warn: jest.fn() }),

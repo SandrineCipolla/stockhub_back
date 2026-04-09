@@ -6,7 +6,7 @@ import { StockPredictionService } from '@domain/prediction/services/StockPredict
 import { IStockVisualizationRepository } from '@domain/stock-management/visualization/queries/IStockVisualizationRepository';
 import { UserService } from '@services/userService';
 import { HTTP_CODE_OK } from '@utils/httpCodes';
-import { CustomError, sendError } from '@core/errors';
+import { CustomError, sendError } from '@api/errors';
 import { rootController } from '@utils/logger';
 import { rootException } from '@utils/cloudLogger';
 

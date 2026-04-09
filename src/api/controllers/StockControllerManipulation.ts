@@ -26,7 +26,7 @@ import { DeleteStockCommand } from '@domain/stock-management/manipulation/comman
 import { DeleteItemCommand } from '@domain/stock-management/manipulation/commands/DeleteItemCommand';
 import { DeleteItemCommandHandler } from '@domain/stock-management/manipulation/use-cases/DeleteItemCommandHandler';
 import { HTTP_CODE_CREATED, HTTP_CODE_OK } from '@utils/httpCodes';
-import { CustomError, sendError } from '@core/errors';
+import { CustomError, sendError } from '@api/errors';
 import { rootMain } from '@utils/logger';
 import { rootException } from '@utils/cloudLogger';
 

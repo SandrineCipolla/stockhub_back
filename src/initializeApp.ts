@@ -2,10 +2,8 @@ import authConfig from '@core/authConfig';
 import { rootMain, rootSecurity, rootServerSetup } from '@utils/logger';
 import express from 'express';
 import cors from 'cors';
-import { CustomError } from '@core/errors';
+import { CustomError } from '@api/errors';
 import passport from 'passport';
-import configureStockRoutes from '@routes/stockRoutes';
-import configureUserRoutes from '@routes/userRoutes';
 import { authConfigbearerStrategy } from '@authentication/authBearerStrategy';
 import { authenticationMiddleware } from '@authentication/authenticateMiddleware';
 import { setupHttpServer } from '@serverSetup/setupHttpServer';
@@ -140,33 +138,6 @@ export async function initializeApp() {
     stockRoutesV2
   );
   rootMain.info('api/v2 routes (auth required) configured');
-  // Middleware d'authentification appliqué seulement après les routes V2
-  app.use(
-    '/api/v1',
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      authenticationMiddleware(req, res, next);
-    },
-    (_req: express.Request, _res: express.Response, next: express.NextFunction) => {
-      next();
-    },
-    (
-      err: CustomError,
-      req: express.Request,
-      res: express.Response,
-      _next: express.NextFunction
-    ) => {
-      res.locals.message = err.message;
-      res.locals.error = req.app.get('env') === 'development' ? err : {};
-      res.status(err.status || 500).send(err);
-    }
-  );
-  rootMain.info('api/v1 routes (auth required) configured');
-
-  const stockRoutes = await configureStockRoutes();
-  app.use('/api/v1', stockRoutes);
-
-  const userRoutes = await configureUserRoutes();
-  app.use('/api/v1', userRoutes);
 
   app.use((_req: express.Request, res: express.Response, _next: express.NextFunction) => {
     res.status(404).send('Route not found');
@@ -179,7 +150,7 @@ export async function initializeApp() {
       res: express.Response,
       _next: express.NextFunction
     ) => {
-      console.error(err.stack);
+      rootMain.error('Unhandled error: {stack}', { stack: err.stack });
       res.status(500).send('Internal Server Error');
     }
   );

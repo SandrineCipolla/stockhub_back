@@ -1,5 +1,5 @@
 import { StockControllerVisualization } from '@api/controllers/StockControllerVisualization';
-import { CustomError, sendError } from '@core/errors';
+import { CustomError, sendError } from '@api/errors';
 import { StockVisualizationService } from '@domain/stock-management/visualization/services/StockVisualizationService';
 import {
   StockSummaryDto,
@@ -13,7 +13,7 @@ import { PoolConnection } from 'mysql2/promise';
 import { Request, Response } from 'express';
 
 jest.mock('@domain/stock-management/visualization/services/StockVisualizationService');
-jest.mock('@core/errors', () => ({
+jest.mock('@api/errors', () => ({
   sendError: jest.fn(),
 }));
 

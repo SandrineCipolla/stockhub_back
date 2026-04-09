@@ -8,7 +8,7 @@ import { CreateContributionCommand } from '@domain/stock-management/manipulation
 import { ReviewContributionCommand } from '@domain/stock-management/manipulation/commands/ReviewContributionCommand';
 import { IContributionRepository } from '@domain/stock-management/manipulation/repositories/IContributionRepository';
 import { HTTP_CODE_CREATED, HTTP_CODE_OK } from '@utils/httpCodes';
-import { CustomError, sendError } from '@core/errors';
+import { CustomError, sendError } from '@api/errors';
 import { rootMain } from '@utils/logger';
 import { rootException } from '@utils/cloudLogger';
 
