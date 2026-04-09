@@ -25,8 +25,7 @@ import { createAzureAuthHelper } from '../helpers/azureAuth';
 
 test.describe('Stock Management API E2E Workflow with Azure AD', () => {
   const baseURL = process.env.API_BASE_URL || 'http://localhost:3006';
-  const apiV1 = `${baseURL}/api/v1`; // Used for POST/PUT (creation/modification)
-  const apiV2 = `${baseURL}/api/v2`; // Used for GET (reading)
+  const apiV2 = `${baseURL}/api/v2`;
   let stockId: number;
   let itemId1: number;
   let authToken: string;
@@ -51,41 +50,22 @@ test.describe('Stock Management API E2E Workflow with Azure AD', () => {
   });
 
   test('Step 1: Create a new stock with Azure AD authentication', async ({ request }) => {
-    const response = await request.post(`${apiV1}/stocks`, {
+    const response = await request.post(`${apiV2}/stocks`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: authToken,
       },
       data: {
-        LABEL: 'E2E Test Stock with Azure AD',
-        DESCRIPTION: 'Stock created via E2E test with real Azure AD authentication',
+        label: 'E2E Test Stock with Azure AD',
+        description: 'Stock created via E2E test with real Azure AD authentication',
       },
     });
 
     expect(response.status()).toBe(201);
     const result = await response.json();
 
-    expect(result).toHaveProperty('message');
-    expect(result.message).toContain('Stock created successfully');
-
-    // Extract stock ID from response if available, otherwise fetch from GET endpoint
-    if (result.stock && result.stock.ID) {
-      stockId = result.stock.ID;
-    } else {
-      // Get the stock ID by fetching all stocks (using v2 GET endpoint)
-      const getAllResponse = await request.get(`${apiV2}/stocks`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: authToken,
-        },
-      });
-
-      expect(getAllResponse.status()).toBe(200);
-      const stocks = await getAllResponse.json();
-      const createdStock = stocks.find((s: any) => s.label === 'E2E Test Stock with Azure AD');
-      expect(createdStock).toBeDefined();
-      stockId = createdStock.id;
-    }
+    expect(result).toHaveProperty('id');
+    stockId = result.id;
 
     console.log(`✅ Stock created (ID: ${stockId}`);
 
@@ -94,70 +74,44 @@ test.describe('Stock Management API E2E Workflow with Azure AD', () => {
   });
 
   test('Step 2: Add first item to stock (normal stock)', async ({ request }) => {
-    const response = await request.post(`${apiV1}/stocks/${stockId}/items`, {
+    const response = await request.post(`${apiV2}/stocks/${stockId}/items`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: authToken,
       },
       data: {
-        LABEL: 'Pommes Bio',
-        DESCRIPTION: 'Pommes rouges biologiques',
-        QUANTITY: 50,
-        MINIMUM_STOCK: 10,
+        label: 'Pommes Bio',
+        description: 'Pommes rouges biologiques',
+        quantity: 50,
+        minimumStock: 10,
       },
     });
 
     expect(response.status()).toBe(201);
     const result = await response.json();
 
-    expect(result).toHaveProperty('message');
-    expect(result.message).toContain('added successfully');
-
-    // Get item ID
-    const getItemsResponse = await request.get(`${apiV2}/stocks/${stockId}/items`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: authToken,
-      },
-      data: {},
-    });
-
-    const items = await getItemsResponse.json();
-    const apple = items.find((item: any) => item.label === 'Pommes Bio');
-    itemId1 = apple.id;
+    expect(result).toHaveProperty('id');
+    itemId1 = result.id;
   });
 
   test('Step 3: Add second item to stock (low stock)', async ({ request }) => {
-    const response = await request.post(`${apiV1}/stocks/${stockId}/items`, {
+    const response = await request.post(`${apiV2}/stocks/${stockId}/items`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: authToken,
       },
       data: {
-        LABEL: 'Bananes',
-        DESCRIPTION: 'Bananes équitables',
-        QUANTITY: 5,
-        MINIMUM_STOCK: 20,
+        label: 'Bananes',
+        description: 'Bananes équitables',
+        quantity: 5,
+        minimumStock: 20,
       },
     });
 
     expect(response.status()).toBe(201);
     const result = await response.json();
 
-    expect(result).toHaveProperty('message');
-    expect(result.message).toContain('added successfully');
-
-    // Get item ID
-    const getItemsResponse = await request.get(`${apiV2}/stocks/${stockId}/items`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: authToken,
-      },
-      data: {},
-    });
-
-    const items = await getItemsResponse.json();
-    items.find((item: any) => item.label === 'Bananes');
+    expect(result).toHaveProperty('id');
   });
 
   test('Step 4: Visualize stock and verify items', async ({ request }) => {
@@ -186,24 +140,23 @@ test.describe('Stock Management API E2E Workflow with Azure AD', () => {
   });
 
   test('Step 5: Update item quantity', async ({ request }) => {
-    const response = await request.put(`${apiV1}/stocks/${stockId}/items/${itemId1}`, {
+    const response = await request.patch(`${apiV2}/stocks/${stockId}/items/${itemId1}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: authToken,
       },
       data: {
-        QUANTITY: 75,
+        quantity: 75,
       },
     });
 
     expect(response.status()).toBe(200);
     const result = await response.json();
 
-    expect(result).toHaveProperty('message');
-    expect(result.message).toContain('updated successfully');
+    expect(result).toHaveProperty('id');
 
     // Verify the update
-    const getItemResponse = await request.get(`${apiV1}/stocks/${stockId}/items`, {
+    const getItemsResponse = await request.get(`${apiV2}/stocks/${stockId}/items`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: authToken,
@@ -211,15 +164,13 @@ test.describe('Stock Management API E2E Workflow with Azure AD', () => {
       data: {},
     });
 
-    const items = await getItemResponse.json();
-    // V2 returns lowercase field names
-    const updatedApple = items.find((item: any) => (item.id || item.ID) === itemId1);
-    const updatedQty = updatedApple.quantity || updatedApple.QUANTITY;
-    expect(updatedQty).toBe(75);
+    const items = await getItemsResponse.json();
+    const updatedApple = items.find((item: any) => item.id === itemId1);
+    expect(updatedApple.quantity).toBe(75);
   });
 
   test('Step 6: Check for low stock items', async ({ request }) => {
-    const response = await request.get(`${apiV1}/low-stock-items`, {
+    const response = await request.get(`${apiV2}/stocks/${stockId}/items`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: authToken,
@@ -228,28 +179,24 @@ test.describe('Stock Management API E2E Workflow with Azure AD', () => {
     });
 
     expect(response.status()).toBe(200);
-    const lowStockItems = await response.json();
+    const items = await response.json();
 
-    expect(Array.isArray(lowStockItems)).toBe(true);
-    expect(lowStockItems.length).toBeGreaterThan(0);
+    expect(Array.isArray(items)).toBe(true);
 
-    const lowStockBanana = lowStockItems.find((item: any) => {
-      const label = item.label || item.LABEL;
-      const qty = item.quantity ?? item.QUANTITY;
-      const minStock = item.minimumStock ?? item.MINIMUM_STOCK;
-      return label === 'Bananes' && qty < minStock;
-    });
+    const lowStockBanana = items.find(
+      (item: any) => item.label === 'Bananes' && item.status === 'low'
+    );
 
     expect(lowStockBanana).toBeDefined();
-    expect(lowStockBanana.quantity ?? lowStockBanana.QUANTITY).toBe(5);
-    expect(lowStockBanana.minimumStock ?? lowStockBanana.MINIMUM_STOCK).toBe(20);
+    expect(lowStockBanana.quantity).toBe(5);
+    expect(lowStockBanana.minimumStock).toBe(20);
   });
 
   test.afterAll(async ({ request }) => {
     // Delete all created stocks
     for (const id of createdStockIds) {
       try {
-        await request.delete(`${apiV1}/stocks/${id}`, {
+        await request.delete(`${apiV2}/stocks/${id}`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: authToken,

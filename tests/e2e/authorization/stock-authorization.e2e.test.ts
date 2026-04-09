@@ -12,7 +12,6 @@ import { createAzureAuthHelper } from '../helpers/azureAuth';
 
 test.describe('Stock Authorization E2E Tests', () => {
   const baseURL = process.env.API_BASE_URL || 'http://localhost:3006';
-  const apiV1 = `${baseURL}/api/v1`;
   const apiV2 = `${baseURL}/api/v2`;
   let authToken: string;
   let stockId: number;
@@ -33,36 +32,22 @@ test.describe('Stock Authorization E2E Tests', () => {
 
   test('Step 1: Owner can create and access their own stock', async ({ request }) => {
     // Create a stock
-    const createResponse = await request.post(`${apiV1}/stocks`, {
+    const createResponse = await request.post(`${apiV2}/stocks`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: authToken,
       },
       data: {
-        LABEL: 'E2E Test Stock - Authorization',
-        DESCRIPTION: 'E2E test for authorization features',
+        label: 'E2E Test Stock - Authorization',
+        description: 'E2E test for authorization features',
       },
     });
 
     expect(createResponse.status()).toBe(201);
-    console.log('✅ Stock created successfully');
-
-    // Get stock ID by listing all stocks
-    const getAllResponse = await request.get(`${apiV2}/stocks`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: authToken,
-      },
-    });
-
-    expect(getAllResponse.status()).toBe(200);
-    const stocks = await getAllResponse.json();
-    const createdStock = stocks.find(
-      (s: any) => (s.label || s.LABEL) === 'E2E Test Stock - Authorization'
-    );
-    expect(createdStock).toBeDefined();
-    stockId = createdStock.id || createdStock.ID;
-    console.log(`✅ Stock ID retrieved: ${stockId}`);
+    const created = await createResponse.json();
+    expect(created).toHaveProperty('id');
+    stockId = created.id;
+    console.log(`✅ Stock created (ID: ${stockId})`);
 
     // Owner should be able to access stock items (this is a protected route)
     const getItemsResponse = await request.get(`${apiV2}/stocks/${stockId}/items`, {
@@ -89,29 +74,28 @@ test.describe('Stock Authorization E2E Tests', () => {
   });
 
   test('Step 3: Owner can add items to their stock (write operation)', async ({ request }) => {
-    // Add an item to the stock using V1 API (manipulation)
-    const addItemResponse = await request.post(`${apiV1}/stocks/${stockId}/items`, {
+    const addItemResponse = await request.post(`${apiV2}/stocks/${stockId}/items`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: authToken,
       },
       data: {
-        LABEL: 'Authorization Test Item',
-        DESCRIPTION: 'Item for testing authorization',
-        QUANTITY: 10,
-        MINIMUM_STOCK: 2,
+        label: 'Authorization Test Item',
+        description: 'Item for testing authorization',
+        quantity: 10,
+        minimumStock: 2,
       },
     });
 
     expect(addItemResponse.status()).toBe(201);
     const result = await addItemResponse.json();
-    expect(result.message).toContain('added successfully');
+    expect(result).toHaveProperty('id');
     console.log('✅ Owner can add items to their stock');
   });
 
   test('Step 4: Owner can update items in their stock (write operation)', async ({ request }) => {
     // Get the item we just created
-    const getItemsResponse = await request.get(`${apiV1}/stocks/${stockId}/items`, {
+    const getItemsResponse = await request.get(`${apiV2}/stocks/${stockId}/items`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: authToken,
@@ -119,25 +103,25 @@ test.describe('Stock Authorization E2E Tests', () => {
     });
 
     const items = await getItemsResponse.json();
-    const testItem = items.find((i: any) => (i.label || i.LABEL) === 'Authorization Test Item');
+    const testItem = items.find((i: any) => i.label === 'Authorization Test Item');
     expect(testItem).toBeDefined();
 
-    const itemId = testItem.id || testItem.ID;
+    const itemId = testItem.id;
 
-    // Update the item quantity using V1 API
-    const updateResponse = await request.put(`${apiV1}/stocks/${stockId}/items/${itemId}`, {
+    // Update the item quantity
+    const updateResponse = await request.patch(`${apiV2}/stocks/${stockId}/items/${itemId}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: authToken,
       },
       data: {
-        QUANTITY: 20,
+        quantity: 20,
       },
     });
 
     expect(updateResponse.status()).toBe(200);
     const result = await updateResponse.json();
-    expect(result.message).toContain('updated successfully');
+    expect(result).toHaveProperty('id');
     console.log('✅ Owner can update items in their stock');
   });
 
@@ -145,7 +129,7 @@ test.describe('Stock Authorization E2E Tests', () => {
     // Cleanup: delete the test stock
     if (stockId) {
       try {
-        await request.delete(`${apiV1}/stocks/${stockId}`, {
+        await request.delete(`${apiV2}/stocks/${stockId}`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: authToken,

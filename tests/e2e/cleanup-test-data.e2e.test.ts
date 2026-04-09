@@ -9,7 +9,6 @@ import { createAzureAuthHelper } from './helpers/azureAuth';
 
 test.describe('Cleanup old test data', () => {
   const baseURL = process.env.API_BASE_URL || 'http://localhost:3006';
-  const apiV1 = `${baseURL}/api/v1`;
   const apiV2 = `${baseURL}/api/v2`;
   let authToken: string;
 
@@ -47,7 +46,7 @@ test.describe('Cleanup old test data', () => {
 
     // Delete each test stock
     for (const stock of testStocks) {
-      const deleteResponse = await request.delete(`${apiV1}/stocks/${stock.id}`, {
+      const deleteResponse = await request.delete(`${apiV2}/stocks/${stock.id}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: authToken,
