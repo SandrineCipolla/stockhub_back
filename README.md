@@ -87,27 +87,12 @@ Usage personnel/familial → visibilité rapide sur les stocks, valeur ajoutée 
 
 ### Inclus (V2)
 
-- `GET /api/v2/stocks` → liste des stocks de l'utilisateur
-- `GET /api/v2/stocks/{stockId}` → détail d'un stock
-- `POST /api/v2/stocks` → créer un stock
-- `PATCH /api/v2/stocks/{stockId}` → modifier un stock
-- `DELETE /api/v2/stocks/{stockId}` → supprimer un stock (cascade items)
-- `GET /api/v2/stocks/{stockId}/items` → items d'un stock
-- `POST /api/v2/stocks/{stockId}/items` → ajouter un item
-- `PATCH /api/v2/stocks/{stockId}/items/{itemId}` → modifier un item (label, description, quantité, stock minimum)
-- `DELETE /api/v2/stocks/{stockId}/items/{itemId}` → supprimer un item
-- `GET /api/v2/stocks/{stockId}/items/{itemId}/history` → historique des quantités d'un item
-- `GET /api/v2/stocks/{stockId}/items/{itemId}/prediction` → prédiction de rupture de stock
-- `GET /api/v2/stocks/{stockId}/suggestions` → suggestions IA de réapprovisionnement
-- `GET /api/v2/stocks/{stockId}/collaborators` → lister les collaborateurs d'un stock
-- `POST /api/v2/stocks/{stockId}/collaborators` → ajouter un collaborateur (OWNER/EDITOR, règle hiérarchique)
-- `PATCH /api/v2/stocks/{stockId}/collaborators/{collaboratorId}` → modifier le rôle d'un collaborateur
-- `DELETE /api/v2/stocks/{stockId}/collaborators/{collaboratorId}` → retirer un collaborateur
-- `POST /api/v2/stocks/{stockId}/items/{itemId}/contributions` → soumettre une contribution (VIEWER_CONTRIBUTOR)
-- `GET /api/v2/stocks/{stockId}/contributions` → lister les contributions en attente
-- `PATCH /api/v2/stocks/{stockId}/contributions/{contributionId}` → approuver ou rejeter une contribution (OWNER/EDITOR)
+Gestion complète des stocks (CRUD), items, collaborateurs, contributions (workflow VIEWER_CONTRIBUTOR), prédictions de rupture et suggestions IA.
+
 - Entités DDD (`Stock`, `StockItem`, `Quantity`) + service `StockVisualizationService`
 - Autorisation par rôles (OWNER / EDITOR / VIEWER / VIEWER_CONTRIBUTOR)
+
+📖 Liste détaillée des endpoints : [Swagger Editor](https://editor.swagger.io/?url=https://raw.githubusercontent.com/SandrineCipolla/stockhub_back/main/docs/openapi.yaml)
 
 ## 3. Cas d'usage
 
@@ -145,7 +130,7 @@ TDD appliqué sur `Quantity`, `StockItem`, `Stock`, puis `StockVisualizationServ
 
 ### Sécurité
 
-- **Authentification** : Azure AD B2C avec tokens JWT Bearer (routes V1 et V2)
+- **Authentification** : Azure AD B2C avec tokens JWT Bearer (routes V2)
 - **Autorisation** : Système hybride basé sur les ressources (voir [ADR-009](./docs/adr/ADR-009-resource-based-authorization.md))
 - **RGPD** : Politique de protection des données personnelles → [docs/rgpd.md](./docs/rgpd.md)
   - Groupes familiaux + rôles par stock (OWNER/EDITOR/VIEWER/VIEWER_CONTRIBUTOR)
@@ -358,15 +343,17 @@ Content-Type: application/json
 
 #### Script de validation rapide (curl)
 
+> ⚠️ **Azure F1 (prod)** : démarrer l'app avant les tests — `npm run azure:start` — et l'arrêter après — `npm run azure:stop`.
+
 ```bash
 export JWT_TOKEN="eyJ0eXAiOiJKV1Qi..."  # Token récupéré depuis DevTools
 
-# Test API V2
-curl -X GET "https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net/api/v2/stocks" \
+# Test sur staging (toujours disponible)
+curl -X GET "https://stockhub-back.onrender.com/api/v2/stocks" \
      -H "Authorization: Bearer $JWT_TOKEN"
 
 # Test sans token (doit retourner 401)
-curl -X GET "https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net/api/v2/stocks"
+curl -X GET "https://stockhub-back.onrender.com/api/v2/stocks"
 ```
 
 #### Checklist de test
