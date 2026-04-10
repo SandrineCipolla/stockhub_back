@@ -2,7 +2,7 @@
 
 ![CI/CD Pipeline](https://github.com/sandrineCipolla/stockhub_back/actions/workflows/main_stockhub-back.yml/badge.svg)
 ![Security Audit](https://github.com/SandrineCipolla/stockhub_back/actions/workflows/security-audit.yml/badge.svg)
-![Version](https://img.shields.io/badge/version-2.6.0-blue)
+![Version](https://img.shields.io/badge/version-2.10.0-blue)
 ![Node](https://img.shields.io/badge/node-22.x-brightgreen)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
 ![Coverage](https://img.shields.io/badge/coverage-92%25-brightgreen)
@@ -227,50 +227,12 @@ stock_collaborators → id, stockId, userId, role, grantedAt, grantedBy
 
 ## 6. API V2
 
-### Endpoints
+La documentation complète de l'API est disponible via Swagger UI :
 
-```
-GET    /api/v2/stocks                                              → Liste des stocks de l'utilisateur
-GET    /api/v2/stocks/:stockId                                     → Détail d'un stock
-POST   /api/v2/stocks                                              → Créer un stock
-PATCH  /api/v2/stocks/:stockId                                     → Modifier un stock
-DELETE /api/v2/stocks/:stockId                                     → Supprimer (cascade items)
-GET    /api/v2/stocks/:stockId/items                               → Items d'un stock
-POST   /api/v2/stocks/:stockId/items                               → Ajouter un item
-PATCH  /api/v2/stocks/:stockId/items/:itemId                       → Modifier un item (label, description, quantité, stock minimum)
-GET    /api/v2/stocks/:stockId/collaborators                       → Lister les collaborateurs
-POST   /api/v2/stocks/:stockId/collaborators                       → Ajouter un collaborateur (OWNER/EDITOR, règle hiérarchique)
-PATCH  /api/v2/stocks/:stockId/collaborators/:collaboratorId       → Modifier le rôle d'un collaborateur
-DELETE /api/v2/stocks/:stockId/collaborators/:collaboratorId       → Retirer un collaborateur
-DELETE /api/v2/stocks/:stockId/items/:itemId                       → Supprimer un item
+- **Local** (back démarré) : [http://localhost:3006/api-docs](http://localhost:3006/api-docs)
+- **Swagger Editor** (toujours accessible) : [Visualiser la spec OpenAPI](https://editor.swagger.io/?url=https://raw.githubusercontent.com/SandrineCipolla/stockhub_back/main/docs/openapi.yaml)
 
-# Prédictions & Suggestions IA
-GET    /api/v2/stocks/:stockId/items/:itemId/history     → Historique de consommation
-GET    /api/v2/stocks/:stockId/items/:itemId/prediction  → Prédiction (daysUntilEmpty, trend, recommendedRestock)
-GET    /api/v2/stocks/:stockId/suggestions               → Suggestions IA (cache 24h, LLM Mistral)
-
-# Contributions (VIEWER_CONTRIBUTOR workflow)
-POST   /api/v2/stocks/:stockId/items/:itemId/contributions    → Soumettre une contribution (quantité proposée)
-GET    /api/v2/stocks/:stockId/contributions                  → Lister les contributions PENDING
-PATCH  /api/v2/stocks/:stockId/contributions/:contributionId  → Approuver ou rejeter une contribution (OWNER)
-```
-
-Catégories valides : `alimentation` | `hygiene` | `artistique`
-
-### Exemple de réponse
-
-```json
-{
-  "id": 1,
-  "label": "Cuisine",
-  "description": "Stock alimentaire",
-  "category": "alimentation",
-  "items": [
-    { "label": "Pâtes", "quantity": { "value": 5 }, "minimumStock": 2 },
-    { "label": "Riz", "quantity": { "value": 0 }, "minimumStock": 1 }
-  ]
-}
-```
+Le fichier source est dans `docs/openapi.yaml`.
 
 ## 7. Scripts disponibles
 
@@ -290,7 +252,7 @@ npx prisma migrate deploy # Appliquer les migrations
 npx prisma studio        # Interface visuelle DB
 
 # Tests
-npm run test:unit        # 253 tests unitaires
+npm run test:unit        # 266 tests unitaires
 npm run test:integration # Tests d'intégration (TestContainers)
 npm run test:e2e         # Tests E2E Playwright
 npm run test:coverage    # Rapport de couverture
@@ -309,7 +271,7 @@ npm run azure:stop       # Arrêter l'app Azure après les tests
 
 ### Unitaires (TDD)
 
-**253 tests — couverture globale : 92% statements | 82% branches | 94% functions**
+**266 tests — couverture globale : 92% statements | 82% branches | 94% functions**
 Seuil minimum configuré : 80% sur toutes les métriques (`jest.ci.config.js`)
 
 - `Quantity` : valeurs invalides interdites
@@ -425,10 +387,8 @@ Middleware Azure Bearer appliqué sur **toutes les routes** :
 
 ```typescript
 app.use('/api/v2', authenticationMiddleware, stockRoutesV2);
-app.use('/api/v1', authenticationMiddleware, stockRoutes);
 ```
 
-- 🔒 `/api/v1` protégé (Bearer Token requis)
 - 🔒 `/api/v2` protégé (Bearer Token requis)
 
 ### Performance
