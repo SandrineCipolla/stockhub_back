@@ -1,5 +1,5 @@
-import { ReadUserRepository } from '@services/readUserRepository';
-import { WriteUserRepository } from '@services/writeUserRepository';
+import { IReadUserRepository } from '@domain/user/repositories/IReadUserRepository';
+import { IWriteUserRepository } from '@domain/user/repositories/IWriteUserRepository';
 import { rootUserService } from '@utils/logger';
 
 class UserIdentifier {
@@ -13,10 +13,10 @@ class UserIdentifier {
 }
 
 export class UserService {
-  private readUserRepository: ReadUserRepository;
-  private writeUserRepository: WriteUserRepository;
+  private readUserRepository: IReadUserRepository;
+  private writeUserRepository: IWriteUserRepository;
 
-  constructor(readUser: ReadUserRepository, writeUser: WriteUserRepository) {
+  constructor(readUser: IReadUserRepository, writeUser: IWriteUserRepository) {
     this.readUserRepository = readUser;
     this.writeUserRepository = writeUser;
   }

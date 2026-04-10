@@ -1,7 +1,8 @@
 import { PrismaClient } from '@prisma/client';
+import { IWriteUserRepository } from '@domain/user/repositories/IWriteUserRepository';
 import { rootDatabase } from '@utils/logger';
 
-export class WriteUserRepository {
+export class PrismaWriteUserRepository implements IWriteUserRepository {
   private prisma: PrismaClient;
 
   constructor(prismaClient?: PrismaClient) {

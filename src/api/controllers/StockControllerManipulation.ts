@@ -10,7 +10,7 @@ import {
   UpdateItemRequest,
   UpdateStockRequest,
 } from '@api/types/StockRequestTypes';
-import { UserService } from '@services/userService';
+import { UserService } from '@domain/user/services/UserService';
 import { CreateStockCommandHandler } from '@domain/stock-management/manipulation/use-cases/CreateStockCommandHandler';
 import { AddItemToStockCommandHandler } from '@domain/stock-management/manipulation/use-cases/AddItemToStockCommandHandler';
 import { UpdateItemCommandHandler } from '@domain/stock-management/manipulation/use-cases/UpdateItemCommandHandler';

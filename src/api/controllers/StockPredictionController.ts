@@ -1,5 +1,4 @@
 import express from 'express';
-import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
 import { StockPredictionService } from '@domain/prediction/services/StockPredictionService';
 import { IItemHistoryRepository } from '@domain/prediction/repositories/IItemHistoryRepository';
 import { IPredictionRepository } from '@domain/prediction/repositories/IPredictionRepository';
@@ -17,7 +16,7 @@ export class StockPredictionController {
     private readonly predictionRepository: IPredictionRepository
   ) {}
 
-  public async getItemHistory(req: AuthenticatedRequest, res: express.Response): Promise<void> {
+  public async getItemHistory(req: express.Request, res: express.Response): Promise<void> {
     try {
       const itemId = Number(req.params.itemId);
       const days = Number(req.query['days'] ?? 90);
@@ -33,7 +32,7 @@ export class StockPredictionController {
     }
   }
 
-  public async getItemPrediction(req: AuthenticatedRequest, res: express.Response): Promise<void> {
+  public async getItemPrediction(req: express.Request, res: express.Response): Promise<void> {
     try {
       const itemId = Number(req.params.itemId);
       const currentQuantity = Number(req.query['quantity'] ?? 0);

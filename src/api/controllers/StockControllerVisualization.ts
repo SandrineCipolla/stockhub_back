@@ -1,5 +1,5 @@
 import { StockVisualizationService } from '@domain/stock-management/visualization/services/StockVisualizationService';
-import { UserService } from '@services/userService';
+import { UserService } from '@domain/user/services/UserService';
 import { HTTP_CODE_OK } from '@utils/httpCodes';
 import { CustomError, sendError } from '@api/errors';
 import express from 'express';

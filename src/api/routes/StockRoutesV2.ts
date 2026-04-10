@@ -1,5 +1,5 @@
 import { StockVisualizationService } from '@domain/stock-management/visualization/services/StockVisualizationService';
-import { UserService } from '@services/userService';
+import { UserService } from '@domain/user/services/UserService';
 import { StockControllerVisualization } from '@api/controllers/StockControllerVisualization';
 import { StockControllerManipulation } from '@api/controllers/StockControllerManipulation';
 import {
@@ -11,8 +11,8 @@ import {
   UpdateStockRequest,
 } from '@api/types/StockRequestTypes';
 import express, { Router } from 'express';
-import { ReadUserRepository } from '@services/readUserRepository';
-import { WriteUserRepository } from '@services/writeUserRepository';
+import { PrismaReadUserRepository } from '@infrastructure/user/repositories/PrismaReadUserRepository';
+import { PrismaWriteUserRepository } from '@infrastructure/user/repositories/PrismaWriteUserRepository';
 import { PrismaStockVisualizationRepository } from '@infrastructure/stock-management/visualization/repositories/PrismaStockVisualizationRepository';
 import { PrismaStockCommandRepository } from '@infrastructure/stock-management/manipulation/repositories/PrismaStockCommandRepository';
 import { CreateStockCommandHandler } from '@domain/stock-management/manipulation/use-cases/CreateStockCommandHandler';
@@ -60,8 +60,8 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   const stockVisualizationService = new StockVisualizationService(prismaRepository);
 
-  const readUserRepo = new ReadUserRepository();
-  const writeUserRepo = new WriteUserRepository();
+  const readUserRepo = new PrismaReadUserRepository();
+  const writeUserRepo = new PrismaWriteUserRepository();
   const userService = new UserService(readUserRepo, writeUserRepo);
 
   const stockController = new StockControllerVisualization(stockVisualizationService, userService);
@@ -179,7 +179,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   logger.info('Routes for POST /stocks/:stockId/items configured (with authorization)');
 
   router.patch(
-    STOCK_ROUTES.UPDATE_ITEM_QUANTITY,
+    STOCK_ROUTES.UPDATE_ITEM,
     authorizeStockWrite,
     async (req, res: express.Response) => {
       await manipulationController.updateItem(req as UpdateItemRequest, res);
