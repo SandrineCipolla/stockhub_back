@@ -114,8 +114,14 @@ src/
 │   ├── stock-management/
 │   │   ├── manipulation/      # Command side (CQRS — Write)
 │   │   └── visualization/     # Query side (CQRS — Read)
-│   └── authorization/         # Entités famille, rôles
-├── infrastructure/             # Repositories Prisma
+│   ├── authorization/         # Entités famille, rôles
+│   ├── prediction/            # Prédictions stock (services + interfaces)
+│   └── user/
+│       ├── repositories/      # IReadUserRepository, IWriteUserRepository
+│       └── services/          # UserService (OID → ID interne)
+├── infrastructure/
+│   └── user/
+│       └── repositories/      # PrismaReadUserRepository, PrismaWriteUserRepository
 ├── api/                        # Controllers, routes, DTOs
 ├── authentication/             # Azure AD B2C (Passport Bearer)
 ├── authorization/              # Middleware autorisation stocks
