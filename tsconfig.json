@@ -21,7 +21,6 @@
       "@utils/*": ["src/Utils/*"],
       "@config/*": ["src/config/*"],
       "@api/*": ["src/api/*"],
-      "@services/*": ["src/services/*"],
       "@authentication/*": ["src/authentication/*"],
       "@authorization/*": ["src/authorization/*"],
       "@serverSetup/*": ["src/serverSetup/*"],

@@ -5,11 +5,10 @@ import {
   StockSummaryDto,
   StockDetailDto,
 } from '@domain/stock-management/visualization/models/StockSummary';
-import { UserService } from '@services/userService';
+import { UserService } from '@domain/user/services/UserService';
 import { HTTP_CODE_OK } from '@utils/httpCodes';
-import { ReadUserRepository } from '@services/readUserRepository';
-import { WriteUserRepository } from '@services/writeUserRepository';
-import { PoolConnection } from 'mysql2/promise';
+import { PrismaReadUserRepository } from '@infrastructure/user/repositories/PrismaReadUserRepository';
+import { PrismaWriteUserRepository } from '@infrastructure/user/repositories/PrismaWriteUserRepository';
 import { Request, Response } from 'express';
 
 jest.mock('@domain/stock-management/visualization/services/StockVisualizationService');
@@ -23,18 +22,16 @@ describe('StockControllerVisualization', () => {
   let res: jest.Mocked<Response>;
   let mockStockService: jest.Mocked<StockVisualizationService>;
   let mockUserService: jest.Mocked<UserService>;
-  let mockReadUserRepo: jest.Mocked<ReadUserRepository>;
-  let mockWriteUserRepo: jest.Mocked<WriteUserRepository>;
+  let mockReadUserRepo: jest.Mocked<PrismaReadUserRepository>;
+  let mockWriteUserRepo: jest.Mocked<PrismaWriteUserRepository>;
 
   beforeEach(() => {
     mockReadUserRepo = {
-      connection: {} as PoolConnection,
       readUserByOID: jest.fn().mockResolvedValue(1),
-    } as unknown as jest.Mocked<ReadUserRepository>;
+    } as unknown as jest.Mocked<PrismaReadUserRepository>;
     mockWriteUserRepo = {
-      connection: {} as PoolConnection,
-      writeUser: jest.fn().mockResolvedValue(1),
-    } as unknown as jest.Mocked<WriteUserRepository>;
+      addUser: jest.fn().mockResolvedValue(undefined),
+    } as unknown as jest.Mocked<PrismaWriteUserRepository>;
     mockStockService = new StockVisualizationService(
       {} as any
     ) as jest.Mocked<StockVisualizationService>;

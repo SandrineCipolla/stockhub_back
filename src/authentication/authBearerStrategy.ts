@@ -2,9 +2,9 @@ import passportAzureAd, { ITokenPayload, VerifyCallback } from 'passport-azure-a
 import express from 'express';
 import { rootMain } from '@utils/logger';
 
-import { ReadUserRepository } from '@services/readUserRepository';
-import { WriteUserRepository } from '@services/writeUserRepository';
-import { UserService } from '@services/userService';
+import { PrismaReadUserRepository } from '@infrastructure/user/repositories/PrismaReadUserRepository';
+import { PrismaWriteUserRepository } from '@infrastructure/user/repositories/PrismaWriteUserRepository';
+import { UserService } from '@domain/user/services/UserService';
 import { authConfigoptions } from '@config/authenticationConfig';
 
 interface AzureB2CTokenPayload extends ITokenPayload {
@@ -13,8 +13,8 @@ interface AzureB2CTokenPayload extends ITokenPayload {
 }
 
 async function createUserService() {
-  const readUserRepository = new ReadUserRepository();
-  const writeUserRepository = new WriteUserRepository();
+  const readUserRepository = new PrismaReadUserRepository();
+  const writeUserRepository = new PrismaWriteUserRepository();
 
   return new UserService(readUserRepository, writeUserRepository);
 }

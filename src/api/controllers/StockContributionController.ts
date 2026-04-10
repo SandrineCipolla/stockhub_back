@@ -1,7 +1,7 @@
 import express from 'express';
 import { AuthenticatedRequest } from '@api/types/AuthenticatedRequest';
 import { CreateContributionRequest, ReviewContributionRequest } from '@api/types/StockRequestTypes';
-import { UserService } from '@services/userService';
+import { UserService } from '@domain/user/services/UserService';
 import { CreateContributionCommandHandler } from '@domain/stock-management/manipulation/use-cases/CreateContributionCommandHandler';
 import { ReviewContributionCommandHandler } from '@domain/stock-management/manipulation/use-cases/ReviewContributionCommandHandler';
 import { CreateContributionCommand } from '@domain/stock-management/manipulation/commands/CreateContributionCommand';

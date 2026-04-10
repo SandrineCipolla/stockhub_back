@@ -1,7 +1,8 @@
 import { PrismaClient } from '@prisma/client';
+import { IReadUserRepository } from '@domain/user/repositories/IReadUserRepository';
 import { rootReadUserRepository } from '@utils/logger';
 
-export class ReadUserRepository {
+export class PrismaReadUserRepository implements IReadUserRepository {
   private prisma: PrismaClient;
 
   constructor(prismaClient?: PrismaClient) {

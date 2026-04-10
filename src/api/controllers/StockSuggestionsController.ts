@@ -4,7 +4,7 @@ import { AISuggestion, IAIService } from '@domain/ai/IAIService';
 import { IPredictionRepository } from '@domain/prediction/repositories/IPredictionRepository';
 import { StockPredictionService } from '@domain/prediction/services/StockPredictionService';
 import { IStockVisualizationRepository } from '@domain/stock-management/visualization/queries/IStockVisualizationRepository';
-import { UserService } from '@services/userService';
+import { UserService } from '@domain/user/services/UserService';
 import { HTTP_CODE_OK } from '@utils/httpCodes';
 import { CustomError, sendError } from '@api/errors';
 import { rootController } from '@utils/logger';

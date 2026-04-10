@@ -16,7 +16,6 @@ module.exports = {
     '^@utils/(.*)$': '<rootDir>/src/Utils/$1',
     '^@config/(.*)$': '<rootDir>/src/config/$1',
     '^@api/(.*)$': '<rootDir>/src/api/$1',
-    '^@services/(.*)$': '<rootDir>/src/services/$1',
     '^@authentication/(.*)$': '<rootDir>/src/authentication/$1',
     '^@authorization/(.*)$': '<rootDir>/src/authorization/$1',
     '^@serverSetup/(.*)$': '<rootDir>/src/serverSetup/$1',
