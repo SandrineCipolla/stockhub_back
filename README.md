@@ -2,7 +2,7 @@
 
 ![CI/CD Pipeline](https://github.com/sandrineCipolla/stockhub_back/actions/workflows/main_stockhub-back.yml/badge.svg)
 ![Security Audit](https://github.com/SandrineCipolla/stockhub_back/actions/workflows/security-audit.yml/badge.svg)
-![Version](https://img.shields.io/badge/version-2.6.0-blue)
+![Version](https://img.shields.io/badge/version-2.10.0-blue)
 ![Node](https://img.shields.io/badge/node-22.x-brightgreen)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
 ![Coverage](https://img.shields.io/badge/coverage-92%25-brightgreen)
@@ -87,27 +87,12 @@ Usage personnel/familial → visibilité rapide sur les stocks, valeur ajoutée 
 
 ### Inclus (V2)
 
-- `GET /api/v2/stocks` → liste des stocks de l'utilisateur
-- `GET /api/v2/stocks/{stockId}` → détail d'un stock
-- `POST /api/v2/stocks` → créer un stock
-- `PATCH /api/v2/stocks/{stockId}` → modifier un stock
-- `DELETE /api/v2/stocks/{stockId}` → supprimer un stock (cascade items)
-- `GET /api/v2/stocks/{stockId}/items` → items d'un stock
-- `POST /api/v2/stocks/{stockId}/items` → ajouter un item
-- `PATCH /api/v2/stocks/{stockId}/items/{itemId}` → modifier un item (label, description, quantité, stock minimum)
-- `DELETE /api/v2/stocks/{stockId}/items/{itemId}` → supprimer un item
-- `GET /api/v2/stocks/{stockId}/items/{itemId}/history` → historique des quantités d'un item
-- `GET /api/v2/stocks/{stockId}/items/{itemId}/prediction` → prédiction de rupture de stock
-- `GET /api/v2/stocks/{stockId}/suggestions` → suggestions IA de réapprovisionnement
-- `GET /api/v2/stocks/{stockId}/collaborators` → lister les collaborateurs d'un stock
-- `POST /api/v2/stocks/{stockId}/collaborators` → ajouter un collaborateur (OWNER/EDITOR, règle hiérarchique)
-- `PATCH /api/v2/stocks/{stockId}/collaborators/{collaboratorId}` → modifier le rôle d'un collaborateur
-- `DELETE /api/v2/stocks/{stockId}/collaborators/{collaboratorId}` → retirer un collaborateur
-- `POST /api/v2/stocks/{stockId}/items/{itemId}/contributions` → soumettre une contribution (VIEWER_CONTRIBUTOR)
-- `GET /api/v2/stocks/{stockId}/contributions` → lister les contributions en attente
-- `PATCH /api/v2/stocks/{stockId}/contributions/{contributionId}` → approuver ou rejeter une contribution (OWNER/EDITOR)
+Gestion complète des stocks (CRUD), items, collaborateurs, contributions (workflow VIEWER_CONTRIBUTOR), prédictions de rupture et suggestions IA.
+
 - Entités DDD (`Stock`, `StockItem`, `Quantity`) + service `StockVisualizationService`
 - Autorisation par rôles (OWNER / EDITOR / VIEWER / VIEWER_CONTRIBUTOR)
+
+📖 Liste détaillée des endpoints : [Swagger Editor](https://editor.swagger.io/?url=https://raw.githubusercontent.com/SandrineCipolla/stockhub_back/main/docs/openapi.yaml)
 
 ## 3. Cas d'usage
 
@@ -145,7 +130,7 @@ TDD appliqué sur `Quantity`, `StockItem`, `Stock`, puis `StockVisualizationServ
 
 ### Sécurité
 
-- **Authentification** : Azure AD B2C avec tokens JWT Bearer (routes V1 et V2)
+- **Authentification** : Azure AD B2C avec tokens JWT Bearer (routes V2)
 - **Autorisation** : Système hybride basé sur les ressources (voir [ADR-009](./docs/adr/ADR-009-resource-based-authorization.md))
 - **RGPD** : Politique de protection des données personnelles → [docs/rgpd.md](./docs/rgpd.md)
   - Groupes familiaux + rôles par stock (OWNER/EDITOR/VIEWER/VIEWER_CONTRIBUTOR)
@@ -227,50 +212,12 @@ stock_collaborators → id, stockId, userId, role, grantedAt, grantedBy
 
 ## 6. API V2
 
-### Endpoints
+La documentation complète de l'API est disponible via Swagger UI :
 
-```
-GET    /api/v2/stocks                                              → Liste des stocks de l'utilisateur
-GET    /api/v2/stocks/:stockId                                     → Détail d'un stock
-POST   /api/v2/stocks                                              → Créer un stock
-PATCH  /api/v2/stocks/:stockId                                     → Modifier un stock
-DELETE /api/v2/stocks/:stockId                                     → Supprimer (cascade items)
-GET    /api/v2/stocks/:stockId/items                               → Items d'un stock
-POST   /api/v2/stocks/:stockId/items                               → Ajouter un item
-PATCH  /api/v2/stocks/:stockId/items/:itemId                       → Modifier un item (label, description, quantité, stock minimum)
-GET    /api/v2/stocks/:stockId/collaborators                       → Lister les collaborateurs
-POST   /api/v2/stocks/:stockId/collaborators                       → Ajouter un collaborateur (OWNER/EDITOR, règle hiérarchique)
-PATCH  /api/v2/stocks/:stockId/collaborators/:collaboratorId       → Modifier le rôle d'un collaborateur
-DELETE /api/v2/stocks/:stockId/collaborators/:collaboratorId       → Retirer un collaborateur
-DELETE /api/v2/stocks/:stockId/items/:itemId                       → Supprimer un item
+- **Local** (back démarré) : [http://localhost:3006/api-docs](http://localhost:3006/api-docs)
+- **Swagger Editor** (toujours accessible) : [Visualiser la spec OpenAPI](https://editor.swagger.io/?url=https://raw.githubusercontent.com/SandrineCipolla/stockhub_back/main/docs/openapi.yaml)
 
-# Prédictions & Suggestions IA
-GET    /api/v2/stocks/:stockId/items/:itemId/history     → Historique de consommation
-GET    /api/v2/stocks/:stockId/items/:itemId/prediction  → Prédiction (daysUntilEmpty, trend, recommendedRestock)
-GET    /api/v2/stocks/:stockId/suggestions               → Suggestions IA (cache 24h, LLM Mistral)
-
-# Contributions (VIEWER_CONTRIBUTOR workflow)
-POST   /api/v2/stocks/:stockId/items/:itemId/contributions    → Soumettre une contribution (quantité proposée)
-GET    /api/v2/stocks/:stockId/contributions                  → Lister les contributions PENDING
-PATCH  /api/v2/stocks/:stockId/contributions/:contributionId  → Approuver ou rejeter une contribution (OWNER)
-```
-
-Catégories valides : `alimentation` | `hygiene` | `artistique`
-
-### Exemple de réponse
-
-```json
-{
-  "id": 1,
-  "label": "Cuisine",
-  "description": "Stock alimentaire",
-  "category": "alimentation",
-  "items": [
-    { "label": "Pâtes", "quantity": { "value": 5 }, "minimumStock": 2 },
-    { "label": "Riz", "quantity": { "value": 0 }, "minimumStock": 1 }
-  ]
-}
-```
+Le fichier source est dans `docs/openapi.yaml`.
 
 ## 7. Scripts disponibles
 
@@ -290,7 +237,7 @@ npx prisma migrate deploy # Appliquer les migrations
 npx prisma studio        # Interface visuelle DB
 
 # Tests
-npm run test:unit        # 253 tests unitaires
+npm run test:unit        # 266 tests unitaires
 npm run test:integration # Tests d'intégration (TestContainers)
 npm run test:e2e         # Tests E2E Playwright
 npm run test:coverage    # Rapport de couverture
@@ -309,7 +256,7 @@ npm run azure:stop       # Arrêter l'app Azure après les tests
 
 ### Unitaires (TDD)
 
-**253 tests — couverture globale : 92% statements | 82% branches | 94% functions**
+**266 tests — couverture globale : 92% statements | 82% branches | 94% functions**
 Seuil minimum configuré : 80% sur toutes les métriques (`jest.ci.config.js`)
 
 - `Quantity` : valeurs invalides interdites
@@ -396,15 +343,17 @@ Content-Type: application/json
 
 #### Script de validation rapide (curl)
 
+> ⚠️ **Azure F1 (prod)** : démarrer l'app avant les tests — `npm run azure:start` — et l'arrêter après — `npm run azure:stop`.
+
 ```bash
 export JWT_TOKEN="eyJ0eXAiOiJKV1Qi..."  # Token récupéré depuis DevTools
 
-# Test API V2
-curl -X GET "https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net/api/v2/stocks" \
+# Test sur staging (toujours disponible)
+curl -X GET "https://stockhub-back.onrender.com/api/v2/stocks" \
      -H "Authorization: Bearer $JWT_TOKEN"
 
 # Test sans token (doit retourner 401)
-curl -X GET "https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net/api/v2/stocks"
+curl -X GET "https://stockhub-back.onrender.com/api/v2/stocks"
 ```
 
 #### Checklist de test
@@ -425,10 +374,8 @@ Middleware Azure Bearer appliqué sur **toutes les routes** :
 
 ```typescript
 app.use('/api/v2', authenticationMiddleware, stockRoutesV2);
-app.use('/api/v1', authenticationMiddleware, stockRoutes);
 ```
 
-- 🔒 `/api/v1` protégé (Bearer Token requis)
 - 🔒 `/api/v2` protégé (Bearer Token requis)
 
 ### Performance
