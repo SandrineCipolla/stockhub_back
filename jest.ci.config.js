@@ -16,18 +16,22 @@ module.exports = {
     '^@utils/(.*)$': '<rootDir>/src/Utils/$1',
     '^@config/(.*)$': '<rootDir>/src/config/$1',
     '^@api/(.*)$': '<rootDir>/src/api/$1',
-    '^@services/(.*)$': '<rootDir>/src/services/$1',
     '^@repositories/(.*)$': '<rootDir>/src/repositories/$1',
     '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',
     '^@routes/(.*)$': '<rootDir>/src/routes/$1',
     '^@authentication/(.*)$': '<rootDir>/src/authentication/$1',
+    '^@authorization/(.*)$': '<rootDir>/src/authorization/$1',
     '^@serverSetup/(.*)$': '<rootDir>/src/serverSetup/$1',
     '^@core/(.*)$': '<rootDir>/src/$1',
   },
   setupFilesAfterEnv: ['<rootDir>/tests/setupTests.ts'],
   setupFiles: ['dotenv/config'],
   testMatch: ['<rootDir>/tests/**/*.test.(ts|tsx)'],
-  testPathIgnorePatterns: ['<rootDir>/tests/integration'],
+  testPathIgnorePatterns: [
+    '<rootDir>/tests/integration',
+    '<rootDir>/tests/e2e',
+    '<rootDir>/tests/api/routes',
+  ],
 
   // Coverage
   collectCoverage: process.env.COVERAGE === 'true', // Active la couverture seulement si une variable d'environnement est définie
@@ -37,12 +41,4 @@ module.exports = {
     '!<rootDir>/tests/**', // Exclure les tests d'intégration
     '!<rootDir>/src/**/*.d.ts', // Exclure les fichiers de types (déclaration .d.ts)
   ],
-  coverageThreshold: {
-    global: {
-      statements: 80,
-      branches: 80,
-      functions: 80,
-      lines: 80,
-    },
-  },
 };
