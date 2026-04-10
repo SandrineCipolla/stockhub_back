@@ -18,8 +18,8 @@ export const STOCK_ROUTES = {
   /** POST - Add item to stock (requires write permission) */
   ADD_ITEM: '/stocks/:stockId/items',
 
-  /** PATCH - Update item quantity (requires write permission) */
-  UPDATE_ITEM_QUANTITY: '/stocks/:stockId/items/:itemId',
+  /** PATCH - Update item (label, description, quantity — requires write permission) */
+  UPDATE_ITEM: '/stocks/:stockId/items/:itemId',
 
   /** DELETE - Remove an item from a stock (requires write permission) */
   DELETE_ITEM: '/stocks/:stockId/items/:itemId',

@@ -179,7 +179,7 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
   logger.info('Routes for POST /stocks/:stockId/items configured (with authorization)');
 
   router.patch(
-    STOCK_ROUTES.UPDATE_ITEM_QUANTITY,
+    STOCK_ROUTES.UPDATE_ITEM,
     authorizeStockWrite,
     async (req, res: express.Response) => {
       await manipulationController.updateItem(req as UpdateItemRequest, res);

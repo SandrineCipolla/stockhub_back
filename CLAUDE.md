@@ -234,6 +234,22 @@ gh issue create --label "back,bug" ...
 gh issue edit <numero> --repo SandrineCipolla/stockhub_back --add-label "back,bug"
 ```
 
+### Association au GitHub Project (obligatoire)
+
+Toute issue doit être associée au **GitHub Project** du projet :
+
+```bash
+# Lors de la création
+gh issue create --label "back,bug" --project "StockHub V2"
+
+# Après coup si oublié
+gh issue edit <numero> --repo SandrineCipolla/stockhub_back --add-project "StockHub V2"
+```
+
+**URL du project** : https://github.com/users/SandrineCipolla/projects/3
+
+Sans cette association, l'issue n'apparaît pas dans le board de suivi et ne peut pas être déplacée entre les colonnes (Backlog → In Progress → Done).
+
 ### ⚠️ AVANT de créer une issue GitHub
 
 **Format User Story** :
