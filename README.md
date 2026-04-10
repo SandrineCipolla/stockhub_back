@@ -5,7 +5,7 @@
 ![Version](https://img.shields.io/badge/version-2.10.0-blue)
 ![Node](https://img.shields.io/badge/node-22.x-brightgreen)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
-![Coverage](https://img.shields.io/badge/coverage-92%25-brightgreen)
+[![Coverage](https://codecov.io/gh/SandrineCipolla/stockhub_back/branch/main/graph/badge.svg)](https://codecov.io/gh/SandrineCipolla/stockhub_back)
 
 StockHub est une application web conçue pour aider les familles à gérer leurs stocks de produits (alimentaires, artistiques...).
 Elle permet aux utilisateurs de visualiser l'état des stocks et de les mettre à jour facilement.
