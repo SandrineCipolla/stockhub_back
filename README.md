@@ -2,7 +2,7 @@
 
 ![CI/CD Pipeline](https://github.com/sandrineCipolla/stockhub_back/actions/workflows/main_stockhub-back.yml/badge.svg)
 ![Security Audit](https://github.com/SandrineCipolla/stockhub_back/actions/workflows/security-audit.yml/badge.svg)
-![Version](https://img.shields.io/badge/version-2.10.0-blue)
+![Version](https://img.shields.io/github/package-json/v/SandrineCipolla/stockhub_back)
 ![Node](https://img.shields.io/badge/node-22.x-brightgreen)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
 [![Coverage](https://codecov.io/gh/SandrineCipolla/stockhub_back/branch/main/graph/badge.svg)](https://codecov.io/gh/SandrineCipolla/stockhub_back)
