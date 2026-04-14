@@ -549,7 +549,7 @@ paths:
         Retourne la dernière prédiction calculée pour un item (cache). Si aucune prédiction n'existe, en calcule une à la volée.
 
         Les prédictions sont recalculées automatiquement chaque matin (cron job).
-        Si l'historique est insuffisant (< 7 jours de consommation), `simulatedFallback=true` est retourné.
+        Si l'historique est insuffisant (< 7 jours de consommation), retourne 404.
       tags:
         - Stock Prediction (READ)
       security:
@@ -598,8 +598,24 @@ paths:
                 recommendedRestock: 32
                 simulatedFallback: false
                 generatedAt: '2026-03-25T08:00:00.000Z'
+        '400':
+          description: itemId invalide (non numérique)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: Invalid itemId
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Historique insuffisant pour calculer une prédiction (< 7 jours de consommation)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: Insufficient history to compute a prediction for this item
         '500':
           $ref: '#/components/responses/InternalServerError'
 
