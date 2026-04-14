@@ -154,6 +154,9 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs:
       - continuous-integration
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false # Les déploiements font la queue pour éviter les 409
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -178,7 +181,7 @@ jobs:
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'stockhub-back'
           slot-name: 'Production'
