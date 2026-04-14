@@ -19,6 +19,10 @@ export class StockPredictionController {
   public async getItemHistory(req: express.Request, res: express.Response): Promise<void> {
     try {
       const itemId = Number(req.params.itemId);
+      if (isNaN(itemId)) {
+        res.status(400).json({ error: 'Invalid itemId' });
+        return;
+      }
       const days = Number(req.query['days'] ?? 90);
 
       const history = await this.historyRepository.getHistory(itemId, days);
@@ -35,6 +39,10 @@ export class StockPredictionController {
   public async getItemPrediction(req: express.Request, res: express.Response): Promise<void> {
     try {
       const itemId = Number(req.params.itemId);
+      if (isNaN(itemId)) {
+        res.status(400).json({ error: 'Invalid itemId' });
+        return;
+      }
       const currentQuantity = Number(req.query['quantity'] ?? 0);
       const minimumStock = Number(req.query['minimumStock'] ?? 1);
 

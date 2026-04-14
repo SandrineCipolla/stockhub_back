@@ -120,6 +120,18 @@ describe('StockPredictionController', () => {
       });
     });
 
+    describe('invalid itemId', () => {
+      it('should return 400 when itemId is not a number', async () => {
+        req = { params: { itemId: 'abc' }, query: {} };
+
+        await controller.getItemHistory(req as Request, res);
+
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Invalid itemId' });
+        expect(mockHistoryRepository.getHistory).not.toHaveBeenCalled();
+      });
+    });
+
     describe('error case', () => {
       it('should call sendError when the repository throws', async () => {
         const error = new Error('DB connection failed');
@@ -179,6 +191,18 @@ describe('StockPredictionController', () => {
         await controller.getItemPrediction(req as Request, res);
 
         expect(mockPredictionService.computeAndSave).toHaveBeenCalledWith(3, 0, 1);
+      });
+    });
+
+    describe('invalid itemId', () => {
+      it('should return 400 when itemId is not a number', async () => {
+        req = { params: { itemId: 'abc' }, query: {} };
+
+        await controller.getItemPrediction(req as Request, res);
+
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Invalid itemId' });
+        expect(mockPredictionRepository.getLatest).not.toHaveBeenCalled();
       });
     });
 
