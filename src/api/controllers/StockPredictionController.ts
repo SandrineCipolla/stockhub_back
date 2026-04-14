@@ -55,6 +55,13 @@ export class StockPredictionController {
         `getItemPrediction itemId=${itemId} simulatedFallback=${prediction.simulatedFallback} cached=${existing !== null}`
       );
 
+      if (prediction.simulatedFallback) {
+        res
+          .status(404)
+          .json({ error: 'Insufficient history to compute a prediction for this item' });
+        return;
+      }
+
       res.status(HTTP_CODE_OK).json(prediction);
     } catch (err) {
       rootException(err as Error);
