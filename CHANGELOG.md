@@ -1,5 +1,36 @@
 # Changelog
 
+## [2.11.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.10.1...v2.11.0) (2026-04-14)
+
+
+### ✨ Features
+
+* **prediction:** return 400 when itemId is not a valid number — closes [#195](https://github.com/SandrineCipolla/stockhub_back/issues/195) ([#220](https://github.com/SandrineCipolla/stockhub_back/issues/220)) ([dd4d2d9](https://github.com/SandrineCipolla/stockhub_back/commit/dd4d2d93963f1edc22439f47c9e18a0425137dda))
+* **prediction:** return 404 when history is insufficient — closes [#196](https://github.com/SandrineCipolla/stockhub_back/issues/196) ([#221](https://github.com/SandrineCipolla/stockhub_back/issues/221)) ([ce2fe53](https://github.com/SandrineCipolla/stockhub_back/commit/ce2fe53a09db9695be4f1df1b9eb2ba59da7a50d))
+
+
+### 🐛 Bug Fixes
+
+* **ci:** queue concurrent deploys and upgrade to webapps-deploy@v3 — closes [#222](https://github.com/SandrineCipolla/stockhub_back/issues/222) ([#223](https://github.com/SandrineCipolla/stockhub_back/issues/223)) ([47f72b6](https://github.com/SandrineCipolla/stockhub_back/commit/47f72b66c3f37866c153bd4f9322fc77e6f4ff34))
+
+
+### ⚡ Performance Improvements
+
+* **ci:** move e2e tests to manual trigger and weekly schedule — closes [#211](https://github.com/SandrineCipolla/stockhub_back/issues/211) ([#213](https://github.com/SandrineCipolla/stockhub_back/issues/213)) ([347434f](https://github.com/SandrineCipolla/stockhub_back/commit/347434f1c343b689cbee058b141219cdd8de7139))
+
+
+### 🧪 Tests
+
+* **controllers:** add unit tests for contribution and collaborator — closes [#204](https://github.com/SandrineCipolla/stockhub_back/issues/204) ([#206](https://github.com/SandrineCipolla/stockhub_back/issues/206)) ([58dd1dc](https://github.com/SandrineCipolla/stockhub_back/commit/58dd1dc05948ed99a0f1d211a0e2360a7b7918ff))
+
+
+### 🔧 Chores
+
+* **ci:** add coverageThreshold to jest.ci.config — closes [#208](https://github.com/SandrineCipolla/stockhub_back/issues/208) ([#210](https://github.com/SandrineCipolla/stockhub_back/issues/210)) ([990e40f](https://github.com/SandrineCipolla/stockhub_back/commit/990e40ff69d3d608d93864531cdb5ea39889b596))
+* **ci:** switch security audit to --audit-level=high — closes [#215](https://github.com/SandrineCipolla/stockhub_back/issues/215) ([#216](https://github.com/SandrineCipolla/stockhub_back/issues/216)) ([4c0f81c](https://github.com/SandrineCipolla/stockhub_back/commit/4c0f81c299cdd4184595ced4317db2aca043d94f))
+* **infra:** update render.yaml nodeVersion to 22 — closes [#217](https://github.com/SandrineCipolla/stockhub_back/issues/217) ([#218](https://github.com/SandrineCipolla/stockhub_back/issues/218)) ([d149b3c](https://github.com/SandrineCipolla/stockhub_back/commit/d149b3cd5ebd655f9e67d870fc79339d8ecaa7ca))
+* **readme:** replace static version badge with dynamic package-json badge ([#226](https://github.com/SandrineCipolla/stockhub_back/issues/226)) ([8d83b99](https://github.com/SandrineCipolla/stockhub_back/commit/8d83b993c26f6f22bc1568861e5032d48de3e207))
+
 ## [2.10.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.10.0...v2.10.1) (2026-04-14)
 
 ### 🐛 Bug Fixes
