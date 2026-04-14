@@ -1,9 +1,6 @@
 import { Response } from 'express';
 import { StockCollaboratorController } from '@api/controllers/StockCollaboratorController';
-import {
-  ICollaboratorRepository,
-  CollaboratorData,
-} from '@domain/authorization/collaboration/repositories/ICollaboratorRepository';
+import { ICollaboratorRepository } from '@domain/authorization/collaboration/repositories/ICollaboratorRepository';
 import { AddCollaboratorCommandHandler } from '@domain/authorization/collaboration/command-handlers/AddCollaboratorCommandHandler';
 import { UpdateCollaboratorRoleCommandHandler } from '@domain/authorization/collaboration/command-handlers/UpdateCollaboratorRoleCommandHandler';
 import { RemoveCollaboratorCommandHandler } from '@domain/authorization/collaboration/command-handlers/RemoveCollaboratorCommandHandler';
@@ -14,24 +11,15 @@ import {
   UpdateCollaboratorRequest,
   RemoveCollaboratorRequest,
 } from '@api/types/StockRequestTypes';
+import { makeCollaborator } from '../../fixtures/collaborator.fixtures';
 
 jest.mock('@utils/logger', () => ({
   rootController: { getChildCategory: () => ({ info: jest.fn(), error: jest.fn() }) },
 }));
 
-const makeCollaborator = (overrides: Partial<CollaboratorData> = {}): CollaboratorData => ({
-  id: 1,
-  stockId: 2,
-  userId: 10,
-  userEmail: 'collab@test.com',
-  role: 'EDITOR',
-  grantedAt: new Date('2026-04-10'),
-  grantedBy: 5,
-  ...overrides,
-});
-
 describe('StockCollaboratorController', () => {
   let controller: StockCollaboratorController;
+  let req: Partial<AuthorizedRequest>;
   let res: jest.Mocked<Response>;
   let mockRepository: jest.Mocked<ICollaboratorRepository>;
   let mockAddHandler: jest.Mocked<Pick<AddCollaboratorCommandHandler, 'handle'>>;
@@ -78,9 +66,9 @@ describe('StockCollaboratorController', () => {
         ];
         mockRepository.findByStockId.mockResolvedValue(collaborators);
 
-        const req = { params: { stockId: '2' } } as unknown as AuthorizedRequest;
+        req = { params: { stockId: '2' } };
 
-        await controller.listCollaborators(req, res);
+        await controller.listCollaborators(req as AuthorizedRequest, res);
 
         expect(mockRepository.findByStockId).toHaveBeenCalledWith(2);
         expect(res.status).toHaveBeenCalledWith(HTTP_CODE_OK);
@@ -92,9 +80,9 @@ describe('StockCollaboratorController', () => {
       it('should return 500 when the repository throws', async () => {
         mockRepository.findByStockId.mockRejectedValue(new Error('DB error'));
 
-        const req = { params: { stockId: '2' } } as unknown as AuthorizedRequest;
+        req = { params: { stockId: '2' } };
 
-        await controller.listCollaborators(req, res);
+        await controller.listCollaborators(req as AuthorizedRequest, res);
 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
@@ -108,14 +96,14 @@ describe('StockCollaboratorController', () => {
         const collaborator = makeCollaborator();
         mockAddHandler.handle.mockResolvedValue(collaborator);
 
-        const req = {
+        req = {
           params: { stockId: '2' },
           body: { email: 'collab@test.com', role: 'EDITOR' },
           userID: 'owner@test.com',
           stockRole: 'OWNER',
-        } as unknown as AddCollaboratorRequest & AuthorizedRequest;
+        };
 
-        await controller.addCollaborator(req, res);
+        await controller.addCollaborator(req as AddCollaboratorRequest & AuthorizedRequest, res);
 
         expect(mockAddHandler.handle).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(HTTP_CODE_CREATED);
@@ -125,14 +113,14 @@ describe('StockCollaboratorController', () => {
 
     describe('validation', () => {
       it('should return 400 when email is missing', async () => {
-        const req = {
+        req = {
           params: { stockId: '2' },
           body: { role: 'EDITOR' },
           userID: 'owner@test.com',
           stockRole: 'OWNER',
-        } as unknown as AddCollaboratorRequest & AuthorizedRequest;
+        };
 
-        await controller.addCollaborator(req, res);
+        await controller.addCollaborator(req as AddCollaboratorRequest & AuthorizedRequest, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ error: 'email and role are required' });
@@ -140,14 +128,14 @@ describe('StockCollaboratorController', () => {
       });
 
       it('should return 400 when role is missing', async () => {
-        const req = {
+        req = {
           params: { stockId: '2' },
           body: { email: 'collab@test.com' },
           userID: 'owner@test.com',
           stockRole: 'OWNER',
-        } as unknown as AddCollaboratorRequest & AuthorizedRequest;
+        };
 
-        await controller.addCollaborator(req, res);
+        await controller.addCollaborator(req as AddCollaboratorRequest & AuthorizedRequest, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ error: 'email and role are required' });
@@ -158,14 +146,14 @@ describe('StockCollaboratorController', () => {
       it('should return 403 when the handler throws a Forbidden error', async () => {
         mockAddHandler.handle.mockRejectedValue(new Error('Forbidden: insufficient role'));
 
-        const req = {
+        req = {
           params: { stockId: '2' },
           body: { email: 'collab@test.com', role: 'EDITOR' },
           userID: 'viewer@test.com',
           stockRole: 'VIEWER',
-        } as unknown as AddCollaboratorRequest & AuthorizedRequest;
+        };
 
-        await controller.addCollaborator(req, res);
+        await controller.addCollaborator(req as AddCollaboratorRequest & AuthorizedRequest, res);
 
         expect(res.status).toHaveBeenCalledWith(403);
       });
@@ -173,14 +161,14 @@ describe('StockCollaboratorController', () => {
       it('should return 400 when the handler throws a not found error', async () => {
         mockAddHandler.handle.mockRejectedValue(new Error('User not found'));
 
-        const req = {
+        req = {
           params: { stockId: '2' },
           body: { email: 'unknown@test.com', role: 'EDITOR' },
           userID: 'owner@test.com',
           stockRole: 'OWNER',
-        } as unknown as AddCollaboratorRequest & AuthorizedRequest;
+        };
 
-        await controller.addCollaborator(req, res);
+        await controller.addCollaborator(req as AddCollaboratorRequest & AuthorizedRequest, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
       });
@@ -188,14 +176,14 @@ describe('StockCollaboratorController', () => {
       it('should return 500 for unexpected errors', async () => {
         mockAddHandler.handle.mockRejectedValue(new Error('Unexpected failure'));
 
-        const req = {
+        req = {
           params: { stockId: '2' },
           body: { email: 'collab@test.com', role: 'EDITOR' },
           userID: 'owner@test.com',
           stockRole: 'OWNER',
-        } as unknown as AddCollaboratorRequest & AuthorizedRequest;
+        };
 
-        await controller.addCollaborator(req, res);
+        await controller.addCollaborator(req as AddCollaboratorRequest & AuthorizedRequest, res);
 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
@@ -209,13 +197,16 @@ describe('StockCollaboratorController', () => {
         const updated = makeCollaborator({ role: 'VIEWER' });
         mockUpdateHandler.handle.mockResolvedValue(updated);
 
-        const req = {
+        req = {
           params: { stockId: '2', collaboratorId: '1' },
           body: { role: 'VIEWER' },
           stockRole: 'OWNER',
-        } as unknown as UpdateCollaboratorRequest & AuthorizedRequest;
+        };
 
-        await controller.updateCollaboratorRole(req, res);
+        await controller.updateCollaboratorRole(
+          req as UpdateCollaboratorRequest & AuthorizedRequest,
+          res
+        );
 
         expect(mockUpdateHandler.handle).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(HTTP_CODE_OK);
@@ -225,13 +216,16 @@ describe('StockCollaboratorController', () => {
 
     describe('validation', () => {
       it('should return 400 when collaboratorId is not a number', async () => {
-        const req = {
+        req = {
           params: { stockId: '2', collaboratorId: 'abc' },
           body: { role: 'VIEWER' },
           stockRole: 'OWNER',
-        } as unknown as UpdateCollaboratorRequest & AuthorizedRequest;
+        };
 
-        await controller.updateCollaboratorRole(req, res);
+        await controller.updateCollaboratorRole(
+          req as UpdateCollaboratorRequest & AuthorizedRequest,
+          res
+        );
 
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ error: 'Invalid collaborator ID' });
@@ -239,13 +233,12 @@ describe('StockCollaboratorController', () => {
       });
 
       it('should return 400 when role is missing', async () => {
-        const req = {
-          params: { stockId: '2', collaboratorId: '1' },
-          body: {},
-          stockRole: 'OWNER',
-        } as unknown as UpdateCollaboratorRequest & AuthorizedRequest;
+        req = { params: { stockId: '2', collaboratorId: '1' }, body: {}, stockRole: 'OWNER' };
 
-        await controller.updateCollaboratorRole(req, res);
+        await controller.updateCollaboratorRole(
+          req as UpdateCollaboratorRequest & AuthorizedRequest,
+          res
+        );
 
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ error: 'role is required' });
@@ -256,13 +249,16 @@ describe('StockCollaboratorController', () => {
       it('should return 403 when the handler throws a Forbidden error', async () => {
         mockUpdateHandler.handle.mockRejectedValue(new Error('Forbidden: insufficient role'));
 
-        const req = {
+        req = {
           params: { stockId: '2', collaboratorId: '1' },
           body: { role: 'VIEWER' },
           stockRole: 'EDITOR',
-        } as unknown as UpdateCollaboratorRequest & AuthorizedRequest;
+        };
 
-        await controller.updateCollaboratorRole(req, res);
+        await controller.updateCollaboratorRole(
+          req as UpdateCollaboratorRequest & AuthorizedRequest,
+          res
+        );
 
         expect(res.status).toHaveBeenCalledWith(403);
       });
@@ -270,13 +266,16 @@ describe('StockCollaboratorController', () => {
       it('should return 404 when the handler throws a not found error', async () => {
         mockUpdateHandler.handle.mockRejectedValue(new Error('Collaborator not found'));
 
-        const req = {
+        req = {
           params: { stockId: '2', collaboratorId: '99' },
           body: { role: 'VIEWER' },
           stockRole: 'OWNER',
-        } as unknown as UpdateCollaboratorRequest & AuthorizedRequest;
+        };
 
-        await controller.updateCollaboratorRole(req, res);
+        await controller.updateCollaboratorRole(
+          req as UpdateCollaboratorRequest & AuthorizedRequest,
+          res
+        );
 
         expect(res.status).toHaveBeenCalledWith(404);
       });
@@ -284,13 +283,16 @@ describe('StockCollaboratorController', () => {
       it('should return 500 for unexpected errors', async () => {
         mockUpdateHandler.handle.mockRejectedValue(new Error('Unexpected failure'));
 
-        const req = {
+        req = {
           params: { stockId: '2', collaboratorId: '1' },
           body: { role: 'VIEWER' },
           stockRole: 'OWNER',
-        } as unknown as UpdateCollaboratorRequest & AuthorizedRequest;
+        };
 
-        await controller.updateCollaboratorRole(req, res);
+        await controller.updateCollaboratorRole(
+          req as UpdateCollaboratorRequest & AuthorizedRequest,
+          res
+        );
 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
@@ -303,12 +305,12 @@ describe('StockCollaboratorController', () => {
       it('should return 204 on successful removal', async () => {
         mockRemoveHandler.handle.mockResolvedValue(undefined);
 
-        const req = {
-          params: { stockId: '2', collaboratorId: '1' },
-          stockRole: 'OWNER',
-        } as unknown as RemoveCollaboratorRequest & AuthorizedRequest;
+        req = { params: { stockId: '2', collaboratorId: '1' }, stockRole: 'OWNER' };
 
-        await controller.removeCollaborator(req, res);
+        await controller.removeCollaborator(
+          req as RemoveCollaboratorRequest & AuthorizedRequest,
+          res
+        );
 
         expect(mockRemoveHandler.handle).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(204);
@@ -318,12 +320,12 @@ describe('StockCollaboratorController', () => {
 
     describe('validation', () => {
       it('should return 400 when collaboratorId is not a number', async () => {
-        const req = {
-          params: { stockId: '2', collaboratorId: 'abc' },
-          stockRole: 'OWNER',
-        } as unknown as RemoveCollaboratorRequest & AuthorizedRequest;
+        req = { params: { stockId: '2', collaboratorId: 'abc' }, stockRole: 'OWNER' };
 
-        await controller.removeCollaborator(req, res);
+        await controller.removeCollaborator(
+          req as RemoveCollaboratorRequest & AuthorizedRequest,
+          res
+        );
 
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ error: 'Invalid collaborator ID' });
@@ -335,12 +337,12 @@ describe('StockCollaboratorController', () => {
       it('should return 403 when the handler throws a Forbidden error', async () => {
         mockRemoveHandler.handle.mockRejectedValue(new Error('Forbidden: insufficient role'));
 
-        const req = {
-          params: { stockId: '2', collaboratorId: '1' },
-          stockRole: 'EDITOR',
-        } as unknown as RemoveCollaboratorRequest & AuthorizedRequest;
+        req = { params: { stockId: '2', collaboratorId: '1' }, stockRole: 'EDITOR' };
 
-        await controller.removeCollaborator(req, res);
+        await controller.removeCollaborator(
+          req as RemoveCollaboratorRequest & AuthorizedRequest,
+          res
+        );
 
         expect(res.status).toHaveBeenCalledWith(403);
       });
@@ -348,12 +350,12 @@ describe('StockCollaboratorController', () => {
       it('should return 404 when the handler throws a not found error', async () => {
         mockRemoveHandler.handle.mockRejectedValue(new Error('Collaborator not found'));
 
-        const req = {
-          params: { stockId: '2', collaboratorId: '99' },
-          stockRole: 'OWNER',
-        } as unknown as RemoveCollaboratorRequest & AuthorizedRequest;
+        req = { params: { stockId: '2', collaboratorId: '99' }, stockRole: 'OWNER' };
 
-        await controller.removeCollaborator(req, res);
+        await controller.removeCollaborator(
+          req as RemoveCollaboratorRequest & AuthorizedRequest,
+          res
+        );
 
         expect(res.status).toHaveBeenCalledWith(404);
       });
@@ -361,12 +363,12 @@ describe('StockCollaboratorController', () => {
       it('should return 500 for unexpected errors', async () => {
         mockRemoveHandler.handle.mockRejectedValue(new Error('Unexpected failure'));
 
-        const req = {
-          params: { stockId: '2', collaboratorId: '1' },
-          stockRole: 'OWNER',
-        } as unknown as RemoveCollaboratorRequest & AuthorizedRequest;
+        req = { params: { stockId: '2', collaboratorId: '1' }, stockRole: 'OWNER' };
 
-        await controller.removeCollaborator(req, res);
+        await controller.removeCollaborator(
+          req as RemoveCollaboratorRequest & AuthorizedRequest,
+          res
+        );
 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
