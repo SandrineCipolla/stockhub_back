@@ -41,4 +41,12 @@ module.exports = {
     '<rootDir>/src/api/controllers/**/*.ts',
     '!<rootDir>/src/**/*.d.ts',
   ],
+  coverageThreshold: {
+    global: {
+      statements: 85,
+      branches: 65,
+      functions: 90,
+      lines: 85,
+    },
+  },
 };
