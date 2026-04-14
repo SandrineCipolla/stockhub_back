@@ -164,8 +164,8 @@ describe('StockPredictionController', () => {
     });
 
     describe('no cached prediction', () => {
-      it('should compute and return 200 when no prediction is cached', async () => {
-        const computed = makePrediction({ simulatedFallback: true });
+      it('should compute and return 200 when history is sufficient', async () => {
+        const computed = makePrediction({ simulatedFallback: false });
         mockPredictionRepository.getLatest.mockResolvedValue(null);
         mockPredictionService.computeAndSave.mockResolvedValue(computed);
 
@@ -182,7 +182,7 @@ describe('StockPredictionController', () => {
       });
 
       it('should use default quantity=0 and minimumStock=1 when not provided', async () => {
-        const computed = makePrediction();
+        const computed = makePrediction({ simulatedFallback: false });
         mockPredictionRepository.getLatest.mockResolvedValue(null);
         mockPredictionService.computeAndSave.mockResolvedValue(computed);
 
@@ -191,6 +191,35 @@ describe('StockPredictionController', () => {
         await controller.getItemPrediction(req as Request, res);
 
         expect(mockPredictionService.computeAndSave).toHaveBeenCalledWith(3, 0, 1);
+      });
+
+      it('should return 404 when history is insufficient (simulatedFallback)', async () => {
+        const fallback = makePrediction({ simulatedFallback: true });
+        mockPredictionRepository.getLatest.mockResolvedValue(null);
+        mockPredictionService.computeAndSave.mockResolvedValue(fallback);
+
+        req = { params: { itemId: '4' }, query: {} };
+
+        await controller.getItemPrediction(req as Request, res);
+
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.json).toHaveBeenCalledWith({
+          error: 'Insufficient history to compute a prediction for this item',
+        });
+      });
+    });
+
+    describe('cached prediction with simulatedFallback', () => {
+      it('should return 404 when the cached prediction is a simulated fallback', async () => {
+        const cached = makePrediction({ simulatedFallback: true });
+        mockPredictionRepository.getLatest.mockResolvedValue(cached);
+
+        req = { params: { itemId: '1' }, query: {} };
+
+        await controller.getItemPrediction(req as Request, res);
+
+        expect(mockPredictionService.computeAndSave).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(404);
       });
     });
 
