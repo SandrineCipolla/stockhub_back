@@ -1,5 +1,34 @@
 # Changelog
 
+## [2.10.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.10.0...v2.10.1) (2026-04-14)
+
+
+### 🐛 Bug Fixes
+
+* **coverage:** restrict collectCoverageFrom to domain and controllers — refs [#199](https://github.com/SandrineCipolla/stockhub_back/issues/199) ([#203](https://github.com/SandrineCipolla/stockhub_back/issues/203)) ([e356325](https://github.com/SandrineCipolla/stockhub_back/commit/e3563254d37cef2f32949afdc69f87864377f02a))
+* **prediction:** remove unused AuthenticatedRequest from StockPredictionController ([bc64b66](https://github.com/SandrineCipolla/stockhub_back/commit/bc64b6607f028242622a8cad26475b40093bbac0))
+
+
+### ♻️ Code Refactoring
+
+* **arch:** align src/ with DDD/CQRS layers — closes [#194](https://github.com/SandrineCipolla/stockhub_back/issues/194) ([#197](https://github.com/SandrineCipolla/stockhub_back/issues/197)) ([bc64b66](https://github.com/SandrineCipolla/stockhub_back/commit/bc64b6607f028242622a8cad26475b40093bbac0))
+* **domain:** rename manipulation folders — closes [#189](https://github.com/SandrineCipolla/stockhub_back/issues/189) ([#190](https://github.com/SandrineCipolla/stockhub_back/issues/190)) ([017ee49](https://github.com/SandrineCipolla/stockhub_back/commit/017ee49474bc2bd95904dc3df497ae21fc744ba7))
+* **tests:** remove redundant getValue happy-path tests on VOs — closes [#187](https://github.com/SandrineCipolla/stockhub_back/issues/187) ([#188](https://github.com/SandrineCipolla/stockhub_back/issues/188)) ([9c6bddf](https://github.com/SandrineCipolla/stockhub_back/commit/9c6bddf69a5443f1e9f8150d965721f620de975e))
+
+
+### 📚 Documentation
+
+* **adr:** add ADR-016 REST, ADR-017 Express, ADR-018 GitHub Flow — closes [#181](https://github.com/SandrineCipolla/stockhub_back/issues/181) [#182](https://github.com/SandrineCipolla/stockhub_back/issues/182) [#183](https://github.com/SandrineCipolla/stockhub_back/issues/183) ([#184](https://github.com/SandrineCipolla/stockhub_back/issues/184)) ([4c12ebe](https://github.com/SandrineCipolla/stockhub_back/commit/4c12ebe68bb035a415a20d035f8bfb879a505e47))
+* **adr:** clarify V1 context and add versioning best practices in ADR-005 ([#186](https://github.com/SandrineCipolla/stockhub_back/issues/186)) ([92873be](https://github.com/SandrineCipolla/stockhub_back/commit/92873be03867e2ab74fda1103c8fd586e339df68))
+* **readme:** update architecture diagram to reflect [#194](https://github.com/SandrineCipolla/stockhub_back/issues/194) changes ([#202](https://github.com/SandrineCipolla/stockhub_back/issues/202)) ([1b91348](https://github.com/SandrineCipolla/stockhub_back/commit/1b91348424b4d4d39acef3ddf4107874f3607fa1))
+* **readme:** update README — closes [#198](https://github.com/SandrineCipolla/stockhub_back/issues/198) ([#200](https://github.com/SandrineCipolla/stockhub_back/issues/200)) ([89c3173](https://github.com/SandrineCipolla/stockhub_back/commit/89c3173e5055a12d42c882fcc64093bc3d8edf25))
+
+
+### 🔧 Chores
+
+* **ci:** integrate Codecov for dynamic coverage badge — closes [#199](https://github.com/SandrineCipolla/stockhub_back/issues/199) ([#201](https://github.com/SandrineCipolla/stockhub_back/issues/201)) ([b645c13](https://github.com/SandrineCipolla/stockhub_back/commit/b645c133f933220bf97850c2c3beb1977622470e))
+* remove V1 code and migrate UserService to Prisma — closes [#192](https://github.com/SandrineCipolla/stockhub_back/issues/192) ([#193](https://github.com/SandrineCipolla/stockhub_back/issues/193)) ([c22d07e](https://github.com/SandrineCipolla/stockhub_back/commit/c22d07e4550f532c0d25ee999f8018ff1c86cdb4))
+
 ## [2.10.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.9.0...v2.10.0) (2026-04-05)
 
 ### ✨ Features
