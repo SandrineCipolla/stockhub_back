@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.2](https://github.com/SandrineCipolla/stockhub_back/compare/v2.10.1...v2.10.2) (2026-04-14)
+
+
+### 🧪 Tests
+
+* **controllers:** add unit tests for contribution and collaborator — closes [#204](https://github.com/SandrineCipolla/stockhub_back/issues/204) ([#206](https://github.com/SandrineCipolla/stockhub_back/issues/206)) ([58dd1dc](https://github.com/SandrineCipolla/stockhub_back/commit/58dd1dc05948ed99a0f1d211a0e2360a7b7918ff))
+
 ## [2.10.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.10.0...v2.10.1) (2026-04-14)
 
 ### 🐛 Bug Fixes
