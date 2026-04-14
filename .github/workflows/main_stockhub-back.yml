@@ -10,6 +10,8 @@ on:
     branches: ['*']
     types: [opened, synchronize]
   workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1' # Lundi 6h UTC — détection régressions e2e sur main
 
 jobs:
   # CI Job - s'exécute sur toutes les branches
@@ -41,10 +43,10 @@ jobs:
       - name: Check outdated dependencies (informational)
         run: npm outdated || true
 
-  # E2E Tests - s'exécute sur PR vers main et workflow_dispatch
+  # E2E Tests - déclenchement manuel ou cron hebdomadaire (lundi 6h UTC)
   e2e-tests:
     runs-on: ubuntu-latest
-    if: (github.event_name == 'pull_request' && github.base_ref == 'main') || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     needs:
       - continuous-integration
     services:
