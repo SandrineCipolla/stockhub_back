@@ -220,19 +220,41 @@ Endpoints : `GET/POST /stocks`, `GET /stocks/:id/items`, `POST/PATCH /stocks/:id
 
 ### Labels obligatoires
 
-Toute issue doit avoir **au minimum** ces deux labels :
+Toute issue doit avoir **au minimum** ces trois labels :
 
-| Label | Valeur                                                         |
-| ----- | -------------------------------------------------------------- |
-| Scope | `back` (toujours sur ce repo)                                  |
-| Type  | `bug`, `enhancement`, `documentation`, `tech`, `clean code`... |
+| Label    | Valeur                                                         |
+| -------- | -------------------------------------------------------------- |
+| Scope    | `back` (toujours sur ce repo)                                  |
+| Type     | `bug`, `enhancement`, `documentation`, `tech`, `clean code`... |
+| Priorité | `P0`, `P1`, `P2`, `P3` ou `P4` (voir critères ci-dessous)      |
 
 Sans ces labels, les issues n'apparaissent pas correctement dans le GitHub Project board.
 
 ```bash
-gh issue create --label "back,bug" ...
-gh issue edit <numero> --repo SandrineCipolla/stockhub_back --add-label "back,bug"
+gh issue create --label "back,bug,P2" ...
+gh issue edit <numero> --repo SandrineCipolla/stockhub_back --add-label "back,bug,P2"
 ```
+
+### Labels de priorité — critères
+
+| Label  | Description | Quand l'utiliser                                                                                  |
+| ------ | ----------- | ------------------------------------------------------------------------------------------------- |
+| **P0** | Bloquant    | Production inaccessible, fuite de données, vulnérabilité exploitée, CI cassée bloquant tout merge |
+| **P1** | Haute       | Fonctionnalité principale cassée sans workaround, régression prod, blocage démo RNCP              |
+| **P2** | Moyenne     | Bug avec workaround, feature importante du sprint, dette technique impactant la productivité      |
+| **P3** | Basse       | Amélioration UX, polish, feature secondaire, documentation non urgente                            |
+| **P4** | Très basse  | Nice-to-have hors scope soutenance, feature post-RNCP, refactoring cosmétique                     |
+
+### Champs GitHub Project board
+
+Après création, remplir ces deux champs sur le board :
+
+| Champ          | Valeurs                                                          | Règle                                                                       |
+| -------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **Priorité**   | 🔴 Très haute → ⚪ Très basse                                    | Même échelle que P0–P4. Peut être ajusté au planning sans modifier l'issue. |
+| **Estimation** | `XS (≤1h)` / `S (1-3h)` / `M (3-7h)` / `L (7-15h)` / `XL (15h+)` | Format `taille (plage)`, ex. `M (3-7h)`                                     |
+
+Correspondance labels ↔ board : P0 → 🔴, P1 → 🟠, P2 → 🟡, P3 → 🟢, P4 → ⚪
 
 ### Association au GitHub Project (obligatoire)
 
