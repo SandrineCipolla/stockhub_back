@@ -4,6 +4,7 @@ import { StockVisualizationService } from '@domain/stock-management/visualizatio
 import {
   StockSummaryDto,
   StockDetailDto,
+  StockItemDto,
 } from '@domain/stock-management/visualization/models/StockSummary';
 import { UserService } from '@domain/user/services/UserService';
 import { HTTP_CODE_OK } from '@utils/httpCodes';
@@ -149,6 +150,54 @@ describe('StockControllerVisualization', () => {
         mockUserService.convertOIDtoUserID = jest.fn().mockRejectedValue(error);
 
         await controller.getStockItems(req as Request, res as Response);
+
+        expect(sendError).toHaveBeenCalledWith(res, error as CustomError);
+      });
+    });
+  });
+
+  describe('getStockItemDetail', () => {
+    describe('when the item is found', () => {
+      it('should return 200 and the item detail', async () => {
+        req = { userID: 'test-oid', params: { stockId: '1', itemId: '3' } };
+        mockUserService.convertOIDtoUserID = jest.fn().mockResolvedValue({ value: 42 });
+        const mockItem: StockItemDto = {
+          id: 3,
+          label: 'Tomates bio',
+          description: 'Tomates bio du marché',
+          quantity: 12,
+          minimumStock: 5,
+          status: 'optimal',
+        };
+        mockStockService.getStockItemDetail = jest.fn().mockResolvedValue(mockItem);
+
+        await controller.getStockItemDetail(req as Request, res as Response);
+
+        expect(res.status).toHaveBeenCalledWith(HTTP_CODE_OK);
+        expect(res.json).toHaveBeenCalledWith(mockItem);
+      });
+    });
+
+    describe('when the item is not found', () => {
+      it('should return 404', async () => {
+        req = { userID: 'test-oid', params: { stockId: '1', itemId: '99' } };
+        mockUserService.convertOIDtoUserID = jest.fn().mockResolvedValue({ value: 42 });
+        mockStockService.getStockItemDetail = jest.fn().mockResolvedValue(null);
+
+        await controller.getStockItemDetail(req as Request, res as Response);
+
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Item not found' });
+      });
+    });
+
+    describe('when the service call fails', () => {
+      it('should call sendError', async () => {
+        req = { userID: 'test-oid', params: { stockId: '1', itemId: '3' } };
+        const error = new Error('fail item detail');
+        mockUserService.convertOIDtoUserID = jest.fn().mockRejectedValue(error);
+
+        await controller.getStockItemDetail(req as Request, res as Response);
 
         expect(sendError).toHaveBeenCalledWith(res, error as CustomError);
       });
