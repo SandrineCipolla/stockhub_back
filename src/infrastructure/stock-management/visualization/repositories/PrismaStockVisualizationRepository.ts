@@ -146,4 +146,43 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
       } as DependencyTelemetry);
     }
   }
+
+  async getStockItemDetail(
+    stockId: number,
+    itemId: number,
+    userId: number
+  ): Promise<StockItem | null> {
+    try {
+      const stock = await this.prisma.stock.findFirst({
+        where: {
+          id: stockId,
+          OR: [{ userId }, { collaborators: { some: { userId } } }],
+        },
+      });
+      if (!stock) {
+        throw new Error('Stock not found or access denied');
+      }
+
+      const item = await this.prisma.item.findFirst({
+        where: { id: itemId, stockId },
+      });
+
+      if (!item) {
+        return null;
+      }
+
+      return new StockItem(
+        item.id,
+        item.label ?? '',
+        item.quantity ?? 0,
+        item.description ?? '',
+        item.minimumStock,
+        item.stockId ?? stockId,
+        item.updatedAt
+      );
+    } catch (error) {
+      rootException(error as Error);
+      throw error;
+    }
+  }
 }

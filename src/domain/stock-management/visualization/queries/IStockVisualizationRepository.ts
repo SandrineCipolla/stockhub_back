@@ -12,4 +12,6 @@ export interface IStockVisualizationRepository {
   getStockDetails(stockId: number, userId: number): Promise<Stock | null>;
 
   getStockItems(stockId: number, userId: number): Promise<StockItem[]>;
+
+  getStockItemDetail(stockId: number, itemId: number, userId: number): Promise<StockItem | null>;
 }
