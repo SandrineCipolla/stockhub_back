@@ -1,6 +1,6 @@
 # État du projet — StockHub Back
 
-> Mis à jour le 13 juin 2026  
+> Mis à jour le 15 juin 2026  
 > Reprise après ~2 mois de standby (dernier commit actif : mi-avril 2026)
 
 ---
@@ -13,7 +13,7 @@
 | **Stack**        | Node.js 22, Express 4, TypeScript 5.8, Prisma 6, MySQL |
 | **Architecture** | DDD/CQRS — 18 ADRs documentés                          |
 | **Auth**         | Azure AD B2C (Bearer JWT)                              |
-| **Tests**        | 201 unitaires · 4 intégration · 4 E2E                  |
+| **Tests**        | 298 unitaires · 4 intégration · 4 E2E                  |
 | **Prod**         | Azure App Service (West Europe)                        |
 | **Staging**      | Render.com + Aiven MySQL                               |
 | **Soutenance**   | RNCP7 — mars 2027 (~9 mois)                            |
@@ -64,6 +64,16 @@
 
 ---
 
+## Session du 15 juin 2026 — ce qui a été fait
+
+| Ticket | Action                                                                                                     | PR            |
+| ------ | ---------------------------------------------------------------------------------------------------------- | ------------- |
+| #230   | Fix dépendances vulnérables — `npm audit fix` : 73 packages mis à jour, toutes les high/critical éliminées | #231 mergé ✅ |
+
+**Restant #230** : 9 vulnérabilités moderate dans `uuid` via `@azure/msal-node` / `passport-azure-ad` / `testcontainers` — non fixables sans `--force` (breaking change). Non bloquantes pour le CI (`--audit-level=high`).
+
+---
+
 ## Session du 12 juin 2026 — ce qui a été fait
 
 | Ticket         | Action                                                                                                                                            | PR            |
@@ -77,9 +87,7 @@
 
 ## Prochaine session — par où commencer
 
-**Option A — dette technique urgente** : #230 dépendances vulnérables (`npm audit fix` + vérifier les breaking changes sur `@azure/msal-node`)
-
-**Option B — feature métier** : #191 `GET /stocks/:id/items/:itemId` (2-3h, endpoint manquant, priorité rouge Phase 1)
+**#191** `GET /stocks/:id/items/:itemId` — endpoint manquant, priorité rouge Phase 1 (2-3h)
 
 ---
 
@@ -89,17 +97,17 @@ La roadmap prévoyait **Phase 1 en mai–juin 2026**. Le projet reprend exacteme
 
 ### Phase 1 — Finitions V2 (mai–juin 2026) — EN COURS
 
-| #    | Ticket                                                | Estimation | Priorité |
-| ---- | ----------------------------------------------------- | ---------- | -------- |
-| #191 | `GET /stocks/:id/items/:itemId` — endpoint manquant   | 2-3h       | 🔴       |
-| #169 | Remplacer l'enum `category` par champ free-text       | 3-4h       | 🔴       |
-| #158 | Champ `note` libre sur les items                      | 2-3h       | 🔴       |
-| #219 | Validation Zod sur les inputs controllers             | 5-7h       | 🔴       |
-| #207 | Extraire les fixtures inline vers `tests/fixtures/`   | 2-3h       | 🟡       |
-| #209 | Améliorer la branch coverage (handlers, controllers)  | 3-5h       | 🟡       |
-| #214 | Ajouter le job integration tests dans la CI           | 4-6h       | 🟡       |
-| #230 | Mettre à jour les dépendances vulnérables (CI cassée) | 3-7h       | 🔴       |
-| #225 | Branch protection rules sur `main`                    | 30min      | 🟡       |
+| #    | Ticket                                               | Estimation | Priorité |
+| ---- | ---------------------------------------------------- | ---------- | -------- |
+| #191 | `GET /stocks/:id/items/:itemId` — endpoint manquant  | 2-3h       | 🔴       |
+| #169 | Remplacer l'enum `category` par champ free-text      | 3-4h       | 🔴       |
+| #158 | Champ `note` libre sur les items                     | 2-3h       | 🔴       |
+| #219 | Validation Zod sur les inputs controllers            | 5-7h       | 🔴       |
+| #207 | Extraire les fixtures inline vers `tests/fixtures/`  | 2-3h       | 🟡       |
+| #209 | Améliorer la branch coverage (handlers, controllers) | 3-5h       | 🟡       |
+| #214 | Ajouter le job integration tests dans la CI          | 4-6h       | 🟡       |
+| #230 | ~~Mettre à jour les dépendances vulnérables~~        | ✅ done    | —        |
+| #225 | Branch protection rules sur `main`                   | 30min      | 🟡       |
 
 ### Phase 2 — Features domaine (juil–sept 2026)
 
@@ -117,7 +125,7 @@ Compte démo seed (#125), SonarCloud optionnel (#205), polish doc + démo
 
 ## Tickets ouverts résumés
 
-**Phase 1 (priorité immédiate) :** #230, #191, #169, #158, #219, #207, #209, #214, #225
+**Phase 1 (priorité immédiate) :** #191, #169, #158, #219, #207, #209, #214, #225 _(#230 ✅ done)_
 
 **Phase 2 :** #135, #133, #138, #224, #36, #126, #131
 

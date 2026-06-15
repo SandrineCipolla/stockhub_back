@@ -243,7 +243,7 @@ npx prisma migrate deploy # Appliquer les migrations
 npx prisma studio        # Interface visuelle DB
 
 # Tests
-npm run test:unit        # 266 tests unitaires
+npm run test:unit        # 298 tests unitaires
 npm run test:integration # Tests d'intégration (TestContainers)
 npm run test:e2e         # Tests E2E Playwright
 npm run test:coverage    # Rapport de couverture
@@ -262,7 +262,7 @@ npm run azure:stop       # Arrêter l'app Azure après les tests
 
 ### Unitaires (TDD)
 
-**266 tests — couverture globale : 92% statements | 82% branches | 94% functions**
+**298 tests — couverture globale : 92% statements | 82% branches | 94% functions**
 Seuil minimum configuré : 80% sur toutes les métriques (`jest.ci.config.js`)
 
 - `Quantity` : valeurs invalides interdites
