@@ -1,6 +1,6 @@
 # État du projet — StockHub Back
 
-> Mis à jour le 12 juin 2026  
+> Mis à jour le 13 juin 2026  
 > Reprise après ~2 mois de standby (dernier commit actif : mi-avril 2026)
 
 ---
@@ -64,22 +64,42 @@
 
 ---
 
+## Session du 12 juin 2026 — ce qui a été fait
+
+| Ticket         | Action                                                                                                                                            | PR            |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| #227 (nouveau) | Bug : pool de connexions MySQL épuisé après inactivité — `DB_CONNECTION_LIMIT` passé de 3 à 20 dans `compose.yaml`                                | #229 mergé ✅ |
+| #230 (nouveau) | Ticket ouvert : 25 vulnérabilités npm dont 1 critical (`protobufjs`) et 7 high (`axios`, `grpc-js`…) — CI Security Audit cassée depuis 3 semaines | à traiter     |
+
+**Cause racine du #227** : chaque repository crée son propre `new PrismaClient()` — 9 pools ouverts simultanément, nodemon accumule les connexions sans les fermer. Workaround : limite relevée à 20. Fix définitif (singleton Prisma) reste à faire.
+
+---
+
+## Prochaine session — par où commencer
+
+**Option A — dette technique urgente** : #230 dépendances vulnérables (`npm audit fix` + vérifier les breaking changes sur `@azure/msal-node`)
+
+**Option B — feature métier** : #191 `GET /stocks/:id/items/:itemId` (2-3h, endpoint manquant, priorité rouge Phase 1)
+
+---
+
 ## Où on en est par rapport à la roadmap
 
 La roadmap prévoyait **Phase 1 en mai–juin 2026**. Le projet reprend exactement à cette fenêtre.
 
 ### Phase 1 — Finitions V2 (mai–juin 2026) — EN COURS
 
-| #    | Ticket                                               | Estimation | Priorité |
-| ---- | ---------------------------------------------------- | ---------- | -------- |
-| #191 | `GET /stocks/:id/items/:itemId` — endpoint manquant  | 2-3h       | 🔴       |
-| #169 | Remplacer l'enum `category` par champ free-text      | 3-4h       | 🔴       |
-| #158 | Champ `note` libre sur les items                     | 2-3h       | 🔴       |
-| #219 | Validation Zod sur les inputs controllers            | 5-7h       | 🔴       |
-| #207 | Extraire les fixtures inline vers `tests/fixtures/`  | 2-3h       | 🟡       |
-| #209 | Améliorer la branch coverage (handlers, controllers) | 3-5h       | 🟡       |
-| #214 | Ajouter le job integration tests dans la CI          | 4-6h       | 🟡       |
-| #225 | Branch protection rules sur `main`                   | 30min      | 🟡       |
+| #    | Ticket                                                | Estimation | Priorité |
+| ---- | ----------------------------------------------------- | ---------- | -------- |
+| #191 | `GET /stocks/:id/items/:itemId` — endpoint manquant   | 2-3h       | 🔴       |
+| #169 | Remplacer l'enum `category` par champ free-text       | 3-4h       | 🔴       |
+| #158 | Champ `note` libre sur les items                      | 2-3h       | 🔴       |
+| #219 | Validation Zod sur les inputs controllers             | 5-7h       | 🔴       |
+| #207 | Extraire les fixtures inline vers `tests/fixtures/`   | 2-3h       | 🟡       |
+| #209 | Améliorer la branch coverage (handlers, controllers)  | 3-5h       | 🟡       |
+| #214 | Ajouter le job integration tests dans la CI           | 4-6h       | 🟡       |
+| #230 | Mettre à jour les dépendances vulnérables (CI cassée) | 3-7h       | 🔴       |
+| #225 | Branch protection rules sur `main`                    | 30min      | 🟡       |
 
 ### Phase 2 — Features domaine (juil–sept 2026)
 
@@ -97,7 +117,7 @@ Compte démo seed (#125), SonarCloud optionnel (#205), polish doc + démo
 
 ## Tickets ouverts résumés
 
-**Phase 1 (priorité immédiate) :** #191, #169, #158, #219, #207, #209, #214, #225
+**Phase 1 (priorité immédiate) :** #230, #191, #169, #158, #219, #207, #209, #214, #225
 
 **Phase 2 :** #135, #133, #138, #224, #36, #126, #131
 
