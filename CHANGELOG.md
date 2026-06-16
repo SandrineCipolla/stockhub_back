@@ -1,5 +1,30 @@
 # Changelog
 
+## [2.12.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.11.0...v2.12.0) (2026-06-16)
+
+
+### ✨ Features
+
+* **items:** add GET /stocks/:stockId/items/:itemId — closes [#191](https://github.com/SandrineCipolla/stockhub_back/issues/191) ([#233](https://github.com/SandrineCipolla/stockhub_back/issues/233)) ([9dc65f0](https://github.com/SandrineCipolla/stockhub_back/commit/9dc65f0bc2a8adeed4c830ab2ffb63f0e1e60c72))
+
+
+### 🐛 Bug Fixes
+
+* **deps:** update @babel/core, form-data to fix high vulnerabilities, add knip as explicit dep ([#234](https://github.com/SandrineCipolla/stockhub_back/issues/234)) ([31a6a87](https://github.com/SandrineCipolla/stockhub_back/commit/31a6a878a0c8f2bdfc4df29c8445b9b9f1ffee92))
+* **deps:** update vulnerable dependencies via npm audit fix — closes [#230](https://github.com/SandrineCipolla/stockhub_back/issues/230) ([#231](https://github.com/SandrineCipolla/stockhub_back/issues/231)) ([91b6f87](https://github.com/SandrineCipolla/stockhub_back/commit/91b6f87c7c97d2a353d399ea620584295e70f12b))
+
+
+### 📚 Documentation
+
+* update session notes for june 16 (security fixes and Dependabot) ([e1f5a54](https://github.com/SandrineCipolla/stockhub_back/commit/e1f5a54fc69bd862a98ee998e412bb053582f28c))
+* update test count to 298 and add session notes for june 15 ([4c53233](https://github.com/SandrineCipolla/stockhub_back/commit/4c53233191213388f9f84137cc52693c8844ffa9))
+* update test count to 304 and modify project status notes for June 16 ([b8c8d1a](https://github.com/SandrineCipolla/stockhub_back/commit/b8c8d1a6b82416124a7098e0fad4e67d5094951b))
+
+
+### 🔧 Chores
+
+* **deps:** bump js-yaml from 4.1.1 to 4.2.0 ([#236](https://github.com/SandrineCipolla/stockhub_back/issues/236)) ([9f5e3b4](https://github.com/SandrineCipolla/stockhub_back/commit/9f5e3b4e58a3299a5de2f7f2dca1857c464d0289))
+
 ## [2.11.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.10.1...v2.11.0) (2026-04-14)
 
 ### ✨ Features
