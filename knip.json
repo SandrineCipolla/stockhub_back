@@ -7,9 +7,10 @@
     "@azure/msal-node",
     "@testcontainers/mysql",
     "testcontainers",
-    "express-serve-static-core"
+    "express-serve-static-core",
+    "form-data"
   ],
-  "ignoreBinaries": ["knip", "az"],
+  "ignoreBinaries": ["az"],
   "ignoreExportsUsedInFile": true,
   "includeEntryExports": false,
   "jest": {
