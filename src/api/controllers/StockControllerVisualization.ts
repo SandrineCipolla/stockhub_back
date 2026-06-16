@@ -79,4 +79,34 @@ export class StockControllerVisualization {
       sendError(res, err as CustomError);
     }
   }
+
+  public async getStockItemDetail(req: express.Request, res: express.Response) {
+    try {
+      const OID = req.userID || '';
+
+      if (!this.validateOID(OID, res)) {
+        return;
+      }
+
+      const userID = await this.userService.convertOIDtoUserID(OID);
+      const stockId = Number(req.params.stockId);
+      const itemId = Number(req.params.itemId);
+      const item = await this.stockVisualizationService.getStockItemDetail(
+        stockId,
+        itemId,
+        userID.value
+      );
+
+      if (!item) {
+        res.status(404).json({ error: 'Item not found' });
+        return;
+      }
+
+      rootMain.info(`getStockItemDetail OID=${OID} stockId=${stockId} itemId=${itemId}`);
+      res.status(HTTP_CODE_OK).json(item);
+    } catch (err: unknown) {
+      rootException(err as Error);
+      sendError(res, err as CustomError);
+    }
+  }
 }

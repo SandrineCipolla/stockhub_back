@@ -10,6 +10,7 @@ describe('StockVisualizationService', () => {
         getAllStocks: async () => [],
         getStockDetails: async () => null,
         getStockItems: async () => [],
+        getStockItemDetail: async () => null,
       };
       const service = new StockVisualizationService(fakeRepository);
       it('should return an empty array', async () => {
@@ -31,6 +32,7 @@ describe('StockVisualizationService', () => {
         ],
         getStockDetails: async () => null,
         getStockItems: async () => [],
+        getStockItemDetail: async () => null,
       };
       const service = new StockVisualizationService(fakeRepository);
       it('should return stock with aggregates', async () => {
@@ -61,6 +63,7 @@ describe('StockVisualizationService', () => {
         ],
         getStockDetails: async () => null,
         getStockItems: async () => [],
+        getStockItemDetail: async () => null,
       };
       const service = new StockVisualizationService(fakeRepository);
       it('should return all stocks with aggregates', async () => {
@@ -82,6 +85,7 @@ describe('StockVisualizationService', () => {
             new StockItem(2, 'Item 2', 0, 'desc', 3, 1), // qty=0 → out-of-stock
           ]),
         getStockItems: async () => [],
+        getStockItemDetail: async () => null,
       };
       const service = new StockVisualizationService(fakeRepository);
       it('should return stock detail with items and aggregates', async () => {
@@ -102,6 +106,7 @@ describe('StockVisualizationService', () => {
         getAllStocks: async () => [],
         getStockDetails: async () => new Stock(1, 'Stock 1', 'Description 1', 'alimentation', []),
         getStockItems: async () => [],
+        getStockItemDetail: async () => null,
       };
       const service = new StockVisualizationService(fakeRepository);
       it('should return stock with 0 items and 0 quantity', async () => {
@@ -120,6 +125,7 @@ describe('StockVisualizationService', () => {
         getAllStocks: async () => [],
         getStockDetails: async () => null,
         getStockItems: async () => [],
+        getStockItemDetail: async () => null,
       };
       const service = new StockVisualizationService(fakeRepository);
       it('should throw an error', async () => {
@@ -134,6 +140,7 @@ describe('StockVisualizationService', () => {
         getAllStocks: async () => [],
         getStockDetails: async () => null,
         getStockItems: async () => [],
+        getStockItemDetail: async () => null,
       };
       const service = new StockVisualizationService(fakeRepository);
       it('should return an empty array', async () => {
@@ -150,6 +157,7 @@ describe('StockVisualizationService', () => {
           new StockItem(1, 'Item 1', 5, 'description item1', 3, 1), // qty=5, min=3 → optimal
           new StockItem(2, 'Item 2', 0, 'description item2', 3, 1), // qty=0 → out-of-stock
         ],
+        getStockItemDetail: async () => null,
       };
       const service = new StockVisualizationService(fakeRepository);
       it('should return items with status', async () => {
@@ -161,6 +169,57 @@ describe('StockVisualizationService', () => {
         expect(result[1].label).toBe('Item 2');
         expect(result[1].quantity).toBe(0);
         expect(result[1].status).toBe('out-of-stock');
+      });
+    });
+  });
+
+  describe('getStockItemDetail', () => {
+    describe('when item exists', () => {
+      const item = new StockItem(1, 'Item 1', 5, 'description item1', 3, 1);
+      const fakeRepository: IStockVisualizationRepository = {
+        getAllStocks: async () => [],
+        getStockDetails: async () => null,
+        getStockItems: async () => [],
+        getStockItemDetail: async () => item,
+      };
+      const service = new StockVisualizationService(fakeRepository);
+      it('should return the item DTO with status', async () => {
+        const result = await service.getStockItemDetail(1, 1, 1);
+        expect(result).not.toBeNull();
+        expect(result?.id).toBe(1);
+        expect(result?.label).toBe('Item 1');
+        expect(result?.quantity).toBe(5);
+        expect(result?.minimumStock).toBe(3);
+        expect(result?.status).toBe('optimal');
+      });
+    });
+
+    describe('when item does not exist', () => {
+      const fakeRepository: IStockVisualizationRepository = {
+        getAllStocks: async () => [],
+        getStockDetails: async () => null,
+        getStockItems: async () => [],
+        getStockItemDetail: async () => null,
+      };
+      const service = new StockVisualizationService(fakeRepository);
+      it('should return null', async () => {
+        const result = await service.getStockItemDetail(1, 99, 1);
+        expect(result).toBeNull();
+      });
+    });
+
+    describe('when item is critical', () => {
+      const item = new StockItem(2, 'Item 2', 0, 'description item2', 3, 1);
+      const fakeRepository: IStockVisualizationRepository = {
+        getAllStocks: async () => [],
+        getStockDetails: async () => null,
+        getStockItems: async () => [],
+        getStockItemDetail: async () => item,
+      };
+      const service = new StockVisualizationService(fakeRepository);
+      it('should return the item with out-of-stock status', async () => {
+        const result = await service.getStockItemDetail(1, 2, 1);
+        expect(result?.status).toBe('out-of-stock');
       });
     });
   });

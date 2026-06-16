@@ -36,4 +36,24 @@ export class StockVisualizationService {
       status: item.getStatus(),
     }));
   }
+
+  async getStockItemDetail(
+    stockId: number,
+    itemId: number,
+    userId: number
+  ): Promise<StockItemDto | null> {
+    const item = await this.repository.getStockItemDetail(stockId, itemId, userId);
+    if (!item) {
+      return null;
+    }
+    return {
+      id: item.id,
+      label: item.label,
+      description: item.description,
+      quantity: item.quantity,
+      minimumStock: item.minimumStock,
+      status: item.getStatus(),
+      updatedAt: item.updatedAt ? item.updatedAt.toISOString() : null,
+    };
+  }
 }

@@ -12,6 +12,9 @@ export const STOCK_ROUTES = {
   /** GET - Get all items in a stock (requires authorization) */
   ITEMS: '/stocks/:stockId/items',
 
+  /** GET - Get a single item detail (requires authorization) */
+  ITEM_DETAIL: '/stocks/:stockId/items/:itemId',
+
   /** POST - Create a new stock */
   CREATE: '/stocks',
 

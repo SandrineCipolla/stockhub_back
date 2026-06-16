@@ -165,6 +165,16 @@ const configureStockRoutesV2 = async (prismaClient?: PrismaClient): Promise<Rout
 
   logger.info('Routes for /stocks/:stockId/items configured');
 
+  router.get(
+    STOCK_ROUTES.ITEM_DETAIL,
+    authorizeStockRead,
+    async (req: express.Request, res: express.Response) => {
+      await stockController.getStockItemDetail(req, res);
+    }
+  );
+
+  logger.info(`Routes for GET ${STOCK_ROUTES.ITEM_DETAIL} configured`);
+
   // Manipulation routes
   router.post(STOCK_ROUTES.CREATE, async (req, res: express.Response) => {
     await manipulationController.createStock(req as CreateStockRequest, res);
