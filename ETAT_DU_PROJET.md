@@ -69,8 +69,10 @@
 | Ticket | Action                                                                                                                                       | PR            |
 | ------ | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
 | #191   | Implémentation `GET /stocks/:stockId/items/:itemId` sur toutes les couches DDD/CQRS — 304 tests, OpenAPI mis à jour, couverture CI maintenue | #233 mergé ✅ |
+| —      | Fix vulnérabilités high : `@babel/core` → 7.29.7, `form-data` → 4.0.6 ; `knip` ajouté en devDependency explicite ; `knip.json` nettoyé       | #234 mergé ✅ |
+| —      | Activation Dependabot sur le repo backend — 2 PRs auto-ouvertes (#235 form-data, #236 js-yaml), en cours de merge                            | —             |
 
-**En cours** : intégration côté front (appel de l'endpoint depuis l'UI).
+**En cours** : intégration côté front (appel de l'endpoint depuis l'UI) + merge des PRs Dependabot + release v2.12.0.
 
 **Remise en route staging** : Aiven MySQL relancée (instance existante), migrations + seed exécutés. `.env.aiven` mis à jour (`sslaccept=accept_invalid_certs` pour Windows). Render pointe sur `main`.
 
