@@ -1,6 +1,6 @@
 # État du projet — StockHub Back
 
-> Mis à jour le 15 juin 2026  
+> Mis à jour le 16 juin 2026  
 > Reprise après ~2 mois de standby (dernier commit actif : mi-avril 2026)
 
 ---
@@ -13,7 +13,7 @@
 | **Stack**        | Node.js 22, Express 4, TypeScript 5.8, Prisma 6, MySQL |
 | **Architecture** | DDD/CQRS — 18 ADRs documentés                          |
 | **Auth**         | Azure AD B2C (Bearer JWT)                              |
-| **Tests**        | 298 unitaires · 4 intégration · 4 E2E                  |
+| **Tests**        | 304 unitaires · 4 intégration · 4 E2E                  |
 | **Prod**         | Azure App Service (West Europe)                        |
 | **Staging**      | Render.com + Aiven MySQL                               |
 | **Soutenance**   | RNCP7 — mars 2027 (~9 mois)                            |
@@ -38,7 +38,7 @@
 | GET               | `/api/v2/stocks/:id/history`       | ✅                     |
 | GET               | `/api/v2/stocks/:id/predictions`   | ✅                     |
 | GET               | `/api/v2/stocks/:id/suggestions`   | ✅ (IA + déterministe) |
-| GET               | `/api/v2/stocks/:id/items/:itemId` | ❌ manquant (#191)     |
+| GET               | `/api/v2/stocks/:id/items/:itemId` | ✅                     |
 
 ### Fonctionnalités implémentées
 
@@ -61,6 +61,18 @@
 - Conventional commits enforced par commitlint
 - CI/CD GitHub Actions : build, unit tests, security audit, deploy staging/prod
 - Codecov badge dynamique
+
+---
+
+## Session du 16 juin 2026 — ce qui a été fait
+
+| Ticket | Action                                                                                                                                       | PR            |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| #191   | Implémentation `GET /stocks/:stockId/items/:itemId` sur toutes les couches DDD/CQRS — 304 tests, OpenAPI mis à jour, couverture CI maintenue | #233 mergé ✅ |
+
+**En cours** : intégration côté front (appel de l'endpoint depuis l'UI).
+
+**Remise en route staging** : Aiven MySQL relancée (instance existante), migrations + seed exécutés. `.env.aiven` mis à jour (`sslaccept=accept_invalid_certs` pour Windows). Render pointe sur `main`.
 
 ---
 
@@ -87,7 +99,7 @@
 
 ## Prochaine session — par où commencer
 
-**#191** `GET /stocks/:id/items/:itemId` — endpoint manquant, priorité rouge Phase 1 (2-3h)
+**#169** Remplacer l'enum `category` par champ free-text — priorité rouge Phase 1 (3-4h)
 
 ---
 
@@ -99,7 +111,7 @@ La roadmap prévoyait **Phase 1 en mai–juin 2026**. Le projet reprend exacteme
 
 | #    | Ticket                                               | Estimation | Priorité |
 | ---- | ---------------------------------------------------- | ---------- | -------- |
-| #191 | `GET /stocks/:id/items/:itemId` — endpoint manquant  | 2-3h       | 🔴       |
+| #191 | ~~`GET /stocks/:id/items/:itemId`~~                  | ✅ done    | —        |
 | #169 | Remplacer l'enum `category` par champ free-text      | 3-4h       | 🔴       |
 | #158 | Champ `note` libre sur les items                     | 2-3h       | 🔴       |
 | #219 | Validation Zod sur les inputs controllers            | 5-7h       | 🔴       |
@@ -125,7 +137,7 @@ Compte démo seed (#125), SonarCloud optionnel (#205), polish doc + démo
 
 ## Tickets ouverts résumés
 
-**Phase 1 (priorité immédiate) :** #191, #169, #158, #219, #207, #209, #214, #225 _(#230 ✅ done)_
+**Phase 1 (priorité immédiate) :** #169, #158, #219, #207, #209, #214, #225 _(#191 ✅ done, #230 ✅ done)_
 
 **Phase 2 :** #135, #133, #138, #224, #36, #126, #131
 
@@ -164,4 +176,4 @@ npm run test:unit
 git checkout -b feat/191-get-item-detail   # exemple
 ```
 
-Le prochain ticket à attaquer selon la roadmap : **#191** (`GET /stocks/:id/items/:itemId`).
+Le prochain ticket à attaquer selon la roadmap : **#169** (enum `category` → free-text).
