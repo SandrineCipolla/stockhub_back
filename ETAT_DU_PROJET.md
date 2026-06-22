@@ -64,6 +64,17 @@
 
 ---
 
+## Session du 18 juin 2026 — ce qui a été fait
+
+| Ticket | Action                                                                                                                                   | PR            |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| —      | Debug auth 401 : container Docker actif depuis la veille → cache JWKS `passport-azure-ad` stale → fix : `docker compose restart api`     | —             |
+| —      | Amélioration logging `authenticateMiddleware` : raison du rejet passport loggée (`reason: {info}`) pour faciliter les diagnostics futurs | commit direct |
+
+**Workaround documenté** : 401 inexpliqués après une nuit de container allumé → `docker compose restart api` (re-fetch des clés JWKS B2C).
+
+---
+
 ## Session du 16 juin 2026 — ce qui a été fait
 
 | Ticket | Action                                                                                                                                       | PR            |

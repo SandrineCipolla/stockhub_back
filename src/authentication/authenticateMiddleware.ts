@@ -28,7 +28,10 @@ export function authenticationMiddleware(
         return res.status(401).json({ error: err.message });
       }
       if (!user) {
-        rootSecurityAuthenticationMiddleware.error('User not authenticated, returning 401');
+        rootSecurityAuthenticationMiddleware.error(
+          'User not authenticated, returning 401 — reason: {info}',
+          { info: JSON.stringify(info) }
+        );
         return res.status(401).json({ error: 'Unauthorized' });
       }
       if (info) {
