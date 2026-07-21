@@ -12,6 +12,7 @@ model Item {
   id            Int                @id @default(autoincrement())
   label         String?            @db.VarChar(255)
   description   String?            @db.VarChar(255)
+  note          String?            @db.VarChar(1000)
   quantity      Int?
   minimumStock  Int                @default(1)
   expiresAt     DateTime?

@@ -5,6 +5,7 @@ import {
   CreateStockRequest,
   AddItemToStockRequest,
   UpdateItemQuantityRequest,
+  UpdateItemRequest,
 } from '@api/types/StockRequestTypes';
 
 jest.mock('@api/errors', () => ({
@@ -21,6 +22,7 @@ describe('StockControllerManipulation', () => {
   let mockUpdateStockHandler: any;
   let mockDeleteStockHandler: any;
   let mockUserService: any;
+  let mockUpdateItemHandler: any;
 
   beforeEach(() => {
     mockCreateStockHandler = {
@@ -47,7 +49,7 @@ describe('StockControllerManipulation', () => {
       handle: jest.fn(),
     };
 
-    const mockUpdateItemHandler: any = {
+    mockUpdateItemHandler = {
       handle: jest.fn(),
     };
 
@@ -167,6 +169,73 @@ describe('StockControllerManipulation', () => {
         mockAddItemHandler.handle = jest.fn().mockRejectedValue(error);
 
         await controller.addItemToStock(req as AddItemToStockRequest, res);
+
+        expect(sendError).toHaveBeenCalled();
+      });
+    });
+
+    describe('when a note is provided', () => {
+      it('should pass the note to the handler', async () => {
+        req = {
+          userID: 'test-oid-123',
+          params: { stockId: '1' },
+          body: {
+            label: 'Item 1',
+            quantity: 10,
+            description: 'Item description',
+            minimumStock: 5,
+            note: 'À racheter en priorité',
+          },
+        };
+        mockUserService.convertOIDtoUserID = jest.fn().mockResolvedValue({ value: 42 });
+        mockAddItemHandler.handle = jest.fn().mockResolvedValue({ id: 1 });
+
+        await controller.addItemToStock(req as AddItemToStockRequest, res);
+
+        expect(mockAddItemHandler.handle).toHaveBeenCalledWith(
+          expect.objectContaining({ note: 'À racheter en priorité' })
+        );
+      });
+    });
+  });
+
+  describe('updateItem', () => {
+    describe('when the handler call is successful', () => {
+      it('should return 200 and the updated stock', async () => {
+        req = {
+          userID: 'test-oid-123',
+          params: { stockId: '1', itemId: '5' },
+          body: {
+            label: 'Tomates bio',
+            note: 'Marque préférée',
+          },
+        };
+        mockUserService.convertOIDtoUserID = jest.fn().mockResolvedValue({ value: 42 });
+
+        const mockStock = { id: 1, label: 'My Stock' };
+        mockUpdateItemHandler.handle = jest.fn().mockResolvedValue(mockStock);
+
+        await controller.updateItem(req as UpdateItemRequest, res);
+
+        expect(mockUpdateItemHandler.handle).toHaveBeenCalledWith(
+          expect.objectContaining({ note: 'Marque préférée' })
+        );
+        expect(res.status).toHaveBeenCalledWith(HTTP_CODE_OK);
+        expect(res.json).toHaveBeenCalledWith(mockStock);
+      });
+    });
+
+    describe('when the handler call fails', () => {
+      it('should call sendError', async () => {
+        req = {
+          userID: 'test-oid-123',
+          params: { stockId: '1', itemId: '5' },
+          body: {},
+        };
+        const error = new Error('fail to update item');
+        mockUpdateItemHandler.handle = jest.fn().mockRejectedValue(error);
+
+        await controller.updateItem(req as UpdateItemRequest, res);
 
         expect(sendError).toHaveBeenCalled();
       });

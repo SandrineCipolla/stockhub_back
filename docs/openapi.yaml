@@ -393,7 +393,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     patch:
       summary: Modifier un item
-      description: Met à jour un ou plusieurs champs d'un item (label, description, minimumStock, quantity). Tous les champs sont optionnels — seuls les champs fournis sont modifiés.
+      description: Met à jour un ou plusieurs champs d'un item (label, description, minimumStock, quantity, note). Tous les champs sont optionnels — seuls les champs fournis sont modifiés.
       tags:
         - Stock Manipulation (WRITE)
       security:
@@ -1239,6 +1239,12 @@ components:
           type: integer
           description: ID du stock parent
           example: 1
+        note:
+          type: string
+          nullable: true
+          description: Note libre sur l'item (optionnelle)
+          maxLength: 1000
+          example: Marque préférée, à racheter en priorité
 
     # DTOs de requête (Request Bodies)
     CreateStockBody:
@@ -1292,6 +1298,11 @@ components:
           description: Stock minimum requis
           example: 1
           minimum: 0
+        note:
+          type: string
+          description: Note libre sur l'item (optionnelle)
+          maxLength: 1000
+          example: Marque préférée, à racheter en priorité
 
     UpdateStockBody:
       type: object
@@ -1335,6 +1346,11 @@ components:
           description: Nouvelle quantité
           example: 20
           minimum: 0
+        note:
+          type: string
+          description: Nouvelle note libre sur l'item
+          maxLength: 1000
+          example: Marque préférée, à racheter en priorité
 
     UpdateItemQuantityBody:
       type: object

@@ -10,7 +10,8 @@ export class StockItem {
     public description: string,
     public minimumStock: number = 1,
     public stockId: number,
-    public updatedAt?: Date | null
+    public updatedAt?: Date | null,
+    public note?: string | null
   ) {
     this.innerQuantity = new Quantity(quantity);
   }

@@ -91,7 +91,7 @@ export class StockControllerManipulation {
       if (!OID) return;
 
       const stockId = Number(req.params.stockId);
-      const { label, quantity, description, minimumStock } = req.body;
+      const { label, quantity, description, minimumStock, note } = req.body;
 
       const command = new AddItemToStockCommand(
         stockId,
@@ -99,7 +99,8 @@ export class StockControllerManipulation {
         quantity,
         description,
         minimumStock,
-        OID
+        OID,
+        note
       );
 
       const stock = await this.addItemHandler.handle(command);
@@ -144,7 +145,7 @@ export class StockControllerManipulation {
 
       const stockId = Number(req.params.stockId);
       const itemId = Number(req.params.itemId);
-      const { label, description, minimumStock, quantity } = req.body as UpdateItemBody;
+      const { label, description, minimumStock, quantity, note } = req.body as UpdateItemBody;
 
       const command = new UpdateItemCommand(
         stockId,
@@ -153,7 +154,8 @@ export class StockControllerManipulation {
         description,
         minimumStock,
         quantity,
-        OID
+        OID,
+        note
       );
 
       const stock = await this.updateItemHandler.handle(command);

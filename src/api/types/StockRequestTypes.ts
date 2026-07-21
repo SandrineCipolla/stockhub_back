@@ -16,6 +16,7 @@ export interface AddItemToStockBody {
   quantity: number;
   description: string;
   minimumStock: number;
+  note?: string;
 }
 
 export interface UpdateItemQuantityBody {
@@ -27,6 +28,7 @@ export interface UpdateItemBody {
   description?: string;
   minimumStock?: number;
   quantity?: number;
+  note?: string;
 }
 
 export interface UpdateStockBody {

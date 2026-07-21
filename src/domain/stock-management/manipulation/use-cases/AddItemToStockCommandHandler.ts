@@ -16,6 +16,7 @@ export class AddItemToStockCommandHandler {
         quantity: command.quantity,
         description: command.description,
         minimumStock: command.minimumStock,
+        note: command.note,
       });
 
       if (this.historyRepository && command.quantity > 0) {

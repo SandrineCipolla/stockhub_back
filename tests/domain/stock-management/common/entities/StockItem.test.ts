@@ -58,4 +58,16 @@ describe('StockItem', () => {
       expect(item.getStatus()).toBe('optimal');
     });
   });
+
+  describe('note', () => {
+    it('should be undefined when not provided', () => {
+      const item = new StockItem(1, 'item1', 2, '', 1, 1);
+      expect(item.note).toBeUndefined();
+    });
+
+    it('should store the provided note', () => {
+      const item = new StockItem(1, 'item1', 2, '', 1, 1, null, 'À racheter en priorité');
+      expect(item.note).toBe('À racheter en priorité');
+    });
+  });
 });

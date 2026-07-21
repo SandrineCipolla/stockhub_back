@@ -40,8 +40,42 @@ describe('UpdateItemCommandHandler', () => {
           description: 'Tomates bio du marché',
           minimumStock: 5,
           quantity: undefined,
+          note: undefined,
         });
         expect(result).toBe(mockStock);
+      });
+    });
+
+    describe('when updating the note', () => {
+      it('should call updateItem with the note', async () => {
+        const item = new StockItem(1, 'Tomates', 10, 'Tomates fraîches', 2, 1);
+        const mockStock = new Stock(1, 'Stock Cuisine', 'Description', 'alimentation', [item]);
+
+        const mockRepository = createMockRepository({
+          updateItem: jest.fn().mockResolvedValue(mockStock),
+        });
+
+        const handler = new UpdateItemCommandHandler(mockRepository);
+        const command = new UpdateItemCommand(
+          1,
+          1,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          'Marque préférée'
+        );
+
+        await handler.handle(command);
+
+        expect(mockRepository.updateItem).toHaveBeenCalledWith(1, 1, {
+          label: undefined,
+          description: undefined,
+          minimumStock: undefined,
+          quantity: undefined,
+          note: 'Marque préférée',
+        });
       });
     });
 
@@ -64,6 +98,7 @@ describe('UpdateItemCommandHandler', () => {
           description: undefined,
           minimumStock: undefined,
           quantity: 25,
+          note: undefined,
         });
         expect(result).toBe(mockStock);
       });
@@ -88,6 +123,7 @@ describe('UpdateItemCommandHandler', () => {
           description: 'Tomates bio du marché',
           minimumStock: 10,
           quantity: 50,
+          note: undefined,
         });
       });
     });
@@ -110,6 +146,7 @@ describe('UpdateItemCommandHandler', () => {
           description: undefined,
           minimumStock: undefined,
           quantity: undefined,
+          note: undefined,
         });
       });
     });
