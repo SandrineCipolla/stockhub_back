@@ -33,7 +33,7 @@ export interface StockDTO {
   description: string;
 
   /**
-   * Catégorie du stock (alimentation, hygiene, artistique)
+   * Catégorie du stock (texte libre, ex: "alimentation", "cave à vin", 50 caractères max)
    */
   category: string;
 

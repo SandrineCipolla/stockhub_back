@@ -65,6 +65,34 @@ describe('Stock', () => {
         ).toThrow('Stock label must be at least 3 characters');
       });
     });
+
+    describe('when category is free text', () => {
+      it('should accept any non-empty value, not just the predefined categories', () => {
+        const stock = createTestStock({ category: 'cave à vin' });
+
+        expect(stock.category).toBe('cave à vin');
+      });
+
+      it('should accept the 3 historical categories for backward compatibility', () => {
+        expect(createTestStock({ category: 'alimentation' }).category).toBe('alimentation');
+        expect(createTestStock({ category: 'hygiene' }).category).toBe('hygiene');
+        expect(createTestStock({ category: 'artistique' }).category).toBe('artistique');
+      });
+
+      it('should accept a category up to 50 characters', () => {
+        const category = 'a'.repeat(50);
+
+        expect(createTestStock({ category }).category).toBe(category);
+      });
+
+      it('should throw when category exceeds 50 characters', () => {
+        const category = 'a'.repeat(51);
+
+        expect(() => createTestStock({ category })).toThrow(
+          'Stock category cannot exceed 50 characters'
+        );
+      });
+    });
   });
 
   describe('getTotalItems()', () => {

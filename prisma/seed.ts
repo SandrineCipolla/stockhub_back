@@ -11,7 +11,7 @@
 t *  - 90 jours d'historique de consommation par item (pour les prédictions IA)
  */
 
-import { PrismaClient, StockCategory, StockRole, FamilyRole } from '@prisma/client';
+import { PrismaClient, StockRole, FamilyRole } from '@prisma/client';
 
 // --- Gaussian (Box-Muller) ---
 function gaussianRandom(mean: number, stdDev: number): number {
@@ -77,19 +77,19 @@ async function main(): Promise<void> {
   const stockCafe = await upsertStock(
     'Stock Café',
     'Provisions café et thé',
-    StockCategory.alimentation,
+    'alimentation',
     owner.id
   );
   const stockHygiene = await upsertStock(
     'Stock Hygiène',
     'Produits hygiène quotidienne',
-    StockCategory.hygiene,
+    'hygiene',
     owner.id
   );
   const stockArt = await upsertStock(
     'Stock Artistique',
     'Matériel peinture et dessin',
-    StockCategory.artistique,
+    'artistique',
     owner.id
   );
 
@@ -160,7 +160,7 @@ async function main(): Promise<void> {
 async function upsertStock(
   label: string,
   description: string,
-  category: StockCategory,
+  category: string,
   userId: number
 ): Promise<{ id: number; label: string }> {
   const existing = await prisma.stock.findFirst({

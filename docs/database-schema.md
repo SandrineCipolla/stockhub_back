@@ -18,7 +18,7 @@ erDiagram
         int id PK
         string label
         string description
-        enum category
+        string category
         int userId FK
     }
 
@@ -137,11 +137,12 @@ Un seul enregistrement de prédiction par item (`itemId` unique). Le champ `aiSu
 
 ### Enums
 
-| Enum            | Valeurs                                           | Usage                            |
-| --------------- | ------------------------------------------------- | -------------------------------- |
-| `StockCategory` | `alimentation`, `hygiene`, `artistique`           | Catégorisation des stocks        |
-| `FamilyRole`    | `ADMIN`, `MEMBER`                                 | Rôle au sein d'une famille       |
-| `StockRole`     | `OWNER`, `EDITOR`, `VIEWER`, `VIEWER_CONTRIBUTOR` | Permissions sur un stock partagé |
+| Enum         | Valeurs                                           | Usage                            |
+| ------------ | ------------------------------------------------- | -------------------------------- |
+| `FamilyRole` | `ADMIN`, `MEMBER`                                 | Rôle au sein d'une famille       |
+| `StockRole`  | `OWNER`, `EDITOR`, `VIEWER`, `VIEWER_CONTRIBUTOR` | Permissions sur un stock partagé |
+
+`Stock.category` n'est plus un enum depuis #169 : texte libre (`VARCHAR(50)`), les valeurs `alimentation`/`hygiene`/`artistique` restent valides mais ne sont plus contraintes.
 
 ---
 

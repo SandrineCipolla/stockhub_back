@@ -9,17 +9,17 @@ datasource db {
 }
 
 model Item {
-  id           Int               @id @default(autoincrement())
-  label        String?           @db.VarChar(255)
-  description  String?           @db.VarChar(255)
-  quantity     Int?
-  minimumStock Int               @default(1)
-  expiresAt    DateTime?
-  updatedAt    DateTime?         @updatedAt
-  stockId      Int?
-  stock        Stock?            @relation(fields: [stockId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  history      ItemHistory[]
-  predictions  StockPrediction[]
+  id            Int                @id @default(autoincrement())
+  label         String?            @db.VarChar(255)
+  description   String?            @db.VarChar(255)
+  quantity      Int?
+  minimumStock  Int                @default(1)
+  expiresAt     DateTime?
+  updatedAt     DateTime?          @updatedAt
+  stockId       Int?
+  stock         Stock?             @relation(fields: [stockId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  history       ItemHistory[]
+  predictions   StockPrediction[]
   contributions ItemContribution[]
 
   @@index([stockId])
@@ -41,65 +41,65 @@ model ItemHistory {
 }
 
 model StockPrediction {
-  id                   Int       @id @default(autoincrement())
-  itemId               Int
-  daysUntilEmpty       Int?
-  avgDailyConsumption  Float?
-  trend                String    @db.VarChar(20) // STABLE | INCREASING | DECREASING
-  recommendedRestock   Int?
-  simulatedFallback    Boolean   @default(false)
-  generatedAt          DateTime  @default(now())
-  aiSuggestions        Json?     // cache des suggestions LLM
-  aiGeneratedAt        DateTime? // timestamp du dernier appel LLM
-  item                 Item      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  id                  Int       @id @default(autoincrement())
+  itemId              Int
+  daysUntilEmpty      Int?
+  avgDailyConsumption Float?
+  trend               String    @db.VarChar(20) // STABLE | INCREASING | DECREASING
+  recommendedRestock  Int?
+  simulatedFallback   Boolean   @default(false)
+  generatedAt         DateTime  @default(now())
+  aiSuggestions       Json? // cache des suggestions LLM
+  aiGeneratedAt       DateTime? // timestamp du dernier appel LLM
+  item                Item      @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
   @@index([itemId, generatedAt])
   @@map("stock_predictions")
 }
 
 model Stock {
-  id            Int               @id @default(autoincrement())
-  label         String            @db.VarChar(255)
-  description   String?           @db.VarChar(255)
-  category      StockCategory     @default(alimentation)
+  id            Int                 @id @default(autoincrement())
+  label         String              @db.VarChar(255)
+  description   String?             @db.VarChar(255)
+  category      String              @default("alimentation") @db.VarChar(50)
   userId        Int?
   items         Item[]
-  collaborators  StockCollaborator[]
-  contributions  ItemContribution[]
-  user          User?             @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  collaborators StockCollaborator[]
+  contributions ItemContribution[]
+  user          User?               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([userId])
   @@map("stocks")
 }
 
 model User {
-  id                    Int                  @id @default(autoincrement())
-  email                 String               @unique @db.VarChar(255)
-  stocks                Stock[]
-  familyMemberships     FamilyMember[]
-  stockCollaborations   StockCollaborator[]  @relation("UserCollaborations")
-  grantedCollaborations StockCollaborator[]  @relation("GrantedByUser")
-  submittedContributions ItemContribution[]   @relation("ContributedByUser")
-  reviewedContributions  ItemContribution[]   @relation("ReviewedByUser")
+  id                     Int                 @id @default(autoincrement())
+  email                  String              @unique @db.VarChar(255)
+  stocks                 Stock[]
+  familyMemberships      FamilyMember[]
+  stockCollaborations    StockCollaborator[] @relation("UserCollaborations")
+  grantedCollaborations  StockCollaborator[] @relation("GrantedByUser")
+  submittedContributions ItemContribution[]  @relation("ContributedByUser")
+  reviewedContributions  ItemContribution[]  @relation("ReviewedByUser")
 
   @@map("users")
 }
 
 model Family {
   id        Int            @id @default(autoincrement()) @map("ID")
-  name      String         @db.VarChar(255) @map("NAME")
+  name      String         @map("NAME") @db.VarChar(255)
   createdAt DateTime       @default(now()) @map("CREATED_AT")
   members   FamilyMember[]
 }
 
 model FamilyMember {
-  id        Int        @id @default(autoincrement()) @map("ID")
-  familyId  Int        @map("FAMILY_ID")
-  userId    Int        @map("USER_ID")
-  role      FamilyRole @default(MEMBER) @map("ROLE")
-  joinedAt  DateTime   @default(now()) @map("JOINED_AT")
-  family    Family     @relation(fields: [familyId], references: [id], onDelete: Cascade)
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id       Int        @id @default(autoincrement()) @map("ID")
+  familyId Int        @map("FAMILY_ID")
+  userId   Int        @map("USER_ID")
+  role     FamilyRole @default(MEMBER) @map("ROLE")
+  joinedAt DateTime   @default(now()) @map("JOINED_AT")
+  family   Family     @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([familyId, userId])
   @@index([familyId])
@@ -107,19 +107,19 @@ model FamilyMember {
 }
 
 model ItemContribution {
-  id                 Int                @id @default(autoincrement())
-  itemId             Int
-  stockId            Int
-  contributedBy      Int
-  suggestedQuantity  Int
-  status             ContributionStatus @default(PENDING)
-  reviewedBy         Int?
-  reviewedAt         DateTime?
-  createdAt          DateTime           @default(now())
-  item               Item               @relation(fields: [itemId], references: [id], onDelete: Cascade)
-  stock              Stock              @relation(fields: [stockId], references: [id], onDelete: Cascade)
-  contributedByUser  User               @relation("ContributedByUser", fields: [contributedBy], references: [id], onDelete: Cascade)
-  reviewedByUser     User?              @relation("ReviewedByUser", fields: [reviewedBy], references: [id], onDelete: SetNull)
+  id                Int                @id @default(autoincrement())
+  itemId            Int
+  stockId           Int
+  contributedBy     Int
+  suggestedQuantity Int
+  status            ContributionStatus @default(PENDING)
+  reviewedBy        Int?
+  reviewedAt        DateTime?
+  createdAt         DateTime           @default(now())
+  item              Item               @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  stock             Stock              @relation(fields: [stockId], references: [id], onDelete: Cascade)
+  contributedByUser User               @relation("ContributedByUser", fields: [contributedBy], references: [id], onDelete: Cascade)
+  reviewedByUser    User?              @relation("ReviewedByUser", fields: [reviewedBy], references: [id], onDelete: SetNull)
 
   @@index([stockId, status])
   @@index([itemId])
@@ -141,12 +141,6 @@ model StockCollaborator {
   @@index([stockId])
   @@index([userId])
   @@index([grantedBy])
-}
-
-enum StockCategory {
-  alimentation
-  hygiene
-  artistique
 }
 
 enum FamilyRole {
