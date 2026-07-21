@@ -1,5 +1,37 @@
 # Changelog
 
+## [2.13.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.12.0...v2.13.0) (2026-07-21)
+
+
+### ✨ Features
+
+* **stock:** replace category enum with free-text field ([847d01a](https://github.com/SandrineCipolla/stockhub_back/commit/847d01acb65342e4138094331a6e99834dc1d5a3))
+* **stock:** replace category enum with free-text field ([#169](https://github.com/SandrineCipolla/stockhub_back/issues/169)) ([de75b51](https://github.com/SandrineCipolla/stockhub_back/commit/de75b51a09ddaa92a62ec17ceb3344d286f9f05e))
+
+
+### 🐛 Bug Fixes
+
+* **auth:** log passport rejection reason on 401 and document JWKS cache workaround ([180af43](https://github.com/SandrineCipolla/stockhub_back/commit/180af437e3ae4e398f542084415d5ffc793bdf0e))
+* **deps:** resolve npm audit vulnerabilities (41 → 19) ([b434c34](https://github.com/SandrineCipolla/stockhub_back/commit/b434c340e683d238298122f15b334cdbf69708b0))
+* **deps:** resolve npm audit vulnerabilities via npm audit fix ([0ed87b6](https://github.com/SandrineCipolla/stockhub_back/commit/0ed87b69d9a353c5e52887bebe1a15dcd4ba603b))
+
+
+### 📚 Documentation
+
+* mettre à jour ETAT_DU_PROJET.md (session [#169](https://github.com/SandrineCipolla/stockhub_back/issues/169)) ([57cb880](https://github.com/SandrineCipolla/stockhub_back/commit/57cb88046c27d08ada922e9cec63cd278f57e83d))
+* mettre à jour ETAT_DU_PROJET.md après [#169](https://github.com/SandrineCipolla/stockhub_back/issues/169) et fix npm audit ([23d63ae](https://github.com/SandrineCipolla/stockhub_back/commit/23d63ae3fca4bf27aba822a897421720b0183ddc))
+
+
+### 💄 Styles
+
+* **changelog:** fix Prettier formatting ([282c786](https://github.com/SandrineCipolla/stockhub_back/commit/282c786b5469d01de8d063740143393d759635a7))
+
+
+### 🔧 Chores
+
+* **deps:** bump undici from 7.24.6 to 7.28.0 ([8c78106](https://github.com/SandrineCipolla/stockhub_back/commit/8c78106df8ebe0a8cdebcf17b0441204193353df))
+* **deps:** bump undici from 7.24.6 to 7.28.0 ([ba0c249](https://github.com/SandrineCipolla/stockhub_back/commit/ba0c2491537fa29c5daa13d01b821a14f32f3625))
+
 ## [2.12.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.11.0...v2.12.0) (2026-06-16)
 
 ### ✨ Features
