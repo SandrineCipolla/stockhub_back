@@ -11,7 +11,7 @@ import {
   authorizeStockContribute,
   authorizeStockWrite,
 } from '@authorization/authorizeMiddleware';
-import { StockRole, StockCategory } from '@prisma/client';
+import { StockRole } from '@prisma/client';
 
 // Test helpers to reduce duplication
 const createTestUser = async (prisma: any, overrides?: { id?: number; email?: string }) => {
@@ -29,14 +29,14 @@ const createTestStock = async (
   overrides?: {
     label?: string;
     description?: string;
-    category?: StockCategory;
+    category?: string;
   }
 ) => {
   return prisma.stock.create({
     data: {
       label: overrides?.label ?? 'Test Stock',
       description: overrides?.description ?? 'Test Description',
-      category: overrides?.category ?? StockCategory.alimentation,
+      category: overrides?.category ?? 'alimentation',
       userId: userId,
     },
   });

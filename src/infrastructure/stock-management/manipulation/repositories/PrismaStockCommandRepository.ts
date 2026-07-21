@@ -1,4 +1,4 @@
-import { Item as PrismaItem, Prisma, PrismaClient, StockCategory } from '@prisma/client';
+import { Item as PrismaItem, Prisma, PrismaClient } from '@prisma/client';
 import { IStockCommandRepository } from '@domain/stock-management/manipulation/repositories/IStockCommandRepository';
 import { Stock } from '@domain/stock-management/common/entities/Stock';
 import { StockItem } from '@domain/stock-management/common/entities/StockItem';
@@ -269,7 +269,7 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
       const updateData: {
         label?: string;
         description?: string;
-        category?: StockCategory;
+        category?: string;
       } = {};
 
       if (data.label !== undefined) {
@@ -368,19 +368,18 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
     }
   }
 
-  private normalizeCategory(category: string | StockCategory): StockCategory {
-    const lowerCategory = category.toLowerCase();
-    const categoryValues = Object.values(StockCategory);
+  private normalizeCategory(category: string): string {
+    const trimmed = category.trim();
 
-    const matchedCategory = categoryValues.find(catValue => catValue === lowerCategory);
-
-    if (matchedCategory) {
-      return matchedCategory;
+    if (!trimmed) {
+      throw new Error('Invalid category: category cannot be empty');
     }
 
-    throw new Error(
-      `Invalid category: ${category}. Valid categories: ${categoryValues.join(', ')}`
-    );
+    if (trimmed.length > 50) {
+      throw new Error('Invalid category: category cannot exceed 50 characters');
+    }
+
+    return trimmed;
   }
 
   private toDomain(prismaStock: PrismaStockWithItems): Stock {

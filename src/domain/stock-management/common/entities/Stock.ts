@@ -1,15 +1,16 @@
 import { StockLabel } from '@domain/stock-management/common/value-objects/StockLabel';
 import { StockDescription } from '@domain/stock-management/common/value-objects/StockDescription';
 import { Quantity } from '@domain/stock-management/common/value-objects/Quantity';
-import { StockCategory } from '@domain/stock-management/common/enums/StockCategory';
 import { StockItem } from '@domain/stock-management/common/entities/StockItem';
+
+const CATEGORY_MAX_LENGTH = 50;
 
 export class Stock {
   constructor(
     public id: number,
     public label: string | StockLabel,
     public description: string | StockDescription,
-    public category: string | StockCategory,
+    public category: string,
     public items: StockItem[] = []
   ) {}
 
@@ -30,6 +31,10 @@ export class Stock {
 
     if (!params.category || params.category.trim() === '') {
       throw new Error('Stock category cannot be empty');
+    }
+
+    if (params.category.trim().length > CATEGORY_MAX_LENGTH) {
+      throw new Error(`Stock category cannot exceed ${CATEGORY_MAX_LENGTH} characters`);
     }
 
     if (!params.userId || params.userId <= 0) {

@@ -1173,11 +1173,8 @@ components:
           example: Stock de peinture aquarelle pour loisirs créatifs
         category:
           type: string
-          description: Catégorie du stock
-          enum:
-            - alimentation
-            - hygiene
-            - artistique
+          description: Catégorie du stock — texte libre (ex. "alimentation", "cave à vin")
+          maxLength: 50
           example: artistique
         totalItems:
           type: integer
@@ -1263,11 +1260,8 @@ components:
           minLength: 1
         category:
           type: string
-          description: Catégorie du stock
-          enum:
-            - alimentation
-            - hygiene
-            - artistique
+          description: Catégorie du stock — texte libre (ex. "alimentation", "cave à vin")
+          maxLength: 50
           example: artistique
 
     AddItemToStockBody:
@@ -1315,11 +1309,8 @@ components:
           minLength: 1
         category:
           type: string
-          description: Nouvelle catégorie du stock
-          enum:
-            - alimentation
-            - hygiene
-            - artistique
+          description: Nouvelle catégorie du stock — texte libre (ex. "alimentation", "cave à vin")
+          maxLength: 50
           example: artistique
 
     UpdateItemBody:
