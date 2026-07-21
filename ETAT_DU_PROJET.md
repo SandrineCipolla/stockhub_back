@@ -110,9 +110,23 @@
 
 ---
 
+## Session du 21 juillet 2026 — ce qui a été fait
+
+| Ticket | Action                                                                                                                                                                                                                                                                       | PR   |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| #237   | Dependabot `undici` 7.24.6→7.28.0 mergé                                                                                                                                                                                                                                      | #237 |
+| —      | `npm audit` cassé sur toutes les PR (41 vulnérabilités, nouvelle vague d'advisories GitHub) — corrigé via `npm audit fix` (41→19, sans breaking change)                                                                                                                      | #243 |
+| #169   | ✅ Enum `category` remplacé par `VARCHAR(50)` libre. Rétrocompatible (les 3 valeurs historiques restent valides). Migration testée en conditions réelles sur la DB locale (volume Docker existant, données de mars 2026 préservées, insertion d'une catégorie libre validée) | #242 |
+
+**Reste 19 vulnérabilités moderate** (chaîne `uuid` → `@azure/msal-node`, nécessite un breaking change) — non traité, à évaluer séparément si besoin.
+
+**Note technique** : Docker Desktop a eu un problème réseau IPv6 (connexions coupées vers le CDN CloudFront de Docker Hub) qui bloquait tout `docker pull`. Résolu en passant "Default networking mode" sur "IPv4 only" dans Docker Desktop Settings → Resources → Network.
+
+---
+
 ## Prochaine session — par où commencer
 
-**#169** Remplacer l'enum `category` par champ free-text — priorité rouge Phase 1 (3-4h)
+**#158** Champ `note` libre sur les items — priorité rouge Phase 1 (2-3h)
 
 ---
 
@@ -125,7 +139,7 @@ La roadmap prévoyait **Phase 1 en mai–juin 2026**. Le projet reprend exacteme
 | #    | Ticket                                               | Estimation | Priorité |
 | ---- | ---------------------------------------------------- | ---------- | -------- |
 | #191 | ~~`GET /stocks/:id/items/:itemId`~~                  | ✅ done    | —        |
-| #169 | Remplacer l'enum `category` par champ free-text      | 3-4h       | 🔴       |
+| #169 | ~~Remplacer l'enum `category` par champ free-text~~  | ✅ done    | —        |
 | #158 | Champ `note` libre sur les items                     | 2-3h       | 🔴       |
 | #219 | Validation Zod sur les inputs controllers            | 5-7h       | 🔴       |
 | #207 | Extraire les fixtures inline vers `tests/fixtures/`  | 2-3h       | 🟡       |
@@ -150,7 +164,7 @@ Compte démo seed (#125), SonarCloud optionnel (#205), polish doc + démo
 
 ## Tickets ouverts résumés
 
-**Phase 1 (priorité immédiate) :** #169, #158, #219, #207, #209, #214, #225 _(#191 ✅ done, #230 ✅ done)_
+**Phase 1 (priorité immédiate) :** #158, #219, #207, #209, #214, #225 _(#191 ✅ done, #230 ✅ done, #169 ✅ done)_
 
 **Phase 2 :** #135, #133, #138, #224, #36, #126, #131
 
@@ -189,4 +203,4 @@ npm run test:unit
 git checkout -b feat/191-get-item-detail   # exemple
 ```
 
-Le prochain ticket à attaquer selon la roadmap : **#169** (enum `category` → free-text).
+Le prochain ticket à attaquer selon la roadmap : **#158** (champ `note` libre sur les items).
