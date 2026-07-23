@@ -251,14 +251,14 @@ docs/
 
 #### Lacunes identifiées
 
-| Problème                                                                                                                                              | Impact                              |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
-| `0-INDEX.md` référence `1-ARCHITECTURE.md` à `6-API-DOCUMENTATION.md` mais ces fichiers **n'existent pas** dans `docs/`                               | Liens brisés dans l'index principal |
-| `0-INDEX.md` référence `technical/dependency-injection.md`, `technical/testcontainers.md`, `technical/prisma-mapping.md` qui **n'existent pas**       | Idem                                |
-| La dernière session documentée est **mars 2026** — les sessions de février à avril 2026 (migrations IA, contributions, seed) ne sont pas journalisées | Trou dans l'historique              |
-| `docs/authorization-phase1-summary.md` existe à la racine de `docs/` — aurait sa place dans `sessions/` ou `archive/`                                 | Cohérence d'organisation            |
-| `docs/7-SESSIONS.md` et `docs/0-INDEX.md` sont présents mais les fichiers `1-` à `6-` manquent                                                        | Index incohérent                    |
-| `ARCHITECTURE_AUDIT.md` (créé aujourd'hui) n'est pas encore référencé dans `0-INDEX.md`                                                               | Document orphelin                   |
+| Problème                                                                                                                                                                      | Impact                              |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `0-INDEX.md` référence `1-ARCHITECTURE.md` à `6-API-DOCUMENTATION.md` mais ces fichiers **n'existent pas** dans `docs/`                                                       | Liens brisés dans l'index principal |
+| `0-INDEX.md` référence `technical/dependency-injection.md` et `technical/prisma-mapping.md` qui **n'existent pas** (`technical/testcontainers.md` comblé le 2026-07-23, #250) | Idem                                |
+| La dernière session documentée est **mars 2026** — les sessions de février à avril 2026 (migrations IA, contributions, seed) ne sont pas journalisées                         | Trou dans l'historique              |
+| `docs/authorization-phase1-summary.md` existe à la racine de `docs/` — aurait sa place dans `sessions/` ou `archive/`                                                         | Cohérence d'organisation            |
+| `docs/7-SESSIONS.md` et `docs/0-INDEX.md` sont présents mais les fichiers `1-` à `6-` manquent                                                                                | Index incohérent                    |
+| `ARCHITECTURE_AUDIT.md` (créé aujourd'hui) n'est pas encore référencé dans `0-INDEX.md`                                                                                       | Document orphelin                   |
 
 ---
 
