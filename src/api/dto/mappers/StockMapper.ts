@@ -77,6 +77,7 @@ export class StockMapper {
       quantity: item.quantity,
       minimumStock: item.minimumStock,
       stockId: item.stockId,
+      note: item.note,
     };
   }
 

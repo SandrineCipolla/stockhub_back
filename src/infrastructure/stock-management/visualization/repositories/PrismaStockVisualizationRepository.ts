@@ -49,7 +49,8 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
               item.description ?? '',
               item.minimumStock,
               item.stockId ?? stock.id,
-              item.updatedAt
+              item.updatedAt,
+              item.note
             )
         )
       );
@@ -97,7 +98,8 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
             item.description ?? '',
             item.minimumStock,
             item.stockId ?? stock.id,
-            item.updatedAt
+            item.updatedAt,
+            item.note
           )
       )
     );
@@ -128,7 +130,9 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
             item.quantity ?? 0,
             item.description ?? '',
             item.minimumStock,
-            item.stockId ?? stockId
+            item.stockId ?? stockId,
+            item.updatedAt,
+            item.note
           )
       );
     } catch (error) {
@@ -178,7 +182,8 @@ export class PrismaStockVisualizationRepository implements IStockVisualizationRe
         item.description ?? '',
         item.minimumStock,
         item.stockId ?? stockId,
-        item.updatedAt
+        item.updatedAt,
+        item.note
       );
     } catch (error) {
       rootException(error as Error);

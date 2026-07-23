@@ -97,6 +97,7 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
       quantity: number;
       description?: string;
       minimumStock?: number;
+      note?: string;
     }
   ): Promise<Stock> {
     let success = false;
@@ -112,12 +113,14 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
         quantity: item.quantity,
         description: item.description,
         minimumStock: item.minimumStock,
+        note: item.note,
       });
 
       await this.prisma.item.create({
         data: {
           label: item.label,
           description: item.description || '',
+          note: item.note?.trim() || null,
           quantity: item.quantity,
           minimumStock: item.minimumStock || 1,
           stockId: stockId,
@@ -189,7 +192,13 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
   async updateItem(
     stockId: number,
     itemId: number,
-    data: { label?: string; description?: string; minimumStock?: number; quantity?: number }
+    data: {
+      label?: string;
+      description?: string;
+      minimumStock?: number;
+      quantity?: number;
+      note?: string;
+    }
   ): Promise<Stock> {
     let success = false;
 
@@ -204,11 +213,13 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
         description?: string;
         minimumStock?: number;
         quantity?: number;
+        note?: string;
       } = {};
       if (data.label !== undefined) updateData.label = data.label;
       if (data.description !== undefined) updateData.description = data.description;
       if (data.minimumStock !== undefined) updateData.minimumStock = data.minimumStock;
       if (data.quantity !== undefined) updateData.quantity = data.quantity;
+      if (data.note !== undefined) updateData.note = data.note;
 
       if (Object.keys(updateData).length > 0) {
         try {
@@ -392,7 +403,9 @@ export class PrismaStockCommandRepository implements IStockCommandRepository {
             item.quantity ?? 0,
             item.description ?? '',
             item.minimumStock,
-            item.stockId ?? prismaStock.id
+            item.stockId ?? prismaStock.id,
+            item.updatedAt,
+            item.note
           )
       ) || [];
 

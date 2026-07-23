@@ -89,6 +89,7 @@ export class Stock {
     description?: string;
     quantity: number;
     minimumStock?: number;
+    note?: string;
   }): StockItem {
     if (!params.label || params.label.trim() === '') {
       throw new Error('Item label cannot be empty');
@@ -112,7 +113,9 @@ export class Stock {
       params.quantity,
       params.description?.trim() ?? '',
       params.minimumStock ?? 1,
-      this.id
+      this.id,
+      undefined,
+      params.note?.trim() ?? null
     );
 
     this.items.push(newItem);

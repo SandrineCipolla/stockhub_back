@@ -5,6 +5,7 @@ export class AddItemToStockCommand {
     public readonly quantity: number,
     public readonly description?: string,
     public readonly minimumStock?: number,
-    public readonly userId?: string
+    public readonly userId?: string,
+    public readonly note?: string
   ) {}
 }

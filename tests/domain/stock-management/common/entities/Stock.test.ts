@@ -23,12 +23,14 @@ const createTestItem = (overrides?: {
   description?: string;
   quantity?: number;
   minimumStock?: number;
+  note?: string;
 }) => {
   return {
     label: overrides?.label ?? 'Tomates',
     description: overrides?.description ?? 'Tomates fraîches',
     quantity: overrides?.quantity ?? 10,
     minimumStock: overrides?.minimumStock ?? 3,
+    note: overrides?.note,
   };
 };
 
@@ -202,6 +204,26 @@ describe('Stock', () => {
         expect(() => stock.addItem(createTestItem({ label: 'TOMATES', quantity: 5 }))).toThrow(
           'Item with label "TOMATES" already exists in this stock'
         );
+      });
+    });
+
+    describe('when a note is provided', () => {
+      it('should store the trimmed note on the item', () => {
+        const stock = createTestStock();
+
+        const item = stock.addItem(createTestItem({ note: '  À racheter en priorité  ' }));
+
+        expect(item.note).toBe('À racheter en priorité');
+      });
+    });
+
+    describe('when no note is provided', () => {
+      it('should default the note to null', () => {
+        const stock = createTestStock();
+
+        const item = stock.addItem(createTestItem());
+
+        expect(item.note).toBeNull();
       });
     });
   });

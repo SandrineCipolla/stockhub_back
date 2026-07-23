@@ -127,5 +127,69 @@ describe('PrismaStockCommandRepository', () => {
         expect(newItem?.stockId).toBe(createdStock.id);
       });
     });
+
+    describe('when adding an item with a note', () => {
+      it('should persist the note in MySQL', async () => {
+        const createdStock = await setup.prisma.stock.create({
+          data: {
+            label: 'Existing Stock',
+            description: 'Stock for item addition test',
+            category: 'alimentation',
+            userId: 1,
+          },
+        });
+
+        await repository.addItemToStock(createdStock.id, {
+          label: 'Item with note',
+          quantity: 3,
+          description: 'Some item',
+          minimumStock: 1,
+          note: 'Marque préférée, à racheter en priorité',
+        });
+
+        const stockInDb = await setup.prisma.stock.findUnique({
+          where: { id: createdStock.id },
+          include: { items: true },
+        });
+
+        const newItem = stockInDb?.items.find(item => item.label === 'Item with note');
+        expect(newItem?.note).toBe('Marque préférée, à racheter en priorité');
+      });
+    });
+  });
+
+  describe('updateItem()', () => {
+    describe('when updating the note of an existing item', () => {
+      it('should persist the updated note in MySQL', async () => {
+        const createdStock = await setup.prisma.stock.create({
+          data: {
+            label: 'Existing Stock',
+            description: 'Stock for item update test',
+            category: 'alimentation',
+            userId: 1,
+          },
+        });
+
+        const createdItem = await setup.prisma.item.create({
+          data: {
+            label: 'Item to update',
+            quantity: 5,
+            description: 'Initial item',
+            minimumStock: 2,
+            stockId: createdStock.id,
+          },
+        });
+
+        await repository.updateItem(createdStock.id, createdItem.id, {
+          note: 'Nouvelle note',
+        });
+
+        const itemInDb = await setup.prisma.item.findUnique({
+          where: { id: createdItem.id },
+        });
+
+        expect(itemInDb?.note).toBe('Nouvelle note');
+      });
+    });
   });
 });

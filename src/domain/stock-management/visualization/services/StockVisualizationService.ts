@@ -34,6 +34,7 @@ export class StockVisualizationService {
       quantity: item.quantity,
       minimumStock: item.minimumStock,
       status: item.getStatus(),
+      note: item.note ?? null,
     }));
   }
 
@@ -54,6 +55,7 @@ export class StockVisualizationService {
       minimumStock: item.minimumStock,
       status: item.getStatus(),
       updatedAt: item.updatedAt ? item.updatedAt.toISOString() : null,
+      note: item.note ?? null,
     };
   }
 }

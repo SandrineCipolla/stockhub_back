@@ -93,4 +93,9 @@ export interface StockItemDTO {
    * ID du stock parent
    */
   stockId: number;
+
+  /**
+   * Note libre sur l'item (optionnelle)
+   */
+  note?: string | null;
 }

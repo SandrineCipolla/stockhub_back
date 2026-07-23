@@ -35,6 +35,7 @@ export class UpdateItemCommandHandler {
       description: command.description,
       minimumStock: command.minimumStock,
       quantity: command.quantity,
+      note: command.note,
     });
   }
 }

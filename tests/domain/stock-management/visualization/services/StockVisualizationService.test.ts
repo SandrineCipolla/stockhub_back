@@ -194,6 +194,21 @@ describe('StockVisualizationService', () => {
       });
     });
 
+    describe('when item has a note', () => {
+      const item = new StockItem(1, 'Item 1', 5, 'description item1', 3, 1, null, 'À racheter');
+      const fakeRepository: IStockVisualizationRepository = {
+        getAllStocks: async () => [],
+        getStockDetails: async () => null,
+        getStockItems: async () => [],
+        getStockItemDetail: async () => item,
+      };
+      const service = new StockVisualizationService(fakeRepository);
+      it('should include the note in the DTO', async () => {
+        const result = await service.getStockItemDetail(1, 1, 1);
+        expect(result?.note).toBe('À racheter');
+      });
+    });
+
     describe('when item does not exist', () => {
       const fakeRepository: IStockVisualizationRepository = {
         getAllStocks: async () => [],

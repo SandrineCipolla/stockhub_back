@@ -10,6 +10,7 @@ export interface IStockCommandRepository {
       quantity: number;
       description?: string;
       minimumStock?: number;
+      note?: string;
     }
   ): Promise<Stock>;
   updateItemQuantity(stockId: number, itemId: number, newQuantity: number): Promise<Stock>;
@@ -21,6 +22,7 @@ export interface IStockCommandRepository {
       description?: string;
       minimumStock?: number;
       quantity?: number;
+      note?: string;
     }
   ): Promise<Stock>;
   updateStock(

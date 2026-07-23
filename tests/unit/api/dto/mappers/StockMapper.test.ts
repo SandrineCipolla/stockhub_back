@@ -202,6 +202,26 @@ describe('StockMapper', () => {
         stockId: 5,
       });
     });
+
+    it('should include the note when the item has one', () => {
+      // Arrange
+      const item = new StockItem(
+        1,
+        'Sac 1kg',
+        50,
+        'Sac de café arabica',
+        10,
+        5,
+        null,
+        'À racheter en priorité'
+      );
+
+      // Act
+      const dto = StockMapper.itemToDTO(item);
+
+      // Assert
+      expect(dto.note).toBe('À racheter en priorité');
+    });
   });
 
   describe('toDTOList', () => {
