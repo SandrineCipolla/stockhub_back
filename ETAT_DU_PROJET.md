@@ -1,7 +1,6 @@
 # État du projet — StockHub Back
 
-> Mis à jour le 16 juin 2026  
-> Reprise après ~2 mois de standby (dernier commit actif : mi-avril 2026)
+> Mis à jour le 23 juillet 2026
 
 ---
 
@@ -9,11 +8,11 @@
 
 | Champ            | Valeur                                                 |
 | ---------------- | ------------------------------------------------------ |
-| **Version**      | v2.11.0                                                |
+| **Version**      | v2.13.0 (release 2.14.0 en attente via release-please) |
 | **Stack**        | Node.js 22, Express 4, TypeScript 5.8, Prisma 6, MySQL |
 | **Architecture** | DDD/CQRS — 18 ADRs documentés                          |
 | **Auth**         | Azure AD B2C (Bearer JWT)                              |
-| **Tests**        | 304 unitaires · 4 intégration · 4 E2E                  |
+| **Tests**        | 318 unitaires · 4 intégration · 4 E2E                  |
 | **Prod**         | Azure App Service (West Europe)                        |
 | **Staging**      | Render.com + Aiven MySQL                               |
 | **Soutenance**   | RNCP7 — mars 2027 (~9 mois)                            |
@@ -61,6 +60,24 @@
 - Conventional commits enforced par commitlint
 - CI/CD GitHub Actions : build, unit tests, security audit, deploy staging/prod
 - Codecov badge dynamique
+
+---
+
+## Session du 23 juillet 2026 — ce qui a été fait
+
+| Ticket | Action                                                             | PR      |
+| ------ | ------------------------------------------------------------------ | ------- |
+| #158   | Champ `note` libre sur les items (texte, 1000 car. max, optionnel) | #246 ✅ |
+
+### #158 — Champ `note` libre sur les items (PR #246)
+
+- Prisma : colonne `note VARCHAR(1000) NULL` sur `items`, migration écrite à la main (pattern suivi depuis #169), testée en conditions réelles sur MySQL Docker local (pas seulement build/lint)
+- Domain : `StockItem.note`, `Stock.addItem()`, `AddItemToStockCommand`/`UpdateItemCommand`
+- Infrastructure : `PrismaStockCommandRepository` (create/update) + `PrismaStockVisualizationRepository` (4 méthodes de lecture)
+- API : DTOs, `StockVisualizationService`, `StockRequestTypes`, `StockControllerManipulation` (POST/PATCH), OpenAPI
+- 8 nouveaux tests unitaires (318 total)
+
+**Diagnostic outillage** : TestContainers indisponible dans l'environnement de dev (image `ryuk` inaccessible) → vérification end-to-end faite manuellement via script contre la base Docker locale à la place des tests d'intégration automatisés.
 
 ---
 
