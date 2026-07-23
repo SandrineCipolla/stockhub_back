@@ -68,6 +68,8 @@
 | Ticket | Action                                                             | PR      |
 | ------ | ------------------------------------------------------------------ | ------- |
 | #158   | Champ `note` libre sur les items (texte, 1000 car. max, optionnel) | #246 ✅ |
+| #247   | Fix 5 vulnérabilités HIGH `@opentelemetry/*` — Security Audit      | #249 ✅ |
+| #250   | Doc manquante `technical/testcontainers.md` (lien mort comblé)     | #251 ✅ |
 
 ### #158 — Champ `note` libre sur les items (PR #246)
 
@@ -79,13 +81,15 @@
 
 **Diagnostic outillage** : TestContainers indisponible dans l'environnement de dev (image `ryuk` inaccessible) → vérification end-to-end faite manuellement via script contre la base Docker locale à la place des tests d'intégration automatisés.
 
-### Tickets créés
+### #247 — Fix 5 vulnérabilités HIGH `@opentelemetry/*` (PR #249)
 
-| #    | Titre                                                                                            | Priorité |
-| ---- | ------------------------------------------------------------------------------------------------ | -------- |
-| #247 | 5 vulnérabilités HIGH (`applicationinsights`/`@opentelemetry`) — Security Audit rouge sur `main` | P1       |
+`applicationinsights` était déjà en `^3.3.0` (>= la version minimale demandée), mais sa dépendance transitive `@azure/monitor-opentelemetry` pinne `@opentelemetry/sdk-node@0.219.0`, qui tire des sous-paquets `@opentelemetry/*` non patchés (dont `propagator-jaeger@2.8.0`, DoS via header malformé). Fix : ajout d'un bloc `overrides` npm (`@opentelemetry/propagator-jaeger@^2.10.0`, `fast-uri@^3.1.4`) — pas de breaking change, peer deps inchangées. `npm audit --audit-level=high` repasse à 0 HIGH. Vérifié : build, lint, tsc, 318 tests, boot serveur local (`cloudLogger`/Application Insights fonctionnel).
 
-**#247** : sans rapport avec #158 — nouvelles CVE publiées entre le 21 et le 23 juillet sur des dépendances déjà présentes (`applicationinsights` tire des versions vulnérables de `@opentelemetry/*`). Seul fix disponible = upgrade breaking vers `applicationinsights@>=3.0.0-beta.0`, touche tout le logging applicatif (`cloudLogger`/`rootMain`) — reporté à une session dédiée plutôt que traité à la volée.
+### #250 — Doc `technical/testcontainers.md` manquante (PR #251)
+
+`docs/0-INDEX.md` référençait ce fichier depuis un moment sans qu'il existe (gap déjà signalé dans `docs/REPO_AUDIT.md`). Comblé avec un guide TestContainers + injection Prisma. Au passage : suppression d'un doublon (`docs/architecture/ddd-cqrs-stock-manipulation.md`, contenu déjà couvert par `ADR-001` + `docs/technical/ddd-cqrs-guide.md`) et de deux rapports de session périmés (`SECURITY_AUDIT_REPORT.md`, `docs/alternatives-deploiement-budget.md`) décrivant un état du projet dépassé (API v1 disparue, choix Render/Aiven déjà fait).
+
+**Nettoyage annexe** : 77 branches locales déjà mergées supprimées ; branches de spike/exploration jamais proposées en PR (`feat/poc-ia-gemini`, `feature/adding_prisma`, etc.) sécurisées sur origin pour éviter toute perte.
 
 ---
 
