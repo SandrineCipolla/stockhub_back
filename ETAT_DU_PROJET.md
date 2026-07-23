@@ -79,6 +79,14 @@
 
 **Diagnostic outillage** : TestContainers indisponible dans l'environnement de dev (image `ryuk` inaccessible) → vérification end-to-end faite manuellement via script contre la base Docker locale à la place des tests d'intégration automatisés.
 
+### Tickets créés
+
+| #    | Titre                                                                                            | Priorité |
+| ---- | ------------------------------------------------------------------------------------------------ | -------- |
+| #247 | 5 vulnérabilités HIGH (`applicationinsights`/`@opentelemetry`) — Security Audit rouge sur `main` | P1       |
+
+**#247** : sans rapport avec #158 — nouvelles CVE publiées entre le 21 et le 23 juillet sur des dépendances déjà présentes (`applicationinsights` tire des versions vulnérables de `@opentelemetry/*`). Seul fix disponible = upgrade breaking vers `applicationinsights@>=3.0.0-beta.0`, touche tout le logging applicatif (`cloudLogger`/`rootMain`) — reporté à une session dédiée plutôt que traité à la volée.
+
 ---
 
 ## Session du 18 juin 2026 — ce qui a été fait
