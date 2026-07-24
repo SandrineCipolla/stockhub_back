@@ -1,5 +1,36 @@
 # Changelog
 
+## [2.14.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.13.0...v2.14.0) (2026-07-24)
+
+
+### ✨ Features
+
+* **items:** add free-text note field to items ([#246](https://github.com/SandrineCipolla/stockhub_back/issues/246)) ([33d9258](https://github.com/SandrineCipolla/stockhub_back/commit/33d9258e2996b4664dd27716a1d0c4a8bc18335d))
+
+
+### 🐛 Bug Fixes
+
+* **deps:** resolve 5 HIGH OpenTelemetry vulnerabilities — closes [#247](https://github.com/SandrineCipolla/stockhub_back/issues/247) ([#249](https://github.com/SandrineCipolla/stockhub_back/issues/249)) ([6f7a355](https://github.com/SandrineCipolla/stockhub_back/commit/6f7a3551700644002863e477a4d078964da09bb4))
+
+
+### 📚 Documentation
+
+* documenter l'incident de migrations Prisma jamais appliquées en prod ([#253](https://github.com/SandrineCipolla/stockhub_back/issues/253)) ([fb7863c](https://github.com/SandrineCipolla/stockhub_back/commit/fb7863cdd36d7283ec3dfe3105b2965bd7d9b2a1))
+* mettre à jour ETAT_DU_PROJET.md (session [#158](https://github.com/SandrineCipolla/stockhub_back/issues/158)) ([5b96216](https://github.com/SandrineCipolla/stockhub_back/commit/5b962166b3fed5f056abfbbe9423af4ccd629d27))
+* mettre à jour ETAT_DU_PROJET.md après [#247](https://github.com/SandrineCipolla/stockhub_back/issues/247) et [#250](https://github.com/SandrineCipolla/stockhub_back/issues/250) ([#252](https://github.com/SandrineCipolla/stockhub_back/issues/252)) ([92073ef](https://github.com/SandrineCipolla/stockhub_back/commit/92073ef52f3c42f47b52bfba384e545956b496c8))
+* référencer [#247](https://github.com/SandrineCipolla/stockhub_back/issues/247) dans ETAT_DU_PROJET.md ([#248](https://github.com/SandrineCipolla/stockhub_back/issues/248)) ([08f6c87](https://github.com/SandrineCipolla/stockhub_back/commit/08f6c877ba4b88b63a18f68d5b70f454d018a7a2))
+* **testing:** add TestContainers integration testing guide — closes [#250](https://github.com/SandrineCipolla/stockhub_back/issues/250) ([#251](https://github.com/SandrineCipolla/stockhub_back/issues/251)) ([68d8dbe](https://github.com/SandrineCipolla/stockhub_back/commit/68d8dbe013acefd81f2e33b5f4d5036919124e72))
+
+
+### 💄 Styles
+
+* **changelog:** fix Prettier formatting ([25ce055](https://github.com/SandrineCipolla/stockhub_back/commit/25ce05527b3bfd62cf308fcfbb846ab62c10477b))
+
+
+### 🔧 Chores
+
+* add proprietary license ([8b7ae28](https://github.com/SandrineCipolla/stockhub_back/commit/8b7ae28f7bb1630111e30032f41d895d15c351e4))
+
 ## [2.13.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.12.0...v2.13.0) (2026-07-21)
 
 ### ✨ Features
