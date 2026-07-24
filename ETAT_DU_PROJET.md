@@ -1,6 +1,6 @@
 # État du projet — StockHub Back
 
-> Mis à jour le 23 juillet 2026
+> Mis à jour le 24 juillet 2026
 
 ---
 
@@ -60,6 +60,25 @@
 - Conventional commits enforced par commitlint
 - CI/CD GitHub Actions : build, unit tests, security audit, deploy staging/prod
 - Codecov badge dynamique
+
+---
+
+## Session du 24 juillet 2026 — ce qui a été fait
+
+### Incident — 6 migrations Prisma jamais appliquées en production (`/api/v2/stocks` cassé)
+
+**Découvert en creusant un échec de test E2E côté Front** (issue #66) : `GET`/`POST /api/v2/stocks` renvoyaient 500 en production pour **tout le monde**, pas seulement pour le test. Diagnostiqué via Application Insights (`az monitor app-insights query`) :
+
+```
+PrismaClientKnownRequestError — prisma.stock.create() / findMany()
+The column `stockhub.items.note` does not exist in the current database.
+```
+
+**Cause racine (process, pas juste la colonne manquante)** : `prisma migrate deploy` n'existe que dans le job `continuous-integration` de `.github/workflows/main_stockhub-back.yml` (ligne 105), exécuté contre la DB MySQL **éphémère** du sidecar CI — jamais contre la vraie base de production ni staging. Aucune étape du pipeline de déploiement (`build-and-deploy`, `deploy-to-staging`) n'applique les migrations aux bases réelles. Elles doivent donc être appliquées **manuellement** après chaque merge touchant le schéma — ce qui a été oublié pendant ~4 mois : 6 migrations en attente depuis `20260327000000_add_ai_suggestions_cache` jusqu'à `20260721150000_add_item_note`.
+
+**Fix appliqué** : `DATABASE_URL=<prod> npx prisma migrate deploy` lancé manuellement (avec accord explicite avant de toucher à la prod) — 6 migrations additives, aucune perte de données, confirmé par `az monitor app-insights query` (plus aucune exception, `POST /api/v2/stocks` → 201, `GET` → 200).
+
+**Non traité cette session** : le gap de process lui-même (aucune automatisation de `migrate deploy` vers prod/staging) reste ouvert — à trancher dans une session dédiée : automatiser dans `build-and-deploy` (risque : migrations destructives appliquées sans revue), ou ajouter un rappel/checklist post-merge, ou une étape manuelle avec confirmation. Voir `docs/troubleshooting/` pour un futur doc dédié si ça se reproduit.
 
 ---
 
