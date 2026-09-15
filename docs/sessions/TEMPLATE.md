@@ -99,7 +99,7 @@ Exemple :
 
 - [ ] **ADR créé** (si décision architecturale importante)
   - [ ] ADR-XXX: Titre de la décision
-- [ ] **ROADMAP.md mis à jour** (si issue complétée)
+- [ ] **ROADMAP-GLOBAL.md mis à jour** (si issue complétée)
   - [ ] Issue #XX marquée comme complétée
 - [ ] **Tests documentés**
   - [ ] Structure des tests expliquée
@@ -111,7 +111,7 @@ Exemple :
 ### Fichiers Documentation Modifiés
 
 - `docs/adr/ADR-XXX.md` - Nouveau
-- `ROADMAP.md` - Issue #XX complétée
+- `docs/ROADMAP-GLOBAL.md` - Issue #XX complétée
 - `docs/7-SESSIONS.md` - Ajout entrée session
 - `docs/guides/X-GUIDE.md` - Mise à jour
 

@@ -8,7 +8,7 @@ openapi: 3.0.0
 
 info:
   title: StockHub Backend API
-  version: 2.8.1
+  version: 2.13.0
   description: |
     API REST pour la gestion de stocks (alimentation, hygiène, artistique)
 
@@ -803,6 +803,73 @@ paths:
           $ref: '#/components/responses/ForbiddenError'
         '500':
           $ref: '#/components/responses/InternalServerError'
+
+  /api/v2/stocks/{stockId}/contributions/{contributionId}:
+    patch:
+      summary: Approuver ou rejeter une contribution
+      description: |
+        Réservé au propriétaire du stock (OWNER). Applique la mise à jour de quantité si `action` est `approve`,
+        marque la contribution `REJECTED` sinon.
+      tags:
+        - Stock Contributions (WRITE)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: contributionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewContributionBody'
+            example:
+              action: approve
+      responses:
+        '200':
+          description: Contribution mise à jour (APPROVED ou REJECTED)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemContributionDTO'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /api/v2/contributions/pending-count:
+    get:
+      summary: Compter les contributions en attente sur tous les stocks possédés
+      description: Retourne le nombre total de contributions au statut PENDING sur les stocks dont l'utilisateur authentifié est propriétaire.
+      tags:
+        - Stock Contributions (WRITE)
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Nombre de contributions en attente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 2
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
 
   /api/v2/stocks/{stockId}/collaborators:
     get:
