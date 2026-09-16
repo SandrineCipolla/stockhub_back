@@ -92,4 +92,4 @@ Couverture à jour : badge en haut de ce fichier.
 
 ## License
 
-ISC. Voir [LICENSE](LICENSE).
+Propriétaire, tous droits réservés. Voir [LICENSE](LICENSE).

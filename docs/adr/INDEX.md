@@ -15,26 +15,30 @@ Un ADR (Architecture Decision Record) est un document qui capture une **décisio
 
 ## 📋 Liste des ADRs
 
-| #                                                       | Titre                                         | Date       | Statut     |
-| ------------------------------------------------------- | --------------------------------------------- | ---------- | ---------- |
-| [ADR-001](./ADR-001-migration-ddd-cqrs.md)              | Migration vers DDD/CQRS                       | 2025-11-25 | ✅ Accepté |
-| [ADR-002](./ADR-002-choix-prisma-orm.md)                | Choix de Prisma comme ORM                     | 2025-11-28 | ✅ Accepté |
-| [ADR-003](./ADR-003-azure-ad-b2c-authentication.md)     | Azure AD B2C pour l'authentification          | 2025-11-30 | ✅ Accepté |
-| [ADR-004](./ADR-004-tests-value-objects-entities.md)    | Tests sur Value Objects et Entities           | 2025-12-02 | ✅ Accepté |
-| [ADR-005](./ADR-005-api-versioning-v2.md)               | Versioning API (commencer en V2)              | 2025-12-05 | ✅ Accepté |
-| [ADR-006](./ADR-006-mysql-azure-cloud.md)               | MySQL sur Azure Cloud                         | 2025-12-08 | ✅ Accepté |
-| [ADR-007](./ADR-007-code-quality-enforcement.md)        | Application stricte des standards de qualité  | 2024-12-19 | ✅ Accepté |
-| [ADR-008](./ADR-008-typescript-request-type-aliases.md) | Type Aliases pour requêtes Express            | 2025-12-26 | ✅ Accepté |
-| [ADR-009](./ADR-009-resource-based-authorization.md)    | Système d'autorisation hybride (Phase 1 ✅)   | 2025-12-27 | ✅ Accepté |
-| [ADR-010](./ADR-010-ci-cd-pipeline-optimization.md)     | Optimisation pipeline CI/CD GitHub Actions    | 2025-12-27 | ✅ Accepté |
-| [ADR-011](./ADR-011-staging-render-aiven.md)            | Staging Render.com + Aiven MySQL              | 2026-01-15 | ✅ Accepté |
-| [ADR-012](./ADR-012-upgrade-node-22.md)                 | Migration vers Node.js 22 LTS                 | 2026-03-10 | ✅ Accepté |
-| [ADR-013](./ADR-013-llm-provider-local-vs-cloud.md)     | Provider LLM — Ollama local vs OpenRouter     | 2026-03-25 | ✅ Accepté |
-| [ADR-014](./ADR-014-stock-prediction-deterministic.md)  | Prédictions stock — algorithmes déterministes | 2026-03-25 | ✅ Accepté |
-| [ADR-015](./ADR-015-openrouter-mistral-ai-service.md)   | OpenRouter + Mistral comme provider LLM       | 2026-03-27 | ✅ Accepté |
-| [ADR-016](./ADR-016-rest-api-style.md)                  | Choix du style d'API — REST                   | 2026-04-08 | ✅ Accepté |
-| [ADR-017](./ADR-017-express-framework.md)               | Choix du framework HTTP — Express             | 2026-04-08 | ✅ Accepté |
-| [ADR-018](./ADR-018-github-flow.md)                     | Stratégie de branches — GitHub Flow           | 2026-04-08 | ✅ Accepté |
+| #                                                                  | Titre                                                                      | Date       | Statut     |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------- | ---------- | ---------- |
+| [ADR-001](./ADR-001-migration-ddd-cqrs.md)                         | Migration vers DDD/CQRS                                                    | 2025-11-25 | ✅ Accepté |
+| [ADR-002](./ADR-002-choix-prisma-orm.md)                           | Choix de Prisma comme ORM                                                  | 2025-11-28 | ✅ Accepté |
+| [ADR-003](./ADR-003-azure-ad-b2c-authentication.md)                | Azure AD B2C pour l'authentification                                       | 2025-11-30 | ✅ Accepté |
+| [ADR-004](./ADR-004-tests-value-objects-entities.md)               | Tests sur Value Objects et Entities                                        | 2025-12-02 | ✅ Accepté |
+| [ADR-005](./ADR-005-api-versioning-v2.md)                          | Versioning API (commencer en V2)                                           | 2025-12-05 | ✅ Accepté |
+| [ADR-006](./ADR-006-mysql-azure-cloud.md)                          | MySQL sur Azure Cloud                                                      | 2025-12-08 | ✅ Accepté |
+| [ADR-007](./ADR-007-code-quality-enforcement.md)                   | Application stricte des standards de qualité                               | 2024-12-19 | ✅ Accepté |
+| [ADR-008](./ADR-008-typescript-request-type-aliases.md)            | Type Aliases pour requêtes Express                                         | 2025-12-26 | ✅ Accepté |
+| [ADR-009](./ADR-009-resource-based-authorization.md)               | Système d'autorisation hybride (Phase 1 ✅)                                | 2025-12-27 | ✅ Accepté |
+| [ADR-010](./ADR-010-ci-cd-pipeline-optimization.md)                | Optimisation pipeline CI/CD GitHub Actions                                 | 2025-12-27 | ✅ Accepté |
+| [ADR-011](./ADR-011-staging-render-aiven.md)                       | Staging Render.com + Aiven MySQL                                           | 2026-01-15 | ✅ Accepté |
+| [ADR-012](./ADR-012-upgrade-node-22.md)                            | Migration vers Node.js 22 LTS                                              | 2026-03-10 | ✅ Accepté |
+| [ADR-013](./ADR-013-llm-provider-local-vs-cloud.md)                | Provider LLM — Ollama local vs OpenRouter                                  | 2026-03-25 | ✅ Accepté |
+| [ADR-014](./ADR-014-stock-prediction-deterministic.md)             | Prédictions stock — algorithmes déterministes                              | 2026-03-25 | ✅ Accepté |
+| [ADR-015](./ADR-015-openrouter-mistral-ai-service.md)              | OpenRouter + Mistral comme provider LLM                                    | 2026-03-27 | ✅ Accepté |
+| [ADR-016](./ADR-016-rest-api-style.md)                             | Choix du style d'API — REST                                                | 2026-04-08 | ✅ Accepté |
+| [ADR-017](./ADR-017-express-framework.md)                          | Choix du framework HTTP — Express                                          | 2026-04-08 | ✅ Accepté |
+| [ADR-018](./ADR-018-github-flow.md)                                | Stratégie de branches — GitHub Flow                                        | 2026-04-08 | ✅ Accepté |
+| [ADR-019](./ADR-019-authorize-middleware-couches-classiques.md)    | Middleware d'autorisation en couches classiques (exception hexagonale)     | 2026-08-31 | ✅ Accepté |
+| [ADR-020](./ADR-020-conversion-hexagonale-authorize-middleware.md) | Conversion hexagonale du middleware d'autorisation (alternative à ADR-019) | 2026-09-09 | 📝 Proposé |
+
+> Numérotation locale à ce repo : le prochain numéro est le plus grand numéro existant dans ce tableau, plus un (donc après ADR-020 actuellement). Elle ne correspond pas à celle de `stockHub_V2_front` ni à un ordre global. Voir la table de correspondance sur la page wiki [Architecture-Decision-Records](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Decision-Records).
 
 ## 📖 Comment lire un ADR ?
 

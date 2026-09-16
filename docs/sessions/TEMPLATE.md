@@ -113,7 +113,7 @@ Exemple :
 - `docs/adr/ADR-XXX.md` - Nouveau
 - `docs/ROADMAP-GLOBAL.md` - Issue #XX complétée
 - `docs/7-SESSIONS.md` - Ajout entrée session
-- `docs/guides/X-GUIDE.md` - Mise à jour
+- `docs/technical/X-GUIDE.md` - Mise à jour
 
 ---
 
