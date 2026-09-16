@@ -36,51 +36,32 @@ Un ADR (Architecture Decision Record) est un document qui capture une **décisio
 | [ADR-017](./ADR-017-express-framework.md)                          | Choix du framework HTTP — Express                                          | 2026-04-08 | ✅ Accepté |
 | [ADR-018](./ADR-018-github-flow.md)                                | Stratégie de branches — GitHub Flow                                        | 2026-04-08 | ✅ Accepté |
 | [ADR-019](./ADR-019-authorize-middleware-couches-classiques.md)    | Middleware d'autorisation en couches classiques (exception hexagonale)     | 2026-08-31 | ✅ Accepté |
-| [ADR-021](./ADR-021-conversion-hexagonale-authorize-middleware.md) | Conversion hexagonale du middleware d'autorisation (alternative à ADR-019) | 2026-09-09 | 📝 Proposé |
+| [ADR-020](./ADR-020-conversion-hexagonale-authorize-middleware.md) | Conversion hexagonale du middleware d'autorisation (alternative à ADR-019) | 2026-09-09 | 📝 Proposé |
 
-> Numérotation **globale au projet**, partagée avec le frontend et alignée sur la séquence unique du [wiki](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Decision-Records) : ADR-001, ADR-002, ADR-004 à ADR-012 et ADR-020 sont des décisions frontend (voir `stockHub_V2_front/docs/adr/`), donc le prochain numéro libre se choisit après ADR-021, pas après ADR-019.
+> Numérotation locale à ce repo : le prochain numéro est le plus grand numéro existant dans ce tableau, plus un (donc après ADR-020 actuellement). Elle ne correspond pas à celle de `stockHub_V2_front` ni à un ordre global. Voir la table de correspondance sur la page wiki [Architecture-Decision-Records](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Decision-Records).
 
 ## 📖 Comment lire un ADR ?
 
-Chaque ADR suit une structure standard :
-
-1. **Contexte** : Quel problème devions-nous résoudre ?
-2. **Décision** : Quelle solution avons-nous choisie ?
-3. **Raisons** : Pourquoi cette solution ?
-4. **Alternatives** : Quelles autres options avons-nous considérées ?
-5. **Conséquences** : Quels sont les impacts (positifs et négatifs) ?
+Format et sections : voir `TEMPLATE.md`. En résumé : Contexte, Décision (justification incluse), Alternatives (optionnelle), Conséquences, Critères de vérification (optionnelle), Liens (optionnelle), plus un frontmatter `author/status/related`.
 
 ## ✍️ Comment créer un nouvel ADR ?
 
 ### 1. Utiliser le template
 
-Copier `TEMPLATE.md` (si disponible) ou suivre la structure d'un ADR existant.
+Copier `TEMPLATE.md` tel quel.
 
 ### 2. Numérotation
 
-Les ADRs sont numérotés séquentiellement : ADR-001, ADR-002, etc.
+Lister le dossier avant d'écrire : le numéro est celui du plus grand ADR existant, plus un. Format de fichier : `ADR-NNN-titre-en-kebab-case.md`. Les numéros ne sont jamais réattribués, même si une ADR est refusée.
 
-### 3. Nom du fichier
+### 3. Guide de rédaction
 
-Format : `ADR-XXX-titre-en-kebab-case.md`
+Voir `../technical/guide-redaction.md` pour le style d'écriture.
 
-Exemple : `ADR-009-choix-redis-cache.md`
-
-### 4. Sections obligatoires
-
-- **Date** : Date de la décision
-- **Statut** : Proposé | Accepté | Déprécié | Supplanté par ADR-XXX
-- **Décideurs** : Qui a pris la décision
-- **Contexte** : Situation et problème
-- **Décision** : Solution choisie
-- **Raisons** : Justification
-- **Alternatives** : Options rejetées et pourquoi
-- **Conséquences** : Impacts positifs et négatifs
-
-### 5. Workflow
+### 4. Workflow
 
 1. Créer l'ADR dans `docs/adr/`
-2. Ajouter le lien dans ce README
+2. Ajouter le lien dans ce fichier
 3. Créer une PR pour review
 4. Merger après validation
 
@@ -129,10 +110,6 @@ Si une décision change :
 ## 🔗 Liens utiles
 
 - [Documentation principale](../../README.md)
-- [Standards de qualité](../code-quality-standards.md)
-- [Guide de contribution](../../CONTRIBUTING.md) (si existant)
-
----
-
-**Dernière mise à jour** : 2026-08-31
-**Mainteneur** : Équipe StockHub Backend
+- [Standards de qualité](../technical/code-quality-standards.md)
+- [Guide de contribution](../../CONTRIBUTING.md)
+- [Guide de rédaction](../technical/guide-redaction.md)

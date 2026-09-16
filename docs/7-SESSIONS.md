@@ -64,7 +64,7 @@
   - Toutes les issues ouvertes et fermées assignées
   - Pourcentages d'avancement calculés automatiquement
 - ✅ **Documentation**
-  - Section ajoutée dans ROADMAP.md
+  - Section ajoutée dans ROADMAP-GLOBAL.md
   - Session documentée
 
 **KPIs initiaux** :
@@ -293,9 +293,9 @@ Copier le contenu de [sessions/README.md](sessions/TEMPLATE.md) comme point de d
 
 Ajouter une entrée dans ce fichier pour référencer la nouvelle session.
 
-### 5. Mettre à jour ROADMAP.md
+### 5. Mettre à jour ROADMAP-GLOBAL.md
 
-Si des issues ont été complétées, marquer dans ROADMAP.md.
+Si des issues ont été complétées, marquer dans ROADMAP-GLOBAL.md.
 
 ---
 
@@ -307,7 +307,7 @@ Avant de terminer une session de développement :
 - [ ] **Tests passent** (unit + integration + E2E si applicable)
 - [ ] **Documentation session créée** dans `sessions/YYYY-MM-DD-description.md`
 - [ ] **7-SESSIONS.md mis à jour** avec nouvelle entrée
-- [ ] **ROADMAP.md mis à jour** si issues complétées
+- [ ] **ROADMAP-GLOBAL.md mis à jour** si issues complétées
 - [ ] **ADR créé** si décision architecturale importante
 - [ ] **PR créée** si feature complète
 - [ ] **GitHub Project mis à jour**

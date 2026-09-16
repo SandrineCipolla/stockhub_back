@@ -78,7 +78,7 @@ _(format demandé par la fiche "Comprendre une stack technique" du cours : couch
 | ------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | interface (API)           | REST versionné `/api/v2`                                               | contrat d'échange avec le front                      | [ADR-016](./ADR-016-rest-api-style.md) : un seul client, ressources hiérarchiques                          | si un second client (mobile) apparaît avec des besoins de sur-fetching différents         |
 | backend                   | Express 4.20.0                                                         | routes, middlewares, transport HTTP                  | [ADR-017](./ADR-017-express-framework.md) : minimal, sépare transport et domaine                           | si le besoin de DI/modules structurés dépasse ce qu'Express permet simplement             |
-| organisation interne      | DDD/CQRS (`domain/`→`infrastructure/`→`api/`)                          | séparation logique métier / persistance / transport  | [ADR-001](./ADR-001-migration-ddd-cqrs.md)                                                                 | — (cf. ADR-021 pour l'exception middleware d'autorisation)                                |
+| organisation interne      | DDD/CQRS (`domain/`→`infrastructure/`→`api/`)                          | séparation logique métier / persistance / transport  | [ADR-001](./ADR-001-migration-ddd-cqrs.md)                                                                 | — (cf. ADR-020 pour l'exception middleware d'autorisation)                                |
 | environnement d'exécution | Node.js 22 LTS                                                         | exécution du code applicatif                         | [ADR-012](./ADR-012-upgrade-node-22.md)                                                                    | à la fin du support LTS de Node 22                                                        |
 | données                   | Prisma 6.16.0 + MySQL (Azure Database, Flexible Server Burstable B1ms) | persistance, migrations, requêtes typées             | [ADR-002](./ADR-002-choix-prisma-orm.md), [ADR-006](./ADR-006-mysql-azure-cloud.md)                        | si `$queryRaw` dépasse 10% des requêtes domaine, ou si le trafic dépasse la capacité B1ms |
 | identité                  | Azure AD B2C (Passport Bearer)                                         | authentification, gestion des tokens                 | [ADR-003](./ADR-003-azure-ad-b2c-authentication.md)                                                        | —                                                                                         |
@@ -163,42 +163,44 @@ Ce tableau n'est pas dans ADR-006 aujourd'hui — c'est le genre d'ajout qui ren
 L'atelier demande explicitement deux ADR : un qui **confirme** un choix existant, un qui **propose une alternative** à un choix existant. Fait, chacun avec migration décomposée / conditions d'abandon là où l'étape le demande :
 
 1. **Confirmer un choix existant** → [ADR-020 (front) — fetch natif plutôt qu'axios](https://github.com/SandrineCipolla/stockHub_V2_front/blob/main/docs/adr/ADR-020-fetch-natif-plutot-quaxios.md). Décision jamais documentée nulle part (ni repo, ni wiki) avant ce travail. Contraintes/critères séparés, hypothèses et preuves, grille de comparaison pondérée (fetch vs Axios vs ky), scénario de qualité, seuil de réexamen mesurable. Publié : [PR #263](https://github.com/SandrineCipolla/stockHub_V2_front/pull/263), résumé sur le [wiki](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Decision-Records).
-2. **Proposer une alternative à un choix existant** → [ADR-021 (back) — conversion hexagonale du middleware d'autorisation](./ADR-021-conversion-hexagonale-authorize-middleware.md), alternative à [ADR-019](./ADR-019-authorize-middleware-couches-classiques.md). Statut `Proposé` (pas encore accepté, conformément à l'atelier). Contient la migration décomposée (conversion des données / adaptation du code / tests / déploiement / retour arrière) et les conditions explicites d'abandon ou de réexamen de la proposition.
+2. **Proposer une alternative à un choix existant** → [ADR-020 (back) — conversion hexagonale du middleware d'autorisation](./ADR-020-conversion-hexagonale-authorize-middleware.md), alternative à [ADR-019](./ADR-019-authorize-middleware-couches-classiques.md). Statut `Proposé` (pas encore accepté, conformément à l'atelier). Contient la migration décomposée (conversion des données / adaptation du code / tests / déploiement / retour arrière) et les conditions explicites d'abandon ou de réexamen de la proposition. Numéro local au repo back, sans lien avec l'ADR-020 du front (voir décision de numérotation locale par repo ci-dessous).
 
 **Résolu au passage** : la divergence de numérotation entre wiki (`ADR-011`) et repo front (`ADR-001`) pour la décision dual-view — fusionnée sous `ADR-011` partout, cf. [PR #263](https://github.com/SandrineCipolla/stockHub_V2_front/pull/263).
+
+**Décision prise après cet atelier** : abandon de la numérotation globale front+back envisagée plus haut. Chaque repo garde sa propre séquence locale (back : ADR-001 à ADR-020, sans trou ; front : sa propre séquence, y compris son propre ADR-020, sans rapport avec celui de back). Le wiki tient la table de correspondance entre les deux séquences plutôt qu'une numérotation unique. Voir `docs/adr/INDEX.md` pour la règle actuelle.
 
 ---
 
 ## 7. Grille de relecture (à réutiliser telle quelle)
 
-| Point de contrôle                                                    | Validé         | À revoir                                                                                                     |
-| -------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------ |
-| Le périmètre, les personnes et les systèmes externes sont identifiés | ✅ (section 1) |                                                                                                              |
-| Contraintes séparées des critères                                    | ⚠️             | à ajouter dans le template                                                                                   |
-| Hypothèses nommées + vérification prévue                             | ⚠️             | ex. latence LLM non mesurée                                                                                  |
-| Preuves sourcées                                                     | ✅ partiel     | benchmarks internes présents dans ADR-002/006                                                                |
-| Au moins deux options comparées sur les mêmes critères               | ✅             | déjà fait dans la plupart des ADR back                                                                       |
-| Conséquences positives ET négatives                                  | ✅             | déjà systématique côté back                                                                                  |
-| Seuil de réexamen observable                                         | ✅             | présent sur ADR-020, ADR-021 ; à généraliser aux ADR back plus anciens (ADR-006 s'en approche le plus)       |
-| Front : décisions structurantes documentées                          | ✅             | présentes, désormais aussi dans `stockHub_V2_front/docs/adr/` (PR #263), pas seulement sur le wiki           |
-| Une seule source de vérité par décision                              | ✅             | dual-view fusionnée sous ADR-011 partout ; numérotation globale front+back documentée dans les deux INDEX.md |
-| Fiche de stack (back + front)                                        | ✅             | voir section 2 ci-dessus                                                                                     |
-| Deux ADR (confirmer + proposer alternative)                          | ✅             | ADR-020 (front, confirme) et ADR-021 (back, propose)                                                         |
-| Relecture croisée par une autre personne (étape 7)                   | ❌             | nécessite une deuxième personne réelle — pas quelque chose qu'un outil peut simuler de façon crédible        |
+| Point de contrôle                                                    | Validé         | À revoir                                                                                                                                                             |
+| -------------------------------------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Le périmètre, les personnes et les systèmes externes sont identifiés | ✅ (section 1) |                                                                                                                                                                      |
+| Contraintes séparées des critères                                    | ⚠️             | à ajouter dans le template                                                                                                                                           |
+| Hypothèses nommées + vérification prévue                             | ⚠️             | ex. latence LLM non mesurée                                                                                                                                          |
+| Preuves sourcées                                                     | ✅ partiel     | benchmarks internes présents dans ADR-002/006                                                                                                                        |
+| Au moins deux options comparées sur les mêmes critères               | ✅             | déjà fait dans la plupart des ADR back                                                                                                                               |
+| Conséquences positives ET négatives                                  | ✅             | déjà systématique côté back                                                                                                                                          |
+| Seuil de réexamen observable                                         | ✅             | présent sur ADR-020 front et ADR-020 back ; à généraliser aux ADR back plus anciens (ADR-006 s'en approche le plus)                                                  |
+| Front : décisions structurantes documentées                          | ✅             | présentes, désormais aussi dans `stockHub_V2_front/docs/adr/` (PR #263), pas seulement sur le wiki                                                                   |
+| Une seule source de vérité par décision                              | ✅             | dual-view fusionnée sous ADR-011 partout ; numérotation locale par repo, table de correspondance sur le wiki (décision prise après cet atelier, voir note plus haut) |
+| Fiche de stack (back + front)                                        | ✅             | voir section 2 ci-dessus                                                                                                                                             |
+| Deux ADR (confirmer + proposer alternative)                          | ✅             | ADR-020 front (confirme) et ADR-020 back (propose) — mêmes numéros, repos différents, numérotation locale                                                            |
+| Relecture croisée par une autre personne (étape 7)                   | ❌             | nécessite une deuxième personne réelle — pas quelque chose qu'un outil peut simuler de façon crédible                                                                |
 
 ---
 
 ## État d'avancement
 
-| Livrable de l'atelier                           | Statut                                        |
-| ----------------------------------------------- | --------------------------------------------- |
-| Vue de contexte                                 | ✅ section 1                                  |
-| Inventaire des choix existants                  | ✅ section 2                                  |
-| Fiche de stack (rôle de chaque techno)          | ✅ section 2                                  |
-| Contraintes/critères/hypothèses/preuves séparés | ✅ section 3, ADR-020, ADR-021                |
-| Scénario de qualité mesurable                   | ✅ section 4 (+ un second dans ADR-020)       |
-| Comparaison d'au moins deux options             | ✅ section 5 (+ grille pondérée dans ADR-020) |
-| Deux ADR (confirmer + proposer une alternative) | ✅ section 6 (ADR-020, ADR-021)               |
-| Relecture croisée (étape 7)                     | ❌ demande une deuxième personne              |
+| Livrable de l'atelier                           | Statut                                              |
+| ----------------------------------------------- | --------------------------------------------------- |
+| Vue de contexte                                 | ✅ section 1                                        |
+| Inventaire des choix existants                  | ✅ section 2                                        |
+| Fiche de stack (rôle de chaque techno)          | ✅ section 2                                        |
+| Contraintes/critères/hypothèses/preuves séparés | ✅ section 3, ADR-020 front, ADR-020 back           |
+| Scénario de qualité mesurable                   | ✅ section 4 (+ un second dans ADR-020 front)       |
+| Comparaison d'au moins deux options             | ✅ section 5 (+ grille pondérée dans ADR-020 front) |
+| Deux ADR (confirmer + proposer une alternative) | ✅ section 6 (ADR-020 front, ADR-020 back)          |
+| Relecture croisée (étape 7)                     | ❌ demande une deuxième personne                    |
 
-**Reste à faire par Sandrine** : relire et merger la [PR #263](https://github.com/SandrineCipolla/stockHub_V2_front/pull/263) (déjà poussée), relire/pousser ADR-021 côté back (encore en local à ce stade), et faire relire ADR-020/ADR-021 par une autre personne pour l'étape 7 — c'est la seule partie de l'atelier qu'un outil ne peut pas exécuter à ta place.
+**Reste à faire par Sandrine** : relire et merger la [PR #263](https://github.com/SandrineCipolla/stockHub_V2_front/pull/263) (déjà poussée), relire/pousser ADR-020 côté back (encore en local à ce stade), et faire relire les deux ADR-020 (front et back) par une autre personne pour l'étape 7 — c'est la seule partie de l'atelier qu'un outil ne peut pas exécuter à ta place.

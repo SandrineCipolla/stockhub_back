@@ -1,4 +1,4 @@
-# ADR-021: Convertir le middleware d'autorisation vers un port/adapter hexagonal (alternative à ADR-019)
+# ADR-020: Convertir le middleware d'autorisation vers un port/adapter hexagonal (alternative à ADR-019)
 
 **Date:** 2026-09-09
 **Statut:** Proposé
@@ -100,4 +100,4 @@ Définir un port `IAuthorizationRepository` dans `domain/authorization/`, dépla
 
 ---
 
-**Note:** Statut "Proposé" — si accepté, mettre à jour ADR-019 en `Supplanté par ADR-021` et ce document en `Accepté`. Si rejeté, marquer `Rejeté` avec la raison.
+**Note:** Statut "Proposé" — si accepté, mettre à jour ADR-019 en `Supplanté par ADR-020` et ce document en `Accepté`. Si rejeté, marquer `Rejeté` avec la raison.

@@ -6,26 +6,26 @@
 
 ---
 
-## 📖 Documentation Principale (Ordre Recommandé)
+## 📖 Documentation Principale
 
 ### Guides Essentiels
 
-| #     | Fichier                                                | Description                                          |
-| ----- | ------------------------------------------------------ | ---------------------------------------------------- |
-| **0** | [0-INDEX.md](0-INDEX.md)                               | 📍 Vous êtes ici - Index principal                   |
-| **1** | [1-ARCHITECTURE.md](1-ARCHITECTURE.md)                 | 🏗️ **Architecture DDD/CQRS** - Principes & structure |
-| **2** | [2-AUTHENTICATION.md](2-AUTHENTICATION.md)             | 🔐 **Azure AD B2C** - Configuration & utilisation    |
-| **3** | [3-TESTING.md](3-TESTING.md)                           | 🧪 **Tests** - Unit, Integration, E2E                |
-| **4** | [4-CODE-QUALITY.md](4-CODE-QUALITY.md)                 | ✨ **Qualité** - ESLint, Prettier, TypeScript        |
-| **5** | [5-DEVELOPMENT-WORKFLOW.md](5-DEVELOPMENT-WORKFLOW.md) | 🔄 **Workflow** - Git, Commits, PRs                  |
-| **6** | [6-API-DOCUMENTATION.md](6-API-DOCUMENTATION.md)       | 📡 **API** - Endpoints, DTOs, Swagger                |
-| **7** | [7-SESSIONS.md](7-SESSIONS.md)                         | 📅 **Sessions** - Index sessions développement       |
+| Fichier                                      | Description                                                |
+| -------------------------------------------- | ---------------------------------------------------------- |
+| [0-INDEX.md](0-INDEX.md)                     | 📍 Vous êtes ici - Index principal                         |
+| [7-SESSIONS.md](7-SESSIONS.md)               | 📅 Sessions - Index sessions développement                 |
+| [../CLAUDE.md](../CLAUDE.md)                 | 🤖 Contexte projet pour sessions IA                        |
+| [../CONTRIBUTING.md](../CONTRIBUTING.md)     | 🤝 Process de contribution - branches, commits, PR, issues |
+| [../README.md](../README.md)                 | 📖 Présentation du projet                                  |
+| [../ETAT_DU_PROJET.md](../ETAT_DU_PROJET.md) | 📊 État courant - version, endpoints, sessions récentes    |
+
+Architecture, authentification, tests et qualité de code sont documentés dans les guides de [technical/](technical/) ci-dessous plutôt que dans des fichiers numérotés séparés.
 
 ### Quick Links
 
-- **🚀 Nouveau sur le projet ?** → [1-ARCHITECTURE.md](1-ARCHITECTURE.md) + [../CLAUDE.md](../CLAUDE.md)
-- **🔐 Authentification ?** → [2-AUTHENTICATION.md](2-AUTHENTICATION.md)
-- **🧪 Tests ?** → [3-TESTING.md](3-TESTING.md)
+- **🚀 Nouveau sur le projet ?** → [../CLAUDE.md](../CLAUDE.md) + [../ETAT_DU_PROJET.md](../ETAT_DU_PROJET.md)
+- **🔐 Authentification ?** → [technical/azure-b2c-setup.md](technical/azure-b2c-setup.md)
+- **🧪 Tests ?** → [technical/e2e-testing.md](technical/e2e-testing.md), [technical/testcontainers.md](technical/testcontainers.md)
 - **🐛 Problème technique ?** → [troubleshooting/](troubleshooting/)
 - **📅 Documenter session ?** → [7-SESSIONS.md](7-SESSIONS.md)
 
@@ -36,25 +36,34 @@
 > **Décisions architecturales importantes**
 > Localisation : [adr/](adr/)
 
-| #      | Fichier                                                                                      | Description                             | Statut  |
-| ------ | -------------------------------------------------------------------------------------------- | --------------------------------------- | ------- |
-| **01** | [ADR-001-migration-ddd-cqrs.md](adr/ADR-001-migration-ddd-cqrs.md)                           | Migration architecture DDD/CQRS         | Accepté |
-| **02** | [ADR-002-choix-prisma-orm.md](adr/ADR-002-choix-prisma-orm.md)                               | Choix de Prisma comme ORM               | Accepté |
-| **03** | [ADR-003-azure-ad-b2c-authentication.md](adr/ADR-003-azure-ad-b2c-authentication.md)         | Azure AD B2C pour authentification      | Accepté |
-| **04** | [ADR-004-tests-value-objects-entities.md](adr/ADR-004-tests-value-objects-entities.md)       | Tests Value Objects & Entities          | Accepté |
-| **05** | [ADR-005-api-versioning-v2.md](adr/ADR-005-api-versioning-v2.md)                             | Versioning API (V2)                     | Accepté |
-| **06** | [ADR-006-mysql-azure-cloud.md](adr/ADR-006-mysql-azure-cloud.md)                             | MySQL Azure Database                    | Accepté |
-| **07** | [ADR-007-code-quality-enforcement.md](adr/ADR-007-code-quality-enforcement.md)               | Standards qualité de code               | Accepté |
-| **08** | [ADR-008-typescript-request-type-aliases.md](adr/ADR-008-typescript-request-type-aliases.md) | Type aliases pour requêtes              | Accepté |
-| **09** | [ADR-009-resource-based-authorization.md](adr/ADR-009-resource-based-authorization.md)       | Autorisation Phase 1 (ressources)       | Accepté |
-| **10** | [ADR-010-ci-cd-pipeline-optimization.md](adr/ADR-010-ci-cd-pipeline-optimization.md)         | Optimisation pipeline CI/CD             | Accepté |
-| **11** | [ADR-011-staging-render-aiven.md](adr/ADR-011-staging-render-aiven.md)                       | Staging Render.com + Aiven MySQL        | Accepté |
-| **12** | [ADR-012-upgrade-node-22.md](adr/ADR-012-upgrade-node-22.md)                                 | Migration Node.js 22 LTS                | Accepté |
-| **13** | [ADR-013-llm-provider-local-vs-cloud.md](adr/ADR-013-llm-provider-local-vs-cloud.md)         | Provider LLM — local vs OpenRouter      | Accepté |
-| **14** | [ADR-014-stock-prediction-deterministic.md](adr/ADR-014-stock-prediction-deterministic.md)   | Prédictions — algorithmes déterministes | Accepté |
-| **15** | [ADR-015-openrouter-mistral-ai-service.md](adr/ADR-015-openrouter-mistral-ai-service.md)     | OpenRouter + Mistral provider LLM       | Accepté |
+| #      | Fichier                                                                                                            | Description                                                                | Statut  |
+| ------ | ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- | ------- |
+| **01** | [ADR-001-migration-ddd-cqrs.md](adr/ADR-001-migration-ddd-cqrs.md)                                                 | Migration architecture DDD/CQRS                                            | Accepté |
+| **02** | [ADR-002-choix-prisma-orm.md](adr/ADR-002-choix-prisma-orm.md)                                                     | Choix de Prisma comme ORM                                                  | Accepté |
+| **03** | [ADR-003-azure-ad-b2c-authentication.md](adr/ADR-003-azure-ad-b2c-authentication.md)                               | Azure AD B2C pour authentification                                         | Accepté |
+| **04** | [ADR-004-tests-value-objects-entities.md](adr/ADR-004-tests-value-objects-entities.md)                             | Tests Value Objects & Entities                                             | Accepté |
+| **05** | [ADR-005-api-versioning-v2.md](adr/ADR-005-api-versioning-v2.md)                                                   | Versioning API (V2)                                                        | Accepté |
+| **06** | [ADR-006-mysql-azure-cloud.md](adr/ADR-006-mysql-azure-cloud.md)                                                   | MySQL Azure Database                                                       | Accepté |
+| **07** | [ADR-007-code-quality-enforcement.md](adr/ADR-007-code-quality-enforcement.md)                                     | Standards qualité de code                                                  | Accepté |
+| **08** | [ADR-008-typescript-request-type-aliases.md](adr/ADR-008-typescript-request-type-aliases.md)                       | Type aliases pour requêtes                                                 | Accepté |
+| **09** | [ADR-009-resource-based-authorization.md](adr/ADR-009-resource-based-authorization.md)                             | Autorisation Phase 1 (ressources)                                          | Accepté |
+| **10** | [ADR-010-ci-cd-pipeline-optimization.md](adr/ADR-010-ci-cd-pipeline-optimization.md)                               | Optimisation pipeline CI/CD                                                | Accepté |
+| **11** | [ADR-011-staging-render-aiven.md](adr/ADR-011-staging-render-aiven.md)                                             | Staging Render.com + Aiven MySQL                                           | Accepté |
+| **12** | [ADR-012-upgrade-node-22.md](adr/ADR-012-upgrade-node-22.md)                                                       | Migration Node.js 22 LTS                                                   | Accepté |
+| **13** | [ADR-013-llm-provider-local-vs-cloud.md](adr/ADR-013-llm-provider-local-vs-cloud.md)                               | Provider LLM — local vs OpenRouter                                         | Accepté |
+| **14** | [ADR-014-stock-prediction-deterministic.md](adr/ADR-014-stock-prediction-deterministic.md)                         | Prédictions — algorithmes déterministes                                    | Accepté |
+| **15** | [ADR-015-openrouter-mistral-ai-service.md](adr/ADR-015-openrouter-mistral-ai-service.md)                           | OpenRouter + Mistral provider LLM                                          | Accepté |
+| **16** | [ADR-016-rest-api-style.md](adr/ADR-016-rest-api-style.md)                                                         | Style d'API (REST)                                                         | Accepté |
+| **17** | [ADR-017-express-framework.md](adr/ADR-017-express-framework.md)                                                   | Choix du framework Express                                                 | Accepté |
+| **18** | [ADR-018-github-flow.md](adr/ADR-018-github-flow.md)                                                               | Workflow Git (GitHub Flow)                                                 | Accepté |
+| **19** | [ADR-019-authorize-middleware-couches-classiques.md](adr/ADR-019-authorize-middleware-couches-classiques.md)       | Middleware d'autorisation en couches classiques (exception hexagonale)     | Accepté |
+| **20** | [ADR-020-conversion-hexagonale-authorize-middleware.md](adr/ADR-020-conversion-hexagonale-authorize-middleware.md) | Conversion hexagonale du middleware d'autorisation (alternative à ADR-019) | Proposé |
 
-**Index complet** : [adr/INDEX.md](adr/INDEX.md) | **Template** : [adr/TEMPLATE.md](adr/TEMPLATE.md)
+**Index complet** : [adr/INDEX.md](adr/INDEX.md) | **Template** : [adr/TEMPLATE.md](adr/TEMPLATE.md) | **Guide de rédaction** : [technical/guide-redaction.md](technical/guide-redaction.md)
+
+Atelier "justifier ses propres choix techniques" (contexte, inventaire, ADR-019/020) : [adr/ATELIER-2026-09-choix-techniques.md](adr/ATELIER-2026-09-choix-techniques.md).
+
+Numérotation locale à ce repo, elle ne correspond pas à celle de `front` ou du wiki. Voir la table de correspondance dans la page wiki `Architecture-Decision-Records`.
 
 ---
 
@@ -63,15 +72,22 @@
 > **Documentation détaillée sur des sujets spécifiques**
 > Localisation : [technical/](technical/)
 
-| Catégorie        | Fichier                                                                      | Description                                               |
-| ---------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------- |
-| **Architecture** | [technical/dependency-injection.md](technical/dependency-injection.md)       | Dependency Injection - Best Practices                     |
-| **Frontend**     | [technical/frontend-v2-integration.md](technical/frontend-v2-integration.md) | Intégration Frontend V2 avec Backend                      |
-| **Tests**        | [technical/e2e-testing.md](technical/e2e-testing.md)                         | Tests E2E avec Playwright                                 |
-| **Tests**        | [technical/testcontainers.md](technical/testcontainers.md)                   | Tests d'intégration avec TestContainers                   |
-| **Auth**         | [technical/azure-b2c-setup.md](technical/azure-b2c-setup.md)                 | Setup Azure AD B2C (ROPC)                                 |
-| **Database**     | [technical/prisma-mapping.md](technical/prisma-mapping.md)                   | Prisma - Mapping TypeScript ↔ MySQL                       |
-| **Database**     | [database-schema.md](database-schema.md)                                     | Schéma ERD — tables, relations, décisions de modélisation |
+| Catégorie        | Fichier                                                                                              | Description                                               |
+| ---------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| **Architecture** | [technical/ddd-cqrs-guide.md](technical/ddd-cqrs-guide.md)                                           | Guide DDD/CQRS appliqué au projet                         |
+| **Architecture** | [technical/DEPENDENCY-INJECTION-BEST-PRACTICES.md](technical/DEPENDENCY-INJECTION-BEST-PRACTICES.md) | Dependency Injection - Best Practices                     |
+| **Frontend**     | [technical/frontend-v2-integration.md](technical/frontend-v2-integration.md)                         | Intégration Frontend V2 avec Backend                      |
+| **Tests**        | [technical/e2e-testing.md](technical/e2e-testing.md)                                                 | Tests E2E avec Playwright                                 |
+| **Tests**        | [technical/testcontainers.md](technical/testcontainers.md)                                           | Tests d'intégration avec TestContainers                   |
+| **Auth**         | [technical/azure-b2c-setup.md](technical/azure-b2c-setup.md)                                         | Setup Azure AD B2C (ROPC)                                 |
+| **Auth**         | [technical/azure-ad-setup-detailed.md](technical/azure-ad-setup-detailed.md)                         | Setup Azure AD - détail complet                           |
+| **Qualité**      | [technical/code-quality-standards.md](technical/code-quality-standards.md)                           | Standards de qualité de code                              |
+| **Qualité**      | [technical/CODE-REVIEW-BEST-PRACTICES.md](technical/CODE-REVIEW-BEST-PRACTICES.md)                   | Bonnes pratiques de code review                           |
+| **Logging**      | [technical/LOGGER-GUIDE.md](technical/LOGGER-GUIDE.md)                                               | Système de logging structuré                              |
+| **Process**      | [technical/MILESTONES-GUIDE.md](technical/MILESTONES-GUIDE.md)                                       | Gestion des milestones GitHub                             |
+| **Infra**        | [technical/environments-setup.md](technical/environments-setup.md)                                   | Mise en place des environnements (local/staging/prod)     |
+| **Rédaction**    | [technical/guide-redaction.md](technical/guide-redaction.md)                                         | Guide de rédaction (ADR et documentation)                 |
+| **Database**     | [database-schema.md](database-schema.md)                                                             | Schéma ERD : tables, relations, décisions de modélisation |
 
 ---
 
@@ -80,10 +96,13 @@
 > **Résolution de problèmes techniques**
 > Localisation : [troubleshooting/](troubleshooting/)
 
-| Problème                      | Fichier                                                                                              | Description                     |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------- |
-| TypeScript module declaration | [troubleshooting/typescript-module-declaration.md](troubleshooting/typescript-module-declaration.md) | Erreurs de déclaration modules  |
-| Tests E2E Azure ROPC          | [troubleshooting/e2e-azure-ropc-issues.md](troubleshooting/e2e-azure-ropc-issues.md)                 | Problèmes Azure ROPC dans tests |
+| Problème                      | Fichier                                                                                              | Description                          |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| TypeScript module declaration | [troubleshooting/typescript-module-declaration.md](troubleshooting/typescript-module-declaration.md) | Erreurs de déclaration modules       |
+| Tests E2E Azure ROPC          | [troubleshooting/e2e-azure-ropc-issues.md](troubleshooting/e2e-azure-ropc-issues.md)                 | Problèmes Azure ROPC dans tests      |
+| Docker / Postman / Azure      | [troubleshooting/docker-postman-azure-issues.md](troubleshooting/docker-postman-azure-issues.md)     | Problèmes en environnement local     |
+| Migrations Prisma en prod     | [troubleshooting/prod-migration-drift.md](troubleshooting/prod-migration-drift.md)                   | Migrations jamais appliquées en prod |
+| Staging Render.com            | [troubleshooting/staging-render-issues.md](troubleshooting/staging-render-issues.md)                 | Problèmes rencontrés sur le staging  |
 
 ---
 
@@ -95,12 +114,7 @@
 
 ### Sessions Récentes
 
-| Date       | Fichier                                                                                    | Description                                   |
-| ---------- | ------------------------------------------------------------------------------------------ | --------------------------------------------- |
-| 2025-12-28 | [sessions/2025-12-28-authorization-phase1.md](sessions/2025-12-28-authorization-phase1.md) | Authorization Phase 1 - Tests & Documentation |
-| 2025-12-29 | [sessions/2025-12-29-doc-reorganization.md](sessions/2025-12-29-doc-reorganization.md)     | Réorganisation documentation                  |
-
-**Index complet** : [7-SESSIONS.md](7-SESSIONS.md)
+Voir [7-SESSIONS.md](7-SESSIONS.md) pour la liste complète et à jour, non dupliquée ici.
 
 ---
 
@@ -109,11 +123,14 @@
 > **Ancienne documentation et références**
 > Localisation : [archive/](archive/)
 
-| Type  | Fichier                                                                        | Description               |
-| ----- | ------------------------------------------------------------------------------ | ------------------------- |
-| Issue | [archive/issues/issue-42-dto-mapper.md](archive/issues/issue-42-dto-mapper.md) | Issue #42 - DTO Mapper    |
-| PR    | [archive/issues/pr-40-review-fixes.md](archive/issues/pr-40-review-fixes.md)   | PR #40 - Review Fixes     |
-| Impl  | [archive/ddd-manipulation-routes.md](archive/ddd-manipulation-routes.md)       | Implémentation routes DDD |
+| Type   | Fichier                                                                            | Description                                                       |
+| ------ | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Issue  | [archive/issues/issue-42-dto-mapper.md](archive/issues/issue-42-dto-mapper.md)     | Issue #42 - DTO Mapper                                            |
+| PR     | [archive/issues/pr-40-review-fixes.md](archive/issues/pr-40-review-fixes.md)       | PR #40 - Review Fixes                                             |
+| Impl   | [archive/ddd-manipulation-routes.md](archive/ddd-manipulation-routes.md)           | Implémentation routes DDD                                         |
+| Résumé | [archive/authorization-phase1-summary.md](archive/authorization-phase1-summary.md) | Résumé autorisation Phase 1 (voir ADR-009 et sessions/2025-12-28) |
+| Audit  | [archive/ARCHITECTURE_AUDIT.md](archive/ARCHITECTURE_AUDIT.md)                     | Audit architecture DDD/CQRS - 10 avril 2026                       |
+| Audit  | [archive/REPO_AUDIT.md](archive/REPO_AUDIT.md)                                     | Audit organisation du repo - 10 avril 2026                        |
 
 ---
 
@@ -139,18 +156,4 @@
 - **Playwright** : https://playwright.dev/
 - **DDD Patterns** : https://martinfowler.com/tags/domain%20driven%20design.html
 
----
-
-## 📝 Fichiers Racine Importants
-
-| Fichier                            | Description                                  |
-| ---------------------------------- | -------------------------------------------- |
-| [../CLAUDE.md](../CLAUDE.md)       | 🤖 Guide pour sessions IA (contexte complet) |
-| [../README.md](../README.md)       | 📖 README principal du projet                |
-| [../ROADMAP.md](../ROADMAP.md)     | 🗺️ Feuille de route & issues                 |
-| [../CHANGELOG.md](../CHANGELOG.md) | 📋 Journal des changements (auto-généré)     |
-
----
-
-**🎯 Dernière mise à jour** : 29 décembre 2025
-**📊 Total documents** : 30+ fichiers organisés
+Fichiers racine : voir la table en tête de cet index. Roadmap : [ROADMAP-GLOBAL.md](ROADMAP-GLOBAL.md) (transversale aux 3 repos).
