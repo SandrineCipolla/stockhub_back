@@ -96,7 +96,7 @@ Définir un port `IAuthorizationRepository` dans `domain/authorization/`, dépla
 
 - ADR lié : [ADR-019 (Middleware d'autorisation en couches classiques)](./ADR-019-authorize-middleware-couches-classiques.md) — cet ADR propose de le supplanter si accepté
 - Pattern de référence : `domain/authorization/ICollaboratorRepository`, `infrastructure/.../PrismaCollaboratorRepository`
-- Code concerné : `src/authorization/authorizeMiddleware.ts`, `src/authorization/AuthorizationRepository.ts`
+- Code concerné : `src/authorization/authorizeMiddleware.ts`, `src/authorization/repositories/AuthorizationRepository.ts`
 
 ---
 
