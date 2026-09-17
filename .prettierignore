@@ -36,3 +36,6 @@ pnpm-lock.yaml
 # Postman collections (large JSON files not suited for Prettier formatting)
 *.postman_collection.json
 postman/
+
+# Généré par release-please, puces `*` non configurables dans son générateur
+CHANGELOG.md
