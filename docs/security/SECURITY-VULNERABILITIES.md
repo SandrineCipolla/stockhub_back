@@ -159,6 +159,96 @@ app.use('/api/', limiter);
 
 ---
 
+## 🟡 Lot de septembre 2026 : 35 vulnérabilités accumulées (10 PR Dependabot en attente)
+
+**Date de découverte :** 2026-09-16 (accumulation progressive depuis plusieurs mois, sans traitement groupé avant cette date)
+**Date de résolution :** 2026-09-16 et 2026-09-17
+**Sévérité :** HIGH (3) et MODERATE (32) au moment de la découverte
+**Advisory principal :** [GHSA-ggr8-5vv4-36mx](https://github.com/advisories/GHSA-ggr8-5vv4-36mx) (deepmerge-ts, via Prisma)
+
+### Description
+
+10 PR Dependabot ouvertes en parallèle (#256, #261 à #270), chacune ciblant une seule vulnérabilité sur les 35 accumulées dans le projet. Aucune n'avait été mergée : les merger une par une aurait déclenché 10 cycles de rebase et de relance CI en cascade côté Dependabot, avec un risque de conflit git à chaque étape.
+
+### Détails techniques
+
+#### Problème
+
+`npm audit` sur `main` remontait 35 vulnérabilités (1 low, 24 moderate, 10 high), réparties sur des dépendances directes (`js-yaml`, `qs`/`express`, `mysql2`, `undici`) et transitives (`fast-uri`, `@humanfs/node`, `joi`, `browserslist`, `baseline-browser-mapping`, `smol-toml` via les outils de build/test, et `deepmerge-ts` via `@prisma/config`).
+
+Les 10 PR Dependabot ciblaient chacune un package précis. `npm audit fix`, exécuté sans `--force`, en résout 25 en dépassant leurs cibles individuelles grâce à la résolution transitive du lockfile. Les 10 vulnérabilités restantes (`uuid` via `@azure/msal-node`/`dockerode`/`testcontainers`/`passport-azure-ad`, et `deepmerge-ts` via `prisma`) n'avaient pas de PR automatique : pas de fix disponible sans breaking change pour `uuid`, pas d'`overrides` en place pour `deepmerge-ts`.
+
+#### Impact sur StockHub
+
+Aucune de ces vulnérabilités n'était activement exploitée ni exploitable côté StockHub : ce sont des dépendances de build, de test ou de logging (OpenTelemetry via Application Insights, dépendances de dev), pas du code exposé directement à une requête HTTP non authentifiée. Le risque réel était surtout le blocage du workflow CI `Security Audit`, qui empêchait de vérifier que de nouvelles vulnérabilités ne s'ajoutaient pas.
+
+### Résolution
+
+#### Fix appliqué, étape 1 (PR #272)
+
+```bash
+npm audit fix
+```
+
+Sans `--force`, donc sans breaking change. Résout 25 des 35 vulnérabilités : toutes les versions installées dépassent désormais les cibles demandées par les 10 PR Dependabot, qui se ferment automatiquement à la fusion.
+
+**Commit :** `2410225` - fix(deps): résoudre 25 vulnérabilités npm via npm audit fix
+**PR :** #272
+**Branch :** `chore/security-deps-batch`
+
+#### Fix appliqué, étape 2 (PR #273)
+
+`npm audit fix` seul ne suffisait pas pour `deepmerge-ts` (transitif via `@prisma/config`, pas de version compatible dans les contraintes de semver de Prisma à ce moment). Ajout d'un `overrides` dans `package.json` pour forcer `deepmerge-ts` en `^8.0.2` :
+
+```json
+{
+  "overrides": {
+    "deepmerge-ts": "^8.0.2"
+  }
+}
+```
+
+**Commit :** voir PR #273 - fix(deps): override deepmerge-ts pour débloquer le Security Audit
+**PR :** #273
+
+#### Vérification
+
+```bash
+# Avant (16 septembre 2026)
+$ npm audit
+35 vulnerabilities (1 low, 24 moderate, 10 high)
+
+# Après PR #272
+$ npm audit
+10 vulnerabilities (7 moderate, 3 high)
+
+# Après PR #273
+$ npm audit
+7 vulnerabilities (7 moderate, 0 high)
+$ npm audit --audit-level=high
+found 0 vulnerabilities ✅ (exit code 0, débloque le workflow Security Audit)
+```
+
+`npm run test:unit` (318/318), `npm run lint` (0 warning), `npx tsc --noEmit` (0 erreur) et `npm run build` (succès) passent après chaque étape.
+
+### Prévention future
+
+#### 1. Ne pas laisser les PR Dependabot s'accumuler
+
+10 PR ouvertes en même temps est le signal que le rythme de merge individuel ne suit pas le rythme de publication de Dependabot. Le batch groupé (`npm audit fix` sur une branche dédiée) est la bonne réponse quand l'accumulation est déjà là, mais la vraie prévention est de merger au fil de l'eau plutôt que de laisser s'accumuler.
+
+#### 2. Les 7 vulnérabilités moderate restantes (uuid) sont un choix assumé
+
+Elles nécessitent `npm audit fix --force`, qui casserait `@azure/msal-node` (authentification) et `testcontainers` (tests d'intégration), un risque jugé disproportionné par rapport à des vulnérabilités moderate sur des dépendances de test/auth non directement exposées. À réévaluer si un fix non-breaking apparaît, ou si la sévérité de l'advisory change.
+
+### Références
+
+- **PR #272 :** https://github.com/SandrineCipolla/stockhub_back/pull/272
+- **PR #273 :** https://github.com/SandrineCipolla/stockhub_back/pull/273
+- **GitHub Advisory (deepmerge-ts) :** https://github.com/advisories/GHSA-ggr8-5vv4-36mx
+
+---
+
 ## Template pour futures vulnérabilités
 
 ```markdown
@@ -208,6 +298,6 @@ app.use('/api/', limiter);
 
 ---
 
-**Dernière mise à jour :** 2026-01-06
+**Dernière mise à jour :** 2026-09-17
 **Auteur :** Sandrine Cipolla
-**Statut sécurité :** ✅ Aucune vulnérabilité connue (HIGH/CRITICAL)
+**Statut sécurité :** ✅ 0 vulnérabilité HIGH/CRITICAL. 7 MODERATE restantes (uuid, transitif via `@azure/msal-node`/`testcontainers`), voir "Lot de septembre 2026" ci-dessus pour le détail. Vérifier `npm audit` pour l'état réel avant de citer un chiffre : ce fichier n'est mis à jour qu'à l'occasion d'un incident traité, pas en continu.
