@@ -14,9 +14,9 @@ Nouveau fichier de bloc : copier `TEMPLATE.md`.
 
 ## Fichiers
 
-| Fichier                          | Blocs couverts                                                                  | Statut                                                                                              |
-| -------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `C3-mise-en-production.md`       | C3.1 (intégration continue), C3.2 (tests), C3.3 (surveillance des mises à jour) | Créé                                                                                                |
-| `C2-conception-developpement.md` | C2.1 (architecture), C2.4 (back-end, OWASP/RGPD)                                | Pas encore créé, matière disponible dans `docs/adr/` (notamment ADR-001, ADR-009, ADR-019, ADR-020) |
+| Fichier                          | Blocs couverts                                                                  | Statut |
+| -------------------------------- | ------------------------------------------------------------------------------- | ------ |
+| `C2-conception-developpement.md` | C2.1 (architecture), C2.4 (back-end, OWASP/RGPD)                                | Créé   |
+| `C3-mise-en-production.md`       | C3.1 (intégration continue), C3.2 (tests), C3.3 (surveillance des mises à jour) | Créé   |
 
 Bloc 1 (C1.2, veille technologique) vit dans le Second Brain (`stockhub-veille.md`). Bloc 4 (pilotage d'équipe) ne s'applique pas à ce projet solo.
