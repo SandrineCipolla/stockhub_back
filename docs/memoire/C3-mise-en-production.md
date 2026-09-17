@@ -6,7 +6,7 @@ Voir `INDEX.md` de ce dossier pour le principe de ce fichier.
 
 **Cas** : lot de 10 PR Dependabot accumulées, mergées en un batch groupé plutôt qu'une par une.
 
-**Source** : `docs/security/SECURITY-VULNERABILITIES.md`, section "Lot de septembre 2026". PR [#272](https://github.com/SandrineCipolla/stockhub_back/pull/272) et [#273](https://github.com/SandrineCipolla/stockhub_back/pull/273).
+**Source** : [docs/security/SECURITY-VULNERABILITIES.md](../security/SECURITY-VULNERABILITIES.md), section "Lot de septembre 2026". PR [#272](https://github.com/SandrineCipolla/stockhub_back/pull/272) et [#273](https://github.com/SandrineCipolla/stockhub_back/pull/273).
 
 **Angle pour le mémoire** : le diagnostic (merger 10 PR une par une aurait déclenché 10 cycles de rebase/CI en cascade côté Dependabot), la décision d'y répondre par un batch groupé sur une branche dédiée, et la vérification (`npm audit`, tests, lint, build) avant de merger. Démontre une surveillance active du backlog de sécurité.
 
@@ -16,7 +16,7 @@ Voir `INDEX.md` de ce dossier pour le principe de ce fichier.
 
 **Cas** : séparation du workflow `Security Audit` du workflow CI principal, pour un badge dédié et une détection hebdomadaire (cron) des vulnérabilités publiées sur des dépendances déjà installées.
 
-**Source** : `docs/ci-cd/SECURITY-AUDIT-WORKFLOW.md`.
+**Source** : [docs/ci-cd/SECURITY-AUDIT-WORKFLOW.md](../ci-cd/SECURITY-AUDIT-WORKFLOW.md).
 
 **Angle pour le mémoire** : décision d'architecture CI argumentée, avec un avant/après et des avantages/inconvénients pesés explicitement. Le point fort à citer : le déclencheur `schedule` (cron hebdomadaire) répond à un besoin spécifique, détecter une vulnérabilité publiée après coup sur une dépendance qui n'a pas bougé, ce qu'un déclencheur `push`/`pull_request` seul ne couvre pas.
 
@@ -26,6 +26,6 @@ Voir `INDEX.md` de ce dossier pour le principe de ce fichier.
 
 **Cas** : l'incident qs (CVE-2025-01, janvier 2026) documente le cycle complet détection → analyse → fix → vérification avant/après, avec le step CI qui bloque le merge tant que la vulnérabilité n'est pas résolue.
 
-**Source** : `docs/security/SECURITY-VULNERABILITIES.md`, section "CVE-2025-01".
+**Source** : [docs/security/SECURITY-VULNERABILITIES.md](../security/SECURITY-VULNERABILITIES.md), section "CVE-2025-01".
 
 **Angle pour le mémoire** : bon exemple isolé et complet (un seul incident, tout le cycle documenté) plutôt que le lot de septembre (plus large mais moins détaillé par vulnérabilité individuelle). Les deux se complètent : celui-ci pour montrer la méthode sur un cas simple, celui de septembre pour montrer la gestion à l'échelle d'un vrai backlog accumulé.

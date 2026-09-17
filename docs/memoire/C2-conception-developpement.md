@@ -36,7 +36,7 @@ Voir `INDEX.md` de ce dossier pour le principe de ce fichier.
 
 **Cas** : politique RGPD documentée avec base légale par donnée collectée, durée de rétention justifiée par donnée, et procédure concrète pour chacun des 4 droits applicables (accès, rectification, effacement, portabilité).
 
-**Source** : `docs/rgpd.md`.
+**Source** : [docs/rgpd.md](../rgpd.md).
 
 **Angle pour le mémoire** : peu de données collectées au départ (email et identifiant Azure B2C uniquement, énuméré explicitement ce qui n'est pas collecté), ce qui simplifie la conformité mais reste présenté avec la même rigueur qu'un système plus complexe (tableau sous-traitants avec DPA, base légale par donnée). Le droit à la portabilité (Art. 20) est noté non implémenté plutôt que passé sous silence, ce qui est un point honnête à citer.
 
