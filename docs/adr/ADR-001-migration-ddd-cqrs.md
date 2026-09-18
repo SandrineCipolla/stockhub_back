@@ -123,36 +123,7 @@ Nous adoptons une architecture **Domain-Driven Design (DDD)** avec séparation *
 
 #### Value Objects
 
-```typescript
-// ✅ Validation encapsulée dans un Value Object
-export class StockLabel {
-  private readonly value: string;
-  private static readonly MIN_LENGTH = 3;
-  private static readonly MAX_LENGTH = 50;
-
-  constructor(label: string) {
-    if (typeof label !== 'string') {
-      throw new Error('Stock label must be a string.');
-    }
-
-    const normalized = label.trim();
-
-    if (normalized.length < StockLabel.MIN_LENGTH) {
-      throw new Error(`Stock label must be at least ${StockLabel.MIN_LENGTH} characters.`);
-    }
-
-    if (normalized.length > StockLabel.MAX_LENGTH) {
-      throw new Error(`Stock label must not exceed ${StockLabel.MAX_LENGTH} characters.`);
-    }
-
-    this.value = normalized;
-  }
-
-  public getValue(): string {
-    return this.value;
-  }
-}
-```
+Exemple : `src/domain/stock-management/common/value-objects/StockLabel.ts` (validation encapsulée, impossible de construire une instance invalide).
 
 **Avantages:**
 
@@ -163,52 +134,7 @@ export class StockLabel {
 
 #### Entities avec logique métier
 
-```typescript
-// ✅ Logique métier dans l'entité
-export class Stock {
-    static create(params: {...}): Stock {
-        const label = new StockLabel(params.label);  // Validation auto
-        const description = new StockDescription(params.description);
-
-        if (!params.category || params.category.trim() === '') {
-            throw new Error('Stock category cannot be empty');
-        }
-
-        return new Stock(0, label, description, params.category, []);
-    }
-
-    addItem(params: {...}): StockItem {
-        // Validation
-        if (!params.label || params.label.trim() === '') {
-            throw new Error('Item label cannot be empty');
-        }
-
-        if (params.quantity < 0) {
-            throw new Error('Item quantity cannot be negative');
-        }
-
-        // Règle business: pas de duplicates
-        const existingItem = this.items.find(
-            item => item.LABEL.toLowerCase() === params.label.toLowerCase()
-        );
-
-        if (existingItem) {
-            throw new Error(
-                `Item with label "${params.label}" already exists in this stock`
-            );
-        }
-
-        // Création et ajout
-        const newItem = new StockItem(...);
-        this.items.push(newItem);
-        return newItem;
-    }
-
-    getLowStockItems(): StockItem[] {
-        return this.items.filter(item => item.isLowStock());
-    }
-}
-```
+Exemple : `src/domain/stock-management/common/entities/Stock.ts` (`addItem()` rejette label vide, quantité négative et doublons case-insensitive).
 
 **Avantages:**
 
@@ -221,91 +147,11 @@ export class Stock {
 
 #### READ Side (Visualization)
 
-```typescript
-// ✅ Service simple pour lectures optimisées
-export class StockVisualizationService {
-  constructor(private readonly stockRepository: IStockVisualizationRepository) {}
-
-  async getAllStocks(userId: number): Promise<StockDTO[]> {
-    // Pas de logique métier, juste lecture
-    return await this.stockRepository.findAllByUserId(userId);
-  }
-}
-```
-
-**Repository READ:**
-
-```typescript
-async findAllByUserId(userId: number): Promise<StockDTO[]> {
-    // SELECT optimisé avec COUNT au lieu de charger tous les items
-    const stocks = await this.prisma.stocks.findMany({
-        where: { USER_ID: userId },
-        include: {
-            _count: { select: { items: true } }
-        }
-    });
-
-    return stocks.map(stock => ({
-        id: stock.ID,
-        label: stock.LABEL,
-        itemCount: stock._count.items  // Performant
-    }));
-}
-```
+Service : `src/domain/stock-management/visualization/services/StockVisualizationService.ts`. Repository : `src/infrastructure/stock-management/visualization/repositories/PrismaStockVisualizationRepository.ts`.
 
 #### WRITE Side (Manipulation)
 
-```typescript
-// ✅ Handler orchestrant le use case
-export class AddItemToStockCommandHandler {
-  constructor(private readonly stockRepository: IStockCommandRepository) {}
-
-  async handle(command: AddItemToStockCommand): Promise<Stock> {
-    return await this.stockRepository.addItemToStock(command.stockId, {
-      label: command.label,
-      quantity: command.quantity,
-      description: command.description,
-      minimumStock: command.minimumStock,
-    });
-  }
-}
-```
-
-**Repository WRITE:**
-
-```typescript
-async addItemToStock(stockId: number, item: {...}): Promise<Stock> {
-    // 1. Charger le stock complet
-    const stockData = await this.prisma.stocks.findUnique({
-        where: { ID: stockId },
-        include: { items: true }
-    });
-
-    // 2. Reconstituer l'entité domaine
-    const stock = new Stock(
-        stockData.ID,
-        stockData.LABEL,
-        stockData.DESCRIPTION,
-        stockData.CATEGORY,
-        stockData.items.map(i => new StockItem(...))
-    );
-
-    // 3. Appeler la logique métier (validation auto)
-    const newItem = stock.addItem(item);  // ← Validation ici!
-
-    // 4. Persister
-    await this.prisma.items.create({
-        data: {
-            LABEL: newItem.LABEL,
-            QUANTITY: newItem.QUANTITY,
-            STOCK_ID: stockId,
-            ...
-        }
-    });
-
-    return stock;
-}
-```
+Handler : `src/domain/stock-management/manipulation/use-cases/AddItemToStockCommandHandler.ts`. Repository : `src/infrastructure/stock-management/manipulation/repositories/PrismaStockCommandRepository.ts`.
 
 **Avantages:**
 
@@ -317,35 +163,11 @@ async addItemToStock(stockId: number, item: {...}): Promise<Stock> {
 
 #### Tests unitaires domaine (sans DB)
 
-```typescript
-describe('Stock', () => {
-    describe('addItem()', () => {
-        it('should reject duplicate items (case-insensitive)', () => {
-            const stock = Stock.create({...});
-            stock.addItem({label: 'Tomates', quantity: 10});
-
-            // Pas besoin de DB pour tester cette règle!
-            expect(() => stock.addItem({label: 'TOMATES', quantity: 5}))
-                .toThrow('already exists');
-        });
-    });
-});
-```
+Exemple : `tests/domain/stock-management/common/entities/Stock.test.ts` (règles métier testées sans base de données, dont le rejet des doublons insensible à la casse).
 
 #### Tests d'intégration (avec DB)
 
-```typescript
-describe('PrismaStockCommandRepository', () => {
-  it('should enforce business rules when adding item', async () => {
-    const repo = new PrismaStockCommandRepository(prisma);
-
-    // La validation métier est garantie par l'entité
-    await expect(repo.addItemToStock(stockId, { label: '', quantity: 10 })).rejects.toThrow(
-      'cannot be empty'
-    );
-  });
-});
-```
+Exemple : `tests/integration/stock-management/repositories/PrismaStockCommandRepository.integration.test.ts` (validation métier garantie par l'entité, vérifiée avec une vraie base via TestContainers).
 
 ---
 

@@ -261,19 +261,7 @@ const stock = await stockRepository
 
 Au démarrage du projet V2 (nov. 2024), la couche domaine et infrastructure a été migrée vers Prisma. Cependant, le service `UserService` (conversion OID Azure → ID utilisateur en base) utilisait encore des requêtes MySQL directes via un pool de connexions `mysql2` hérité de V1.
 
-En avril 2026, dans le cadre du nettoyage du code V1 (#192), `UserService` a été complètement migré vers Prisma :
-
-```typescript
-// Avant (V1 — MySQL direct)
-const connection = await connectToDatabase();
-const [rows] = await connection.execute('SELECT ID FROM users WHERE EMAIL = ?', [oid]);
-
-// Après (Prisma)
-const user = await this.prisma.user.findUnique({
-  where: { email: oid },
-  select: { id: true },
-});
-```
+En avril 2026, dans le cadre du nettoyage du code V1 (#192), `UserService` a été complètement migré vers Prisma. Interfaces : `src/domain/user/repositories/IReadUserRepository.ts` et `IWriteUserRepository.ts`. Implémentations Prisma : `src/infrastructure/user/repositories/PrismaReadUserRepository.ts` et `PrismaWriteUserRepository.ts`.
 
 Cette migration supprime la dernière dépendance à `mysql2` dans le code applicatif. Prisma est désormais le seul point d'accès à la base de données dans tout le projet.
 

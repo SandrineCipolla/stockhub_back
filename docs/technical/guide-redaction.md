@@ -6,6 +6,16 @@ Règles d'écriture pour la documentation du projet (ADR, README, CONTRIBUTING, 
 
 Rester court pour réduire le temps de relecture. Écrire simplement, préférer la formulation la plus ordinaire. Dire ce qui est, pas ce qui n'est pas. Énoncer chaque idée une seule fois. Supprimer tout mot dont le retrait ne change rien. Préférer le concret à ce qui impressionne : nommer le fichier, le nombre, le mécanisme. La structure suit le contenu. Le texte doit être compréhensible par une personne qui découvre le sujet. Ajouter un commentaire uniquement s'il apporte ce que le code ne peut pas montrer.
 
+## Ne pas répéter entre documents
+
+Une information vit à un seul endroit. Un autre document qui en a besoin y renvoie par un lien qui fonctionne (vers le fichier, la section, ou le code concerné), il ne la recopie pas. Si l'information change, elle ne doit être corrigée qu'à un seul endroit.
+
+Quand deux documents couvrent le même sujet, vérifier le contenu réel avant de choisir quoi garder, pas seulement le titre :
+
+- Contenu strictement identique (même exemple de code, même explication) : garder l'ADR quand une ADR existe pour ce sujet, elle est la source de la décision. Sinon garder le document le plus complet et faire pointer l'autre vers lui.
+- Contenu différent mais même sujet : chacun garde ce qui lui est propre (une ADR justifie une décision avec ses alternatives, un guide `technical/` documente la pratique courante). Vérifier qu'aucun exemple de code ou paragraphe entier n'est recopié entre les deux malgré des rôles différents.
+- Contenu périmé ou devenu secondaire : évaluer s'il vaut mieux dans `docs/archive/` (obsolète) ou `docs/memoire/` (utile pour le mémoire RNCP, voir `docs/memoire/INDEX.md`) plutôt que supprimé sans y avoir pensé.
+
 ## Règles fixes
 
 Aucun tiret cadratin. Aucun point-virgule dans la prose. Aucun point médian Unicode comme séparateur. Les flèches (`->` ou `→`) sont acceptables comme raccourcis délibérés, pas comme décoration.
