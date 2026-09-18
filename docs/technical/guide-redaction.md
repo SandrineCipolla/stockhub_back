@@ -16,6 +16,8 @@ Quand deux documents couvrent le même sujet, vérifier le contenu réel avant d
 - Contenu différent mais même sujet : chacun garde ce qui lui est propre (une ADR justifie une décision avec ses alternatives, un guide `technical/` documente la pratique courante). Vérifier qu'aucun exemple de code ou paragraphe entier n'est recopié entre les deux malgré des rôles différents.
 - Contenu périmé ou devenu secondaire : évaluer s'il vaut mieux dans `docs/archive/` (obsolète) ou `docs/memoire/` (utile pour le mémoire RNCP, voir `docs/memoire/INDEX.md`) plutôt que supprimé sans y avoir pensé.
 
+Si un fichier référencé est déplacé ou renommé, mettre à jour le lien dans tous les documents qui y renvoient.
+
 ## Règles fixes
 
 Aucun tiret cadratin. Aucun point-virgule dans la prose. Aucun point médian Unicode comme séparateur. Les flèches (`->` ou `→`) sont acceptables comme raccourcis délibérés, pas comme décoration.

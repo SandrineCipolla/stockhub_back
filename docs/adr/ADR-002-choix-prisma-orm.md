@@ -270,7 +270,7 @@ Cette migration supprime la dernière dépendance à `mysql2` dans le code appli
 ## Liens
 
 - **Documentation Prisma :** https://www.prisma.io/docs
-- **Code concerné :** `src/infrastructure/stock-management/**/*Repository.ts`, `src/services/userService.ts`
+- **Code concerné :** `src/infrastructure/stock-management/**/*Repository.ts`, `src/infrastructure/user/repositories/Prisma*UserRepository.ts`
 - **Schéma Prisma :** `prisma/schema.prisma`
 - **Issue GitHub :** Choix initial ORM (projet setup), #192 (nettoyage V1 + migration UserService)
 - **ADR lié :** [ADR-001 (Migration DDD/CQRS)](./ADR-001-migration-ddd-cqrs.md)

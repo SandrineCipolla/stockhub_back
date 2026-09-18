@@ -346,8 +346,8 @@ class StockModel extends PrismaStock {
 
 - [Issue #37 - Migration DDD](https://github.com/SandrineCipolla/stockhub_back/issues/37)
 - [PR #40 - E2E Tests](https://github.com/SandrineCipolla/stockhub_back/pull/40)
-- [docs/architecture/DDD-CQRS-ARCHITECTURE.md](./DDD-CQRS-ARCHITECTURE.md)
-- [docs/ddd-manipulation-routes-implementation.md](../ddd-manipulation-routes-implementation.md)
+- [docs/technical/ddd-cqrs-guide.md](../technical/ddd-cqrs-guide.md)
+- [docs/archive/ddd-manipulation-routes.md](../archive/ddd-manipulation-routes.md)
 
 ---
 
