@@ -35,50 +35,15 @@ Nous adoptons une **approche à base de Type Aliases** pour les requêtes Expres
 
 #### 1. Interface générique de base (`AuthenticatedRequest`)
 
-```typescript
-// src/api/types/AuthenticatedRequest.ts
-export interface AuthenticatedRequest<
-  P = ParamsDictionary,
-  ResBody = unknown,
-  ReqBody = unknown,
-> extends Request<P, ResBody, ReqBody> {
-  userID: string;
-}
-```
-
-**Design choices :**
-
-- **Génériques avec defaults** : compatibilité avec Express
-- **`unknown` par défaut** (pas `any`) : force le typage explicite
-- Extend `Request<P, ResBody, ReqBody>` : suit le contrat Express standard
+Fichier : `src/api/types/AuthenticatedRequest.ts`. Génériques avec défauts pour compatibilité Express, `unknown` par défaut (pas `any`) pour forcer le typage explicite, étend `Request<P, ResBody, ReqBody>`.
 
 #### 2. Type Aliases par endpoint (`StockRequestTypes.ts`)
 
-```typescript
-// src/api/types/StockRequestTypes.ts
-
-// Body types
-export interface CreateStockBody {
-  label: string;
-  description: string;
-  category: string;
-}
-
-// Type aliases - Single Source of Truth
-export type CreateStockRequest = AuthenticatedRequest<ParamsDictionary, unknown, CreateStockBody>;
-
-export type AddItemToStockRequest = AuthenticatedRequest<StockParams, unknown, AddItemToStockBody>;
-```
+Fichier : `src/api/types/StockRequestTypes.ts`. Un type alias par endpoint (ex. `CreateStockRequest`, `AddItemToStockRequest`), chacun combinant `AuthenticatedRequest` avec les types de params et de body propres à cet endpoint.
 
 #### 3. Usage dans les contrôleurs
 
-```typescript
-// ✅ APRÈS - Type safety complète, zéro assertion
-public async createStock(req: CreateStockRequest, res: express.Response) {
-  const { label } = req.body; // ✅ TypeScript sait que body est CreateStockBody
-  // ↑ Autocomplete complet, type checking, pas de "as" nécessaire
-}
-```
+Exemple : `src/api/controllers/StockControllerManipulation.ts`, méthode `createStock` (type safety complète sur `req.body`, aucune assertion `as`).
 
 ## Alternatives considérées
 

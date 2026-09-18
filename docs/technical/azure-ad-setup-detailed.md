@@ -144,6 +144,8 @@ async convertOIDtoUserID(oid: string): Promise<UserIdentifier> {
 
 ### Variables d'environnement (.env.test)
 
+<!-- TODO securite : AZURE_CLIENT_ID, AZURE_TEST_USERNAME et AZURE_TEST_PASSWORD ci-dessous sont des vraies valeurs de test, deja dans l'historique git depuis la creation de ce fichier (commit 41c2f27). Remplacer par des placeholders une fois le mot de passe retrouve ou le compte de test rotate, pas avant (le mot de passe reel n'est peut-etre pas note ailleurs). -->
+
 ```bash
 DATABASE_URL="mysql://root:root@localhost:3308/stockhub_test"
 
@@ -528,6 +530,8 @@ Les tests E2E nécessitent que le serveur soit déjà en cours d'exécution car 
 - ✅ Fonctionne parfaitement pour les tests
 
 **Configuration dans `.env.test`** :
+
+<!-- TODO securite : meme note que plus haut, vraies valeurs deja dans l'historique git, a placeholderiser une fois le mot de passe recupere ou le compte rotate. -->
 
 ```bash
 AZURE_TEST_USERNAME=sandrine.cipolla@gmail.com
