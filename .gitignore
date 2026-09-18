@@ -164,8 +164,12 @@ doccs/architecture/ddd-cqrs-stock-manipulation.md
 playwright-report/
 test-results/
 
-# Claude working files (prompts, audits, implementation notes)
-.claude/
+# Claude Code
+# La config projet est versionnee (commands/, skills/, agents/, settings.json).
+# Seuls les fichiers locaux et l'etat runtime sont ignores.
+.claude/settings.local.json
+.claude/projects/
+.claude/worktrees/
 
 # POC / scripts standalone
 AppelIA.ts
