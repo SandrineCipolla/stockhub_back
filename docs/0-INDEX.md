@@ -123,14 +123,16 @@ Voir [7-SESSIONS.md](7-SESSIONS.md) pour la liste complète et à jour, non dupl
 > **Ancienne documentation et références**
 > Localisation : [archive/](archive/)
 
-| Type   | Fichier                                                                            | Description                                                       |
-| ------ | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| Issue  | [archive/issues/issue-42-dto-mapper.md](archive/issues/issue-42-dto-mapper.md)     | Issue #42 - DTO Mapper                                            |
-| PR     | [archive/issues/pr-40-review-fixes.md](archive/issues/pr-40-review-fixes.md)       | PR #40 - Review Fixes                                             |
-| Impl   | [archive/ddd-manipulation-routes.md](archive/ddd-manipulation-routes.md)           | Implémentation routes DDD                                         |
-| Résumé | [archive/authorization-phase1-summary.md](archive/authorization-phase1-summary.md) | Résumé autorisation Phase 1 (voir ADR-009 et sessions/2025-12-28) |
-| Audit  | [archive/ARCHITECTURE_AUDIT.md](archive/ARCHITECTURE_AUDIT.md)                     | Audit architecture DDD/CQRS - 10 avril 2026                       |
-| Audit  | [archive/REPO_AUDIT.md](archive/REPO_AUDIT.md)                                     | Audit organisation du repo - 10 avril 2026                        |
+| Type    | Fichier                                                                            | Description                                                       |
+| ------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Issue   | [archive/issues/issue-42-dto-mapper.md](archive/issues/issue-42-dto-mapper.md)     | Issue #42 - DTO Mapper                                            |
+| PR      | [archive/issues/pr-40-review-fixes.md](archive/issues/pr-40-review-fixes.md)       | PR #40 - Review Fixes                                             |
+| Impl    | [archive/ddd-manipulation-routes.md](archive/ddd-manipulation-routes.md)           | Implémentation routes DDD                                         |
+| Résumé  | [archive/authorization-phase1-summary.md](archive/authorization-phase1-summary.md) | Résumé autorisation Phase 1 (voir ADR-009 et sessions/2025-12-28) |
+| Audit   | [archive/ARCHITECTURE_AUDIT.md](archive/ARCHITECTURE_AUDIT.md)                     | Audit architecture DDD/CQRS - 10 avril 2026                       |
+| Audit   | [archive/REPO_AUDIT.md](archive/REPO_AUDIT.md)                                     | Audit organisation du repo - 10 avril 2026                        |
+| Audits  | [archive/audits/INDEX.md](archive/audits/INDEX.md)                                 | Résultats d'audits Q1 2026 (audit back, vérification, avancement) |
+| Prompts | [archive/prompts/INDEX.md](archive/prompts/INDEX.md)                               | Prompts Claude Code archivés — trace de la démarche assistée      |
 
 ---
 

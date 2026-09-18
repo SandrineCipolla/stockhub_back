@@ -19,4 +19,13 @@ Nouveau fichier de bloc : copier `TEMPLATE.md`.
 | `C2-conception-developpement.md` | C2.1 (architecture), C2.4 (back-end, OWASP/RGPD)                                | Créé   |
 | `C3-mise-en-production.md`       | C3.1 (intégration continue), C3.2 (tests), C3.3 (surveillance des mises à jour) | Créé   |
 
+## Sources brutes
+
+Documents externes conservés tels quels, à citer depuis les fichiers de bloc plutôt qu'à recopier.
+
+| Fichier                                 | Nature                                      | Usage                                          |
+| --------------------------------------- | ------------------------------------------- | ---------------------------------------------- |
+| `Retours_Encadrant_Back_Octobre2025.md` | Retour écrit de l'encadrante (octobre 2025) | Regard extérieur sur l'architecture DDD — C2.1 |
+| `Instructions_Projet_Back_2025.md`      | Énoncé du module back-end                   | Cadre et attendus de la formation              |
+
 Bloc 1 (C1.2, veille technologique) vit dans le Second Brain (`stockhub-veille.md`). Bloc 4 (pilotage d'équipe) ne s'applique pas à ce projet solo.
