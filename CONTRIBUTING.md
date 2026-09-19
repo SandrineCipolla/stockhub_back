@@ -124,10 +124,11 @@ gh issue edit <numero> --repo SandrineCipolla/stockhub_back --add-label "back,bu
 
 Après création, remplir ces deux champs sur le board :
 
-| Champ          | Valeurs                                                          | Règle                                                                       |
-| -------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| **Priorité**   | 🔴 Très haute → ⚪ Très basse                                    | Même échelle que P0–P4. Peut être ajusté au planning sans modifier l'issue. |
-| **Estimation** | `XS (≤1h)` / `S (1-3h)` / `M (3-7h)` / `L (7-15h)` / `XL (15h+)` | Format `taille (plage)`, ex. `M (3-7h)`                                     |
+| Champ          | Valeurs                                                 | Règle                                                                       |
+| -------------- | ------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **Priorité**   | 🔴 Très haute → ⚪ Très basse                           | Même échelle que P0–P4. Peut être ajusté au planning sans modifier l'issue. |
+| **Module**     | `Frontend` / `Backend` / `Design System` / `Transverse` | Toujours `Backend` sur ce repo                                              |
+| **Estimation** | Nombre d'heures (champ numérique)                       | Repères : XS 1, S 2, M 5, L 11, XL 20                                       |
 
 Correspondance labels ↔ board : P0 → 🔴, P1 → 🟠, P2 → 🟡, P3 → 🟢, P4 → ⚪
 

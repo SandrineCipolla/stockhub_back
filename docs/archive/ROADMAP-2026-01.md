@@ -1,3 +1,7 @@
+> **Archivé.** Ce document décrit la planification arrêtée en janvier 2026. Il est conservé parce que plusieurs comptes rendus de session y font référence. Les chiffres qu'il contient (version, nombre d'ADR, nombre de tests) étaient ceux de l'époque et ne valent plus.
+>
+> Roadmap courante : [ROADMAP-GLOBAL.md](../ROADMAP-GLOBAL.md). Suivi par milestones : même fichier, section « Suivi d'avancement ».
+
 # 🗺️ StockHub Backend - Roadmap
 
 **Date de création:** 2025-12-09
@@ -359,7 +363,7 @@ L'avancement du projet est suivi via des milestones GitHub offrant des KPIs visu
 - [Frontend](https://github.com/SandrineCipolla/stockHub_V2_front/milestones) - 7 milestones
 - [Design System](https://github.com/SandrineCipolla/stockhub_design_system/milestones) - 6 milestones
 
-**Guide complet :** [docs/technical/MILESTONES-GUIDE.md](docs/technical/MILESTONES-GUIDE.md)
+**Guide complet :** [docs/technical/MILESTONES-GUIDE.md](../technical/MILESTONES-GUIDE.md)
 
 ---
 

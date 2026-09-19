@@ -11,17 +11,7 @@ StockHub aide les familles à gérer leurs stocks de produits (alimentaires, art
 
 **Architecture** : DDD/CQRS, séparation stricte des couches (`domain → infrastructure → api`, jamais l'inverse). Détail et justification : [ADR-001](docs/adr/ADR-001-migration-ddd-cqrs.md).
 
-```
-src/
-├── domain/          # Logique métier (entités, value objects)
-│   └── stock-management/
-│       ├── manipulation/     # Command side (CQRS, Write)
-│       └── visualization/    # Query side (CQRS, Read)
-├── infrastructure/  # Implémentations Prisma
-├── api/             # Controllers, routes, DTOs
-├── authentication/  # Azure AD B2C (Passport Bearer)
-└── authorization/   # Middleware autorisation stocks
-```
+Arborescence des dossiers et rôle de chaque couche : [CLAUDE.md](CLAUDE.md#architecture-dddcqrs).
 
 ---
 
