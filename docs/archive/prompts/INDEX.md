@@ -11,7 +11,6 @@ Les résultats correspondants sont dans [../audits/](../audits/).
 | `AUDIT_PROMPT_CLAUDE_CODE_BACK.md`         | mars 2026  | Audit global back-end → résultats : `audits/AUDIT_BACK_RESULTS.md` |
 | `CORRECTIONS_CLAUDE_CODE_BACK_v2.md`       | mars 2026  | Plan de corrections suite à l'audit                                |
 | `VERIFICATION_POST_CORRECTIONS_BACK.md`    | mars 2026  | Vérification → résultats : `audits/VERIFICATION_RESULTS.md`        |
-| `ETAT_CONNEXION_FRONT_BACK.md`             | mars 2026  | Diagnostic connexion front ↔ back (destiné au repo front)          |
 | `audit_backend_items.md`                   | mars 2026  | Flow UpdateItem                                                    |
 | `PROMPT_audit_seed_back.md`                | mars 2026  | Seed de démonstration Prisma                                       |
 | `audit-ia-module.md`                       | mars 2026  | État réel du module IA / prédictions                               |

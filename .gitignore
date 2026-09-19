@@ -165,11 +165,12 @@ playwright-report/
 test-results/
 
 # Claude Code
-# La config projet est versionnee (commands/, skills/, agents/, settings.json).
-# Seuls les fichiers locaux et l'etat runtime sont ignores.
-.claude/settings.local.json
-.claude/projects/
-.claude/worktrees/
+# Configuration projet versionnee. Le runtime local et les fichiers d'etat sont ignores par defaut (allowlist).
+.claude/*
+!.claude/commands/
+!.claude/agents/
+!.claude/skills/
+!.claude/settings.json
 
 # POC / scripts standalone
 AppelIA.ts
