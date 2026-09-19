@@ -164,8 +164,13 @@ doccs/architecture/ddd-cqrs-stock-manipulation.md
 playwright-report/
 test-results/
 
-# Claude working files (prompts, audits, implementation notes)
-.claude/
+# Claude Code
+# Configuration projet versionnee. Le runtime local et les fichiers d'etat sont ignores par defaut (allowlist).
+.claude/*
+!.claude/commands/
+!.claude/agents/
+!.claude/skills/
+!.claude/settings.json
 
 # POC / scripts standalone
 AppelIA.ts
