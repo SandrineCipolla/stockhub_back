@@ -193,7 +193,7 @@ Alors :
 
 1. `npm run test:unit` : tous les tests passent (automatique pre-push)
 2. `npm run knip` : pas de code mort (automatique pre-push)
-3. ADR créée si décision architecturale importante (voir `docs/adr/TEMPLATE.md`)
+3. ADR créé si décision architecturale importante (voir `docs/adr/TEMPLATE.md`)
 4. GitHub Project mis à jour
 
 Les hooks pre-commit et pre-push automatisent la majorité de ces vérifications.

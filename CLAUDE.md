@@ -122,7 +122,7 @@ tests/
 
 `docs/adr/`. Liste à jour dans `docs/adr/INDEX.md`.
 
-Créer une ADR pour toute décision architecturale importante. Format et convention de nommage : `docs/adr/TEMPLATE.md`. Guide de rédaction : `docs/technical/guide-redaction.md`.
+Créer un ADR pour toute décision architecturale importante. Format et convention de nommage : `docs/adr/TEMPLATE.md`. Guide de rédaction : `docs/technical/guide-redaction.md`.
 
 ## Intégration Frontend
 
