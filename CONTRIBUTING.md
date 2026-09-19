@@ -42,6 +42,7 @@ type(scope): message concis (closes #numero)
 
 - Utiliser `.github/PULL_REQUEST_TEMPLATE.md`
 - Indiquer les couches DDD impactées, le test plan, et `Closes #numero`
+- Pas de mention d'outils ou d'IA, ni dans le titre ni dans la description
 
 ### Releases
 
@@ -122,12 +123,13 @@ gh issue edit <numero> --repo SandrineCipolla/stockhub_back --add-label "back,bu
 
 ### Champs GitHub Project board
 
-Après création, remplir ces deux champs sur le board :
+Après création, remplir ces trois champs sur le board :
 
-| Champ          | Valeurs                                                          | Règle                                                                       |
-| -------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| **Priorité**   | 🔴 Très haute → ⚪ Très basse                                    | Même échelle que P0–P4. Peut être ajusté au planning sans modifier l'issue. |
-| **Estimation** | `XS (≤1h)` / `S (1-3h)` / `M (3-7h)` / `L (7-15h)` / `XL (15h+)` | Format `taille (plage)`, ex. `M (3-7h)`                                     |
+| Champ          | Valeurs                                                 | Règle                                                                       |
+| -------------- | ------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **Priorité**   | 🔴 Très haute → ⚪ Très basse                           | Même échelle que P0–P4. Peut être ajusté au planning sans modifier l'issue. |
+| **Module**     | `Frontend` / `Backend` / `Design System` / `Transverse` | Toujours `Backend` sur ce repo                                              |
+| **Estimation** | Nombre d'heures (champ numérique)                       | Repères : XS 1, S 2, M 5, L 11, XL 20                                       |
 
 Correspondance labels ↔ board : P0 → 🔴, P1 → 🟠, P2 → 🟡, P3 → 🟢, P4 → ⚪
 
@@ -191,7 +193,7 @@ Alors :
 
 1. `npm run test:unit` : tous les tests passent (automatique pre-push)
 2. `npm run knip` : pas de code mort (automatique pre-push)
-3. ADR créée si décision architecturale importante (voir `docs/adr/TEMPLATE.md`)
+3. ADR créé si décision architecturale importante (voir `docs/adr/TEMPLATE.md`)
 4. GitHub Project mis à jour
 
 Les hooks pre-commit et pre-push automatisent la majorité de ces vérifications.

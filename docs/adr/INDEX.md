@@ -52,7 +52,7 @@ Copier `TEMPLATE.md` tel quel.
 
 ### 2. Numérotation
 
-Lister le dossier avant d'écrire : le numéro est celui du plus grand ADR existant, plus un. Format de fichier : `ADR-NNN-titre-en-kebab-case.md`. Les numéros ne sont jamais réattribués, même si une ADR est refusée.
+Lister le dossier avant d'écrire : le numéro est celui du plus grand ADR existant, plus un. Format de fichier : `ADR-NNN-titre-en-kebab-case.md`. Les numéros ne sont jamais réattribués, même si un ADR est refusé.
 
 ### 3. Guide de rédaction
 

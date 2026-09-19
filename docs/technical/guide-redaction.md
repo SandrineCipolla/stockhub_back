@@ -12,8 +12,8 @@ Une information vit à un seul endroit. Un autre document qui en a besoin y renv
 
 Quand deux documents couvrent le même sujet, vérifier le contenu réel avant de choisir quoi garder, pas seulement le titre :
 
-- Contenu strictement identique (même exemple de code, même explication) : garder l'ADR quand une ADR existe pour ce sujet, elle est la source de la décision. Sinon garder le document le plus complet et faire pointer l'autre vers lui.
-- Contenu différent mais même sujet : chacun garde ce qui lui est propre (une ADR justifie une décision avec ses alternatives, un guide `technical/` documente la pratique courante). Vérifier qu'aucun exemple de code ou paragraphe entier n'est recopié entre les deux malgré des rôles différents.
+- Contenu strictement identique (même exemple de code, même explication) : garder l'ADR quand un ADR existe pour ce sujet, elle est la source de la décision. Sinon garder le document le plus complet et faire pointer l'autre vers lui.
+- Contenu différent mais même sujet : chacun garde ce qui lui est propre (un ADR justifie une décision avec ses alternatives, un guide `technical/` documente la pratique courante). Vérifier qu'aucun exemple de code ou paragraphe entier n'est recopié entre les deux malgré des rôles différents.
 - Contenu périmé ou devenu secondaire : évaluer s'il vaut mieux dans `docs/archive/` (obsolète) ou `docs/memoire/` (utile pour le mémoire RNCP, voir `docs/memoire/INDEX.md`) plutôt que supprimé sans y avoir pensé.
 
 Si un fichier référencé est déplacé ou renommé, mettre à jour le lien dans tous les documents qui y renvoient.
