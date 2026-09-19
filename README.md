@@ -48,11 +48,11 @@ Tester avec Postman : `Stockhub_V2.postman_collection.json` (racine) + un enviro
 
 - **Authentification** : Azure AD B2C, JWT Bearer sur toutes les routes `/api/v2`
 - **Autorisation** : système hybride basé sur les ressources ([ADR-009](docs/adr/ADR-009-resource-based-authorization.md))
-- **RGPD** : [docs/rgpd.md](docs/rgpd.md)
+- **RGPD** : [docs/technical/rgpd.md](docs/technical/rgpd.md)
 
 ## Base de données
 
-MySQL via Prisma ORM. Schéma complet, relations et décisions de modélisation : [docs/database-schema.md](docs/database-schema.md).
+MySQL via Prisma ORM. Schéma complet, relations et décisions de modélisation : [docs/technical/database-schema.md](docs/technical/database-schema.md).
 
 ## Tests
 
@@ -75,7 +75,7 @@ Couverture à jour : badge en haut de ce fichier.
 
 - [CONTRIBUTING.md](CONTRIBUTING.md) : process de contribution (branches, commits, PR, issues)
 - [CLAUDE.md](CLAUDE.md) : contexte projet pour sessions IA
-- [docs/0-INDEX.md](docs/0-INDEX.md) : index complet de la documentation
+- [docs/INDEX.md](docs/INDEX.md) : index complet de la documentation
 - [docs/adr/INDEX.md](docs/adr/INDEX.md) : Architecture Decision Records
 - [CHANGELOG.md](CHANGELOG.md) : journal des changements (généré automatiquement)
 - [Wiki du projet](https://github.com/SandrineCipolla/stockHub_V2_front/wiki) : documentation transversale aux 3 repos StockHub

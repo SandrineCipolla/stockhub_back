@@ -54,7 +54,6 @@
     "express": "^4.20.0",
     "iconv-lite": "^0.6.3",
     "js-yaml": "^4.2.0",
-    "mysql2": "^3.9.4",
     "passport": "^0.7.0",
     "passport-azure-ad": "^4.3.5",
     "prisma": "6.19.3",
