@@ -123,7 +123,7 @@ gh issue edit <numero> --repo SandrineCipolla/stockhub_back --add-label "back,bu
 
 ### Champs GitHub Project board
 
-Après création, remplir ces deux champs sur le board :
+Après création, remplir ces trois champs sur le board :
 
 | Champ          | Valeurs                                                 | Règle                                                                       |
 | -------------- | ------------------------------------------------------- | --------------------------------------------------------------------------- |

@@ -12,7 +12,7 @@ Tableau de bord de l'état courant du backend et point de reprise. La planificat
 | ---------------- | ------------------------------------------------------ |
 | **Version**      | v2.14.0                                                |
 | **Stack**        | Node.js 22, Express 4, TypeScript 5.8, Prisma 6, MySQL |
-| **Architecture** | DDD/CQRS, 20 ADR documentées                           |
+| **Architecture** | DDD/CQRS, 20 ADR documentés                            |
 | **Auth**         | Azure AD B2C (Bearer JWT)                              |
 | **Tests**        | 318 unitaires, 4 intégration, 4 E2E                    |
 | **Prod**         | Azure App Service (West Europe)                        |
