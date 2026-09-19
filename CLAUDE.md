@@ -98,9 +98,9 @@ tests/
 
 📖 **Guides détaillés** :
 
-- Best practices code review → `docs/technical/CODE-REVIEW-BEST-PRACTICES.md`
-- Système de logging → `docs/technical/LOGGER-GUIDE.md`
-- Dependency Injection → `docs/technical/DEPENDENCY-INJECTION-BEST-PRACTICES.md`
+- Best practices code review → `docs/technical/code-review-best-practices.md`
+- Système de logging → `docs/technical/logger-guide.md`
+- Dependency Injection → `docs/technical/dependency-injection-best-practices.md`
 - Tests E2E → `docs/technical/e2e-testing.md`
 - Azure AD B2C → `docs/technical/azure-b2c-setup.md`
 - Guide de rédaction (ADR et documentation) → `docs/technical/guide-redaction.md`

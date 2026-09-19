@@ -70,21 +70,21 @@ Numérotation locale à ce repo, elle ne correspond pas à celle de `front` ou d
 ## 📘 Guides Techniques Approfondis
 
 > **Documentation détaillée sur des sujets spécifiques**
-> Localisation : [technical/](technical/)
+> Localisation : [technical/](technical/) | **Index complet des guides** : [technical/INDEX.md](technical/INDEX.md)
 
 | Catégorie        | Fichier                                                                                              | Description                                               |
 | ---------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | **Architecture** | [technical/ddd-cqrs-guide.md](technical/ddd-cqrs-guide.md)                                           | Guide DDD/CQRS appliqué au projet                         |
-| **Architecture** | [technical/DEPENDENCY-INJECTION-BEST-PRACTICES.md](technical/DEPENDENCY-INJECTION-BEST-PRACTICES.md) | Dependency Injection - Best Practices                     |
+| **Architecture** | [technical/dependency-injection-best-practices.md](technical/dependency-injection-best-practices.md) | Dependency Injection - Best Practices                     |
 | **Frontend**     | [technical/frontend-v2-integration.md](technical/frontend-v2-integration.md)                         | Intégration Frontend V2 avec Backend                      |
 | **Tests**        | [technical/e2e-testing.md](technical/e2e-testing.md)                                                 | Tests E2E avec Playwright                                 |
 | **Tests**        | [technical/testcontainers.md](technical/testcontainers.md)                                           | Tests d'intégration avec TestContainers                   |
 | **Auth**         | [technical/azure-b2c-setup.md](technical/azure-b2c-setup.md)                                         | Setup Azure AD B2C (ROPC)                                 |
 | **Auth**         | [technical/azure-ad-setup-detailed.md](technical/azure-ad-setup-detailed.md)                         | Setup Azure AD - détail complet                           |
 | **Qualité**      | [technical/code-quality-standards.md](technical/code-quality-standards.md)                           | Standards de qualité de code                              |
-| **Qualité**      | [technical/CODE-REVIEW-BEST-PRACTICES.md](technical/CODE-REVIEW-BEST-PRACTICES.md)                   | Bonnes pratiques de code review                           |
-| **Logging**      | [technical/LOGGER-GUIDE.md](technical/LOGGER-GUIDE.md)                                               | Système de logging structuré                              |
-| **Process**      | [technical/MILESTONES-GUIDE.md](technical/MILESTONES-GUIDE.md)                                       | Gestion des milestones GitHub                             |
+| **Qualité**      | [technical/code-review-best-practices.md](technical/code-review-best-practices.md)                   | Bonnes pratiques de code review                           |
+| **Logging**      | [technical/logger-guide.md](technical/logger-guide.md)                                               | Système de logging structuré                              |
+| **Process**      | [technical/milestones-guide.md](technical/milestones-guide.md)                                       | Gestion des milestones GitHub                             |
 | **Infra**        | [technical/environments-setup.md](technical/environments-setup.md)                                   | Mise en place des environnements (local/staging/prod)     |
 | **Rédaction**    | [technical/guide-redaction.md](technical/guide-redaction.md)                                         | Guide de rédaction (ADR et documentation)                 |
 | **Database**     | [technical/database-schema.md](technical/database-schema.md)                                         | Schéma ERD : tables, relations, décisions de modélisation |
@@ -95,7 +95,7 @@ Numérotation locale à ce repo, elle ne correspond pas à celle de `front` ou d
 ## 🐛 Troubleshooting
 
 > **Résolution de problèmes techniques**
-> Localisation : [troubleshooting/](troubleshooting/)
+> Localisation : [troubleshooting/](troubleshooting/) | **Index des fiches** : [troubleshooting/INDEX.md](troubleshooting/INDEX.md)
 
 | Problème                      | Fichier                                                                                              | Description                          |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------ |
@@ -122,7 +122,7 @@ Voir [sessions/INDEX.md](sessions/INDEX.md) pour la liste complète et à jour, 
 ## 📦 Archive
 
 > **Ancienne documentation et références**
-> Localisation : [archive/](archive/)
+> Localisation : [archive/](archive/) | **Index des archives** : [archive/INDEX.md](archive/INDEX.md)
 
 | Type    | Fichier                                                                            | Description                                                                                   |
 | ------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
