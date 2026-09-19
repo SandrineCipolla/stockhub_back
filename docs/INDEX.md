@@ -12,8 +12,8 @@
 
 | Fichier                                      | Description                                                |
 | -------------------------------------------- | ---------------------------------------------------------- |
-| [0-INDEX.md](0-INDEX.md)                     | 📍 Vous êtes ici - Index principal                         |
-| [7-SESSIONS.md](7-SESSIONS.md)               | 📅 Sessions - Index sessions développement                 |
+| [INDEX.md](INDEX.md)                         | 📍 Vous êtes ici - Index principal                         |
+| [sessions/INDEX.md](sessions/INDEX.md)       | 📅 Sessions - Index sessions développement                 |
 | [../CLAUDE.md](../CLAUDE.md)                 | 🤖 Contexte projet pour sessions IA                        |
 | [../CONTRIBUTING.md](../CONTRIBUTING.md)     | 🤝 Process de contribution - branches, commits, PR, issues |
 | [../README.md](../README.md)                 | 📖 Présentation du projet                                  |
@@ -27,7 +27,7 @@ Architecture, authentification, tests et qualité de code sont documentés dans 
 - **🔐 Authentification ?** → [technical/azure-b2c-setup.md](technical/azure-b2c-setup.md)
 - **🧪 Tests ?** → [technical/e2e-testing.md](technical/e2e-testing.md), [technical/testcontainers.md](technical/testcontainers.md)
 - **🐛 Problème technique ?** → [troubleshooting/](troubleshooting/)
-- **📅 Documenter session ?** → [7-SESSIONS.md](7-SESSIONS.md)
+- **📅 Documenter session ?** → [sessions/INDEX.md](sessions/INDEX.md)
 
 ---
 
@@ -87,7 +87,8 @@ Numérotation locale à ce repo, elle ne correspond pas à celle de `front` ou d
 | **Process**      | [technical/MILESTONES-GUIDE.md](technical/MILESTONES-GUIDE.md)                                       | Gestion des milestones GitHub                             |
 | **Infra**        | [technical/environments-setup.md](technical/environments-setup.md)                                   | Mise en place des environnements (local/staging/prod)     |
 | **Rédaction**    | [technical/guide-redaction.md](technical/guide-redaction.md)                                         | Guide de rédaction (ADR et documentation)                 |
-| **Database**     | [database-schema.md](database-schema.md)                                                             | Schéma ERD : tables, relations, décisions de modélisation |
+| **Database**     | [technical/database-schema.md](technical/database-schema.md)                                         | Schéma ERD : tables, relations, décisions de modélisation |
+| **RGPD**         | [technical/rgpd.md](technical/rgpd.md)                                                               | Conformité RGPD et protection des données                 |
 
 ---
 
@@ -109,12 +110,12 @@ Numérotation locale à ce repo, elle ne correspond pas à celle de `front` ou d
 ## 📅 Sessions de Développement
 
 > **Historique chronologique des sessions de développement**
-> **Comment documenter** : Voir [7-SESSIONS.md](7-SESSIONS.md)
+> **Comment documenter** : Voir [sessions/INDEX.md](sessions/INDEX.md)
 > Localisation : [sessions/](sessions/)
 
 ### Sessions Récentes
 
-Voir [7-SESSIONS.md](7-SESSIONS.md) pour la liste complète et à jour, non dupliquée ici.
+Voir [sessions/INDEX.md](sessions/INDEX.md) pour la liste complète et à jour, non dupliquée ici.
 
 ---
 

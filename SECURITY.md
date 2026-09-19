@@ -54,7 +54,7 @@ Dependency updates are proposed automatically by Dependabot.
 - **Database:** MySQL with encryption at rest
 - **Secrets management:** Azure App Service settings and GitHub Secrets
 - **Environment variables:** never committed to the repository
-- **GDPR:** see [docs/rgpd.md](docs/rgpd.md)
+- **GDPR:** see [docs/technical/rgpd.md](docs/technical/rgpd.md)
 
 ## Security Best Practices
 
