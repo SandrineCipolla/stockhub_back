@@ -42,6 +42,7 @@ type(scope): message concis (closes #numero)
 
 - Utiliser `.github/PULL_REQUEST_TEMPLATE.md`
 - Indiquer les couches DDD impactées, le test plan, et `Closes #numero`
+- Pas de mention d'outils ou d'IA, ni dans le titre ni dans la description
 
 ### Releases
 
