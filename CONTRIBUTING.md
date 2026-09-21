@@ -38,11 +38,24 @@ type(scope): message concis (closes #numero)
 
 **Exemples** : `feat(items): add UpdateItem command and handler (closes #118)`, `fix(items): return 404 when itemId not found`
 
-### Pull requests
+### Pull requests et revues de code
 
 - Utiliser `.github/PULL_REQUEST_TEMPLATE.md`
 - Indiquer les couches DDD impactées, le test plan, et `Closes #numero`
 - Pas de mention d'outils ou d'IA, ni dans le titre ni dans la description
+
+#### Règles de rédaction des commentaires de PR (Code & Doc Reviews)
+
+Toute revue de PR doit respecter le [guide-redaction.md](docs/technical/guide-redaction.md) :
+
+1. **Uniquement les points à corriger ou améliorer** : Ne pas lister ce qui est validé ou conforme. Un commentaire de revue sert exclusivement à signaler des éléments à modifier ou améliorer.
+2. **Si aucun point à modifier** : Ne pas ajouter de commentaire de revue inutile. Le statut de la PR suffit.
+3. **Rédaction concrète et factuelle** :
+   - Écrire court pour réduire le temps de relecture.
+   - Aucun tiret cadratin (`—`).
+   - Aucun point-virgule dans la prose (`;`).
+   - Aucun point médian (`·`).
+   - Aucun qualificatif subjectif ou formule de remplissage.
 
 ### Releases
 

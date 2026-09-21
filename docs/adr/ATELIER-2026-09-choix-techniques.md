@@ -103,6 +103,26 @@ _(format demandé par la fiche "Comprendre une stack technique" du cours : couch
 
 **Couches que la stack laisse ouvertes** : pas de state manager global (Redux/Zustand) identifié — à vérifier si React 19 + hooks suffisent durablement ; pas de SSR/edge runtime (cohérent avec le choix CSR).
 
+### Fiche de stack — Design System (`stockhub_design_system`)
+
+| Couche                 | Technologie et version                                 | Rôle dans le projet                                | Raison ou preuve                                                              | Condition de réexamen                                                |
+| ---------------------- | ------------------------------------------------------ | -------------------------------------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| composants UI          | Lit 3.x (Web Components) + TypeScript                  | composants réutilisables, agnostiques du framework | Wiki ADR-001, ADR-002 : portabilité inter-framework, isolation CSS Shadow DOM | si la surcharge des wrappers React dépasse le bénéfice d'agnosticité |
+| wrappers               | `@lit/react`                                           | génération de composants React natifs              | Wiki ADR-002 : intégration transparente avec le JSX React                     | —                                                                    |
+| documentation & visuel | Storybook 8.x + Chromatic                              | catalogue interactif, revue visuelle automatisée   | Wiki ADR-003 : documentation vivante des composants UI                        | —                                                                    |
+| accessibilité (a11y)   | Norme WCAG AA (labels, contrastes, navigation clavier) | conformité d'accessibilité numérique               | Issues DS #27, #33, #34                                                       | si le score Lighthouse A11y descend sous 95                          |
+
+### Matrice de Parité Tri-Repos (Backend ↔ Frontend ↔ Design System)
+
+| Fonctionnalité / Choix | Backend (`stockhub_back`)               | Frontend (`stockHub_V2_front`)      | Design System (`stockhub_design_system`) | Statut d'alignement ISO |
+| ---------------------- | --------------------------------------- | ----------------------------------- | ---------------------------------------- | ----------------------- |
+| **Champ `note` libre** | PR #246 (Prisma, DTOs, OpenAPI)         | Ticket #142 (Saisie UI & affichage) | Composants Form / Textarea               | ✅ Alignment ISO        |
+| **Category free-text** | PR #242 (`VARCHAR(50)`)                 | Ticket #144 (Autocomplete input)    | Composants Input / Dropdown              | ✅ Alignment ISO        |
+| **Détail item**        | PR #233 (`GET /stocks/:sId/items/:iId`) | Ticket #165 (Vue cartes & détail)   | Dual-view responsive (ADR-011)           | ✅ Alignment ISO        |
+| **IA & Suggestions**   | OpenRouter + Mistral (Cache DB)         | Ticket #139 (Page Suggestions IA)   | Cards & Badges IA                        | ✅ Alignment ISO        |
+| **Auth & Sécurité**    | Passport Bearer JWT (Azure B2C)         | MSAL (Auth interactive B2C)         | Wrappers UI sécurisés                    | ✅ Alignment ISO        |
+| **Qualité & Tests**    | Jest + TestContainers (MySQL réel)      | Vitest + Playwright (E2E)           | Storybook + Chromatic + @open-wc         | ✅ Alignment ISO        |
+
 ---
 
 ### Le vrai problème découvert : deux sources de vérité qui divergent déjà

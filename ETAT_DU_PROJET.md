@@ -120,6 +120,8 @@ Le projet est dans la **phase 1** de [docs/ROADMAP-GLOBAL.md](docs/ROADMAP-GLOBA
 
 Prochain ticket selon la roadmap : **#219**, validation Zod sur les inputs des controllers.
 
+> 🧵 **Ticket Fil Rouge Excellence** : Les pistes d'amélioration optionnelles pour consolider l'architecture et la résilience backend sont centralisées dans [docs/technical/ticket-fil-rouge-excellence.md](docs/technical/ticket-fil-rouge-excellence.md).
+
 ---
 
 ## Pour reprendre rapidement

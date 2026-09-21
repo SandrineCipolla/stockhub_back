@@ -72,23 +72,25 @@ Numérotation locale à ce repo, elle ne correspond pas à celle de `front` ou d
 > **Documentation détaillée sur des sujets spécifiques**
 > Localisation : [technical/](technical/) | **Index complet des guides** : [technical/INDEX.md](technical/INDEX.md)
 
-| Catégorie        | Fichier                                                                                              | Description                                               |
-| ---------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| **Architecture** | [technical/ddd-cqrs-guide.md](technical/ddd-cqrs-guide.md)                                           | Guide DDD/CQRS appliqué au projet                         |
-| **Architecture** | [technical/dependency-injection-best-practices.md](technical/dependency-injection-best-practices.md) | Dependency Injection - Best Practices                     |
-| **Frontend**     | [technical/frontend-v2-integration.md](technical/frontend-v2-integration.md)                         | Intégration Frontend V2 avec Backend                      |
-| **Tests**        | [technical/e2e-testing.md](technical/e2e-testing.md)                                                 | Tests E2E avec Playwright                                 |
-| **Tests**        | [technical/testcontainers.md](technical/testcontainers.md)                                           | Tests d'intégration avec TestContainers                   |
-| **Auth**         | [technical/azure-b2c-setup.md](technical/azure-b2c-setup.md)                                         | Setup Azure AD B2C (ROPC)                                 |
-| **Auth**         | [technical/azure-ad-setup-detailed.md](technical/azure-ad-setup-detailed.md)                         | Setup Azure AD - détail complet                           |
-| **Qualité**      | [technical/code-quality-standards.md](technical/code-quality-standards.md)                           | Standards de qualité de code                              |
-| **Qualité**      | [technical/code-review-best-practices.md](technical/code-review-best-practices.md)                   | Bonnes pratiques de code review                           |
-| **Logging**      | [technical/logger-guide.md](technical/logger-guide.md)                                               | Système de logging structuré                              |
-| **Process**      | [technical/milestones-guide.md](technical/milestones-guide.md)                                       | Gestion des milestones GitHub                             |
-| **Infra**        | [technical/environments-setup.md](technical/environments-setup.md)                                   | Mise en place des environnements (local/staging/prod)     |
-| **Rédaction**    | [technical/guide-redaction.md](technical/guide-redaction.md)                                         | Guide de rédaction (ADR et documentation)                 |
-| **Database**     | [technical/database-schema.md](technical/database-schema.md)                                         | Schéma ERD : tables, relations, décisions de modélisation |
-| **RGPD**         | [technical/rgpd.md](technical/rgpd.md)                                                               | Conformité RGPD et protection des données                 |
+| Catégorie        | Fichier                                                                                              | Description                                                |
+| ---------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| **Architecture** | [technical/ddd-cqrs-guide.md](technical/ddd-cqrs-guide.md)                                           | Guide DDD/CQRS appliqué au projet                          |
+| **Architecture** | [technical/dependency-injection-best-practices.md](technical/dependency-injection-best-practices.md) | Dependency Injection - Best Practices                      |
+| **Frontend**     | [technical/frontend-v2-integration.md](technical/frontend-v2-integration.md)                         | Intégration Frontend V2 avec Backend                       |
+| **Tests**        | [technical/e2e-testing.md](technical/e2e-testing.md)                                                 | Tests E2E avec Playwright                                  |
+| **Tests**        | [technical/testcontainers.md](technical/testcontainers.md)                                           | Tests d'intégration avec TestContainers                    |
+| **Auth**         | [technical/azure-b2c-setup.md](technical/azure-b2c-setup.md)                                         | Setup Azure AD B2C (ROPC)                                  |
+| **Auth**         | [technical/azure-ad-setup-detailed.md](technical/azure-ad-setup-detailed.md)                         | Setup Azure AD - détail complet                            |
+| **Qualité**      | [technical/code-quality-standards.md](technical/code-quality-standards.md)                           | Standards de qualité de code                               |
+| **Qualité**      | [technical/code-review-best-practices.md](technical/code-review-best-practices.md)                   | Bonnes pratiques de code review                            |
+| **Excellence**   | [technical/ticket-fil-rouge-excellence.md](technical/ticket-fil-rouge-excellence.md)                 | 🧵 Ticket Fil Rouge : Axes d'amélioration et d'excellence  |
+| **Logging**      | [technical/logger-guide.md](technical/logger-guide.md)                                               | Système de logging structuré                               |
+| **Process**      | [technical/milestones-guide.md](technical/milestones-guide.md)                                       | Gestion des milestones GitHub                              |
+| **Nettoyage**    | [technical/guide-nettoyage-multi-repos.md](technical/guide-nettoyage-multi-repos.md)                 | 🧹 Guide & Checklist de nettoyage multi-repos (Front / DS) |
+| **Infra**        | [technical/environments-setup.md](technical/environments-setup.md)                                   | Mise en place des environnements (local/staging/prod)      |
+| **Rédaction**    | [technical/guide-redaction.md](technical/guide-redaction.md)                                         | Guide de rédaction (ADR et documentation)                  |
+| **Database**     | [technical/database-schema.md](technical/database-schema.md)                                         | Schéma ERD : tables, relations, décisions de modélisation  |
+| **RGPD**         | [technical/rgpd.md](technical/rgpd.md)                                                               | Conformité RGPD et protection des données                  |
 
 ---
 
