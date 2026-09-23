@@ -1,76 +1,73 @@
-# Security Policy
+# Politique de sécurité
 
-## Supported Versions
+## Versions supportées
 
-| Version | Supported          |
+| Version | Supportée          |
 | ------- | ------------------ |
 | 2.x     | :white_check_mark: |
 | < 2.0   | :x:                |
 
-Only the latest released 2.x version receives security fixes. The current version is in [package.json](package.json).
+Seule la dernière version 2.x publiée reçoit les correctifs de sécurité. La version courante est indiquée dans [package.json](package.json).
 
-## Reporting a Vulnerability
+## Signaler une vulnérabilité
 
-If you discover a security vulnerability in StockHub Backend, please report it by emailing the maintainer directly.
+Si vous découvrez une vulnérabilité dans StockHub Backend, signalez-la en privé depuis l'onglet **Security** du dépôt, via [Report a vulnerability](https://github.com/SandrineCipolla/stockhub_back/security/advisories/new).
 
-**Please do not open public issues for security vulnerabilities.**
+**Merci de ne pas ouvrir d'issue publique pour une vulnérabilité de sécurité.**
 
-### What to include in your report
+### Ce que doit contenir le signalement
 
-- Description of the vulnerability
-- Steps to reproduce the issue
-- Potential impact
-- Suggested fix, if any
+- Description de la vulnérabilité
+- Étapes pour la reproduire
+- Impact potentiel
+- Correctif suggéré, le cas échéant
 
-### Response timeline
+### Traitement des signalements
 
-- **Initial response:** within 48 hours
-- **Status update:** within 7 days
-- **Fix timeline:** depends on severity, critical issues prioritized
+Ce projet est maintenu par une seule personne, sur son temps disponible. Les signalements sont examinés dès que possible, les vulnérabilités critiques et hautes étant prioritaires sur le reste.
 
-## Security Measures
+Aucun délai de réponse n'est garanti. Vous serez tenu informé de l'avancement dans le fil de l'advisory.
 
-### Automated security checks
+## Mesures de sécurité
 
-Two GitHub Actions workflows run `npm audit`. HIGH and CRITICAL vulnerabilities block the build.
+### Contrôles automatiques
 
-- `main_stockhub-back.yml`, on every push and pull request, alongside tests, lint and build
-- `security-audit.yml`, dedicated workflow with its own badge, also scheduled weekly
+`security-audit.yml` exécute `npm audit --audit-level=high` : les vulnérabilités HIGH et CRITICAL bloquent le build. Les vulnérabilités MODERATE et LOW sont remontées à titre informatif, sans bloquer.
+
+Le workflow s'exécute sur chaque push et pull request vers `main` ou `develop`, chaque lundi à 00h00 UTC, et sur déclenchement manuel. Il est distinct du workflow principal `main_stockhub-back.yml` (celui-ci n'exécute plus `npm audit`, cette étape y est désactivée depuis l'extraction vers ce workflow dédié) : pourquoi et comment, voir [docs/ci-cd/SECURITY-AUDIT-WORKFLOW.md](docs/ci-cd/SECURITY-AUDIT-WORKFLOW.md).
 
 ![Security](https://github.com/SandrineCipolla/stockhub_back/actions/workflows/security-audit.yml/badge.svg)
 
-Why the workflows are split, and how the badge is wired: [docs/ci-cd/SECURITY-AUDIT-WORKFLOW.md](docs/ci-cd/SECURITY-AUDIT-WORKFLOW.md).
+Les mises à jour de dépendances sont proposées automatiquement par Dependabot.
 
-Dependency updates are proposed automatically by Dependabot.
+### Authentification et autorisation
 
-### Authentication and authorization
+- **Authentification** : Azure AD B2C avec jetons JWT Bearer sur chaque route `/api/v2`
+- **Autorisation** : rôles par stock basés sur les ressources, voir [ADR-009](docs/adr/ADR-009-resource-based-authorization.md)
+- **Sécurité API** : HTTPS uniquement en production, CORS configuré par environnement
 
-- **Authentication:** Azure AD B2C with JWT Bearer tokens on every `/api/v2` route
-- **Authorization:** resource-based roles per stock, see [ADR-009](docs/adr/ADR-009-resource-based-authorization.md)
-- **API security:** HTTPS only in production, CORS configured per environment
+### Protection des données
 
-### Data protection
+- **Base de données** : MySQL avec chiffrement au repos
+- **Gestion des secrets** : Azure App Service settings et GitHub Secrets
+- **Variables d'environnement** : jamais committées dans le dépôt
+- **RGPD** : voir [docs/technical/rgpd.md](docs/technical/rgpd.md)
 
-- **Database:** MySQL with encryption at rest
-- **Secrets management:** Azure App Service settings and GitHub Secrets
-- **Environment variables:** never committed to the repository
-- **GDPR:** see [docs/technical/rgpd.md](docs/technical/rgpd.md)
+## Bonnes pratiques
 
-## Security Best Practices
+Pour toute contribution à ce projet :
 
-When contributing to this project:
+1. Ne jamais committer de données sensibles : clés d'API, mots de passe, tokens
+2. Respecter le mode strict de TypeScript et les règles de sécurité ESLint
+3. Valider toutes les entrées utilisateur
+4. Utiliser Prisma plutôt que du SQL brut
+5. Maintenir les dépendances à jour
 
-1. Never commit sensitive data such as API keys, passwords or tokens
-2. Follow TypeScript strict mode and the ESLint security rules
-3. Validate all user inputs
-4. Use Prisma rather than raw SQL
-5. Keep dependencies up to date
+## Historique des vulnérabilités
 
-## Vulnerability History
-
-Every vulnerability found and fixed is recorded in [docs/security/SECURITY-VULNERABILITIES.md](docs/security/SECURITY-VULNERABILITIES.md).
+Chaque vulnérabilité découverte et corrigée est consignée dans [docs/security/SECURITY-VULNERABILITIES.md](docs/security/SECURITY-VULNERABILITIES.md).
 
 ---
 
-**Maintainer:** Sandrine Cipolla
-**Project:** StockHub Backend (RNCP project)
+**Mainteneuse** : Sandrine Cipolla
+**Projet** : StockHub Backend (projet RNCP)
