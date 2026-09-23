@@ -6,11 +6,12 @@
 
 ## 🏗️ Architecture & Conception
 
-| Fichier                                                                          | Description                                                                                |
-| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| [ddd-cqrs-guide.md](ddd-cqrs-guide.md)                                           | Guide d'implémentation DDD/CQRS appliqué au projet (Command/Query, Value Objects, Entités) |
-| [dependency-injection-best-practices.md](dependency-injection-best-practices.md) | Bonnes pratiques d'injection de dépendances (prismaClient ?? new PrismaClient())           |
-| [database-schema.md](database-schema.md)                                         | Schéma de base de données MySQL : ERD, tables, relations et choix de modélisation          |
+| Fichier                                                                          | Description                                                                                                                             |
+| -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| [ddd-cqrs-guide.md](ddd-cqrs-guide.md)                                           | Guide d'implémentation DDD/CQRS appliqué au projet (Command/Query, Value Objects, Entités)                                              |
+| [dependency-injection-best-practices.md](dependency-injection-best-practices.md) | Bonnes pratiques d'injection de dépendances (prismaClient ?? new PrismaClient())                                                        |
+| [database-schema.md](database-schema.md)                                         | Schéma de base de données MySQL : ERD, tables, relations et choix de modélisation                                                       |
+| [ticket-fil-rouge-excellence.md](ticket-fil-rouge-excellence.md)                 | Axes d'amélioration back-end en réserve (validation Zod, dette technique) — optionnel, à traiter si le temps le permet avant soutenance |
 
 ---
 
@@ -49,6 +50,7 @@
 
 ## ✍️ Méthodologie & Rédaction
 
-| Fichier                                  | Description                                                       |
-| ---------------------------------------- | ----------------------------------------------------------------- |
-| [guide-redaction.md](guide-redaction.md) | Directives de rédaction de la documentation technique et des ADRs |
+| Fichier                                                          | Description                                                                                                                             |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| [guide-redaction.md](guide-redaction.md)                         | Directives de rédaction de la documentation technique et des ADRs                                                                       |
+| [guide-nettoyage-multi-repos.md](guide-nettoyage-multi-repos.md) | Checklist de nettoyage documentaire éprouvée sur ce repo, à répliquer à l'identique sur `stockHub_V2_front` et `stockhub_design_system` |

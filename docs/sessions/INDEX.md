@@ -16,7 +16,7 @@
 
 ### Session du 1er Mars 2026 - Mise en place des environnements (Local / Staging / Prod)
 
-**Fichier** : [sessions/2026-03-01-staging-environment-setup.md](sessions/2026-03-01-staging-environment-setup.md)
+**Fichier** : [2026-03-01-staging-environment-setup.md](2026-03-01-staging-environment-setup.md)
 
 **Objectif** : Mettre en place 4 environnements isolés, configurer Postman ROPC, valider staging, gérer quota Azure
 
@@ -37,7 +37,7 @@
 
 ### Session du 26 Février 2026 - Azure Config CORS & Allowed Origins
 
-**Fichier** : [sessions/2026-02-26-azure-config-cors-allowed-origins.md](sessions/2026-02-26-azure-config-cors-allowed-origins.md)
+**Fichier** : [2026-02-26-azure-config-cors-allowed-origins.md](2026-02-26-azure-config-cors-allowed-origins.md)
 
 **Objectif** : Corriger la configuration CORS et les origines autorisées sur Azure
 
@@ -45,7 +45,7 @@
 
 ### Session du 29 Janvier 2026 - Mise en place des Milestones GitHub
 
-**Fichier** : [sessions/2026-01-29-milestones-setup.md](sessions/2026-01-29-milestones-setup.md)
+**Fichier** : [2026-01-29-milestones-setup.md](2026-01-29-milestones-setup.md)
 
 **Objectif** : Configurer des milestones GitHub pour le suivi d'avancement RNCP
 
@@ -80,7 +80,7 @@
 
 ### Session du 27 Janvier 2026 - PR #72 Final Review & Merge Preparation
 
-**Fichier** : [sessions/2026-01-27-pr72-final-review-improvements.md](sessions/2026-01-27-pr72-final-review-improvements.md)
+**Fichier** : [2026-01-27-pr72-final-review-improvements.md](2026-01-27-pr72-final-review-improvements.md)
 
 **Objectif** : Finaliser PR #72 en traitant tous les commentaires de review restants et merger PR #73
 
@@ -120,7 +120,7 @@
 
 ### Session du 6 Janvier 2026 - PR #72 Code Review Improvements
 
-**Fichier** : [sessions/2026-01-06-pr72-code-review-improvements.md](sessions/2026-01-06-pr72-code-review-improvements.md)
+**Fichier** : [2026-01-06-pr72-code-review-improvements.md](2026-01-06-pr72-code-review-improvements.md)
 
 **Objectif** : Adresser les 17 commentaires de code review de la PR #72
 
@@ -155,7 +155,7 @@
 
 ### Session du 29 Décembre 2025 - Réorganisation Documentation
 
-**Fichier** : [sessions/2025-12-29-doc-reorganization.md](sessions/2025-12-29-doc-reorganization.md)
+**Fichier** : [2025-12-29-doc-reorganization.md](2025-12-29-doc-reorganization.md)
 
 **Objectif** : Réorganiser et structurer la documentation du projet
 
@@ -191,7 +191,7 @@
 
 ### Session du 28 Décembre 2025 - Authorization Phase 1 & Tests
 
-**Fichier** : [sessions/2025-12-28-authorization-phase1.md](sessions/2025-12-28-authorization-phase1.md)
+**Fichier** : [2025-12-28-authorization-phase1.md](2025-12-28-authorization-phase1.md)
 
 **Objectif** : Implémenter Phase 1 de l'autorisation avec tests complets
 
@@ -235,7 +235,7 @@
 
 ### 2. Utiliser le template
 
-Copier le contenu de [sessions/README.md](sessions/TEMPLATE.md) comme point de départ.
+Copier le contenu de [TEMPLATE.md](TEMPLATE.md) comme point de départ.
 
 ### 3. Sections obligatoires
 

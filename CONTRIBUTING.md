@@ -49,7 +49,7 @@ type(scope): message concis (closes #numero)
 Toute revue de PR doit respecter le [guide-redaction.md](docs/technical/guide-redaction.md) :
 
 1. **Uniquement les points à corriger ou améliorer** : Ne pas lister ce qui est validé ou conforme. Un commentaire de revue sert exclusivement à signaler des éléments à modifier ou améliorer.
-2. **Si aucun point à modifier** : Ne pas ajouter de commentaire de revue inutile. Le statut de la PR suffit.
+2. **Si aucun point à modifier** : Ne publier AUCUN commentaire (ne pas écrire "Prêt pour fusion", "RAS" ou "OK"). Seul le statut natif de la PR s'applique.
 3. **Rédaction concrète et factuelle** :
    - Écrire court pour réduire le temps de relecture.
    - Aucun tiret cadratin (`—`).

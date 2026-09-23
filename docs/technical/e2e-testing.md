@@ -684,9 +684,9 @@ logLevel: 3, // Verbose logging
 
 ## Documentation connexe
 
-- **Configuration Azure AD B2C ROPC** : [AZURE_B2C_ROPC_SETUP.md](./AZURE_B2C_ROPC_SETUP.md)
-- **Documentation complète des tests** : [e2e-tests-azure-ad-setup.md](./e2e-tests-azure-ad-setup.md)
-- **Problèmes rencontrés en détail** : [e2e-azure-ropc-issues.md](./e2e-azure-ropc-issues.md)
+- **Configuration Azure AD B2C ROPC** : [azure-b2c-setup.md](./azure-b2c-setup.md)
+- **Documentation complète des tests** : [azure-ad-setup-detailed.md](./azure-ad-setup-detailed.md)
+- **Problèmes rencontrés en détail** : [e2e-azure-ropc-issues.md](../troubleshooting/e2e-azure-ropc-issues.md)
 
 ---
 

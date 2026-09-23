@@ -40,6 +40,10 @@ Un ADR (Architecture Decision Record) est un document qui capture une **décisio
 
 > Numérotation locale à ce repo : le prochain numéro est le plus grand numéro existant dans ce tableau, plus un (donc après ADR-020 actuellement). Elle ne correspond pas à celle de `stockHub_V2_front` ni à un ordre global. Voir la table de correspondance sur la page wiki [Architecture-Decision-Records](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Decision-Records).
 
+## 📄 Autres documents de ce dossier
+
+- [ATELIER-2026-09-choix-techniques.md](./ATELIER-2026-09-choix-techniques.md) — atelier de justification des choix techniques (contrainte/critère/hypothèse/preuve), pas une ADR : ne suit donc pas la numérotation ci-dessus.
+
 ## 📖 Comment lire un ADR ?
 
 Format et sections : voir `TEMPLATE.md`. En résumé : Contexte, Décision (justification incluse), Alternatives (optionnelle), Conséquences, Critères de vérification (optionnelle), Liens (optionnelle), plus un frontmatter `author/status/related`.

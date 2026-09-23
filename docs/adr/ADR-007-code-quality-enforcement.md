@@ -221,7 +221,7 @@ Suite à l'implémentation du pattern type aliases (ADR-008), les métriques ont
 ## Liens
 
 - [Index des ADRs](./INDEX.md)
-- [Documentation standards qualité](../code-quality-standards.md)
+- [Documentation standards qualité](../technical/code-quality-standards.md)
 - [ADR-008 - Type Aliases Pattern](./ADR-008-typescript-request-type-aliases.md)
 - [Issue #52 - ESLint cleanup](https://github.com/SandrineCipolla/stockhub_back/issues/52)
 - [Issue #54 - Typage any](https://github.com/SandrineCipolla/stockhub_back/issues/54) ✅ Complétée
