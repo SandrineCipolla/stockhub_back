@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.14.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.14.0...v2.14.1) (2026-09-23)
+
+
+### 📚 Documentation
+
+* **adr:** appliquer la documentation vivante aux ADR ([#276](https://github.com/SandrineCipolla/stockhub_back/issues/276)) ([0635e4b](https://github.com/SandrineCipolla/stockhub_back/commit/0635e4b7f661a3b8d0f7305f7527919e86529e95))
+* **contributing:** ajouter les regles de redaction des revues de PR ([e41fab1](https://github.com/SandrineCipolla/stockhub_back/commit/e41fab12df923bf17568fc37786a602718ee66b2))
+* corriger les liens caches, indexer les orphelins, preciser CONTRIBUTING ([e17973a](https://github.com/SandrineCipolla/stockhub_back/commit/e17973a8e275d6c8e331a03b759605f296ad32e4))
+* corriger SECURITY.md ([#287](https://github.com/SandrineCipolla/stockhub_back/issues/287)) ([a193695](https://github.com/SandrineCipolla/stockhub_back/commit/a1936951bc3e1f206b6f43290a1bc3b641b07db6))
+* documenter le lot de sécurité de septembre et créer docs/memoire ([#274](https://github.com/SandrineCipolla/stockhub_back/issues/274)) ([4a51f30](https://github.com/SandrineCipolla/stockhub_back/commit/4a51f30a70472b7b2849343ca04426b4e497d1a4))
+* harmoniser le nommage et ajouter INDEX.md dans chaque sous-dossier (closes [#284](https://github.com/SandrineCipolla/stockhub_back/issues/284)) ([#285](https://github.com/SandrineCipolla/stockhub_back/issues/285)) ([6df5e36](https://github.com/SandrineCipolla/stockhub_back/commit/6df5e36b0bff0ba7846df334193af9f4b618ccd9))
+* nettoyer les fichiers markdown de la racine (closes [#278](https://github.com/SandrineCipolla/stockhub_back/issues/278)) ([#280](https://github.com/SandrineCipolla/stockhub_back/issues/280)) ([d269325](https://github.com/SandrineCipolla/stockhub_back/commit/d269325be8a90607051b29ec275ffb64b1ff6af9))
+* réorganiser la structure interne du dossier docs (closes [#282](https://github.com/SandrineCipolla/stockhub_back/issues/282)) ([#283](https://github.com/SandrineCipolla/stockhub_back/issues/283)) ([83d350e](https://github.com/SandrineCipolla/stockhub_back/commit/83d350e9b1ba696f6e7bedb713419450edc1135f))
+
+
+### 🔧 Chores
+
+* ranger le dossier .claude et archiver les prompts dans docs/ ([#277](https://github.com/SandrineCipolla/stockhub_back/issues/277)) ([54c6937](https://github.com/SandrineCipolla/stockhub_back/commit/54c69373999dd96bbce09bbcda25ed58361a2107))
+
 ## [2.14.0](https://github.com/SandrineCipolla/stockhub_back/compare/v2.13.0...v2.14.0) (2026-09-16)
 
 ### ✨ Features
