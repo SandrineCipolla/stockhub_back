@@ -26,7 +26,7 @@ git diff main --name-only
 
 ```bash
 gh pr create \
-  --title "[type]: [description courte]" \
+  --title "[type]: #[numero] [description courte]" \
   --body "## 🔗 Issue liée
 Closes #[numéro]
 
@@ -51,6 +51,6 @@ Closes #[numéro]
 ## Règles
 
 - ✅ Toujours lier à une issue avec `Closes #`
-- ✅ Le titre suit les Conventional Commits (`feat:`, `fix:`, `refactor:`, etc.)
+- ✅ Le titre suit les Conventional Commits (`feat:`, `fix:`, `refactor:`, etc.), numéro de ticket juste après le type, avant la description (voir [CONTRIBUTING.md](../../CONTRIBUTING.md))
 - ✅ Les détails techniques vont ici, PAS dans l'issue
 - ❌ Ne pas merger sans que la checklist soit complète
