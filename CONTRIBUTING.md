@@ -81,7 +81,7 @@ git checkout -b type/numero-description   # ex: feat/118-update-item-command
 
 ### 3. Ouvrir la PR
 
-- Titre : `type(scope): description (closes #numero)`
+- Titre : `type(scope): #numero description` — le numéro de ticket juste après `type(scope):`, avant la description, même principe que les branches (`type/numero-description`)
 - Body : couches impactées, test plan, `Closes #numero`
 - Vérifier que le CI passe avant de merger
 
