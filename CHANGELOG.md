@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.14.2](https://github.com/SandrineCipolla/stockhub_back/compare/v2.14.1...v2.14.2) (2026-09-25)
+
+
+### 📚 Documentation
+
+* ADR-021, réévaluation du provider d'authentification ([#288](https://github.com/SandrineCipolla/stockhub_back/issues/288)) ([f47dbff](https://github.com/SandrineCipolla/stockhub_back/commit/f47dbff149659853a716867dd8c0c132320de278))
+* **docs:** [#293](https://github.com/SandrineCipolla/stockhub_back/issues/293) aligner la documentation sur les environnements réels et corriger les liens ([#294](https://github.com/SandrineCipolla/stockhub_back/issues/294)) ([30f0e1c](https://github.com/SandrineCipolla/stockhub_back/commit/30f0e1c0a380e61348a908426bd8afd647b34991))
+* numéro de ticket devant dans le titre de PR ([#290](https://github.com/SandrineCipolla/stockhub_back/issues/290)) ([6e65753](https://github.com/SandrineCipolla/stockhub_back/commit/6e657536783573979bd84f987eaf65077513ab27))
+
 ## [2.14.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.14.0...v2.14.1) (2026-09-23)
 
 
