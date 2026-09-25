@@ -363,7 +363,7 @@ L'avancement du projet est suivi via des milestones GitHub offrant des KPIs visu
 - [Frontend](https://github.com/SandrineCipolla/stockHub_V2_front/milestones) - 7 milestones
 - [Design System](https://github.com/SandrineCipolla/stockhub_design_system/milestones) - 6 milestones
 
-**Guide complet :** [docs/technical/MILESTONES-GUIDE.md](../technical/MILESTONES-GUIDE.md)
+**Guide complet :** [docs/technical/milestones-guide.md](../technical/milestones-guide.md)
 
 ---
 

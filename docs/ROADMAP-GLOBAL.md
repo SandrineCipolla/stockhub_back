@@ -270,7 +270,7 @@ Utiliser le retour pour corriger les points soulevés pendant les 6 semaines res
 
 ## Suivi d'avancement (milestones GitHub)
 
-L'avancement est suivi par des milestones GitHub, qui donnent un pourcentage de complétion par version et par bloc RNCP. Le détail du découpage et la procédure sont dans [technical/MILESTONES-GUIDE.md](technical/MILESTONES-GUIDE.md).
+L'avancement est suivi par des milestones GitHub, qui donnent un pourcentage de complétion par version et par bloc RNCP. Le détail du découpage et la procédure sont dans [technical/milestones-guide.md](technical/milestones-guide.md).
 
 - [Milestones backend](https://github.com/SandrineCipolla/stockhub_back/milestones)
 - [Milestones frontend](https://github.com/SandrineCipolla/stockHub_V2_front/milestones)
