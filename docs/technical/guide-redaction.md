@@ -39,3 +39,7 @@ Chaque entrée illustre une catégorie à reconnaître. Ne garder un terme signa
 ## Portée
 
 S'applique à toute documentation rédigée pour ce projet : ADR, README, CONTRIBUTING, sessions de développement, commentaires de PR. Ne s'applique pas au code lui-même (noms de variables, commentaires techniques) sauf pour les commentaires en prose longue.
+
+## Vérification automatique
+
+Le workflow `.github/workflows/docs-check.yml` vérifie à chaque pull request les liens de la documentation, y compris vers le frontend et le design system, et les règles fixes ci-dessus sur les fichiers modifiés. Le script est celui du frontend, décrit dans la section « Vérification automatique » de son [guide de rédaction](https://github.com/SandrineCipolla/stockHub_V2_front/blob/main/docs/technical/guide-redaction.md). Configuration propre à ce repo : `.docs-check.json`.

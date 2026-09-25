@@ -1,0 +1,36 @@
+name: Documentation
+
+on:
+  pull_request:
+    branches: ['main']
+  push:
+    branches: ['main']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docs-check:
+    name: Liens et guide de rédaction
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      # Le script de vérification vit dans le repo frontend, les deux autres repos servent à vérifier les liens entre repos
+      - name: Clone des autres repos StockHub
+        run: |
+          mkdir -p "$RUNNER_TEMP/siblings"
+          git clone --depth 1 https://github.com/SandrineCipolla/stockHub_V2_front.git "$RUNNER_TEMP/siblings/stockHub_V2_front"
+          git clone --depth 1 https://github.com/SandrineCipolla/stockhub_design_system.git "$RUNNER_TEMP/siblings/stockhub_design_system"
+
+      - name: Vérification de la documentation
+        run: node "$RUNNER_TEMP/siblings/stockHub_V2_front/scripts/check-docs.mjs"
+        env:
+          DOCS_SIBLINGS_DIR: ${{ runner.temp }}/siblings
