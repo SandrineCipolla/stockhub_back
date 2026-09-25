@@ -39,7 +39,7 @@ Un ADR (Architecture Decision Record) est un document qui capture une **décisio
 | [ADR-020](./ADR-020-conversion-hexagonale-authorize-middleware.md) | Conversion hexagonale du middleware d'autorisation (alternative à ADR-019)          | 2026-09-09 | 📝 Proposé |
 | [ADR-021](./ADR-021-reevaluation-provider-auth.md)                 | Réévaluation provider auth — Azure AD B2C vs Auth0 vs Clerk (alternative à ADR-003) | 2026-09-24 | 📝 Proposé |
 
-> Numérotation locale à ce repo : le prochain numéro est le plus grand numéro existant dans ce tableau, plus un (donc après ADR-020 actuellement). Elle ne correspond pas à celle de `stockHub_V2_front` ni à un ordre global. Voir la table de correspondance sur la page wiki [Architecture-Decision-Records](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Decision-Records).
+> Numérotation locale à ce repo : le prochain numéro est le plus grand numéro existant dans ce tableau, plus un. Elle ne correspond pas à celle de `stockHub_V2_front` ni à un ordre global. Voir la table de correspondance sur la page wiki [Architecture-Decision-Records](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Decision-Records).
 
 ## 📄 Autres documents de ce dossier
 

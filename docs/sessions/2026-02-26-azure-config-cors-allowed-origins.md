@@ -1,6 +1,6 @@
 # Session du 26 Février 2026 — Configuration Azure App Service (CORS + diagnostic QuotaExceeded)
 
-> **Travail frontend associé** : voir [session front 2026-02-25-merge-pr65-logout-fix-deploy.md](https://github.com/SandrineCipolla/stockHub_V2_front/blob/main/documentation/sessions/2026-02-25-merge-pr65-logout-fix-deploy.md)
+> **Travail frontend associé** : voir [session front 2026-02-25-merge-pr65-logout-fix-deploy.md](https://github.com/SandrineCipolla/stockHub_V2_front/blob/main/docs/sessions/2026-02-25-merge-pr65-logout-fix-deploy.md)
 
 ---
 

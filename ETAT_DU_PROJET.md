@@ -8,16 +8,16 @@ Tableau de bord de l'état courant du backend et point de reprise. La planificat
 
 ## Vue d'ensemble
 
-| Champ            | Valeur                                                 |
-| ---------------- | ------------------------------------------------------ |
-| **Version**      | v2.14.0                                                |
-| **Stack**        | Node.js 22, Express 4, TypeScript 5.8, Prisma 6, MySQL |
-| **Architecture** | DDD/CQRS, 20 ADR documentés                            |
-| **Auth**         | Azure AD B2C (Bearer JWT)                              |
-| **Tests**        | 318 unitaires, 4 intégration, 4 E2E                    |
-| **Prod**         | Azure App Service (West Europe)                        |
-| **Staging**      | Render.com et Aiven MySQL                              |
-| **Soutenance**   | RNCP7, mars 2027                                       |
+| Champ            | Valeur                                                                                         |
+| ---------------- | ---------------------------------------------------------------------------------------------- |
+| **Version**      | [CHANGELOG.md](CHANGELOG.md)                                                                   |
+| **Stack**        | Node.js, Express, TypeScript, Prisma, MySQL (versions dans `package.json`)                     |
+| **Architecture** | DDD/CQRS, décisions dans [docs/adr/INDEX.md](docs/adr/INDEX.md)                                |
+| **Auth**         | Azure AD B2C (Bearer JWT)                                                                      |
+| **Tests**        | unitaires (Jest), intégration (TestContainers), E2E (Playwright), couverture : badge du README |
+| **Prod**         | Azure App Service (West Europe)                                                                |
+| **Staging**      | Render.com et Aiven MySQL                                                                      |
+| **Soutenance**   | RNCP7, mars 2027                                                                               |
 
 Les environnements et leurs URL sont décrits dans le [README](README.md#environnements).
 

@@ -889,7 +889,7 @@ Stock (conteneur logique)
 
 - Le frontend doit mapper les données backend et ajouter les propriétés manquantes
 - Voir `stockHub_V2_front/src/services/api/stocksAPI.ts` → fonction `mapBackendStockToFrontend()`
-- Documentation frontend: `stockHub_V2_front/documentation/INTEGRATION_BACKEND_SESSION.md`
+- Documentation frontend: `stockHub_V2_front/docs/sessions/INTEGRATION_BACKEND_SESSION.md`
 
 ### Authentification
 

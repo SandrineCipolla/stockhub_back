@@ -11,7 +11,7 @@ Process de contribution (branches, commits, PR, workflow par ticket, gestion des
 - **Chemin local**: `C:\Users\sandr\Dev\Perso\Projets\stockhub\stockhub_back`
 - **URL GitHub**: https://github.com/SandrineCipolla/stockhub_back
 - **Prod (Azure App Service)**: https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net/
-- **Staging (Render.com)**: déployé automatiquement depuis la branche `staging`, DB Aiven MySQL
+- **Staging (Render.com)**: service qui suit `main` (Auto-Deploy à chaque commit), DB Aiven MySQL. Pour tester une branche, pointer Render dessus puis revenir sur `main` ([ADR-018](docs/adr/ADR-018-github-flow.md))
 - **Description**: API REST StockHub avec architecture DDD/CQRS et authentification Azure AD B2C
 - **Tech**: Node.js, Express, TypeScript, Prisma, MySQL, Azure AD B2C (versions exactes dans `package.json`)
 
@@ -19,7 +19,7 @@ Process de contribution (branches, commits, PR, workflow par ticket, gestion des
 
 - **Chemin local**: `C:\Users\sandr\Dev\RNCP7\StockHubV2\Front_End\stockHub_V2_front`
 - **URL GitHub**: https://github.com/SandrineCipolla/stockHub_V2_front
-- **Démo live**: https://stock-hub-v2-front.vercel.app/
+- **Prod (Azure Static Web Apps)**: https://brave-field-03611eb03.5.azurestaticapps.net
 - **Tech**: React, TypeScript, Vite, TailwindCSS (versions exactes dans son `package.json`)
 
 ### Design System

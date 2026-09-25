@@ -126,7 +126,7 @@ docker compose down -v              # Arrêter + supprimer les données
 
 ### Architecture
 
-- **Backend** : Render.com — service web gratuit, branche `staging`
+- **Backend** : Render.com, service web gratuit. Il suit `main` et redéploie à chaque commit. Pour tester une branche, pointer Render dessus puis revenir sur `main` ([ADR-018](../adr/ADR-018-github-flow.md))
 - **Base de données** : Aiven MySQL — free tier (1 instance)
 
 ### Configuration Render
@@ -134,7 +134,8 @@ docker compose down -v              # Arrêter + supprimer les données
 1. Créer un compte sur [render.com](https://render.com)
 2. New → Web Service → connecter le repo GitHub
 3. Paramètres :
-   - **Branch** : `staging`
+   - **Branch** : `main`
+   - **Auto-Deploy** : On Commit
    - **Build Command** : `npm ci && npm run build`
    - **Start Command** : `node dist/index.js`
    - **Health Check Path** : `/api-docs.json`
@@ -167,14 +168,7 @@ docker compose down -v              # Arrêter + supprimer les données
 
 ### Premier déploiement
 
-```bash
-# Créer la branche staging depuis main
-git checkout main && git pull
-git checkout -b staging
-git push -u origin staging
-```
-
-Render détecte le push sur `staging` et déclenche le déploiement automatiquement si `autoDeploy: true` dans `render.yaml`.
+Render déploie `main` dès la connexion du repo, puis à chaque commit. Le job `deploy-to-staging` de la CI (déclenchement manuel) appelle le Deploy Hook Render pour forcer un redéploiement. Les réglages effectifs sont ceux du dashboard Render : `render.yaml` (`autoDeploy: false`) ne reflète pas la configuration actuelle.
 
 ### Migrations en staging
 

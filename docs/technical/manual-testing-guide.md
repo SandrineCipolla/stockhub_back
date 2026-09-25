@@ -6,13 +6,13 @@ Valide le fonctionnement complet du module DDD depuis la création de compte jus
 
 - Navigateur web avec DevTools
 - Adresse email valide pour Azure B2C
-- Application frontend : https://stock-hub-v2-front.vercel.app/
+- Application frontend : https://brave-field-03611eb03.5.azurestaticapps.net (prod) ou https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app (staging)
 
 ## Procédure
 
 ### 1. Créer un compte via Azure AD B2C
 
-1. Accéder à https://stock-hub-v2-front.vercel.app/
+1. Accéder à l'application frontend (voir Prérequis)
 2. Cliquer "Se connecter" → portail Azure B2C
 3. Créer un compte (email + mot de passe + vérification email)
 
