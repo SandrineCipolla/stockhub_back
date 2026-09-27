@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.14.2](https://github.com/SandrineCipolla/stockhub_back/compare/v2.14.1...v2.14.2) (2026-09-27)
+
+
+### 📚 Documentation
+
+* ADR-021, réévaluation du provider d'authentification ([#288](https://github.com/SandrineCipolla/stockhub_back/issues/288)) ([f47dbff](https://github.com/SandrineCipolla/stockhub_back/commit/f47dbff149659853a716867dd8c0c132320de278))
+* **agents:** [#301](https://github.com/SandrineCipolla/stockhub_back/issues/301) AGENTS.md avec le bloc commun des repos et environnements ([#302](https://github.com/SandrineCipolla/stockhub_back/issues/302)) ([ab90a94](https://github.com/SandrineCipolla/stockhub_back/commit/ab90a94109cd48a1cd8c4665b955b08034fdd70c))
+* **contributing:** [#297](https://github.com/SandrineCipolla/stockhub_back/issues/297) reprendre les blocs communs aux trois repos ([#298](https://github.com/SandrineCipolla/stockhub_back/issues/298)) ([3fd0444](https://github.com/SandrineCipolla/stockhub_back/commit/3fd044455a17301afe3976b2e33befbea10dc76d))
+* **docs:** [#293](https://github.com/SandrineCipolla/stockhub_back/issues/293) aligner la documentation sur les environnements réels et corriger les liens ([#294](https://github.com/SandrineCipolla/stockhub_back/issues/294)) ([30f0e1c](https://github.com/SandrineCipolla/stockhub_back/commit/30f0e1c0a380e61348a908426bd8afd647b34991))
+* numéro de ticket devant dans le titre de PR ([#290](https://github.com/SandrineCipolla/stockhub_back/issues/290)) ([6e65753](https://github.com/SandrineCipolla/stockhub_back/commit/6e657536783573979bd84f987eaf65077513ab27))
+
+
+### 🔧 Chores
+
+* **skills:** [#299](https://github.com/SandrineCipolla/stockhub_back/issues/299) reprendre les skills communs create-issue, create-bug et create-pr ([#300](https://github.com/SandrineCipolla/stockhub_back/issues/300)) ([12ff395](https://github.com/SandrineCipolla/stockhub_back/commit/12ff395cb04e6b667b3615e051090c6a73b9de44))
+
+
+### 👷 CI/CD
+
+* **docs:** [#295](https://github.com/SandrineCipolla/stockhub_back/issues/295) vérifier les liens et le guide de rédaction à chaque pull request ([#296](https://github.com/SandrineCipolla/stockhub_back/issues/296)) ([d49f3b1](https://github.com/SandrineCipolla/stockhub_back/commit/d49f3b153e1e07749110972c99a645c0386039c7))
+
 ## [2.14.1](https://github.com/SandrineCipolla/stockhub_back/compare/v2.14.0...v2.14.1) (2026-09-23)
 
 
