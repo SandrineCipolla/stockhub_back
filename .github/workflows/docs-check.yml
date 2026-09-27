@@ -26,7 +26,7 @@ jobs:
       # Le script de vérification vit dans le repo frontend, les deux autres repos servent à vérifier les liens entre repos
       - name: Clone des autres repos StockHub
         env:
-          CHECK_DOCS_REF: 26f5bf0c06927c246b546872f5d0401a3dc6062c # front #324
+          CHECK_DOCS_REF: beedffc8726d7ee225b7cf452ea7578a0ab27403 # front #333
         run: |
           mkdir -p "$RUNNER_TEMP/siblings"
           # Version épinglée du script : une évolution de check-docs côté frontend ne s'applique ici qu'en mettant à jour CHECK_DOCS_REF (SHA complet, tag ou branche)
