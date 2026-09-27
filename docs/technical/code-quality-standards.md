@@ -259,4 +259,3 @@ if (!data) {
 ---
 
 **Maintenu par :** Équipe StockHub
-**Dernière mise à jour :** 2024-12-19

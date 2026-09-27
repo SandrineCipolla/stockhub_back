@@ -271,8 +271,3 @@ Lors de la création d'un fichier de déclaration de types:
 - Les types TypeScript ne sont pas visibles au runtime, c'est uniquement pour la validation à la compilation
 
 Les changements garantissent simplement que le backend TypeScript est correctement typé et peut détecter les erreurs de développement avant le déploiement.
-
----
-
-**Auteur:** Claude Sonnet 4.5
-**Dernière mise à jour:** 2025-12-19
