@@ -25,9 +25,14 @@ jobs:
 
       # Le script de vérification vit dans le repo frontend, les deux autres repos servent à vérifier les liens entre repos
       - name: Clone des autres repos StockHub
+        env:
+          CHECK_DOCS_REF: main
         run: |
           mkdir -p "$RUNNER_TEMP/siblings"
-          git clone --depth 1 https://github.com/SandrineCipolla/stockHub_V2_front.git "$RUNNER_TEMP/siblings/stockHub_V2_front"
+          # Version épinglée du script : une évolution de check-docs côté frontend ne s'applique ici qu'en mettant à jour CHECK_DOCS_REF (SHA complet, tag ou branche)
+          git init -q "$RUNNER_TEMP/siblings/stockHub_V2_front"
+          git -C "$RUNNER_TEMP/siblings/stockHub_V2_front" fetch -q --depth 1 https://github.com/SandrineCipolla/stockHub_V2_front.git "$CHECK_DOCS_REF"
+          git -C "$RUNNER_TEMP/siblings/stockHub_V2_front" checkout -q FETCH_HEAD
           git clone --depth 1 https://github.com/SandrineCipolla/stockhub_design_system.git "$RUNNER_TEMP/siblings/stockhub_design_system"
 
       - name: Vérification de la documentation
