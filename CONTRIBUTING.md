@@ -1,6 +1,11 @@
 # Contribuer à StockHub Back
 
-Ce document décrit le process de contribution : branches, commits, pull requests, workflow par ticket, gestion des issues GitHub. Pour l'architecture et les standards de code, voir [CLAUDE.md](CLAUDE.md).
+Ce document décrit le process de contribution : branches, commits, pull requests, workflow par ticket, gestion des issues GitHub. Pour l'architecture et les standards de code, voir [CLAUDE.md](CLAUDE.md). Guide de rédaction de ce repo : [docs/technical/guide-redaction.md](docs/technical/guide-redaction.md).
+
+Les sections entre marqueurs `commun` sont identiques dans les trois repos StockHub et vérifiées par le workflow `docs-check`. Les modifier à l'identique dans les trois repos.
+
+<!-- commun:debut contributing-conventions v1 -->
+<!-- Bloc commun aux trois repos StockHub : le modifier à l'identique dans les trois, en incrémentant la version. Vérifié par check-docs. -->
 
 ## Conventions Git
 
@@ -9,7 +14,7 @@ Ce document décrit le process de contribution : branches, commits, pull request
 Format strict :
 
 ```
-type/issue-number-short-description
+type/numero-description-courte
 ```
 
 | Type        | Usage                                       |
@@ -21,8 +26,8 @@ type/issue-number-short-description
 | `test/`     | Tests uniquement                            |
 | `refactor/` | Refactoring sans changement de comportement |
 
-**Exemples corrects** : `feat/118-update-item-command`, `fix/86-stockitem-lowercase`, `docs/101-openapi-endpoints`
-**Jamais** : `feature/...`, `feat-issue-62-...`, `feat/issue-44-...`. Le format `type/number-description` est la seule convention.
+**Exemples corrects** : `feat/118-update-item-command`, `fix/84-msal-cache-security`, `docs/101-openapi-endpoints`
+**Formats refusés** : `feature/...`, `feat-issue-93-...`, `feat/issue-44-...`.
 
 ### Commits (Conventional Commits)
 
@@ -30,36 +35,36 @@ type/issue-number-short-description
 type(scope): message concis (closes #numero)
 ```
 
-- Vérifiés automatiquement par **commitlint** au pre-commit
-- Message en minuscules, verbe à l'infinitif, sans majuscule en fin
+- Message en minuscules, verbe à l'infinitif
 - Inclure `(closes #numero)` si le commit clôt une issue
-- Pas de mention d'outils ou d'IA dans le message
+- Aucune mention d'outil ou d'IA dans le message
 - Pas de tiret cadratin, y compris dans cette syntaxe : parenthèses pour `closes #numero`
 
-**Exemples** : `feat(items): add UpdateItem command and handler (closes #118)`, `fix(items): return 404 when itemId not found`
+**Exemples** : `feat(items): add item edit modal (closes #110)`, `fix(auth): correct msal cache storage (closes #84)`
 
-### Pull requests et revues de code
+### Pull requests
 
-- Utiliser `.github/PULL_REQUEST_TEMPLATE.md`
-- Indiquer les couches DDD impactées, le test plan, et `Closes #numero`
-- Pas de mention d'outils ou d'IA, ni dans le titre ni dans la description
+- Titre : `type(scope): #numero description`, numéro de ticket juste après `type(scope):`, avant la description, même principe que les branches
+- Body : ce qui change, test plan, `Closes #numero`, en suivant le template de PR du repo
+- Sections du template sans objet : les supprimer, ne pas écrire « Sans objet »
+- Aucune mention d'outil ou d'IA (signature, lien de session, « Generated with ») dans les titres, bodies et commentaires de PR et d'issues
+- Vérifier que la CI passe avant de merger
 
-#### Règles de rédaction des commentaires de PR (Code & Doc Reviews)
+### Revues de PR
 
-Toute revue de PR doit respecter le [guide-redaction.md](docs/technical/guide-redaction.md) :
+Toute revue de PR respecte le guide de rédaction du repo :
 
-1. **Uniquement les points à corriger ou améliorer** : Ne pas lister ce qui est validé ou conforme. Un commentaire de revue sert exclusivement à signaler des éléments à modifier ou améliorer.
-2. **Si aucun point à modifier** : Ne publier AUCUN commentaire (ne pas écrire "Prêt pour fusion", "RAS" ou "OK"). Seul le statut natif de la PR s'applique.
-3. **Rédaction concrète et factuelle** :
-   - Écrire court pour réduire le temps de relecture.
-   - Aucun tiret cadratin (`—`).
-   - Aucun point-virgule dans la prose (`;`).
-   - Aucun point médian (`·`).
-   - Aucun qualificatif subjectif ou formule de remplissage.
+1. **Uniquement les points à corriger ou améliorer** : ne pas lister ce qui est validé ou conforme.
+2. **Si aucun point à modifier** : ne publier aucun commentaire (ni « Prêt pour fusion », ni « RAS », ni « OK »). Le statut natif de la PR suffit.
+3. **Rédaction concrète et factuelle** : écrire court, sans tiret cadratin, sans point-virgule dans la prose, sans point médian, sans qualificatif subjectif ni formule de remplissage.
 
 ### Releases
 
-Automatiques via **Release Please** (semver) sur push `main`.
+Automatiques via **Release Please** (semver) à chaque push sur la branche principale du repo.
+
+<!-- commun:fin contributing-conventions -->
+
+Dans ce repo, le format des commits est vérifié par **commitlint** au pre-commit.
 
 ## Workflow par ticket
 
@@ -81,21 +86,19 @@ git checkout -b type/numero-description   # ex: feat/118-update-item-command
 
 ### 3. Ouvrir la PR
 
-- Titre : `type(scope): #numero description` — le numéro de ticket juste après `type(scope):`, avant la description, même principe que les branches (`type/numero-description`)
-- Body : couches impactées, test plan, `Closes #numero`
-- Vérifier que le CI passe avant de merger
+Titre et body : voir [Pull requests](#pull-requests) ci-dessus. Dans le body, indiquer les couches DDD impactées (domain, infrastructure, api).
 
 ### 4. Après le merge
 
 Mettre à jour dans cet ordre :
 
-| Action                                              | Quand                           |
-| --------------------------------------------------- | ------------------------------- |
-| **Wiki** (`Backend-Guide`) : endpoints, nb de tests | Nouvel endpoint ou modification |
-| **Wiki** (`Architecture-Globale` ou `ADR`)          | Décision architecturale         |
-| **Wiki** (`CICD-et-Deploiement`)                    | Changement d'infra ou pipeline  |
-| **`docs/openapi.yaml`**                             | Modification d'un endpoint      |
-| **GitHub Project** (issue → Done)                   | Systématiquement après merge    |
+| Action                                     | Quand                           |
+| ------------------------------------------ | ------------------------------- |
+| **Wiki** (`Backend-Guide`) : endpoints     | Nouvel endpoint ou modification |
+| **Wiki** (`Architecture-Globale` ou `ADR`) | Décision architecturale         |
+| **Wiki** (`CICD-et-Deploiement`)           | Changement d'infra ou pipeline  |
+| **`docs/openapi.yaml`**                    | Modification d'un endpoint      |
+| **GitHub Project** (issue → Done)          | Systématiquement après merge    |
 
 **Comment mettre à jour le wiki** :
 
@@ -105,66 +108,66 @@ git clone https://github.com/SandrineCipolla/stockHub_V2_front.wiki.git /tmp/wik
 cd /tmp/wiki && git add . && git commit -m "docs: ..." && git push
 ```
 
+<!-- commun:debut contributing-issues v1 -->
+<!-- Bloc commun aux trois repos StockHub : le modifier à l'identique dans les trois, en incrémentant la version. Vérifié par check-docs. -->
+
 ## Gestion des issues GitHub
+
+Les trois repos alimentent un seul [GitHub Project](https://github.com/users/SandrineCipolla/projects/3) : labels et champs sont les mêmes partout.
 
 ### Labels obligatoires
 
-Toute issue doit avoir **au minimum** ces trois labels :
+Toute issue porte au minimum un label de chaque catégorie :
 
-| Label    | Valeur                                                         |
-| -------- | -------------------------------------------------------------- |
-| Scope    | `back` (toujours sur ce repo)                                  |
-| Type     | `bug`, `enhancement`, `documentation`, `tech`, `clean code`... |
-| Priorité | `P0`, `P1`, `P2`, `P3` ou `P4` (voir critères ci-dessous)      |
+| Catégorie | Valeurs                                                                        |
+| --------- | ------------------------------------------------------------------------------ |
+| Scope     | `front`, `back` ou `design-system`, selon le repo                              |
+| Type      | `feature`, `improvement`, `bug`, `tech` ou `documentation`                     |
+| Priorité  | `P0` à `P4` (critères ci-dessous)                                              |
+| Thème     | facultatif : `ai`, `a11y`, `security`, `test`, `rncp`, `seo`, `legal`, `demo`… |
 
-Sans ces labels, les issues n'apparaissent pas correctement dans le GitHub Project board.
+Sens des types :
 
-```bash
-gh issue create --label "back,bug,P2" ...
-gh issue edit <numero> --repo SandrineCipolla/stockhub_back --add-label "back,bug,P2"
-```
+- `feature` : nouveau comportement visible
+- `improvement` : amélioration d'un comportement existant
+- `bug` : comportement incorrect
+- `tech` : travail sans valeur visible pour l'utilisateur (outillage, dépendances, refactoring, nettoyage, dette technique)
+- `documentation` : documentation uniquement
 
-### Critères des labels de priorité
+Les labels `dependencies`, `javascript`, `autorelease: pending` et `autorelease: tagged` sont posés par Dependabot et Release Please, ne pas les utiliser à la main.
 
-| Label  | Description | Quand l'utiliser                                                                                  |
-| ------ | ----------- | ------------------------------------------------------------------------------------------------- |
-| **P0** | Bloquant    | Production inaccessible, fuite de données, vulnérabilité exploitée, CI cassée bloquant tout merge |
-| **P1** | Haute       | Fonctionnalité principale cassée sans workaround, régression prod, blocage démo RNCP              |
-| **P2** | Moyenne     | Bug avec workaround, feature importante du sprint, dette technique impactant la productivité      |
-| **P3** | Basse       | Amélioration UX, polish, feature secondaire, documentation non urgente                            |
-| **P4** | Très basse  | Nice-to-have hors scope soutenance, feature post-RNCP, refactoring cosmétique                     |
+### Critères de priorité
 
-### Champs GitHub Project board
+| Label  | Niveau     | Quand l'utiliser                                                                                  |
+| ------ | ---------- | ------------------------------------------------------------------------------------------------- |
+| **P0** | Bloquant   | Production inaccessible, fuite de données, vulnérabilité exploitée, CI cassée bloquant tout merge |
+| **P1** | Haute      | Fonctionnalité principale cassée sans contournement, régression en prod, blocage de démo RNCP     |
+| **P2** | Moyenne    | Bug avec contournement, fonctionnalité importante du sprint, dette qui freine le développement    |
+| **P3** | Basse      | Amélioration UX, finition, fonctionnalité secondaire, documentation non urgente                   |
+| **P4** | Très basse | Hors périmètre de la soutenance, après RNCP, refactoring cosmétique                               |
 
-Après création, remplir ces trois champs sur le board :
+### GitHub Project
 
-| Champ          | Valeurs                                                 | Règle                                                                       |
-| -------------- | ------------------------------------------------------- | --------------------------------------------------------------------------- |
-| **Priorité**   | 🔴 Très haute → ⚪ Très basse                           | Même échelle que P0–P4. Peut être ajusté au planning sans modifier l'issue. |
-| **Module**     | `Frontend` / `Backend` / `Design System` / `Transverse` | Toujours `Backend` sur ce repo                                              |
-| **Estimation** | Nombre d'heures (champ numérique)                       | Repères : XS 1, S 2, M 5, L 11, XL 20                                       |
+Toute issue est ajoutée au GitHub Project à sa création, sinon elle n'apparaît pas sur le board. Champs à remplir :
 
-Correspondance labels ↔ board : P0 → 🔴, P1 → 🟠, P2 → 🟡, P3 → 🟢, P4 → ⚪
+| Champ          | Valeurs                                                 | Règle                                                  |
+| -------------- | ------------------------------------------------------- | ------------------------------------------------------ |
+| **Priorité**   | 🔴 Très haute à ⚪ Très basse                           | P0 → 🔴, P1 → 🟠, P2 → 🟡, P3 → 🟢, P4 → ⚪, ajustable |
+| **Module**     | `Frontend` / `Backend` / `Design System` / `Transverse` | Selon le repo, `Transverse` si plusieurs repos         |
+| **Estimation** | Nombre d'heures                                         | Repères : XS 1, S 2, M 5, L 11, XL 20                  |
 
-### Association au GitHub Project (obligatoire)
+### Titre d'une issue
 
-Toute issue doit être associée au **GitHub Project** du projet :
+Une phrase courte qui décrit le résultat attendu ou le problème observé, compréhensible sans ouvrir l'issue.
 
-```bash
-# Lors de la création
-gh issue create --label "back,bug" --project "StockHub V2"
+- Pas de préfixe manuel (`[US-XXX]`, `[BUG]`, `[TECH]`) : GitHub numérote déjà l'issue
+- Pas de préfixe `type(scope):` : ce format sert aux commits et aux PR, le type d'une issue passe par son label
 
-# Après coup si oublié
-gh issue edit <numero> --repo SandrineCipolla/stockhub_back --add-project "StockHub V2"
-```
+**Exemples** : `Afficher la couverture de tests dans le README`, `Le login échoue après réinitialisation du mot de passe`
 
-**URL du project** : https://github.com/users/SandrineCipolla/projects/3
+### Format User Story
 
-Sans cette association, l'issue n'apparaît pas dans le board de suivi et ne peut pas être déplacée entre les colonnes (Backlog → In Progress → Done).
-
-### Avant de créer une issue GitHub
-
-**Format User Story** :
+Obligatoire pour toute nouvelle fonctionnalité. Une section **Contexte** facultative peut suivre les critères d'acceptation : le constat qui motive l'issue, sans solution technique.
 
 ```
 **En tant que** [persona]
@@ -182,16 +185,23 @@ Alors :
 - [ ] Critère 2
 ```
 
-**Interdit dans le body d'une issue** : détails d'implémentation, couches DDD, commandes, TODO techniques. Ça va dans la PR.
+**Interdit dans le body d'une issue** : détails d'implémentation, étapes techniques, commandes, TODO techniques. Ça va dans la PR.
 
-**Où mettre les notes techniques ?**
+| Information                                | Où                                  |
+| ------------------------------------------ | ----------------------------------- |
+| Valeur utilisateur, critères d'acceptation | Issue GitHub                        |
+| Idées en cours de développement, questions | Commentaire sur l'issue             |
+| Choix d'implémentation, fichiers modifiés  | Description de la PR                |
+| Décisions d'architecture importantes       | ADR, dans le dossier `adr/` du repo |
 
-| Information                                | Où                      |
-| ------------------------------------------ | ----------------------- |
-| Valeur utilisateur, critères d'acceptation | Issue GitHub            |
-| Idées en cours de dev                      | Commentaire sur l'issue |
-| Couches DDD impactées, choix techniques    | Description de la PR    |
-| Décisions d'architecture importantes       | `docs/adr/`             |
+<!-- commun:fin contributing-issues -->
+
+Exemples de création pour ce repo :
+
+```bash
+gh issue create --title "..." --label "back,bug,P2" --project "StockHub V2"
+gh issue edit <numero> --repo SandrineCipolla/stockhub_back --add-label "back,bug,P2"
+```
 
 ## Checklist avant commit
 
