@@ -121,8 +121,8 @@ Exemple :
 
 ### Issues & PRs
 
-- **Issue** : #XX - [Titre de l'issue](lien-github)
-- **PR** : #XX - [Titre de la PR](lien-github)
+- **Issue** : #XX - [Titre de l'issue](https://github.com/SandrineCipolla/stockhub_back/issues/XX)
+- **PR** : #XX - [Titre de la PR](https://github.com/SandrineCipolla/stockhub_back/pull/XX)
 
 ### Commits
 
