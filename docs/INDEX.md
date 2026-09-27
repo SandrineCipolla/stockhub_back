@@ -14,7 +14,7 @@
 | -------------------------------------------- | ---------------------------------------------------------- |
 | [INDEX.md](INDEX.md)                         | 📍 Vous êtes ici - Index principal                         |
 | [sessions/INDEX.md](sessions/INDEX.md)       | 📅 Sessions - Index sessions développement                 |
-| [../CLAUDE.md](../CLAUDE.md)                 | 🤖 Contexte projet pour sessions IA                        |
+| [../AGENTS.md](../AGENTS.md)                 | 🤖 Contexte projet pour les agents IA                      |
 | [../CONTRIBUTING.md](../CONTRIBUTING.md)     | 🤝 Process de contribution - branches, commits, PR, issues |
 | [../README.md](../README.md)                 | 📖 Présentation du projet                                  |
 | [../ETAT_DU_PROJET.md](../ETAT_DU_PROJET.md) | 📊 État courant, version, qualité, point de reprise        |
@@ -23,7 +23,7 @@ Architecture, authentification, tests et qualité de code sont documentés dans 
 
 ### Quick Links
 
-- **🚀 Nouveau sur le projet ?** → [../CLAUDE.md](../CLAUDE.md) + [../ETAT_DU_PROJET.md](../ETAT_DU_PROJET.md)
+- **🚀 Nouveau sur le projet ?** → [../AGENTS.md](../AGENTS.md) + [../ETAT_DU_PROJET.md](../ETAT_DU_PROJET.md)
 - **🔐 Authentification ?** → [technical/azure-b2c-setup.md](technical/azure-b2c-setup.md)
 - **🧪 Tests ?** → [technical/e2e-testing.md](technical/e2e-testing.md), [technical/testcontainers.md](technical/testcontainers.md)
 - **🐛 Problème technique ?** → [troubleshooting/](troubleshooting/)
@@ -36,28 +36,7 @@ Architecture, authentification, tests et qualité de code sont documentés dans 
 > **Décisions architecturales importantes**
 > Localisation : [adr/](adr/)
 
-| #      | Fichier                                                                                                            | Description                                                                | Statut  |
-| ------ | ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- | ------- |
-| **01** | [ADR-001-migration-ddd-cqrs.md](adr/ADR-001-migration-ddd-cqrs.md)                                                 | Migration architecture DDD/CQRS                                            | Accepté |
-| **02** | [ADR-002-choix-prisma-orm.md](adr/ADR-002-choix-prisma-orm.md)                                                     | Choix de Prisma comme ORM                                                  | Accepté |
-| **03** | [ADR-003-azure-ad-b2c-authentication.md](adr/ADR-003-azure-ad-b2c-authentication.md)                               | Azure AD B2C pour authentification                                         | Accepté |
-| **04** | [ADR-004-tests-value-objects-entities.md](adr/ADR-004-tests-value-objects-entities.md)                             | Tests Value Objects & Entities                                             | Accepté |
-| **05** | [ADR-005-api-versioning-v2.md](adr/ADR-005-api-versioning-v2.md)                                                   | Versioning API (V2)                                                        | Accepté |
-| **06** | [ADR-006-mysql-azure-cloud.md](adr/ADR-006-mysql-azure-cloud.md)                                                   | MySQL Azure Database                                                       | Accepté |
-| **07** | [ADR-007-code-quality-enforcement.md](adr/ADR-007-code-quality-enforcement.md)                                     | Standards qualité de code                                                  | Accepté |
-| **08** | [ADR-008-typescript-request-type-aliases.md](adr/ADR-008-typescript-request-type-aliases.md)                       | Type aliases pour requêtes                                                 | Accepté |
-| **09** | [ADR-009-resource-based-authorization.md](adr/ADR-009-resource-based-authorization.md)                             | Autorisation Phase 1 (ressources)                                          | Accepté |
-| **10** | [ADR-010-ci-cd-pipeline-optimization.md](adr/ADR-010-ci-cd-pipeline-optimization.md)                               | Optimisation pipeline CI/CD                                                | Accepté |
-| **11** | [ADR-011-staging-render-aiven.md](adr/ADR-011-staging-render-aiven.md)                                             | Staging Render.com + Aiven MySQL                                           | Accepté |
-| **12** | [ADR-012-upgrade-node-22.md](adr/ADR-012-upgrade-node-22.md)                                                       | Migration Node.js 22 LTS                                                   | Accepté |
-| **13** | [ADR-013-llm-provider-local-vs-cloud.md](adr/ADR-013-llm-provider-local-vs-cloud.md)                               | Provider LLM — local vs OpenRouter                                         | Accepté |
-| **14** | [ADR-014-stock-prediction-deterministic.md](adr/ADR-014-stock-prediction-deterministic.md)                         | Prédictions — algorithmes déterministes                                    | Accepté |
-| **15** | [ADR-015-openrouter-mistral-ai-service.md](adr/ADR-015-openrouter-mistral-ai-service.md)                           | OpenRouter + Mistral provider LLM                                          | Accepté |
-| **16** | [ADR-016-rest-api-style.md](adr/ADR-016-rest-api-style.md)                                                         | Style d'API (REST)                                                         | Accepté |
-| **17** | [ADR-017-express-framework.md](adr/ADR-017-express-framework.md)                                                   | Choix du framework Express                                                 | Accepté |
-| **18** | [ADR-018-github-flow.md](adr/ADR-018-github-flow.md)                                                               | Workflow Git (GitHub Flow)                                                 | Accepté |
-| **19** | [ADR-019-authorize-middleware-couches-classiques.md](adr/ADR-019-authorize-middleware-couches-classiques.md)       | Middleware d'autorisation en couches classiques (exception hexagonale)     | Accepté |
-| **20** | [ADR-020-conversion-hexagonale-authorize-middleware.md](adr/ADR-020-conversion-hexagonale-authorize-middleware.md) | Conversion hexagonale du middleware d'autorisation (alternative à ADR-019) | Proposé |
+Liste, statuts et règle de numérotation : [adr/INDEX.md](adr/INDEX.md), seule source de la liste des ADR.
 
 **Index complet** : [adr/INDEX.md](adr/INDEX.md) | **Template** : [adr/TEMPLATE.md](adr/TEMPLATE.md) | **Guide de rédaction** : [technical/guide-redaction.md](technical/guide-redaction.md)
 
@@ -135,7 +114,7 @@ Voir [sessions/INDEX.md](sessions/INDEX.md) pour la liste complète et à jour, 
 | Audit   | [archive/ARCHITECTURE_AUDIT.md](archive/ARCHITECTURE_AUDIT.md)                     | Audit architecture DDD/CQRS - 10 avril 2026                                                   |
 | Audit   | [archive/REPO_AUDIT.md](archive/REPO_AUDIT.md)                                     | Audit organisation du repo - 10 avril 2026                                                    |
 | Audits  | [archive/audits/INDEX.md](archive/audits/INDEX.md)                                 | Résultats d'audits Q1 2026 (audit back, vérification, avancement)                             |
-| Prompts | [archive/prompts/INDEX.md](archive/prompts/INDEX.md)                               | Prompts Claude Code archivés — trace de la démarche assistée                                  |
+| Prompts | [archive/prompts/INDEX.md](archive/prompts/INDEX.md)                               | Prompts Claude Code archivés, trace de la démarche assistée                                   |
 | Roadmap | [archive/ROADMAP-2026-01.md](archive/ROADMAP-2026-01.md)                           | Roadmap backend arrêtée en janvier 2026, remplacée par [ROADMAP-GLOBAL.md](ROADMAP-GLOBAL.md) |
 
 ---

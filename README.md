@@ -11,7 +11,7 @@ StockHub aide les familles à gérer leurs stocks de produits (alimentaires, art
 
 **Architecture** : DDD/CQRS, séparation stricte des couches (`domain → infrastructure → api`, jamais l'inverse). Détail et justification : [ADR-001](docs/adr/ADR-001-migration-ddd-cqrs.md).
 
-Arborescence des dossiers et rôle de chaque couche : [CLAUDE.md](CLAUDE.md#architecture-dddcqrs).
+Arborescence des dossiers et rôle de chaque couche : [AGENTS.md](AGENTS.md#architecture-dddcqrs).
 
 ---
 
@@ -74,7 +74,7 @@ Couverture à jour : badge en haut de ce fichier.
 ## Documentation
 
 - [CONTRIBUTING.md](CONTRIBUTING.md) : process de contribution (branches, commits, PR, issues)
-- [CLAUDE.md](CLAUDE.md) : contexte projet pour sessions IA
+- [AGENTS.md](AGENTS.md) : contexte projet pour les agents IA (`CLAUDE.md` l'importe)
 - [docs/INDEX.md](docs/INDEX.md) : index complet de la documentation
 - [docs/adr/INDEX.md](docs/adr/INDEX.md) : Architecture Decision Records
 - [CHANGELOG.md](CHANGELOG.md) : journal des changements (généré automatiquement)
