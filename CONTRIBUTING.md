@@ -1,6 +1,6 @@
 # Contribuer à StockHub Back
 
-Ce document décrit le process de contribution : branches, commits, pull requests, workflow par ticket, gestion des issues GitHub. Pour l'architecture et les standards de code, voir [CLAUDE.md](CLAUDE.md). Guide de rédaction de ce repo : [docs/technical/guide-redaction.md](docs/technical/guide-redaction.md).
+Ce document décrit le process de contribution : branches, commits, pull requests, workflow par ticket, gestion des issues GitHub. Pour l'architecture et les standards de code, voir [AGENTS.md](AGENTS.md). Guide de rédaction de ce repo : [docs/technical/guide-redaction.md](docs/technical/guide-redaction.md).
 
 Les sections entre marqueurs `commun` sont identiques dans les trois repos StockHub et vérifiées par le workflow `docs-check`. Les modifier à l'identique dans les trois repos.
 
