@@ -11,7 +11,7 @@
 | [ddd-cqrs-guide.md](ddd-cqrs-guide.md)                                           | Guide d'implémentation DDD/CQRS appliqué au projet (Command/Query, Value Objects, Entités)                                              |
 | [dependency-injection-best-practices.md](dependency-injection-best-practices.md) | Bonnes pratiques d'injection de dépendances (prismaClient ?? new PrismaClient())                                                        |
 | [database-schema.md](database-schema.md)                                         | Schéma de base de données MySQL : ERD, tables, relations et choix de modélisation                                                       |
-| [ticket-fil-rouge-excellence.md](ticket-fil-rouge-excellence.md)                 | Axes d'amélioration back-end en réserve (validation Zod, dette technique) — optionnel, à traiter si le temps le permet avant soutenance |
+| [ticket-fil-rouge-excellence.md](ticket-fil-rouge-excellence.md)                 | Axes d'amélioration back-end en réserve (validation Zod, dette technique), optionnels, à traiter si le temps le permet avant soutenance |
 
 ---
 
@@ -39,12 +39,11 @@
 
 ## ⚙️ Infrastructure & Environnements
 
-| Fichier                                                  | Description                                                                         |
-| -------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| [environments-setup.md](environments-setup.md)           | Configuration des 4 environnements (Local Docker, Staging Render/Aiven, Prod Azure) |
-| [frontend-v2-integration.md](frontend-v2-integration.md) | Guide d'intégration entre le Frontend V2 et l'API Backend                           |
-| [logger-guide.md](logger-guide.md)                       | Système de logging structuré ( ypescript-logging, cloudLogger)                      |
-| [milestones-guide.md](milestones-guide.md)               | Organisation des jalons et milestones GitHub pour le suivi du projet                |
+| Fichier                                        | Description                                                                         |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------- |
+| [environments-setup.md](environments-setup.md) | Configuration des 4 environnements (Local Docker, Staging Render/Aiven, Prod Azure) |
+| [logger-guide.md](logger-guide.md)             | Système de logging structuré ( ypescript-logging, cloudLogger)                      |
+| [milestones-guide.md](milestones-guide.md)     | Organisation des jalons et milestones GitHub pour le suivi du projet                |
 
 ---
 
