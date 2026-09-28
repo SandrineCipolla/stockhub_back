@@ -2,7 +2,7 @@
 
 Règles d'écriture pour la documentation du projet (ADR, README, CONTRIBUTING, sessions, etc.). Tout document ou skill qui rédige de la documentation y renvoie plutôt que de recopier ces règles. Les sections entre marqueurs `commun` sont identiques dans les trois repos StockHub, le workflow `docs-check` le vérifie.
 
-<!-- commun:debut guide-redaction v1 -->
+<!-- commun:debut guide-redaction v2 -->
 <!-- Bloc commun aux trois repos StockHub : le modifier à l'identique dans les trois, en incrémentant la version. Vérifié par check-docs. -->
 
 ## Principes
@@ -22,6 +22,10 @@ Quand deux documents couvrent le même sujet, vérifier le contenu réel avant d
 - Contenu périmé ou devenu secondaire : évaluer l'archivage plutôt que la suppression sans y avoir pensé.
 
 Si un fichier référencé est déplacé ou renommé, mettre à jour le lien dans tous les documents qui y renvoient.
+
+## Valeurs qui changent
+
+Ne pas écrire en dur une valeur qui change et qu'un fichier ou un outil fournit déjà : version, nombre de tests ou de composants, couverture, score, date de mise à jour. Renvoyer vers sa source : `package.json`, la commande qui la calcule, un badge du README, la dernière release GitHub, l'historique git. Une mesure n'est gardée que dans un document daté (session, audit, ADR), qui la fige à sa date.
 
 ## Règles fixes
 
