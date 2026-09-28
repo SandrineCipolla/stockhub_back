@@ -25,8 +25,8 @@
 
 ### Fichiers clés
 
-- `compose.yaml` — définition des services Docker
-- `.env.docker` — variables Azure B2C (gitignored, à créer)
+- `compose.yaml` : définition des services Docker
+- `.env.docker` : variables Azure B2C (gitignored, à créer)
 
 ### Création de `.env.docker`
 
@@ -84,8 +84,8 @@ docker compose down -v              # Arrêter + supprimer les données
 
 ### Points d'attention
 
-- **Port MySQL** : exposé sur `3308` (pas 3307 — conflit avec mysqld local si installé)
-- **Port API** : `3006` — tuer tout process Node.js local avant `docker compose up`
+- **Port MySQL** : exposé sur `3308` (pas 3307, pour éviter le conflit avec un mysqld local)
+- **Port API** : `3006`. Tuer tout process Node.js local avant `docker compose up`
 - **Hot reload** : le dossier `./src` est monté → les modifications sont rechargées automatiquement
 - **`AZURE_USE_ROPC_POLICY=true`** : permet d'utiliser Postman avec ROPC (tokens ROPC acceptés)
 
@@ -95,10 +95,10 @@ docker compose down -v              # Arrêter + supprimer les données
 
 ### Déclenchement
 
-- **`continuous-integration`** : toutes les branches — lint, TypeScript, tests unitaires
-- **`e2e-tests`** : PR vers `main` + `workflow_dispatch` — MySQL sidecar + seed + build + E2E Playwright
-- **`deploy-to-staging`** : `workflow_dispatch` uniquement — trigger Render deploy hook
-- **`build-and-deploy`** : push sur `main` — déploiement Azure App Service
+- **`continuous-integration`** : toutes les branches. Lint, TypeScript, tests unitaires
+- **`e2e-tests`** : `workflow_dispatch` et cron du lundi. MySQL sidecar, seed, build, E2E Playwright
+- **`deploy-to-staging`** : `workflow_dispatch` uniquement. Déclenche le deploy hook Render
+- **`build-and-deploy`** : push sur `main`. Déploiement Azure App Service
 
 ### Secrets GitHub requis
 
@@ -127,7 +127,7 @@ docker compose down -v              # Arrêter + supprimer les données
 ### Architecture
 
 - **Backend** : Render.com, service web gratuit. Il suit `main` et redéploie à chaque commit. Pour tester une branche, pointer Render dessus puis revenir sur `main` ([ADR-018](../adr/ADR-018-github-flow.md))
-- **Base de données** : Aiven MySQL — free tier (1 instance)
+- **Base de données** : Aiven MySQL, free tier (1 instance)
 
 ### Configuration Render
 
@@ -164,7 +164,7 @@ docker compose down -v              # Arrêter + supprimer les données
 2. New Service → MySQL → Free tier → région Frankfurt
 3. Récupérer : hostname, port, username, password, CA certificate
 4. Renseigner les variables dans Render dashboard
-5. ⚠️ **Aiven free tier expire si inactif** — le service se met en veille automatiquement après une période. Si la DB ne répond plus, recréer un service Aiven et mettre à jour les vars Render.
+5. ⚠️ **Aiven free tier expire si inactif** : le service se met en veille automatiquement après une période. Si la DB ne répond plus, recréer un service Aiven et mettre à jour les vars Render.
 
 ### Premier déploiement
 
@@ -172,7 +172,7 @@ Render déploie `main` dès la connexion du repo, puis à chaque commit. Le job 
 
 ### Migrations en staging
 
-Render exécute `npm run build` puis `node dist/index.js`. Les migrations Prisma ne sont **pas** automatiques — ajouter une étape dans `render.yaml` ou lancer manuellement depuis la console Render :
+Render exécute `npm run build` puis `node dist/index.js`. Les migrations Prisma ne sont **pas** automatiques. Ajouter une étape dans `render.yaml` ou lancer manuellement depuis la console Render :
 
 ```bash
 npx prisma migrate deploy
@@ -222,7 +222,7 @@ Variables à configurer dans **Azure Portal → App Service → Configuration** 
 | `ALLOWED_ORIGINS`                       | URLs front autorisées                  |
 | `APPLICATIONINSIGHTS_CONNECTION_STRING` | Connection string App Insights         |
 
-> ⚠️ Azure App Service ne lit **pas** le fichier `.env` — tout doit être dans Application Settings.
+> ⚠️ Azure App Service ne lit **pas** le fichier `.env` : tout doit être dans Application Settings.
 
 ### Déploiement
 
@@ -230,7 +230,7 @@ Le déploiement est automatique via GitHub Actions à chaque push sur `main` (jo
 
 ---
 
-## 5. Postman — Configuration
+## 5. Configuration de Postman
 
 ### Import
 
@@ -244,7 +244,7 @@ Le déploiement est automatique via GitHub Actions à chaque push sur `main` (jo
 
 1. Sélectionner l'environnement cible (Local / Staging / Prod)
 2. Renseigner `username` et `password` dans les variables d'environnement
-3. Lancer `🔑 Get Token` — le token est sauvegardé automatiquement dans `accessToken`
+3. Lancer `🔑 Get Token` : le token est sauvegardé automatiquement dans `accessToken`
 4. Toutes les requêtes utilisent `{{accessToken}}` en Bearer
 
 ### Variables d'environnement Postman
