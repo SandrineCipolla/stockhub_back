@@ -21,6 +21,7 @@
 | [ROADMAP-2026-01.md](ROADMAP-2026-01.md)                           | Ancienne roadmap backend arrêtée en janvier 2026 (remplacée par docs/ROADMAP-GLOBAL.md) |
 | [authorization-phase1-summary.md](authorization-phase1-summary.md) | Récit initial de la Phase 1 d'autorisation (couvert par ADR-009 et docs/sessions/)      |
 | [ddd-manipulation-routes.md](ddd-manipulation-routes.md)           | Document d'analyse initiale pour le refactoring des routes DDD                          |
+| [frontend-v2-integration.md](frontend-v2-integration.md)           | Plan de migration du frontend V2 vers l'API (décembre 2025), exécuté depuis             |
 
 ---
 
