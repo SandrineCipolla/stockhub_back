@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.14.3](https://github.com/SandrineCipolla/stockhub_back/compare/v2.14.2...v2.14.3) (2026-09-28)
+
+
+### 📚 Documentation
+
+* **docs:** [#291](https://github.com/SandrineCipolla/stockhub_back/issues/291) retirer les identifiants du compte de test de la documentation ([#312](https://github.com/SandrineCipolla/stockhub_back/issues/312)) ([00140c2](https://github.com/SandrineCipolla/stockhub_back/commit/00140c2b8ef04c435fe9d5f3c40ec1977faf7a75))
+* **docs:** [#303](https://github.com/SandrineCipolla/stockhub_back/issues/303) retirer les dates de mise à jour figées et ajouter la règle des valeurs qui changent ([#304](https://github.com/SandrineCipolla/stockhub_back/issues/304)) ([8f4b63c](https://github.com/SandrineCipolla/stockhub_back/commit/8f4b63c1de644b6be245d4f8fa75bc221c9bed2c))
+* **docs:** [#310](https://github.com/SandrineCipolla/stockhub_back/issues/310) archiver le plan de migration du frontend V2, déjà exécuté ([#311](https://github.com/SandrineCipolla/stockhub_back/issues/311)) ([ac2d8fd](https://github.com/SandrineCipolla/stockhub_back/commit/ac2d8fdc737dd53ec53a4d27efafa110fac2642f))
+
 ## [2.14.2](https://github.com/SandrineCipolla/stockhub_back/compare/v2.14.1...v2.14.2) (2026-09-27)
 
 
