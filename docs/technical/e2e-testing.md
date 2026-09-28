@@ -89,8 +89,8 @@ import * as msal from '@azure/msal-node';
 
 const request: msal.UsernamePasswordRequest = {
   scopes: ['access_as_user'],
-  username: 'sandrine.cipolla@gmail.com',
-  password: 'Test@2024',
+  username: process.env.AZURE_TEST_USERNAME,
+  password: process.env.AZURE_TEST_PASSWORD,
 };
 
 const response = await msalClient.acquireTokenByUsernamePassword(request);
@@ -248,7 +248,7 @@ test('setup', async ({ page }) => {
   await page.goto('https://stockhub-frontend.com');
   await page.click('Sign in');
   await page.fill('email', 'test@test.com');
-  await page.fill('password', 'Test@2024');
+  await page.fill('password', process.env.AZURE_TEST_PASSWORD);
   await page.click('Submit');
 
   // Sauvegarder la session
@@ -274,7 +274,7 @@ test('can create stock', async ({ page }) => {
 - ✅ **Authentification Azure AD B2C** : ROPC flow avec MSAL Node
 - ✅ **Politique utilisée** : `B2C_1_ROPC`
 - ✅ **Application** : `ROPC_Auth_app` (Client ID: `a6a645f0-32fe-42cc-b524-6a3d83bbfb43`)
-- ✅ **Utilisateur de test** : `sandrine.cipolla@gmail.com`
+- ✅ **Utilisateur de test** : compte dédié aux tests, identifiants dans les secrets GitHub `AZURE_TEST_USERNAME` et `AZURE_TEST_PASSWORD`
 - ✅ **Scope** : `access_as_user` (custom scope de l'application)
 - ✅ **Création automatique d'utilisateurs** : Le backend crée l'utilisateur en base à la première connexion
 - ✅ **Nettoyage automatique** : Les données de test sont supprimées après chaque exécution
@@ -328,8 +328,8 @@ DATABASE_URL="mysql://root:root@localhost:3308/stockhub_test"
 # Azure AD B2C Configuration for E2E Tests
 AZURE_CLIENT_ID=a6a645f0-32fe-42cc-b524-6a3d83bbfb43
 AZURE_TENANT_ID=stockhubb2c
-AZURE_TEST_USERNAME=sandrine.cipolla@gmail.com
-AZURE_TEST_PASSWORD=Test@2024
+AZURE_TEST_USERNAME=<email du compte de test>
+AZURE_TEST_PASSWORD=<mot de passe du compte de test>
 
 # Azure AD B2C specific configuration
 AZURE_B2C_DOMAIN=stockhubb2c.b2clogin.com
@@ -551,9 +551,9 @@ npm run start:dev
 npm run test:e2e
 ```
 
-### 2. ❌ Impossible de créer un utilisateur de test dédié
+### 2. Créer un utilisateur de test dédié
 
-**Problème** : Nous voulions créer un utilisateur spécifique `e2e-test@...` pour les tests, mais Azure AD B2C rend cela très difficile.
+**Problème** : créer un utilisateur de test par les outils d'administration Azure AD B2C échoue.
 
 **Ce qui n'a PAS fonctionné** :
 
@@ -562,14 +562,14 @@ npm run test:e2e
 3. **Microsoft Graph API** : Configuration complexe du champ `identities`
 4. **Azure PowerShell** : Même problématique que CLI
 
-**Solution adoptée** : Utiliser un compte personnel créé via le frontend
+**Solution adoptée** : créer un compte dédié aux tests via l'inscription du frontend, jamais un compte personnel
 
 **Comment créer l'utilisateur** :
 
 1. Ouvrir l'application frontend StockHub
 2. Cliquer sur "Sign up" (inscription)
 3. Créer un compte avec email + mot de passe permanent
-4. Utiliser ces credentials dans `.env.test`
+4. Renseigner ces identifiants dans le `.env.test` local (non versionné) et dans les secrets GitHub `AZURE_TEST_USERNAME` / `AZURE_TEST_PASSWORD`, jamais dans la documentation
 
 **Avantages** :
 
@@ -577,13 +577,6 @@ npm run test:e2e
 - ✅ Pas de changement requis au premier login
 - ✅ Compatible ROPC
 - ✅ Fonctionne immédiatement
-
-**TODO pour le futur** :
-
-- Trouver comment créer programmatiquement un utilisateur B2C avec mot de passe permanent
-- Documentation à consulter :
-  - [Microsoft Graph API - B2C User Management](https://learn.microsoft.com/en-us/graph/api/user-post-users)
-  - [B2C custom policies](https://learn.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-overview)
 
 ### 3. Tests qui échouent aléatoirement
 
@@ -701,6 +694,4 @@ logLevel: 3, // Verbose logging
 
 **Résultat attendu** : `7 tests passed (14.4s)`
 
-**Point bloquant résolu** : Utilisation d'un compte personnel créé via le frontend pour contourner les limitations de création d'utilisateur via API.
-
-**TODO futur** : Trouver la bonne méthode pour créer programmatiquement des utilisateurs de test dans Azure AD B2C.
+**Point bloquant résolu** : utilisation d'un compte dédié aux tests, créé via l'inscription du frontend, pour contourner les limitations de création d'utilisateur via API.

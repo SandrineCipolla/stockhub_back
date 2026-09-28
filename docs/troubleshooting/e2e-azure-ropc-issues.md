@@ -9,7 +9,7 @@ Les tests E2E sont maintenant **complètement fonctionnels** avec authentificati
 ### Solution finale qui fonctionne
 
 - ✅ **Authentification ROPC** : Fonctionne avec MSAL Node
-- ✅ **Utilisateur** : `sandrine.cipolla@gmail.com` (compte personnel créé via B2C_1_signupsignin)
+- ✅ **Utilisateur** : compte dédié aux tests, créé via B2C_1_signupsignin
 - ✅ **Scope** : `access_as_user` (custom scope de l'application ROPC)
 - ✅ **Tous les tests passent** : 7/7 tests réussis
 
@@ -102,17 +102,15 @@ az ad user create --display-name "E2E Test User" --user-principal-name testuser@
 
 ## Solution de contournement adoptée ✅
 
-**Utiliser un compte personnel créé via le flow standard B2C_1_signupsignin**
+**Créer un compte dédié aux tests via le flow standard B2C_1_signupsignin**
 
 ### Comment créer l'utilisateur qui fonctionne :
 
 1. **Ouvrir l'application frontend StockHub**
 2. **Cliquer sur "Sign up"** (inscription)
-3. **Remplir le formulaire** avec un email et mot de passe permanent :
-   - Email : `sandrine.cipolla@gmail.com`
-   - Mot de passe : `Test@2024` (respectant les critères de complexité)
+3. **Remplir le formulaire** avec un email réservé aux tests (jamais un compte personnel) et un mot de passe permanent, unique et respectant les critères de complexité
 4. **Valider l'inscription** - Le compte est créé avec un mot de passe permanent
-5. **Utiliser ces credentials dans `.env.test`**
+5. **Renseigner ces identifiants** dans le `.env.test` local (non versionné) et dans les secrets GitHub `AZURE_TEST_USERNAME` / `AZURE_TEST_PASSWORD`, jamais dans la documentation
 
 ### Pourquoi cette méthode fonctionne :
 
@@ -122,11 +120,11 @@ az ad user create --display-name "E2E Test User" --user-principal-name testuser@
 - ✅ Le compte est un "local account" dans Azure AD B2C
 - ✅ Fonctionne immédiatement avec les tests E2E
 
-### Configuration actuelle dans `.env.test` :
+### Configuration dans `.env.test` :
 
 ```bash
-AZURE_TEST_USERNAME=sandrine.cipolla@gmail.com
-AZURE_TEST_PASSWORD=Test@2024
+AZURE_TEST_USERNAME=<email du compte de test>
+AZURE_TEST_PASSWORD=<mot de passe du compte de test>
 ```
 
 ## Problème non résolu : Création automatisée d'utilisateurs de test
@@ -163,16 +161,16 @@ AZURE_TEST_PASSWORD=Test@2024
 
 ## Recommandation actuelle
 
-**Pour l'instant : Utiliser la solution de contournement (compte personnel)**
+**Utiliser la solution de contournement : un compte dédié aux tests, créé par inscription**
 
-La création manuelle via le flow d'inscription fonctionne parfaitement et ne bloque pas le développement. Cette limitation devrait être résolue avant la mise en production pour avoir un compte de test dédié, mais ce n'est pas critique pour le moment.
+La création manuelle via le flow d'inscription fonctionne et suffit : seule son automatisation reste sans solution.
 
 ### Si vous devez créer un nouvel utilisateur de test :
 
 1. Utiliser le flow d'inscription du frontend (`B2C_1_signupsignin`)
 2. Créer un compte avec un email dédié (ex: `e2e-test@yourdomain.com`)
 3. Définir un mot de passe permanent fort
-4. Mettre à jour `.env.test` avec les nouveaux credentials
+4. Mettre à jour `.env.test` et les secrets GitHub `AZURE_TEST_USERNAME` / `AZURE_TEST_PASSWORD` avec les nouveaux identifiants
 
 ## Documentation Azure AD B2C ROPC
 

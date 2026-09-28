@@ -27,7 +27,7 @@ Cleanup: Delete test data                      ✅
 - ✅ **Authentification Azure AD B2C** : ROPC flow avec MSAL Node
 - ✅ **Politique utilisée** : `B2C_1_ROPC`
 - ✅ **Application** : `ROPC_Auth_app` (Client ID: `a6a645f0-32fe-42cc-b524-6a3d83bbfb43`)
-- ✅ **Utilisateur de test** : `sandrine.cipolla@gmail.com` (compte personnel)
+- ✅ **Utilisateur de test** : compte dédié aux tests, créé par inscription (`B2C_1_signupsignin`), identifiants dans les secrets GitHub `AZURE_TEST_USERNAME` et `AZURE_TEST_PASSWORD`
 - ✅ **Scope** : `access_as_user` (défini dans l'application ROPC)
 - ✅ **Création automatique d'utilisateurs** : Le backend crée l'utilisateur en base à la première connexion
 - ✅ **Nettoyage automatique** : Les données de test sont supprimées après chaque exécution
@@ -144,16 +144,14 @@ async convertOIDtoUserID(oid: string): Promise<UserIdentifier> {
 
 ### Variables d'environnement (.env.test)
 
-<!-- TODO securite : AZURE_CLIENT_ID, AZURE_TEST_USERNAME et AZURE_TEST_PASSWORD ci-dessous sont des vraies valeurs de test, deja dans l'historique git depuis la creation de ce fichier (commit 41c2f27). Remplacer par des placeholders une fois le mot de passe retrouve ou le compte de test rotate, pas avant (le mot de passe reel n'est peut-etre pas note ailleurs). -->
-
 ```bash
 DATABASE_URL="mysql://root:root@localhost:3308/stockhub_test"
 
 # Azure AD Configuration for E2E Tests
 AZURE_CLIENT_ID=a6a645f0-32fe-42cc-b524-6a3d83bbfb43
 AZURE_TENANT_ID=stockhubb2c
-AZURE_TEST_USERNAME=sandrine.cipolla@gmail.com
-AZURE_TEST_PASSWORD=Test@2024
+AZURE_TEST_USERNAME=<email du compte de test>
+AZURE_TEST_PASSWORD=<mot de passe du compte de test>
 
 # Azure AD B2C specific configuration
 AZURE_B2C_DOMAIN=stockhubb2c.b2clogin.com
@@ -500,9 +498,9 @@ npm run test:e2e
 
 Les tests E2E nécessitent que le serveur soit déjà en cours d'exécution car ils testent le vrai workflow complet (authentification Azure AD + appels API réels).
 
-### 2. ❌ Impossible de créer un utilisateur de test dédié dans Azure AD B2C
+### 2. Créer un utilisateur de test dédié dans Azure AD B2C
 
-**Problème rencontré** : Nous avons essayé de créer un utilisateur spécifique pour les tests E2E dans Azure AD B2C, mais plusieurs obstacles ont été rencontrés :
+**Problème rencontré** : la création d'un utilisateur de test par les outils d'administration échoue :
 
 #### Tentatives infructueuses :
 
@@ -521,44 +519,14 @@ Les tests E2E nécessitent que le serveur soit déjà en cours d'exécution car 
    - ❌ Configuration des `identities` compliquée pour Azure AD B2C
    - ❌ Documentation peu claire pour les comptes locaux B2C
 
-#### Solution temporaire actuelle : ✅ Utilisation d'un compte personnel
+#### Solution retenue : ✅ un compte dédié créé par inscription
 
-**Compte utilisé** : `sandrine.cipolla@gmail.com`
+Le seul moyen fiable est de créer le compte comme un utilisateur ordinaire, via le lien « Sign up » de l'application (flow `B2C_1_signupsignin`) :
 
-- ✅ Ce compte a été créé via le flow d'inscription standard B2C (B2C_1_signupsignin)
-- ✅ Possède un mot de passe permanent qui fonctionne avec ROPC
-- ✅ Fonctionne parfaitement pour les tests
+- mot de passe permanent, sans changement imposé à la première connexion
+- compatible ROPC
 
-**Configuration dans `.env.test`** :
-
-<!-- TODO securite : meme note que plus haut, vraies valeurs deja dans l'historique git, a placeholderiser une fois le mot de passe recupere ou le compte rotate. -->
-
-```bash
-AZURE_TEST_USERNAME=sandrine.cipolla@gmail.com
-AZURE_TEST_PASSWORD=Test@2024
-```
-
-#### TODO : Trouver la bonne méthode pour créer des utilisateurs de test
-
-**Pistes à explorer** :
-
-1. **Documentation Microsoft à consulter** :
-   - [Create users in Azure AD B2C](https://learn.microsoft.com/en-us/azure/active-directory-b2c/manage-users-portal)
-   - [Microsoft Graph API - B2C User Management](https://learn.microsoft.com/en-us/graph/api/user-post-users)
-   - [B2C custom policies for automated user creation](https://learn.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-overview)
-
-2. **Solutions potentielles** :
-   - Utiliser Microsoft Graph API avec les bons paramètres pour B2C
-   - Créer une custom policy B2C pour la création d'utilisateurs avec mots de passe permanents
-   - Utiliser Azure AD B2C PowerShell cmdlets spécifiques
-   - Automatiser la création via l'API REST de B2C
-
-3. **Documentation Playwright pour authentification** :
-   - [Playwright Authentication Guide](https://playwright.dev/docs/auth)
-   - [Playwright API Testing](https://playwright.dev/docs/api-testing)
-   - Possibilité d'utiliser une authentification interactive puis sauvegarder le state
-
-**Note** : Pour l'instant, la solution avec le compte personnel fonctionne parfaitement pour les tests. Cette limitation ne bloque pas le développement, mais devrait être résolue avant la mise en production pour avoir un compte de test dédié.
+Le compte de test sert uniquement aux tests automatisés, jamais à un usage personnel ni aux démonstrations. Ses identifiants sont dans les secrets GitHub `AZURE_TEST_USERNAME` et `AZURE_TEST_PASSWORD` des repos backend et frontend, et dans le `.env.test` local (non versionné). Ils ne s'écrivent pas dans la documentation.
 
 ### 3. Erreur 401 Unauthorized
 

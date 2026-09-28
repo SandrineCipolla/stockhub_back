@@ -63,7 +63,7 @@ curl http://localhost:3006/api-docs.json
 docker compose exec api sh -c "SEED_OWNER_EMAIL=ton.email@azure.b2c npm run db:seed"
 ```
 
-> Remplacer `ton.email@azure.b2c` par l'email utilisé pour se connecter via Azure B2C (ex: sandrine.cipolla@gmail.com).
+> Remplacer `ton.email@azure.b2c` par l'email utilisé pour se connecter via Azure B2C.
 
 Le seed crée :
 
