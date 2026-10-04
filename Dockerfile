@@ -38,5 +38,6 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 
 # Run the application.
 # Applique les migrations Prisma en attente puis démarre l'application.
-# Si une migration échoue, le conteneur s'arrête et Render garde la version précédente en ligne.
-CMD [ "sh", "-c", "npx prisma migrate deploy && node dist/index.js" ]
+# La commande est limitée à 120 s : une base qui ne répond pas arrête le démarrage avec un message,
+# et Render garde la version précédente en ligne.
+CMD [ "sh", "-c", "timeout -s KILL 120 npx prisma migrate deploy || { echo 'Migrations Prisma impossibles ou plus longues que 120 s, démarrage annulé'; exit 1; }; exec node dist/index.js" ]
