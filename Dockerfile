@@ -27,6 +27,7 @@ WORKDIR /usr/src/app
 
 COPY --from=builder /usr/src/app/package*.json ./
 COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app/prisma ./prisma
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/docs ./docs
 
@@ -36,4 +37,6 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -subj "/C=FR/ST=State/L=Paris/O=Sancci/OU=Main/CN=localhost"
 
 # Run the application.
-CMD  [ "node", "dist/index.js" ]
+# Applique les migrations Prisma en attente puis démarre l'application.
+# Si une migration échoue, le conteneur s'arrête et Render garde la version précédente en ligne.
+CMD [ "sh", "-c", "npx prisma migrate deploy && node dist/index.js" ]
