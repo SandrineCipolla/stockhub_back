@@ -172,7 +172,7 @@ Render déploie `main` dès la connexion du repo, puis à chaque commit. Le job 
 
 ### Migrations en staging
 
-Le `Dockerfile` lance `npx prisma migrate deploy` avant `node dist/index.js` : chaque déploiement et chaque réveil du service appliquent les migrations en attente à la base Aiven. Une migration qui échoue arrête le conteneur et Render garde la version précédente en ligne. Le déploiement de production sur Azure ne passe pas par le `Dockerfile` et n'est pas concerné.
+Le `Dockerfile` lance `npx prisma migrate deploy` avant `node dist/index.js` : chaque déploiement et chaque réveil du service appliquent les migrations en attente à la base Aiven. La commande est limitée à 120 secondes. Une migration qui échoue, ou une base qui ne répond pas dans ce délai, arrête le conteneur avec le message « Migrations Prisma impossibles ou plus longues que 120 s » et Render garde la version précédente en ligne. Le déploiement de production sur Azure ne passe pas par le `Dockerfile` et n'est pas concerné.
 
 Une base créée sans `prisma migrate` (par exemple avec `db push`) n'a pas d'historique de migrations : `migrate deploy` s'arrête alors sur l'erreur `P3005`. Dans ce cas, déclarer les migrations déjà présentes dans la base avec `npx prisma migrate resolve --applied <nom>`, depuis un poste qui a l'URL de la base, avant de redéployer.
 
