@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.14.3](https://github.com/SandrineCipolla/stockhub_back/compare/v2.14.2...v2.14.3) (2026-10-11)
+
+
+### 🐛 Bug Fixes
+
+* **docker:** [#318](https://github.com/SandrineCipolla/stockhub_back/issues/318) limiter les migrations Prisma à 120 secondes au démarrage ([#319](https://github.com/SandrineCipolla/stockhub_back/issues/319)) ([5602538](https://github.com/SandrineCipolla/stockhub_back/commit/5602538ed024ac75751bb102143419d1e5d3d3b3))
+
+
+### 📚 Documentation
+
+* **docs:** [#291](https://github.com/SandrineCipolla/stockhub_back/issues/291) retirer les identifiants du compte de test de la documentation ([#312](https://github.com/SandrineCipolla/stockhub_back/issues/312)) ([00140c2](https://github.com/SandrineCipolla/stockhub_back/commit/00140c2b8ef04c435fe9d5f3c40ec1977faf7a75))
+* **docs:** [#303](https://github.com/SandrineCipolla/stockhub_back/issues/303) retirer les dates de mise à jour figées et ajouter la règle des valeurs qui changent ([#304](https://github.com/SandrineCipolla/stockhub_back/issues/304)) ([8f4b63c](https://github.com/SandrineCipolla/stockhub_back/commit/8f4b63c1de644b6be245d4f8fa75bc221c9bed2c))
+* **docs:** [#310](https://github.com/SandrineCipolla/stockhub_back/issues/310) archiver le plan de migration du frontend V2, déjà exécuté ([#311](https://github.com/SandrineCipolla/stockhub_back/issues/311)) ([ac2d8fd](https://github.com/SandrineCipolla/stockhub_back/commit/ac2d8fdc737dd53ec53a4d27efafa110fac2642f))
+
+
+### 🔧 Chores
+
+* **ci:** [#324](https://github.com/SandrineCipolla/stockhub_back/issues/324) tolérer les failles sans correctif publié par des exceptions documentées ([#325](https://github.com/SandrineCipolla/stockhub_back/issues/325)) ([c9d86a1](https://github.com/SandrineCipolla/stockhub_back/commit/c9d86a1bfa65fa940a3c80ada8ed6af540735125))
+* **deps:** [#322](https://github.com/SandrineCipolla/stockhub_back/issues/322) mettre a jour les dependances de securite ([#323](https://github.com/SandrineCipolla/stockhub_back/issues/323)) ([ee2c253](https://github.com/SandrineCipolla/stockhub_back/commit/ee2c2537d6ead4a695923bf979b91d05a04c6787))
+* **docker:** [#316](https://github.com/SandrineCipolla/stockhub_back/issues/316) appliquer les migrations Prisma au démarrage du backend de test ([#317](https://github.com/SandrineCipolla/stockhub_back/issues/317)) ([c12836f](https://github.com/SandrineCipolla/stockhub_back/commit/c12836fed11d289c2523919e1cefdc57464d016a))
+
 ## [2.14.2](https://github.com/SandrineCipolla/stockhub_back/compare/v2.14.1...v2.14.2) (2026-09-27)
 
 
