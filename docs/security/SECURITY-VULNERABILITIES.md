@@ -249,6 +249,48 @@ Elles nécessitent `npm audit fix --force`, qui casserait `@azure/msal-node` (au
 
 ---
 
+## 🟡 Lot d'octobre 2026 : traitement des alertes Dependabot et failles sans correctif amont
+
+**Date de découverte :** 2026-10-11
+**Date de traitement :** 2026-10-11
+**Sévérité :** 1 CRITICAL, 40 HIGH, 13 MODERATE au départ
+**Advisories principaux :**
+
+- [GHSA-76c3-p999-5vh6](https://github.com/advisories/GHSA-76c3-p999-5vh6) (proxy-addr, CRITICAL)
+- [GHSA-86w9-cpqp-85rv](https://github.com/advisories/GHSA-86w9-cpqp-85rv) (node-forge, HIGH)
+- [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) (braces, HIGH)
+- [GHSA-566m-q398-2v6x](https://github.com/advisories/GHSA-566m-q398-2v6x) (@grpc/grpc-js, HIGH)
+- [GHSA-4h9c-9mmv-v58g](https://github.com/advisories/GHSA-4h9c-9mmv-v58g) (axios, HIGH)
+- [GHSA-84pr-m45v-9v9p](https://github.com/advisories/GHSA-84pr-m45v-9v9p) (moment, MODERATE)
+
+### Description
+
+La commande `npm audit fix` résout la vulnérabilité critique sur `proxy-addr` et les vulnérabilités ciblées par les pull requests Dependabot #315 (`moment`), #320 (`@grpc/grpc-js`) et #321 (`axios`).
+
+Deux vulnérabilités de niveau haut restent sans version corrigée publiée par leurs mainteneurs :
+
+1. `node-forge` (GHSA-86w9-cpqp-85rv) : touche toutes les versions jusqu'à 1.4.0 inclus. Dépendance transitive de `node-jose` pour le module `passport-azure-ad`.
+2. `braces` (GHSA-vfj7-8cjw-p6xm) : touche toutes les versions jusqu'à 3.0.3 inclus. Dépendance transitive de `chokidar` (via `nodemon`) et de `micromatch` (via `jest` et `tsc-alias`).
+
+### Résolution
+
+#### Correctifs appliqués
+
+- Exécution de `npm audit fix` sans l'option `--force`.
+- Résolution de `proxy-addr` (passage en 2.0.8).
+- Résolution de `@grpc/grpc-js` (passage en 1.14.6).
+- Résolution de `axios` (passage en 1.20.0).
+- Résolution de `moment` (passage en 2.31.0).
+
+#### Vulnérabilités sans correctif disponible
+
+- `node-forge` (<= 1.4.0) : dépendance transitive de `passport-azure-ad`.
+- `braces` (<= 3.0.3) : dépendance transitive de `micromatch` et `chokidar`.
+
+Le passage strict de `npm audit --audit-level=high` dépend de la publication d'un correctif par les mainteneurs ou d'une dérogation ciblée.
+
+---
+
 ## Template pour futures vulnérabilités
 
 ```markdown
@@ -298,6 +340,6 @@ Elles nécessitent `npm audit fix --force`, qui casserait `@azure/msal-node` (au
 
 ---
 
-**Dernière mise à jour :** 2026-09-17
+**Dernière mise à jour :** 2026-10-11
 **Auteur :** Sandrine Cipolla
-**Statut sécurité :** ✅ 0 vulnérabilité HIGH/CRITICAL. 7 MODERATE restantes (uuid, transitif via `@azure/msal-node`/`testcontainers`), voir "Lot de septembre 2026" ci-dessus pour le détail. Vérifier `npm audit` pour l'état réel avant de citer un chiffre : ce fichier n'est mis à jour qu'à l'occasion d'un incident traité, pas en continu.
+**Statut sécurité :** 0 critique restante. 36 vulnérabilités hautes restantes sans correctif publié par les mainteneurs amont (`node-forge` <= 1.4.0 et `braces` <= 3.0.3). 11 vulnérabilités modérées.
