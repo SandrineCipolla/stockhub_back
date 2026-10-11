@@ -32,7 +32,7 @@ Aucun délai de réponse n'est garanti. Vous serez tenu informé de l'avancement
 
 ### Contrôles automatiques
 
-`security-audit.yml` exécute `npm audit --audit-level=high` : les vulnérabilités HIGH et CRITICAL bloquent le build. Les vulnérabilités MODERATE et LOW sont remontées à titre informatif, sans bloquer.
+`security-audit.yml` exécute `npm run audit:check` : les vulnérabilités HIGH et CRITICAL bloquent le build, sauf celles listées avec une raison, une issue de suivi et une date de réexamen dans `scripts/audit-allowlist.json`. Une exception dont la date est dépassée bloque de nouveau. Les vulnérabilités MODERATE et LOW sont remontées à titre informatif, sans bloquer. Règle complète : [docs/ci-cd/SECURITY-AUDIT-WORKFLOW.md](docs/ci-cd/SECURITY-AUDIT-WORKFLOW.md#exceptions-pour-les-failles-sans-correctif-publié).
 
 Le workflow s'exécute sur chaque push et pull request vers `main` ou `develop`, chaque lundi à 00h00 UTC, et sur déclenchement manuel. Il est distinct du workflow principal `main_stockhub-back.yml` (celui-ci n'exécute plus `npm audit`, cette étape y est désactivée depuis l'extraction vers ce workflow dédié) : pourquoi et comment, voir [docs/ci-cd/SECURITY-AUDIT-WORKFLOW.md](docs/ci-cd/SECURITY-AUDIT-WORKFLOW.md).
 

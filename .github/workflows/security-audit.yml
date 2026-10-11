@@ -28,14 +28,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run npm audit
-        run: npm audit --audit-level=high
+      - name: Tests de la règle du contrôle
+        run: node --test scripts/audit-policy.test.mjs
+
+      - name: Contrôle de sécurité (high et critical, hors exceptions documentées)
+        run: node scripts/audit-check.mjs
         continue-on-error: false
 
       - name: Security audit summary
         if: success()
         run: |
-          echo "✅ No HIGH or CRITICAL vulnerabilities detected"
+          echo "✅ Aucune faille HIGH ou CRITICAL hors exceptions documentées (scripts/audit-allowlist.json)"
           npm audit --audit-level=moderate || echo "⚠️ Some MODERATE/LOW vulnerabilities found (non-blocking)"
 
       - name: Check outdated dependencies (informational)

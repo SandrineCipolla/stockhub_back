@@ -287,7 +287,7 @@ Deux vulnérabilités de niveau haut restent sans version corrigée publiée par
 - `node-forge` (<= 1.4.0) : dépendance transitive de `passport-azure-ad`.
 - `braces` (<= 3.0.3) : dépendance transitive de `micromatch` et `chokidar`.
 
-Le passage strict de `npm audit --audit-level=high` dépend de la publication d'un correctif par les mainteneurs ou d'une dérogation ciblée.
+Ces deux avis sont tolérés par une exception documentée dans `scripts/audit-allowlist.json` (#324), réexaminée au plus tard le 2026-12-11. Toute autre faille HIGH ou CRITICAL bloque le contrôle. Règle : [docs/ci-cd/SECURITY-AUDIT-WORKFLOW.md](../ci-cd/SECURITY-AUDIT-WORKFLOW.md#exceptions-pour-les-failles-sans-correctif-publié).
 
 ---
 
