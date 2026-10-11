@@ -11,6 +11,8 @@
     "test:unit": "jest --config jest.config.js --runInBand --detectOpenHandles --forceExit",
     "test:ci": "jest --config=jest.ci.config.js --detectOpenHandles --forceExit",
     "test:coverage": "COVERAGE=true jest --config=jest.ci.config.js --passWithNoTests --detectOpenHandles --forceExit",
+    "audit:check": "node scripts/audit-check.mjs",
+    "test:audit-policy": "node --test scripts/audit-policy.test.mjs",
     "test:integration": "jest --config jest.integration.config.js --runInBand --detectOpenHandles --forceExit",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",

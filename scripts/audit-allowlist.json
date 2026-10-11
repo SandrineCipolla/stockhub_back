@@ -1,0 +1,16 @@
+[
+  {
+    "id": "GHSA-86w9-cpqp-85rv",
+    "package": "node-forge",
+    "reason": "Aucune version corrigée publiée (la dernière, 1.4.0, est touchée). Dépendance transitive de passport-azure-ad puis node-jose. D'après le code de node-jose, la vérification de signature RSA passe par le module crypto de Node et forge sert de repli : à confirmer. Sortie prévue : remplacement de passport-azure-ad (ADR-021).",
+    "issue": "#324",
+    "reviewBy": "2026-12-11"
+  },
+  {
+    "id": "GHSA-vfj7-8cjw-p6xm",
+    "package": "braces",
+    "reason": "Aucune version corrigée publiée. Dépendance de développement (nodemon, jest, tsc-alias), absente de l'image de production.",
+    "issue": "#324",
+    "reviewBy": "2026-12-11"
+  }
+]

@@ -318,6 +318,20 @@ Si `npm audit fix` ne corrige pas :
 
 ---
 
+## Exceptions pour les failles sans correctif publié
+
+Depuis #324, le workflow lance `npm run audit:check` à la place de `npm audit --audit-level=high`. Le script `scripts/audit-check.mjs` lit le résultat de `npm audit --json` et applique la règle de `scripts/audit-policy.mjs` :
+
+- une faille HIGH ou CRITICAL bloque, sauf si son identifiant figure dans `scripts/audit-allowlist.json`
+- chaque exception porte la raison, l'issue de suivi et une date de réexamen (`reviewBy`, au format AAAA-MM-JJ)
+- une exception dont la date est dépassée bloque de nouveau, pour qu'elle soit réexaminée
+- une exception dont l'avis n'apparaît plus est signalée dans le journal du contrôle, à retirer du fichier
+- une erreur de `npm audit` (réseau, sortie illisible) fait échouer le contrôle
+
+Ajouter une exception n'est justifié que si aucune version corrigée n'est publiée. Marche à suivre : chercher d'abord un correctif (`npm audit fix`, montée du paquet parent), puis ajouter l'entrée avec la raison, créer ou citer l'issue de suivi, et consigner l'avis dans [docs/security/SECURITY-VULNERABILITIES.md](../security/SECURITY-VULNERABILITIES.md). `npm run test:audit-policy` lance les tests de la règle.
+
+---
+
 ## 📝 Checklist de mise en place
 
 Pour implémenter ce workflow sur un nouveau projet :
